@@ -1,6 +1,6 @@
 {
-	"name": "tabulator-tables",
-	"version": "5.2.7",
+	"name": "tabulator-custom",
+	"version": "1.0.0",
 	"description": "Interactive table generation JavaScript library",
 	"style": "dist/css/tabulator.css",
 	"main": "dist/js/tabulator.js",
@@ -42,7 +42,7 @@
 	"author": "Oli Folkerd",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/olifolkerd/tabulator/issues"
+		"url": "https://github.com/UmaLPZ/Custom-Tabulator/issues"
 	},
 	"homepage": "http://tabulator.info/",
 	"devDependencies": {
