@@ -82,12 +82,10 @@
 }
 
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title {
-  box-sizing: border-box;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: bottom;
+  white-space: normal;
+    height: auto;
+    text-align: center;
+    overflow: visible;
 }
 
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-title .tabulator-title-editor {
@@ -104,11 +102,9 @@
 
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-sorter {
   display: flex;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 4px;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-sorter .tabulator-arrow {
@@ -149,7 +145,10 @@
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-sortable .tabulator-col-title {
-  padding-right: 25px;
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 0;
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-sortable:hover {
@@ -1133,7 +1132,7 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
 }
 
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content {
-  padding: 12px;
+  padding:5px;
 }
 
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content .tabulator-col-sorter {
