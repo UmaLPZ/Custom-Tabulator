@@ -15814,7 +15814,7 @@
 			trueValueSet = Object.keys(editorParams).includes("trueValue"),
 			falseValueSet = Object.keys(editorParams).includes("falseValue");
 		input.setAttribute("type", "checkbox");
-		input.style.marginTop = "24px";
+		input.style.marginTop = "20px";
 		input.style.boxSizing = "border-box";
 
 		if (
