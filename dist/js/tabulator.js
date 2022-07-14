@@ -29166,8 +29166,8 @@
 				value: function formatCollapsedData(data) {
 					var list = document.createElement("table");
 					data.forEach(function (item) {
-						var row = document.createElement("tr");
-						var titleData = document.createElement("th");
+						var row = document.createElement("th");
+						var titleData = document.createElement("td");
 						var valueData = document.createElement("td");
 						var node_content;
 						var titleHighlight = document.createElement("strong");
