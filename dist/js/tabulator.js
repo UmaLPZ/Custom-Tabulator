@@ -29165,8 +29165,9 @@
 				key: "formatCollapsedData",
 				value: function formatCollapsedData(data) {
 					var list = document.createElement("table");
+					var tbody = document.createElement("tbody");
 					data.forEach(function (item) {
-						var row = document.createElement("th");
+						var row = document.createElement("tr");
 						var titleData = document.createElement("th");
 						var valueData = document.createElement("td");
 						var node_content;
@@ -29186,7 +29187,7 @@
 
 						row.appendChild(titleData);
 						row.appendChild(valueData);
-						list.appendChild(row);
+						tbody.appendChild(row);
 					}, this);
 					return Object.keys(data).length ? list : "";
 				},
