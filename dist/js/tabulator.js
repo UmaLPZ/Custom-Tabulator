@@ -29167,7 +29167,7 @@
 					var list = document.createElement("table");
 					data.forEach(function (item) {
 						var row = document.createElement("tr");
-						var titleData = document.createElement("td");
+						var titleData = document.createElement("th");
 						var valueData = document.createElement("td");
 						var node_content;
 						var titleHighlight = document.createElement("strong");

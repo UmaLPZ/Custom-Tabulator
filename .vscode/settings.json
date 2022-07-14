@@ -1,0 +1,10 @@
+{
+	"editor.guides.highlightActiveBracketPair": false,
+	"editor.guides.bracketPairsHorizontal": false,
+	"editor.bracketPairColorization.enabled": false,
+	"MinifyAll.openMinifiedDocument": false,
+	"MinifyAll.minifyOnSaveToNewFile": true,
+	"MinifyAll.disableHexadecimalShortener": true,
+	"MinifyAll.disableJavascriptReact": true,
+	"MinifyAll.disableHtml": true
+}
