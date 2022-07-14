@@ -29165,9 +29165,9 @@
 				key: "formatCollapsedData",
 				value: function formatCollapsedData(data) {
 					var list = document.createElement("table");
+					var thead = document.createElement("thead");
+					var tbody = document.createElement("tbody");
 					data.forEach(function (item) {
-						var thead = document.createElement("thead");
-						var tbody = document.createElement("tbody");
 						var row = document.createElement("tr");
 						var titleData = document.createElement("th");
 						var valueData = document.createElement("td");
