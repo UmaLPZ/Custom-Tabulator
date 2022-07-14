@@ -29191,7 +29191,7 @@
 						list.append(thead);
 						list.append(tbody);
 						thead.appendChildren(row);
-						tbody.appendChild(valueData);
+						tbody.appendChildren(row);
 					}, this);
 					return Object.keys(data).length ? list : "";
 				},
