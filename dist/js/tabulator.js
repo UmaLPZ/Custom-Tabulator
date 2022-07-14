@@ -29186,7 +29186,7 @@
 
 						row.appendChild(titleData);
 						row.appendChild(valueData);
-						list.appendChild(row);
+						list.appendChild(titleData);
 					}, this);
 					return Object.keys(data).length ? list : "";
 				},
