@@ -29190,7 +29190,7 @@
 						row.appendChild(valueData);
 						list.append(thead);
 						list.append(tbody);
-						thead.append(row);
+						thead.appendChildren(row);
 						tbody.appendChild(valueData);
 					}, this);
 					return Object.keys(data).length ? list : "";
