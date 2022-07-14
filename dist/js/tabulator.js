@@ -29167,8 +29167,9 @@
 					var list = document.createElement("table");
 					data.forEach(function (item) {
 						var row = document.createElement("tr");
-						var titleData = document.createElement("th");
+						var thead = document.createElement("thead");
 						var tbody = document.createElement("tbody");
+						var titleData = document.createElement("th");
 						var valueData = document.createElement("td");
 						var node_content;
 						var titleHighlight = document.createElement("strong");
@@ -29186,8 +29187,9 @@
 						}
 
 						row.appendChild(titleData);
-						tbody.appendChild(valueData);
-						list.appendChild(row);
+						row.appendChild(valueData);
+						list.appendChild(thead);
+						list.appendChild(tbody);
 					}, this);
 					return Object.keys(data).length ? list : "";
 				},
