@@ -29165,10 +29165,10 @@
 				key: "formatCollapsedData",
 				value: function formatCollapsedData(data) {
 					var list = document.createElement("table");
-					var tbody = document.createElement("tbody");
 					data.forEach(function (item) {
 						var row = document.createElement("tr");
 						var titleData = document.createElement("th");
+						var tbody = document.createElement("tbody");
 						var valueData = document.createElement("td");
 						var node_content;
 						var titleHighlight = document.createElement("strong");
@@ -29186,8 +29186,8 @@
 						}
 
 						row.appendChild(titleData);
-						row.appendChild(valueData);
-						tbody.appendChild(row);
+						tbody.appendChild(valueData);
+						list.appendChild(row);
 					}, this);
 					return Object.keys(data).length ? list : "";
 				},
