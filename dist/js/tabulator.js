@@ -29169,8 +29169,6 @@
 						var row = document.createElement("tr");
 						var titleData = document.createElement("th");
 						var valueData = document.createElement("td");
-						var thead = document.createElement("thead");
-						var tbody = document.createElement("tbody");
 						var node_content;
 						var titleHighlight = document.createElement("strong");
 						titleData.appendChild(titleHighlight);
@@ -29188,8 +29186,7 @@
 
 						row.appendChild(titleData);
 						row.appendChild(valueData);
-						list.appendChild(thead);
-						list.appendChild(tbody);
+						list.appendChild(titleData);
 					}, this);
 					return Object.keys(data).length ? list : "";
 				},
