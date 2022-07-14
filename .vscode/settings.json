@@ -6,5 +6,8 @@
 	"MinifyAll.minifyOnSaveToNewFile": true,
 	"MinifyAll.disableHexadecimalShortener": true,
 	"MinifyAll.disableJavascriptReact": true,
-	"MinifyAll.disableHtml": true
+	"MinifyAll.disableHtml": true,
+	"MinifyAll.disableJson": true,
+	"MinifyAll.disableJsonc": true,
+	"MinifyAll.PrefixOfNewMinifiedFiles": ".min"
 }
