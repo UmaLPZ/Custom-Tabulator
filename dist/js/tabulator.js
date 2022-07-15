@@ -29186,12 +29186,12 @@
 							valueData.innerHTML = item.value;
 						}
 
-						row.appendChildren(titleData);
-						row.appendChildren(valueData);
-						list.append(thead);
-						list.append(tbody);
-						thead.append(row);
-						tbody.appendChildren(valueData);
+						row.appendChild(titleData);
+						row.appendChild(valueData);
+						list.appendChild(thead);
+						list.appendChild(tbody);
+						thead.appendChild(row);
+						tbody.appendChild(valueData);
 					}, this);
 					return Object.keys(data).length ? list : "";
 				},
