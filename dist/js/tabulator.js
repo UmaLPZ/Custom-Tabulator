@@ -29187,11 +29187,11 @@
 						}
 
 						row.appendChild(valueData);
-						list.appendChild(thead);
-						thead.append(row);
 						row.appendChild(titleData);
+						list.appendChild(thead);
 						list.appendChild(tbody);
 						tbody.appendChild(valueData);
+						thead.appendChild(valueData);
 					}, this);
 					return Object.keys(data).length ? list : "";
 				},
