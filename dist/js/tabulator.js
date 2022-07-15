@@ -29188,7 +29188,7 @@
 
 						row.appendChild(valueData);
 						list.appendChild(thead);
-						thead.appendChild(row);
+						thead.append(row);
 						row.appendChild(titleData);
 						list.appendChild(tbody);
 						tbody.appendChild(valueData);
