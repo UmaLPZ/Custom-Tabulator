@@ -29186,11 +29186,10 @@
 							valueData.innerHTML = item.value;
 						}
 
-
 						row.appendChild(valueData);
 						list.appendChild(thead);
 						thead.appendChild(row);
-						titleData.appendChild(row);
+						row.appendChild(titleData);
 						list.appendChild(tbody);
 						tbody.appendChild(valueData);
 					}, this);
