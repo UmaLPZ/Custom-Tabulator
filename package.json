@@ -1,10 +1,6 @@
 {
 	"name": "tabulator-custom",
-<<<<<<< HEAD
-	"version": "1.1.9e",
-=======
-	"version": "1.2.1b",
->>>>>>> temp-branch
+	"version": "1.2.1c",
 	"description": "Interactive table generation JavaScript library",
 	"style": "dist/css/tabulator.css",
 	"main": "dist/js/tabulator.js",

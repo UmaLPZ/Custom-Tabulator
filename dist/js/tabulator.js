@@ -29188,16 +29188,10 @@
 
 						row.appendChild(titleData);
 						row.appendChild(valueData);
-<<<<<<< HEAD
-						list.append(thead);
-						list.append(tbody);
-						list.appendChild(row);
-=======
 						list.appendChild(thead);
 						list.appendChild(tbody);
 						thead.appendChild(row);
 						tbody.appendChild(valueData);
->>>>>>> temp-branch
 					}, this);
 					return Object.keys(data).length ? list : "";
 				},
