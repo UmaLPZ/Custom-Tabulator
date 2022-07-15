@@ -29187,10 +29187,10 @@
 						}
 
 
-						row.appendChild(titleData);
 						row.appendChild(valueData);
 						list.appendChild(thead);
 						thead.appendChild(row);
+						titleData.appendChild(row);
 						list.appendChild(tbody);
 						tbody.appendChild(valueData);
 					}, this);
