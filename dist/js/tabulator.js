@@ -29186,7 +29186,7 @@
 							valueData.innerHTML = item.value;
 						}
 
-						row.appenChildd(titleData);
+						row.appenChild(titleData);
 						row.appendChild(valueData);
 						list.appendChild(thead);
 						thead.appendChild(row);
