@@ -29969,12 +29969,12 @@
 							valueData.innerHTML = item.value;
 						}
 
-						list.appendChild(thead);
-						thead.appendChild(row);
-						row.appendChild(titleData);
-						list.appendChild(tbody);
-						tbody.appendChild(valueData);
 						row.appendChild(valueData);
+						row.appendChild(titleData);
+						thead.appendChild(row);
+						tbody.appendChild(valueData);
+						list.appendChild(thead);
+						list.appendChild(tbody);
 					}, this);
 					return Object.keys(data).length ? list : "";
 				},
