@@ -29971,10 +29971,10 @@
 
 						row.appendChild(valueData);
 						row.appendChild(titleData);
-						thead.appendChild(row);
-						tbody.appendChild(valueData);
 						list.appendChild(thead);
 						list.appendChild(tbody);
+						tbody.appendChild(valueData);
+						thead.appendChild(row);
 					}, this);
 					return Object.keys(data).length ? list : "";
 				},
