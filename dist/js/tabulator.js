@@ -29969,11 +29969,11 @@
 							valueData.innerHTML = item.value;
 						}
 
-						list.appendChild(thead);
-						thead.append(row);
-						row.appendChild(titleData);
-						list.appendChild(tbody);
+						
+						thead.appendChild(titleData);
 						tbody.appendChild(valueData);
+						list.appendChild(thead);
+						list.appendChild(tbody);
 					}, this);
 					return Object.keys(data).length ? list : "";
 				},
