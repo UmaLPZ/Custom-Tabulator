@@ -29971,7 +29971,7 @@
 
 						list.appendChild(thead);
 						thead.appendChild(row);
-						row.appendChild(titleData);
+						row.append(titleData);
 						list.appendChild(tbody);
 						
 						tbody.appendChild(valueData);
