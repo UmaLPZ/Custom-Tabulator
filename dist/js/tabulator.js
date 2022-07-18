@@ -29951,8 +29951,7 @@
 					var thead = document.createElement("thead");
 					var tbody = document.createElement("tbody");
 					data.forEach(function (item) {
-						var titlerow = document.createElement("tr");
-						var valuerow = document.createElement("tr");
+						var row = document.createElement("tr");
 						var titleData = document.createElement("th");
 						var valueData = document.createElement("td");
 						var node_content;
@@ -29970,10 +29969,9 @@
 							valueData.innerHTML = item.value;
 						}
 
-						titlerow.appendChild(valueData);
-						valuerow.appendChild(valueData);
-						tbody.appendChild(valuerow);
-						thead.appendChild(titlerow);
+						
+						thead.appendChild(titleData);
+						tbody.appendChild(valueData);
 						list.appendChild(thead);
 						list.appendChild(tbody);
 					}, this);
