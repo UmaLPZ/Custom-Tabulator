@@ -29970,11 +29970,11 @@
 						}
 
 						list.appendChild(thead);
-						list.appendChild(tbody);
 						thead.appendChild(row);
+						row.appendChild(titleData);
+						list.appendChild(tbody);
 						tbody.appendChild(valueData);
 						row.appendChild(valueData);
-						row.appendChild(titleData);
 					}, this);
 					return Object.keys(data).length ? list : "";
 				},
