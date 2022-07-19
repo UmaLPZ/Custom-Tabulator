@@ -309,6 +309,8 @@ class ResponsiveLayout extends Module{
 
 	formatCollapsedData(data){
 		var list = document.createElement("table");
+		var thead = document.createElement("thead");
+		var tbody = document.createElement("tbody");
 
 		data.forEach(function(item){
 			var row = document.createElement("tr");
@@ -330,9 +332,10 @@ class ResponsiveLayout extends Module{
 				valueData.innerHTML = item.value;
 			}
 
-			row.appendChild(titleData);
-			row.appendChild(valueData);
-			list.appendChild(row);
+			thead.appendChild(titleData);
+			tbody.appendChild(valueData);
+			list.appendChild(thead);
+			list.appendChild(tbody);
 		}, this);
 
 		return Object.keys(data).length ? list : "";
