@@ -5810,6 +5810,7 @@
 					var el = document.createElement("div");
 					el.classList.add("tabulator-table");
 					el.setAttribute("role", "rowgroup");
+					el.setAttribute("id", "test-id");
 					return el;
 				},
 			},
