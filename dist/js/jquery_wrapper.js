@@ -1,4 +1,4 @@
-/* Custom Tabulator v2.0.0 */
+/* Custom Tabulator v2.2.1 */
 
 (function (root, factory) {
 	"use strict";

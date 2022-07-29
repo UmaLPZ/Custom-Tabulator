@@ -1,4 +1,4 @@
-/* Custom Tabulator v2.0.0 */
+/* Custom Tabulator v2.2.1 */
 class CoreFeature {
 	constructor(table) {
 		this.table = table;
@@ -2579,8 +2579,20 @@ class Column extends CoreFeature {
 	}
 
 	//return all columns in a group
-	getColumns() {
-		return this.columns;
+	getColumns(traverse) {
+		var columns = [];
+
+		if (traverse) {
+			this.columns.forEach((column) => {
+				columns.push(column);
+
+				columns = columns.concat(column.getColumns(true));
+			});
+		} else {
+			columns = this.columns;
+		}
+
+		return columns;
 	}
 
 	//return all columns in a group
@@ -2822,6 +2834,20 @@ class Column extends CoreFeature {
 	}
 
 	setMinWidth(minWidth) {
+		if (this.maxWidth && minWidth > this.maxWidth) {
+			minWidth = this.maxWidth;
+
+			console.warn(
+				"the minWidth (" +
+					minWidth +
+					"px) for column '" +
+					this.field +
+					"' cannot be bigger that its maxWidth (" +
+					this.maxWidthStyled +
+					")"
+			);
+		}
+
 		this.minWidth = minWidth;
 		this.minWidthStyled = minWidth ? minWidth + "px" : "";
 
@@ -2833,6 +2859,20 @@ class Column extends CoreFeature {
 	}
 
 	setMaxWidth(maxWidth) {
+		if (this.minWidth && maxWidth < this.minWidth) {
+			maxWidth = this.minWidth;
+
+			console.warn(
+				"the maxWidth (" +
+					maxWidth +
+					"px) for column '" +
+					this.field +
+					"' cannot be smaller that its minWidth (" +
+					this.minWidthStyled +
+					")"
+			);
+		}
+
 		this.maxWidth = maxWidth;
 		this.maxWidthStyled = maxWidth ? maxWidth + "px" : "";
 
@@ -3785,7 +3825,7 @@ class ColumnCalcs extends Module {
 
 	rowsUpdated(row) {
 		if (this.table.options.groupBy) {
-			this.recalcRowGroup(this);
+			this.recalcRowGroup(row);
 		} else {
 			this.recalcActiveRows();
 		}
@@ -4315,6 +4355,12 @@ class DataTree extends Module {
 			this.field = options.dataTreeChildField;
 			this.indent = options.dataTreeChildIndent;
 
+			if (this.options("movableRows")) {
+				console.warn(
+					"The movableRows option is not available with dataTree enabled, moving of child rows could result in unpredictable behavior"
+				);
+			}
+
 			if (options.dataTreeBranchElement) {
 				if (options.dataTreeBranchElement === true) {
 					this.branchEl = document.createElement("div");
@@ -4750,7 +4796,7 @@ class DataTree extends Module {
 	}
 
 	getTreeParentRoot(row) {
-		return row.modules.dataTree.parent
+		return row.modules.dataTree && row.modules.dataTree.parent
 			? this.getTreeParentRoot(row.modules.dataTree.parent)
 			: row;
 	}
@@ -7320,7 +7366,7 @@ class Edit {
 			if (!startVis) {
 				setTimeout(() => {
 					this.popup.hideOnBlur(this._resolveValue.bind(this, true));
-				});
+				}, 10);
 			}
 		}
 	}
@@ -12678,7 +12724,7 @@ class Group {
 		this.visible = false;
 
 		if (
-			this.groupManager.table.rowManager.getRenderMode() == "classic" &&
+			this.groupManager.table.rowManager.getRenderMode() == "basic" &&
 			!this.groupManager.table.options.pagination
 		) {
 			this.element.classList.remove("tabulator-group-visible");
@@ -12703,7 +12749,7 @@ class Group {
 				this.groupManager.getDisplayIndex()
 			);
 
-			this.groupManager.table.rowManager.checkClassicModeGroupHeaderWidth();
+			this.groupManager.checkBasicModeGroupHeaderWidth();
 		} else {
 			this.groupManager.updateGroupRows(true);
 		}
@@ -12719,7 +12765,7 @@ class Group {
 		this.visible = true;
 
 		if (
-			this.groupManager.table.rowManager.getRenderMode() == "classic" &&
+			this.groupManager.table.rowManager.getRenderMode() == "basic" &&
 			!this.groupManager.table.options.pagination
 		) {
 			this.element.classList.add("tabulator-group-visible");
@@ -12751,7 +12797,7 @@ class Group {
 				this.groupManager.getDisplayIndex()
 			);
 
-			this.groupManager.table.rowManager.checkClassicModeGroupHeaderWidth();
+			this.groupManager.checkBasicModeGroupHeaderWidth();
 		} else {
 			this.groupManager.updateGroupRows(true);
 		}
@@ -13618,6 +13664,27 @@ class GroupRows extends Module {
 			}
 		}
 	}
+
+	checkBasicModeGroupHeaderWidth() {
+		var element = this.table.rowManager.tableElement,
+			onlyGroupHeaders = true;
+
+		this.table.rowManager.getDisplayRows().forEach((row, index) => {
+			this.table.rowManager.styleRow(row, index);
+			element.appendChild(row.getElement());
+			row.initialize(true);
+
+			if (row.type !== "group") {
+				onlyGroupHeaders = false;
+			}
+		});
+
+		if (onlyGroupHeaders) {
+			element.style.minWidth = this.table.columnManager.getWidth() + "px";
+		} else {
+			element.style.minWidth = "";
+		}
+	}
 }
 
 GroupRows.moduleName = "groupRows";
@@ -13740,7 +13807,7 @@ class History extends Module {
 		var index, rows;
 
 		if (this.table.options.groupBy) {
-			rows = row.getComponent().getGroup().rows;
+			rows = row.getComponent().getGroup()._getSelf().rows;
 			index = rows.indexOf(row);
 
 			if (index) {
@@ -14482,11 +14549,11 @@ class Interaction extends Module {
 			if (document.selection) {
 				// IE
 				range = document.body.createTextRange();
-				range.moveToElementText(this.element);
+				range.moveToElementText(cell.getElement());
 				range.select();
 			} else if (window.getSelection) {
 				range = document.createRange();
-				range.selectNode(this.element);
+				range.selectNode(cell.getElement());
 				window.getSelection().removeAllRanges();
 				window.getSelection().addRange(range);
 			}
@@ -19647,6 +19714,10 @@ class ResponsiveLayout extends Module {
 			this.subscribe("table-redrawing", this.tableRedraw.bind(this));
 
 			if (this.table.options.responsiveLayout === "collapse") {
+				this.subscribe(
+					"row-data-changed",
+					this.generateCollapsedRowContent.bind(this)
+				);
 				this.subscribe("row-init", this.initializeRow.bind(this));
 				this.subscribe("row-layout", this.layoutRow.bind(this));
 			}
@@ -23123,6 +23194,8 @@ class ColumnManager extends CoreFeature {
 
 	//////////////// Column Details /////////////////
 	findColumn(subject) {
+		var columns;
+
 		if (typeof subject == "object") {
 			if (subject instanceof Column) {
 				//subject is column element
@@ -23134,8 +23207,15 @@ class ColumnManager extends CoreFeature {
 				typeof HTMLElement !== "undefined" &&
 				subject instanceof HTMLElement
 			) {
+				columns = [];
+
+				this.columns.forEach((column) => {
+					columns.push(column);
+					columns = columns.concat(column.getColumns(true));
+				});
+
 				//subject is a HTML element of the column header
-				let match = this.columns.find((column) => {
+				let match = columns.find((column) => {
 					return column.element === subject;
 				});
 
@@ -25143,6 +25223,8 @@ class RowManager extends CoreFeature {
 		}
 
 		if (renderClass) {
+			this.renderMode = this.table.options.renderVertical;
+
 			this.renderer = new renderClass(
 				this.table,
 				this.element,
@@ -25703,7 +25785,9 @@ class InteractionManager extends CoreFeature {
 			});
 
 			for (let target of elTargets) {
-				targets[this.componentMap[target]] = el;
+				if (!targets[this.componentMap[target]]) {
+					targets[this.componentMap[target]] = el;
+				}
 			}
 		}
 
@@ -26502,7 +26586,7 @@ function fitDataStretch(columns, forced) {
 
 //resize columns to fit
 function fitColumns(columns, forced) {
-	var totalWidth = this.table.element.clientWidth; //table element width
+	var totalWidth = this.table.rowManager.element.getBoundingClientRect().width; //table element width
 	var fixedWidth = 0; //total width of columns with a defined width
 	var flexWidth = 0; //total width available to flexible columns
 	var flexGrowUnits = 0; //total number of widthGrow blocks across all columns
@@ -26590,9 +26674,7 @@ function fitColumns(columns, forced) {
 				? Math.floor(remainingSpace / changeUnits)
 				: remainingSpace;
 
-			gap = remainingSpace - nextColWidth * changeUnits;
-
-			gap += scaleColumns(
+			gap = scaleColumns(
 				undersizeCols,
 				remainingSpace,
 				nextColWidth,
@@ -26668,7 +26750,7 @@ function fitColumns(columns, forced) {
 
 	//increase width of last column to account for rounding errors
 	if (flexColumns.length && gapFill > 0) {
-		flexColumns[flexColumns.length - 1].width += +gapFill;
+		flexColumns[flexColumns.length - 1].width += gapFill;
 	}
 
 	//calculate space for columns to be shrunk into
@@ -26689,7 +26771,7 @@ function fitColumns(columns, forced) {
 	}
 
 	//decrease width of last column to account for rounding errors
-	if (fixedShrinkColumns.length) {
+	if (gapFill && fixedShrinkColumns.length) {
 		fixedShrinkColumns[fixedShrinkColumns.length - 1].width -= gapFill;
 	}
 
