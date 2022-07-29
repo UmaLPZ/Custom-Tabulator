@@ -1,4 +1,4 @@
-/* Custom Tabulator v2.2.0 */
+/* Custom Tabulator v2.2.2 */
 (function (global, factory) {
 	typeof exports === "object" && typeof module !== "undefined"
 		? (module.exports = factory())
