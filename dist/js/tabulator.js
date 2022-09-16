@@ -7557,7 +7557,7 @@
 						this.reversedX = false;
 					}
 					this.element.style.top = y + "px";
-					this.element.style.left = x + 50 + "px";
+					this.element.style.left = x + 200 + "px";
 					this.container.appendChild(this.element);
 					if (typeof this.renderedCallback === "function") {
 						this.renderedCallback();
