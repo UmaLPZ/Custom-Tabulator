@@ -1,6 +1,7 @@
-/* Custom Tabulator v2.2.1 */
-class CoreFeature {
-	constructor(table) {
+/* Tabulator v5.3.4 (c) Oliver Folkerd 2022 */
+class CoreFeature{
+
+	constructor(table){
 		this.table = table;
 	}
 
@@ -8,42 +9,36 @@ class CoreFeature {
 	/////////////// DataLoad /////////////////
 	//////////////////////////////////////////
 
-	reloadData(data, silent, columnsChanged) {
-		return this.table.dataLoader.load(
-			data,
-			undefined,
-			undefined,
-			undefined,
-			silent,
-			columnsChanged
-		);
+	reloadData(data, silent, columnsChanged){
+		return this.table.dataLoader.load(data, undefined, undefined, undefined, silent, columnsChanged);
 	}
 
 	//////////////////////////////////////////
 	///////////// Localization ///////////////
 	//////////////////////////////////////////
 
-	langText() {
+	langText(){
 		return this.table.modules.localize.getText(...arguments);
 	}
 
-	langBind() {
+	langBind(){
 		return this.table.modules.localize.bind(...arguments);
 	}
 
-	langLocale() {
+	langLocale(){
 		return this.table.modules.localize.getLocale(...arguments);
 	}
+
 
 	//////////////////////////////////////////
 	////////// Inter Table Comms /////////////
 	//////////////////////////////////////////
 
-	commsConnections() {
+	commsConnections(){
 		return this.table.modules.comms.getConnections(...arguments);
 	}
 
-	commsSend() {
+	commsSend(){
 		return this.table.modules.comms.send(...arguments);
 	}
 
@@ -51,55 +46,56 @@ class CoreFeature {
 	//////////////// Layout  /////////////////
 	//////////////////////////////////////////
 
-	layoutMode() {
+	layoutMode(){
 		return this.table.modules.layout.getMode();
 	}
 
-	layoutRefresh(force) {
+	layoutRefresh(force){
 		return this.table.modules.layout.layout(force);
 	}
+
 
 	//////////////////////////////////////////
 	/////////////// Event Bus ////////////////
 	//////////////////////////////////////////
 
-	subscribe() {
+	subscribe(){
 		return this.table.eventBus.subscribe(...arguments);
 	}
 
-	unsubscribe() {
+	unsubscribe(){
 		return this.table.eventBus.unsubscribe(...arguments);
 	}
 
-	subscribed(key) {
+	subscribed(key){
 		return this.table.eventBus.subscribed(key);
 	}
 
-	subscriptionChange() {
+	subscriptionChange(){
 		return this.table.eventBus.subscriptionChange(...arguments);
 	}
 
-	dispatch() {
+	dispatch(){
 		return this.table.eventBus.dispatch(...arguments);
 	}
 
-	chain() {
+	chain(){
 		return this.table.eventBus.chain(...arguments);
 	}
 
-	confirm() {
+	confirm(){
 		return this.table.eventBus.confirm(...arguments);
 	}
 
-	dispatchExternal() {
+	dispatchExternal(){
 		return this.table.externalEvents.dispatch(...arguments);
 	}
 
-	subscribedExternal(key) {
+	subscribedExternal(key){
 		return this.table.externalEvents.subscribed(key);
 	}
 
-	subscriptionChangeExternal() {
+	subscriptionChangeExternal(){
 		return this.table.externalEvents.subscriptionChange(...arguments);
 	}
 
@@ -107,12 +103,12 @@ class CoreFeature {
 	//////////////// Options /////////////////
 	//////////////////////////////////////////
 
-	options(key) {
+	options(key){
 		return this.table.options[key];
 	}
 
-	setOption(key, value) {
-		if (typeof value !== "undefined") {
+	setOption(key, value){
+		if(typeof value !== "undefined"){
 			this.table.options[key] = value;
 		}
 
@@ -123,68 +119,64 @@ class CoreFeature {
 	/////////// Deprecation Checks ///////////
 	//////////////////////////////////////////
 
-	deprecationCheck(oldOption, newOption) {
+	deprecationCheck(oldOption, newOption){
 		return this.table.deprecationAdvisor.check(oldOption, newOption);
 	}
 
-	deprecationCheckMsg(oldOption, msg) {
+	deprecationCheckMsg(oldOption, msg){
 		return this.table.deprecationAdvisor.checkMsg(oldOption, msg);
 	}
 
-	deprecationMsg(msg) {
+	deprecationMsg(msg){
 		return this.table.deprecationAdvisor.msg(msg);
 	}
 	//////////////////////////////////////////
 	//////////////// Modules /////////////////
 	//////////////////////////////////////////
 
-	module(key) {
+	module(key){
 		return this.table.module(key);
 	}
 }
 
-class Helpers {
-	static elVisible(el) {
+class Helpers{
+
+	static elVisible(el){
 		return !(el.offsetWidth <= 0 && el.offsetHeight <= 0);
 	}
 
-	static elOffset(el) {
+	static elOffset(el){
 		var box = el.getBoundingClientRect();
 
 		return {
 			top: box.top + window.pageYOffset - document.documentElement.clientTop,
-			left: box.left + window.pageXOffset - document.documentElement.clientLeft,
+			left: box.left + window.pageXOffset - document.documentElement.clientLeft
 		};
 	}
 
-	static deepClone(obj, clone, list = []) {
+	static deepClone(obj, clone, list = []){
 		var objectProto = {}.__proto__,
-			arrayProto = [].__proto__;
+		arrayProto = [].__proto__;
 
-		if (!clone) {
+		if (!clone){
 			clone = Object.assign(Array.isArray(obj) ? [] : {}, obj);
 		}
 
-		for (var i in obj) {
+		for(var i in obj) {
 			let subject = obj[i],
-				match,
-				copy;
+			match, copy;
 
-			if (
-				subject != null &&
-				typeof subject === "object" &&
-				(subject.__proto__ === objectProto || subject.__proto__ === arrayProto)
-			) {
+			if(subject != null && typeof subject === "object" && (subject.__proto__ === objectProto || subject.__proto__ === arrayProto)){
 				match = list.findIndex((item) => {
 					return item.subject === subject;
 				});
 
-				if (match > -1) {
+				if(match > -1){
 					clone[i] = list[match].copy;
-				} else {
+				}else {
 					copy = Object.assign(Array.isArray(subject) ? [] : {}, subject);
 
-					list.unshift({ subject, copy });
+					list.unshift({subject, copy});
 
 					clone[i] = this.deepClone(subject, copy, list);
 				}
@@ -195,26 +187,26 @@ class Helpers {
 	}
 }
 
-class Popup extends CoreFeature {
-	constructor(table, element, parent) {
+class Popup extends CoreFeature{
+	constructor(table, element, parent){
 		super(table);
-
+        
 		this.element = element;
 		this.container = this._lookupContainer();
-
+        
 		this.parent = parent;
-
+        
 		this.reversedX = false;
 		this.childPopup = null;
 		this.blurable = false;
 		this.blurCallback = null;
 		this.renderedCallback = null;
-
+        
 		this.visible = false;
 		this.hideable = true;
-
+        
 		this.element.classList.add("tabulator-popup-container");
-
+        
 		this.blurEvent = this.hide.bind(this, false);
 		this.escEvent = this._escapeCheck.bind(this);
 
@@ -222,140 +214,129 @@ class Popup extends CoreFeature {
 		this.destroyed = false;
 	}
 
-	tableDestroyed() {
+	tableDestroyed(){
 		this.destroyed = true;
 		this.hide(true);
 	}
-
-	_lookupContainer() {
+    
+	_lookupContainer(){
 		var container = this.table.options.popupContainer;
-
-		if (typeof container === "string") {
+        
+		if(typeof container === "string"){
 			container = document.querySelector(container);
-
-			if (!container) {
-				console.warn(
-					"Menu Error - no container element found matching selector:",
-					this.table.options.popupContainer,
-					"(defaulting to document body)"
-				);
+            
+			if(!container){
+				console.warn("Menu Error - no container element found matching selector:",  this.table.options.popupContainer , "(defaulting to document body)");
 			}
-		} else if (container === true) {
+		}else if (container === true){
 			container = this.table.element;
 		}
-
-		if (container && !this._checkContainerIsParent(container)) {
+        
+		if(container && !this._checkContainerIsParent(container)){
 			container = false;
-			console.warn(
-				"Menu Error - container element does not contain this table:",
-				this.table.options.popupContainer,
-				"(defaulting to document body)"
-			);
+			console.warn("Menu Error - container element does not contain this table:",  this.table.options.popupContainer , "(defaulting to document body)");
 		}
-
-		if (!container) {
+        
+		if(!container){
 			container = document.body;
 		}
-
+        
 		return container;
 	}
-
-	_checkContainerIsParent(container, element = this.table.element) {
-		if (container === element) {
+    
+	_checkContainerIsParent(container, element = this.table.element){
+		if(container === element){
 			return true;
-		} else {
-			return element.parentNode
-				? this._checkContainerIsParent(container, element.parentNode)
-				: false;
+		}else {
+			return element.parentNode ? this._checkContainerIsParent(container, element.parentNode) : false;
 		}
 	}
-
-	renderCallback(callback) {
+    
+	renderCallback(callback){
 		this.renderedCallback = callback;
 	}
-
-	containerEventCoords(e) {
+    
+	containerEventCoords(e){
 		var touch = !(e instanceof MouseEvent);
-
+        
 		var x = touch ? e.touches[0].pageX : e.pageX;
 		var y = touch ? e.touches[0].pageY : e.pageY;
-
-		if (this.container !== document.body) {
+        
+		if(this.container !== document.body){
 			let parentOffset = Helpers.elOffset(this.container);
-
+            
 			x -= parentOffset.left;
 			y -= parentOffset.top;
 		}
-
-		return { x, y };
+        
+		return {x, y};
 	}
-
-	elementPositionCoords(element, position = "right") {
+    
+	elementPositionCoords(element, position = "right"){
 		var offset = Helpers.elOffset(element),
-			containerOffset,
-			x,
-			y;
-
-		if (this.container !== document.body) {
+		containerOffset, x, y;
+        
+		if(this.container !== document.body){
 			containerOffset = Helpers.elOffset(this.container);
-
+            
 			offset.left -= containerOffset.left;
 			offset.top -= containerOffset.top;
 		}
-
-		switch (position) {
+        
+		switch(position){
 			case "right":
 				x = offset.left + element.offsetWidth;
 				y = offset.top - 1;
 				break;
-
+            
 			case "bottom":
 				x = offset.left;
 				y = offset.top + element.offsetHeight;
 				break;
 		}
-
-		return { x, y, offset };
+        
+		return {x, y, offset};
 	}
-
-	show(origin, position) {
+    
+	show(origin, position){
 		var x, y, parentEl, parentOffset, coords;
 
-		if (this.destroyed || this.table.destroyed) {
+		if(this.destroyed || this.table.destroyed){
 			return this;
 		}
-
-		if (origin instanceof HTMLElement) {
+        
+		if(origin instanceof HTMLElement){
 			parentEl = origin;
 			coords = this.elementPositionCoords(origin, position);
-
+            
 			parentOffset = coords.offset;
 			x = coords.x;
 			y = coords.y;
-		} else if (typeof origin === "number") {
-			parentOffset = { top: 0, left: 0 };
+            
+		}else if(typeof origin === "number"){
+			parentOffset = {top:0, left:0};
 			x = origin;
 			y = position;
-		} else {
+		}else {
 			coords = this.containerEventCoords(origin);
-
+            
 			x = coords.x;
 			y = coords.y;
-
+            
 			this.reversedX = false;
 		}
-
+        
 		this.element.style.top = y + "px";
 		this.element.style.left = x + "px";
-
+        
 		this.container.appendChild(this.element);
-
-		if (typeof this.renderedCallback === "function") {
+        
+		if(typeof this.renderedCallback === "function"){
 			this.renderedCallback();
 		}
-
+        
 		this._fitToScreen(x, y, parentEl, parentOffset, position);
-
+        
 		this.visible = true;
 
 		this.subscribe("table-destroy", this.destroyBinding);
@@ -363,276 +344,276 @@ class Popup extends CoreFeature {
 		this.element.addEventListener("mousedown", (e) => {
 			e.stopPropagation();
 		});
-
+        
 		return this;
 	}
-
-	_fitToScreen(x, y, parentEl, parentOffset, position) {
-		var scrollTop =
-			this.container === document.body
-				? document.documentElement.scrollTop
-				: this.container.scrollTop;
+    
+	_fitToScreen(x, y, parentEl, parentOffset, position){
+		var scrollTop = this.container === document.body ? document.documentElement.scrollTop : this.container.scrollTop;
 
 		//move menu to start on right edge if it is too close to the edge of the screen
-		if (
-			x + this.element.offsetWidth >= this.container.offsetWidth ||
-			this.reversedX
-		) {
+		if((x + this.element.offsetWidth) >= this.container.offsetWidth || this.reversedX){
 			this.element.style.left = "";
-
-			if (parentEl) {
-				this.element.style.right =
-					this.container.offsetWidth - parentOffset.left + "px";
-			} else {
-				this.element.style.right = this.container.offsetWidth - x + "px";
+            
+			if(parentEl){
+				this.element.style.right = (this.container.offsetWidth - parentOffset.left) + "px";
+			}else {
+				this.element.style.right = (this.container.offsetWidth - x) + "px";
 			}
-
+            
 			this.reversedX = true;
 		}
 
 		//move menu to start on bottom edge if it is too close to the edge of the screen
-		if (
-			y + this.element.offsetHeight >
-			Math.max(
-				this.container.offsetHeight,
-				scrollTop ? this.container.scrollHeight : 0
-			)
-		) {
-			if (parentEl) {
-				switch (position) {
+		if((y + this.element.offsetHeight) > Math.max(this.container.offsetHeight, scrollTop ? this.container.scrollHeight : 0)) {
+			if(parentEl){
+				switch(position){
 					case "bottom":
-						this.element.style.top =
-							parseInt(this.element.style.top) -
-							this.element.offsetHeight -
-							parentEl.offsetHeight -
-							1 +
-							"px";
+						this.element.style.top = (parseInt(this.element.style.top) - this.element.offsetHeight - parentEl.offsetHeight - 1) + "px";
 						break;
 
 					default:
-						this.element.style.top =
-							parseInt(this.element.style.top) -
-							this.element.offsetHeight +
-							parentEl.offsetHeight +
-							1 +
-							"px";
+						this.element.style.top = (parseInt(this.element.style.top) - this.element.offsetHeight + parentEl.offsetHeight + 1) + "px";
 				}
-			} else {
-				this.element.style.top =
-					parseInt(this.element.style.top) - this.element.offsetHeight + "px";
+                
+			}else {
+				this.element.style.top = (parseInt(this.element.style.top) - this.element.offsetHeight) + "px";
 			}
 		}
 	}
-
-	isVisible() {
+    
+	isVisible(){
 		return this.visible;
 	}
-
-	hideOnBlur(callback) {
+    
+	hideOnBlur(callback){
 		this.blurable = true;
-
-		if (this.visible) {
+        
+		if(this.visible){
 			setTimeout(() => {
-				this.table.rowManager.element.addEventListener(
-					"scroll",
-					this.blurEvent
-				);
+				this.table.rowManager.element.addEventListener("scroll", this.blurEvent);
 				this.subscribe("cell-editing", this.blurEvent);
 				document.body.addEventListener("click", this.blurEvent);
 				document.body.addEventListener("contextmenu", this.blurEvent);
 				document.body.addEventListener("mousedown", this.blurEvent);
 				window.addEventListener("resize", this.blurEvent);
 				document.body.addEventListener("keydown", this.escEvent);
-			}, 100);
 
+			}, 100);
+            
 			this.blurCallback = callback;
 		}
-
+        
 		return this;
 	}
-
-	_escapeCheck(e) {
-		if (e.keyCode == 27) {
+    
+	_escapeCheck(e){
+		if(e.keyCode == 27){
 			this.hide();
 		}
 	}
 
-	blockHide() {
+	blockHide(){
 		this.hideable = false;
 	}
 
-	restoreHide() {
+	restoreHide(){
 		this.hideable = true;
 	}
-
-	hide(silent = false) {
-		if (this.visible && this.hideable) {
-			if (this.blurable) {
+    
+	hide(silent = false){
+		if(this.visible && this.hideable){
+			if(this.blurable){
 				document.body.removeEventListener("keydown", this.escEvent);
 				document.body.removeEventListener("click", this.blurEvent);
 				document.body.removeEventListener("contextmenu", this.blurEvent);
 				document.body.removeEventListener("mousedown", this.blurEvent);
 				window.removeEventListener("resize", this.blurEvent);
-				this.table.rowManager.element.removeEventListener(
-					"scroll",
-					this.blurEvent
-				);
+				this.table.rowManager.element.removeEventListener("scroll", this.blurEvent);
 				this.unsubscribe("cell-editing", this.blurEvent);
 			}
-
-			if (this.childPopup) {
+            
+			if(this.childPopup){
 				this.childPopup.hide();
 			}
-
-			if (this.parent) {
+            
+			if(this.parent){
 				this.parent.childPopup = null;
 			}
-
-			if (this.element.parentNode) {
+            
+			if(this.element.parentNode){
 				this.element.parentNode.removeChild(this.element);
 			}
 
 			this.visible = false;
 
-			if (this.blurCallback && !silent) {
+			if(this.blurCallback && !silent){
 				this.blurCallback();
 			}
 
 			this.unsubscribe("table-destroy", this.destroyBinding);
 		}
-
+        
 		return this;
 	}
-
-	child(element) {
-		if (this.childPopup) {
+    
+	child(element){
+		if(this.childPopup){
 			this.childPopup.hide();
 		}
-
+        
 		this.childPopup = new Popup(this.table, element, this);
-
+        
 		return this.childPopup;
 	}
 }
 
-class Module extends CoreFeature {
-	constructor(table, name) {
+class Module extends CoreFeature{
+	
+	constructor(table, name){
 		super(table);
-
+		
 		this._handler = null;
 	}
-
-	initialize() {
+	
+	initialize(){
 		// setup module when table is initialized, to be overridden in module
 	}
-
+	
+	
 	///////////////////////////////////
 	////// Options Registration ///////
 	///////////////////////////////////
-
-	registerTableOption(key, value) {
+	
+	registerTableOption(key, value){
 		this.table.optionsList.register(key, value);
 	}
-
-	registerColumnOption(key, value) {
+	
+	registerColumnOption(key, value){
 		this.table.columnManager.optionsList.register(key, value);
 	}
-
+	
 	///////////////////////////////////
 	/// Public Function Registration ///
 	///////////////////////////////////
-
-	registerTableFunction(name, func) {
-		if (typeof this.table[name] === "undefined") {
+	
+	registerTableFunction(name, func){
+		if(typeof this.table[name] === "undefined"){
 			this.table[name] = (...args) => {
 				this.table.initGuard(name);
-
+				
 				return func(...args);
 			};
-		} else {
+		}else {
 			console.warn("Unable to bind table function, name already in use", name);
 		}
 	}
-
-	registerComponentFunction(component, func, handler) {
+	
+	registerComponentFunction(component, func, handler){
 		return this.table.componentFunctionBinder.bind(component, func, handler);
 	}
-
+	
 	///////////////////////////////////
 	////////// Data Pipeline //////////
 	///////////////////////////////////
-
-	registerDataHandler(handler, priority) {
+	
+	registerDataHandler(handler, priority){
 		this.table.rowManager.registerDataPipelineHandler(handler, priority);
 		this._handler = handler;
 	}
-
-	registerDisplayHandler(handler, priority) {
+	
+	registerDisplayHandler(handler, priority){
 		this.table.rowManager.registerDisplayPipelineHandler(handler, priority);
 		this._handler = handler;
 	}
+	
+	displayRows(adjust){
+		var index = this.table.rowManager.displayRows.length - 1, 
+		lookupIndex;
+		
+		if(this._handler){
+			lookupIndex = this.table.rowManager.displayPipeline.findIndex((item) => {
+				return item.handler === this._handler;
+			});
 
-	refreshData(renderInPosition, handler) {
-		if (!handler) {
-			handler = this._handler;
+			if(lookupIndex > -1){
+				index = lookupIndex;
+			}
+		}
+		
+		if(adjust){
+			index = index + adjust;
 		}
 
-		if (handler) {
+		if(this._handler){
+			if(index > -1){
+				return this.table.rowManager.getDisplayRows(index);
+			}else {
+				return this.activeRows();
+			}
+		}	
+	}
+	
+	activeRows(){
+		return this.table.rowManager.activeRows;
+	}
+	
+	refreshData(renderInPosition, handler){
+		if(!handler){
+			handler = this._handler;
+		}
+		
+		if(handler){
 			this.table.rowManager.refreshActiveData(handler, false, renderInPosition);
 		}
 	}
-
+	
 	///////////////////////////////////
 	//////// Footer Management ////////
 	///////////////////////////////////
-
-	footerAppend(element) {
+	
+	footerAppend(element){
 		return this.table.footerManager.append(element);
 	}
-
-	footerPrepend(element) {
+	
+	footerPrepend(element){
 		return this.table.footerManager.prepend(element);
 	}
-
-	footerRemove(element) {
+	
+	footerRemove(element){
 		return this.table.footerManager.remove(element);
-	}
-
+	} 
+	
 	///////////////////////////////////
 	//////// Popups Management ////////
 	///////////////////////////////////
-
-	popup(menuEl, menuContainer) {
+	
+	popup(menuEl, menuContainer){
 		return new Popup(this.table, menuEl, menuContainer);
 	}
-
+	
 	///////////////////////////////////
 	//////// Alert Management ////////
 	///////////////////////////////////
-
-	alert(content, type) {
+	
+	alert(content, type){
 		return this.table.alertManager.alert(content, type);
 	}
-
-	clearAlert() {
+	
+	clearAlert(){
 		return this.table.alertManager.clear();
 	}
+	
 }
 
 var defaultAccessors = {};
 
-class Accessor extends Module {
-	constructor(table) {
+class Accessor extends Module{
+
+	constructor(table){
 		super(table);
 
-		this.allowedTypes = [
-			"",
-			"data",
-			"download",
-			"clipboard",
-			"print",
-			"htmlOutput",
-		]; //list of accessor types
+		this.allowedTypes = ["", "data", "download", "clipboard", "print", "htmlOutput"]; //list of accessor types
 
 		this.registerColumnOption("accessor");
 		this.registerColumnOption("accessorParams");
@@ -648,52 +629,49 @@ class Accessor extends Module {
 		this.registerColumnOption("accessorHtmlOutputParams");
 	}
 
-	initialize() {
+	initialize(){
 		this.subscribe("column-layout", this.initializeColumn.bind(this));
 		this.subscribe("row-data-retrieve", this.transformRow.bind(this));
 	}
 
 	//initialize column accessor
-	initializeColumn(column) {
+	initializeColumn(column){
 		var match = false,
-			config = {};
+		config = {};
 
 		this.allowedTypes.forEach((type) => {
 			var key = "accessor" + (type.charAt(0).toUpperCase() + type.slice(1)),
-				accessor;
+			accessor;
 
-			if (column.definition[key]) {
+			if(column.definition[key]){
 				accessor = this.lookupAccessor(column.definition[key]);
 
-				if (accessor) {
+				if(accessor){
 					match = true;
 
 					config[key] = {
-						accessor: accessor,
+						accessor:accessor,
 						params: column.definition[key + "Params"] || {},
 					};
 				}
 			}
 		});
 
-		if (match) {
+		if(match){
 			column.modules.accessor = config;
 		}
 	}
 
-	lookupAccessor(value) {
+	lookupAccessor(value){
 		var accessor = false;
 
 		//set column accessor
-		switch (typeof value) {
+		switch(typeof value){
 			case "string":
-				if (Accessor.accessors[value]) {
+				if(Accessor.accessors[value]){
 					accessor = Accessor.accessors[value];
-				} else {
-					console.warn(
-						"Accessor Error - No such accessor found, ignoring: ",
-						value
-					);
+				}else {
+					console.warn("Accessor Error - No such accessor found, ignoring: ", value);
 				}
 				break;
 
@@ -706,42 +684,27 @@ class Accessor extends Module {
 	}
 
 	//apply accessor to row
-	transformRow(row, type) {
+	transformRow(row, type){
 		var key = "accessor" + (type.charAt(0).toUpperCase() + type.slice(1)),
-			rowComponent = row.getComponent();
+		rowComponent = row.getComponent();
 
 		//clone data object with deep copy to isolate internal data from returned result
 		var data = Helpers.deepClone(row.data || {});
 
-		this.table.columnManager.traverse(function (column) {
+		this.table.columnManager.traverse(function(column){
 			var value, accessor, params, colComponent;
 
-			if (column.modules.accessor) {
-				accessor =
-					column.modules.accessor[key] ||
-					column.modules.accessor.accessor ||
-					false;
+			if(column.modules.accessor){
 
-				if (accessor) {
+				accessor = column.modules.accessor[key] || column.modules.accessor.accessor || false;
+
+				if(accessor){
 					value = column.getFieldValue(data);
 
-					if (value != "undefined") {
+					if(value != "undefined"){
 						colComponent = column.getComponent();
-						params =
-							typeof accessor.params === "function"
-								? accessor.params(value, data, type, colComponent, rowComponent)
-								: accessor.params;
-						column.setFieldValue(
-							data,
-							accessor.accessor(
-								value,
-								data,
-								type,
-								params,
-								colComponent,
-								rowComponent
-							)
-						);
+						params = typeof accessor.params === "function" ? accessor.params(value, data, type, colComponent, rowComponent) : accessor.params;
+						column.setFieldValue(data, accessor.accessor(value, data, type, params, colComponent, rowComponent));
 					}
 				}
 			}
@@ -759,47 +722,41 @@ var defaultConfig = {
 	method: "GET",
 };
 
-function generateParamsList(data, prefix) {
+function generateParamsList(data, prefix){
 	var output = [];
 
 	prefix = prefix || "";
 
-	if (Array.isArray(data)) {
+	if(Array.isArray(data)){
 		data.forEach((item, i) => {
-			output = output.concat(
-				generateParamsList(item, prefix ? prefix + "[" + i + "]" : i)
-			);
+			output = output.concat(generateParamsList(item, prefix ? prefix + "[" + i + "]" : i));
 		});
-	} else if (typeof data === "object") {
-		for (var key in data) {
-			output = output.concat(
-				generateParamsList(data[key], prefix ? prefix + "[" + key + "]" : key)
-			);
+	}else if (typeof data === "object"){
+		for (var key in data){
+			output = output.concat(generateParamsList(data[key], prefix ? prefix + "[" + key + "]" : key));
 		}
-	} else {
-		output.push({ key: prefix, value: data });
+	}else {
+		output.push({key:prefix, value:data});
 	}
 
 	return output;
 }
 
-function serializeParams(params) {
+function serializeParams(params){
 	var output = generateParamsList(params),
-		encoded = [];
+	encoded = [];
 
-	output.forEach(function (item) {
-		encoded.push(
-			encodeURIComponent(item.key) + "=" + encodeURIComponent(item.value)
-		);
+	output.forEach(function(item){
+		encoded.push(encodeURIComponent(item.key) + "=" + encodeURIComponent(item.value));
 	});
 
 	return encoded.join("&");
 }
 
-function urlBuilder(url, config, params) {
-	if (url) {
-		if (params && Object.keys(params).length) {
-			if (!config.method || config.method.toLowerCase() == "get") {
+function urlBuilder(url, config, params){
+	if(url){
+		if(params && Object.keys(params).length){
+			if(!config.method || config.method.toLowerCase() == "get"){
 				config.method = "get";
 
 				url += (url.includes("?") ? "&" : "?") + serializeParams(params);
@@ -810,7 +767,7 @@ function urlBuilder(url, config, params) {
 	return url;
 }
 
-function defaultLoaderPromise(url, config, params) {
+function defaultLoaderPromise(url, config, params){
 	var contentType;
 
 	return new Promise((resolve, reject) => {
@@ -818,135 +775,124 @@ function defaultLoaderPromise(url, config, params) {
 		url = this.urlGenerator.call(this.table, url, config, params);
 
 		//set body content if not GET request
-		if (config.method.toUpperCase() != "GET") {
-			contentType =
-				typeof this.table.options.ajaxContentType === "object"
-					? this.table.options.ajaxContentType
-					: this.contentTypeFormatters[this.table.options.ajaxContentType];
-			if (contentType) {
-				for (var key in contentType.headers) {
-					if (!config.headers) {
+		if(config.method.toUpperCase() != "GET"){
+			contentType = typeof this.table.options.ajaxContentType === "object" ?  this.table.options.ajaxContentType : this.contentTypeFormatters[this.table.options.ajaxContentType];
+			if(contentType){
+
+				for(var key in contentType.headers){
+					if(!config.headers){
 						config.headers = {};
 					}
 
-					if (typeof config.headers[key] === "undefined") {
+					if(typeof config.headers[key] === "undefined"){
 						config.headers[key] = contentType.headers[key];
 					}
 				}
 
 				config.body = contentType.body.call(this, url, config, params);
-			} else {
-				console.warn(
-					"Ajax Error - Invalid ajaxContentType value:",
-					this.table.options.ajaxContentType
-				);
+
+			}else {
+				console.warn("Ajax Error - Invalid ajaxContentType value:", this.table.options.ajaxContentType);
 			}
 		}
 
-		if (url) {
+		if(url){
 			//configure headers
-			if (typeof config.headers === "undefined") {
+			if(typeof config.headers === "undefined"){
 				config.headers = {};
 			}
 
-			if (typeof config.headers.Accept === "undefined") {
+			if(typeof config.headers.Accept === "undefined"){
 				config.headers.Accept = "application/json";
 			}
 
-			if (typeof config.headers["X-Requested-With"] === "undefined") {
+			if(typeof config.headers["X-Requested-With"] === "undefined"){
 				config.headers["X-Requested-With"] = "XMLHttpRequest";
 			}
 
-			if (typeof config.mode === "undefined") {
+			if(typeof config.mode === "undefined"){
 				config.mode = "cors";
 			}
 
-			if (config.mode == "cors") {
-				if (typeof config.headers["Origin"] === "undefined") {
+			if(config.mode == "cors"){
+				if(typeof config.headers["Origin"] === "undefined"){
 					config.headers["Origin"] = window.location.origin;
 				}
-
-				if (typeof config.credentials === "undefined") {
-					config.credentials = "same-origin";
+        
+				if(typeof config.credentials === "undefined"){
+					config.credentials = 'same-origin';
 				}
-			} else {
-				if (typeof config.credentials === "undefined") {
-					config.credentials = "include";
+			}else {
+				if(typeof config.credentials === "undefined"){
+					config.credentials = 'include';
 				}
 			}
 
 			//send request
 			fetch(url, config)
-				.then((response) => {
-					if (response.ok) {
-						response
-							.json()
-							.then((data) => {
+				.then((response)=>{
+					if(response.ok) {
+						response.json()
+							.then((data)=>{
 								resolve(data);
-							})
-							.catch((error) => {
+							}).catch((error)=>{
 								reject(error);
 								console.warn("Ajax Load Error - Invalid JSON returned", error);
 							});
-					} else {
-						console.error(
-							"Ajax Load Error - Connection Error: " + response.status,
-							response.statusText
-						);
+					}else {
+						console.error("Ajax Load Error - Connection Error: " + response.status, response.statusText);
 						reject(response);
 					}
 				})
-				.catch((error) => {
+				.catch((error)=>{
 					console.error("Ajax Load Error - Connection Error: ", error);
 					reject(error);
 				});
-		} else {
+		}else {
 			console.warn("Ajax Load Error - No URL Set");
 			resolve([]);
 		}
 	});
 }
 
-function generateParamsList$1(data, prefix) {
+function generateParamsList$1(data, prefix){
 	var output = [];
 
 	prefix = prefix || "";
 
-	if (Array.isArray(data)) {
+	if(Array.isArray(data)){
 		data.forEach((item, i) => {
-			output = output.concat(
-				generateParamsList$1(item, prefix ? prefix + "[" + i + "]" : i)
-			);
+			output = output.concat(generateParamsList$1(item, prefix ? prefix + "[" + i + "]" : i));
 		});
-	} else if (typeof data === "object") {
-		for (var key in data) {
-			output = output.concat(
-				generateParamsList$1(data[key], prefix ? prefix + "[" + key + "]" : key)
-			);
+	}else if (typeof data === "object"){
+		for (var key in data){
+			output = output.concat(generateParamsList$1(data[key], prefix ? prefix + "[" + key + "]" : key));
 		}
-	} else {
-		output.push({ key: prefix, value: data });
+	}else {
+		output.push({key:prefix, value:data});
 	}
 
 	return output;
 }
 
 var defaultContentTypeFormatters = {
-	json: {
-		headers: {
-			"Content-Type": "application/json",
+	"json":{
+		headers:{
+			'Content-Type': 'application/json',
 		},
-		body: function (url, config, params) {
+		body:function(url, config, params){
 			return JSON.stringify(params);
 		},
 	},
-	form: {
-		headers: {},
-		body: function (url, config, params) {
-			var output = generateParamsList$1(params),
-				form = new FormData();
+	"form":{
+		headers:{
+		},
+		body:function(url, config, params){
 
-			output.forEach(function (item) {
+			var output = generateParamsList$1(params),
+			form = new FormData();
+
+			output.forEach(function(item){
 				form.append(item.key, item.value);
 			});
 
@@ -955,135 +901,129 @@ var defaultContentTypeFormatters = {
 	},
 };
 
-class Ajax extends Module {
-	constructor(table) {
+class Ajax extends Module{
+	
+	constructor(table){
 		super(table);
-
+		
 		this.config = {}; //hold config object for ajax request
 		this.url = ""; //request URL
 		this.urlGenerator = false;
 		this.params = false; //request parameters
-
+		
 		this.loaderPromise = false;
-
+		
 		this.registerTableOption("ajaxURL", false); //url for ajax loading
 		this.registerTableOption("ajaxURLGenerator", false);
-		this.registerTableOption("ajaxParams", {}); //params for ajax loading
+		this.registerTableOption("ajaxParams", {});  //params for ajax loading
 		this.registerTableOption("ajaxConfig", "get"); //ajax request type
 		this.registerTableOption("ajaxContentType", "form"); //ajax request type
 		this.registerTableOption("ajaxRequestFunc", false); //promise function
-
-		this.registerTableOption("ajaxRequesting", function () {});
+		
+		this.registerTableOption("ajaxRequesting", function(){});
 		this.registerTableOption("ajaxResponse", false);
-
+		
 		this.contentTypeFormatters = Ajax.contentTypeFormatters;
 	}
-
+	
 	//initialize setup options
-	initialize() {
-		this.loaderPromise =
-			this.table.options.ajaxRequestFunc || Ajax.defaultLoaderPromise;
-		this.urlGenerator =
-			this.table.options.ajaxURLGenerator || Ajax.defaultURLGenerator;
-
-		if (this.table.options.ajaxURL) {
+	initialize(){
+		this.loaderPromise = this.table.options.ajaxRequestFunc || Ajax.defaultLoaderPromise;
+		this.urlGenerator = this.table.options.ajaxURLGenerator || Ajax.defaultURLGenerator;
+		
+		if(this.table.options.ajaxURL){
 			this.setUrl(this.table.options.ajaxURL);
 		}
 
+
 		this.setDefaultConfig(this.table.options.ajaxConfig);
-
+		
 		this.registerTableFunction("getAjaxUrl", this.getUrl.bind(this));
-
+		
 		this.subscribe("data-loading", this.requestDataCheck.bind(this));
 		this.subscribe("data-params", this.requestParams.bind(this));
 		this.subscribe("data-load", this.requestData.bind(this));
 	}
-
-	requestParams(data, config, silent, params) {
+	
+	requestParams(data, config, silent, params){
 		var ajaxParams = this.table.options.ajaxParams;
-
-		if (ajaxParams) {
-			if (typeof ajaxParams === "function") {
+		
+		if(ajaxParams){
+			if(typeof ajaxParams === "function"){
 				ajaxParams = ajaxParams.call(this.table);
 			}
-
+			
 			params = Object.assign(params, ajaxParams);
-		}
-
+		}		
+		
 		return params;
 	}
-
-	requestDataCheck(data, params, config, silent) {
+	
+	requestDataCheck(data, params, config, silent){
 		return !!((!data && this.url) || typeof data === "string");
 	}
-
-	requestData(url, params, config, silent, previousData) {
+	
+	requestData(url, params, config, silent, previousData){
 		var ajaxConfig;
-
-		if (!previousData && this.requestDataCheck(url)) {
-			if (url) {
+		
+		if(!previousData && this.requestDataCheck(url)){
+			if(url){
 				this.setUrl(url);
 			}
-
+			
 			ajaxConfig = this.generateConfig(config);
-
+			
 			return this.sendRequest(this.url, params, ajaxConfig);
-		} else {
+		}else {
 			return previousData;
 		}
 	}
-
-	setDefaultConfig(config = {}) {
+	
+	setDefaultConfig(config = {}){
 		this.config = Object.assign({}, Ajax.defaultConfig);
 
-		if (typeof config == "string") {
+		if(typeof config == "string"){
 			this.config.method = config;
-		} else {
+		}else {
 			Object.assign(this.config, config);
 		}
 	}
-
+	
 	//load config object
-	generateConfig(config = {}) {
+	generateConfig(config = {}){
 		var ajaxConfig = Object.assign({}, this.config);
-
-		if (typeof config == "string") {
+		
+		if(typeof config == "string"){
 			ajaxConfig.method = config;
-		} else {
+		}else {
 			Object.assign(ajaxConfig, config);
 		}
-
+		
 		return ajaxConfig;
 	}
-
+	
 	//set request url
-	setUrl(url) {
+	setUrl(url){
 		this.url = url;
 	}
-
+	
 	//get request url
-	getUrl() {
+	getUrl(){
 		return this.url;
 	}
-
+	
 	//send ajax request
-	sendRequest(url, params, config) {
-		if (
-			this.table.options.ajaxRequesting.call(this.table, url, params) !== false
-		) {
-			return this.loaderPromise(url, config, params).then((data) => {
-				if (this.table.options.ajaxResponse) {
-					data = this.table.options.ajaxResponse.call(
-						this.table,
-						url,
-						params,
-						data
-					);
-				}
-
-				return data;
-			});
-		} else {
+	sendRequest(url, params, config){
+		if(this.table.options.ajaxRequesting.call(this.table, url, params) !== false){
+			return this.loaderPromise(url, config, params)
+				.then((data)=>{
+					if(this.table.options.ajaxResponse){
+						data = this.table.options.ajaxResponse.call(this.table, url, params, data);
+					}
+				
+					return data;
+				});
+		}else {
 			return Promise.reject();
 		}
 	}
@@ -1098,88 +1038,79 @@ Ajax.defaultLoaderPromise = defaultLoaderPromise;
 Ajax.contentTypeFormatters = defaultContentTypeFormatters;
 
 var defaultPasteActions = {
-	replace: function (rows) {
+	replace:function(rows){
 		return this.table.setData(rows);
 	},
-	update: function (rows) {
+	update:function(rows){
 		return this.table.updateOrAddData(rows);
 	},
-	insert: function (rows) {
+	insert:function(rows){
 		return this.table.addData(rows);
 	},
 };
 
 var defaultPasteParsers = {
-	table: function (clipboard) {
+	table:function(clipboard){
 		var data = [],
-			headerFindSuccess = true,
-			columns = this.table.columnManager.columns,
-			columnMap = [],
-			rows = [];
+		headerFindSuccess = true,
+		columns = this.table.columnManager.columns,
+		columnMap = [],
+		rows = [];
 
 		//get data from clipboard into array of columns and rows.
 		clipboard = clipboard.split("\n");
 
-		clipboard.forEach(function (row) {
+		clipboard.forEach(function(row){
 			data.push(row.split("\t"));
 		});
 
-		if (data.length && !(data.length === 1 && data[0].length < 2)) {
+		if(data.length && !(data.length === 1 && data[0].length < 2)){
+
 			//check if headers are present by title
-			data[0].forEach(function (value) {
-				var column = columns.find(function (column) {
-					return (
-						value &&
-						column.definition.title &&
-						value.trim() &&
-						column.definition.title.trim() === value.trim()
-					);
+			data[0].forEach(function(value){
+				var column = columns.find(function(column){
+					return value && column.definition.title && value.trim() && column.definition.title.trim() === value.trim();
 				});
 
-				if (column) {
+				if(column){
 					columnMap.push(column);
-				} else {
+				}else {
 					headerFindSuccess = false;
 				}
 			});
 
 			//check if column headers are present by field
-			if (!headerFindSuccess) {
+			if(!headerFindSuccess){
 				headerFindSuccess = true;
 				columnMap = [];
 
-				data[0].forEach(function (value) {
-					var column = columns.find(function (column) {
-						return (
-							value &&
-							column.field &&
-							value.trim() &&
-							column.field.trim() === value.trim()
-						);
+				data[0].forEach(function(value){
+					var column = columns.find(function(column){
+						return value && column.field && value.trim() && column.field.trim() === value.trim();
 					});
 
-					if (column) {
+					if(column){
 						columnMap.push(column);
-					} else {
+					}else {
 						headerFindSuccess = false;
 					}
 				});
 
-				if (!headerFindSuccess) {
+				if(!headerFindSuccess){
 					columnMap = this.table.columnManager.columnsByIndex;
 				}
 			}
 
 			//remove header row if found
-			if (headerFindSuccess) {
+			if(headerFindSuccess){
 				data.shift();
 			}
 
-			data.forEach(function (item) {
+			data.forEach(function(item){
 				var row = {};
 
-				item.forEach(function (value, i) {
-					if (columnMap[i]) {
+				item.forEach(function(value, i){
+					if(columnMap[i]){
 						row[columnMap[i].field] = value;
 					}
 				});
@@ -1188,19 +1119,20 @@ var defaultPasteParsers = {
 			});
 
 			return rows;
-		} else {
+		}else {
 			return false;
 		}
-	},
+	}
 };
 
-class Clipboard extends Module {
-	constructor(table) {
+class Clipboard extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.mode = true;
-		this.pasteParser = function () {};
-		this.pasteAction = function () {};
+		this.pasteParser = function(){};
+		this.pasteAction = function(){};
 		this.customSelection = false;
 		this.rowRange = false;
 		this.blocked = true; //block copy actions not originating from this command
@@ -1217,52 +1149,48 @@ class Clipboard extends Module {
 		this.registerColumnOption("titleClipboard");
 	}
 
-	initialize() {
+	initialize(){
 		this.mode = this.table.options.clipboard;
 
 		this.rowRange = this.table.options.clipboardCopyRowRange;
 
-		if (this.mode === true || this.mode === "copy") {
+		if(this.mode === true || this.mode === "copy"){
 			this.table.element.addEventListener("copy", (e) => {
 				var plain, html, list;
 
-				if (!this.blocked) {
+				if(!this.blocked){
 					e.preventDefault();
 
-					if (this.customSelection) {
+					if(this.customSelection){
 						plain = this.customSelection;
 
-						if (this.table.options.clipboardCopyFormatter) {
+						if(this.table.options.clipboardCopyFormatter){
 							plain = this.table.options.clipboardCopyFormatter("plain", plain);
 						}
-					} else {
-						list = this.table.modules.export.generateExportList(
-							this.table.options.clipboardCopyConfig,
-							this.table.options.clipboardCopyStyled,
-							this.rowRange,
-							"clipboard"
-						);
+					}else {
+
+						list = this.table.modules.export.generateExportList(this.table.options.clipboardCopyConfig, this.table.options.clipboardCopyStyled, this.rowRange, "clipboard");
 
 						html = this.table.modules.export.generateHTMLTable(list);
 						plain = html ? this.generatePlainContent(list) : "";
 
-						if (this.table.options.clipboardCopyFormatter) {
+						if(this.table.options.clipboardCopyFormatter){
 							plain = this.table.options.clipboardCopyFormatter("plain", plain);
 							html = this.table.options.clipboardCopyFormatter("html", html);
 						}
 					}
 
 					if (window.clipboardData && window.clipboardData.setData) {
-						window.clipboardData.setData("Text", plain);
+						window.clipboardData.setData('Text', plain);
 					} else if (e.clipboardData && e.clipboardData.setData) {
-						e.clipboardData.setData("text/plain", plain);
-						if (html) {
-							e.clipboardData.setData("text/html", html);
+						e.clipboardData.setData('text/plain', plain);
+						if(html){
+							e.clipboardData.setData('text/html', html);
 						}
 					} else if (e.originalEvent && e.originalEvent.clipboardData.setData) {
-						e.originalEvent.clipboardData.setData("text/plain", plain);
-						if (html) {
-							e.originalEvent.clipboardData.setData("text/html", html);
+						e.originalEvent.clipboardData.setData('text/plain', plain);
+						if(html){
+							e.originalEvent.clipboardData.setData('text/html', html);
 						}
 					}
 
@@ -1273,7 +1201,7 @@ class Clipboard extends Module {
 			});
 		}
 
-		if (this.mode === true || this.mode === "paste") {
+		if(this.mode === true || this.mode === "paste"){
 			this.table.element.addEventListener("paste", (e) => {
 				this.paste(e);
 			});
@@ -1285,12 +1213,12 @@ class Clipboard extends Module {
 		this.registerTableFunction("copyToClipboard", this.copy.bind(this));
 	}
 
-	reset() {
+	reset(){
 		this.blocked = true;
 		this.customSelection = false;
 	}
 
-	generatePlainContent(list) {
+	generatePlainContent (list) {
 		var output = [];
 
 		list.forEach((row) => {
@@ -1299,15 +1227,16 @@ class Clipboard extends Module {
 			row.columns.forEach((col) => {
 				var value = "";
 
-				if (col) {
-					if (row.type === "group") {
+				if(col){
+
+					if(row.type === "group"){
 						col.value = col.component.getKey();
 					}
 
-					if (col.value === null) {
+					if(col.value === null){
 						value = "";
-					} else {
-						switch (typeof col.value) {
+					}else {
+						switch(typeof col.value){
 							case "object":
 								value = JSON.stringify(col.value);
 								break;
@@ -1331,18 +1260,16 @@ class Clipboard extends Module {
 		return output.join("\n");
 	}
 
-	copy(range, internal) {
+	copy (range, internal) {
 		var sel, textRange;
 		this.blocked = false;
 		this.customSelection = false;
 
 		if (this.mode === true || this.mode === "copy") {
+
 			this.rowRange = range || this.table.options.clipboardCopyRowRange;
 
-			if (
-				typeof window.getSelection != "undefined" &&
-				typeof document.createRange != "undefined"
-			) {
+			if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
 				range = document.createRange();
 				range.selectNodeContents(this.table.element);
 				sel = window.getSelection();
@@ -1353,16 +1280,13 @@ class Clipboard extends Module {
 
 				sel.removeAllRanges();
 				sel.addRange(range);
-			} else if (
-				typeof document.selection != "undefined" &&
-				typeof document.body.createTextRange != "undefined"
-			) {
+			} else if (typeof document.selection != "undefined" && typeof document.body.createTextRange != "undefined") {
 				textRange = document.body.createTextRange();
 				textRange.moveToElementText(this.table.element);
 				textRange.select();
 			}
 
-			document.execCommand("copy");
+			document.execCommand('copy');
 
 			if (sel) {
 				sel.removeAllRanges();
@@ -1371,12 +1295,13 @@ class Clipboard extends Module {
 	}
 
 	//PASTE EVENT HANDLING
-	setPasteAction(action) {
-		switch (typeof action) {
+	setPasteAction(action){
+
+		switch(typeof action){
 			case "string":
 				this.pasteAction = Clipboard.pasteActions[action];
 
-				if (!this.pasteAction) {
+				if(!this.pasteAction){
 					console.warn("Clipboard Error - No such paste action found:", action);
 				}
 				break;
@@ -1387,12 +1312,12 @@ class Clipboard extends Module {
 		}
 	}
 
-	setPasteParser(parser) {
-		switch (typeof parser) {
+	setPasteParser(parser){
+		switch(typeof parser){
 			case "string":
 				this.pasteParser = Clipboard.pasteParsers[parser];
 
-				if (!this.pasteParser) {
+				if(!this.pasteParser){
 					console.warn("Clipboard Error - No such paste parser found:", parser);
 				}
 				break;
@@ -1403,63 +1328,65 @@ class Clipboard extends Module {
 		}
 	}
 
-	paste(e) {
+	paste(e){
 		var data, rowData, rows;
 
-		if (this.checkPaseOrigin(e)) {
+		if(this.checkPaseOrigin(e)){
+
 			data = this.getPasteData(e);
 
 			rowData = this.pasteParser.call(this, data);
 
-			if (rowData) {
+			if(rowData){
 				e.preventDefault();
 
-				if (this.table.modExists("mutator")) {
+				if(this.table.modExists("mutator")){
 					rowData = this.mutateData(rowData);
 				}
 
 				rows = this.pasteAction.call(this, rowData);
 
 				this.dispatchExternal("clipboardPasted", data, rowData, rows);
-			} else {
+			}else {
 				this.dispatchExternal("clipboardPasteError", data);
 			}
 		}
 	}
 
-	mutateData(data) {
+	mutateData(data){
 		var output = [];
 
-		if (Array.isArray(data)) {
+		if(Array.isArray(data)){
 			data.forEach((row) => {
 				output.push(this.table.modules.mutator.transformRow(row, "clipboard"));
 			});
-		} else {
+		}else {
 			output = data;
 		}
 
 		return output;
 	}
 
-	checkPaseOrigin(e) {
+
+	checkPaseOrigin(e){
 		var valid = true;
 
-		if (e.target.tagName != "DIV" || this.table.modules.edit.currentCell) {
+		if(e.target.tagName != "DIV" || this.table.modules.edit.currentCell){
 			valid = false;
 		}
 
 		return valid;
 	}
 
-	getPasteData(e) {
+	getPasteData(e){
 		var data;
 
 		if (window.clipboardData && window.clipboardData.getData) {
-			data = window.clipboardData.getData("Text");
+			data = window.clipboardData.getData('Text');
 		} else if (e.clipboardData && e.clipboardData.getData) {
-			data = e.clipboardData.getData("text/plain");
+			data = e.clipboardData.getData('text/plain');
 		} else if (e.originalEvent && e.originalEvent.clipboardData.getData) {
-			data = e.originalEvent.clipboardData.getData("text/plain");
+			data = e.originalEvent.clipboardData.getData('text/plain');
 		}
 
 		return data;
@@ -1472,140 +1399,133 @@ Clipboard.moduleName = "clipboard";
 Clipboard.pasteActions = defaultPasteActions;
 Clipboard.pasteParsers = defaultPasteParsers;
 
-class CalcComponent {
-	constructor(row) {
+class CalcComponent{
+	constructor (row){
 		this._row = row;
 
 		return new Proxy(this, {
-			get: function (target, name, receiver) {
+			get: function(target, name, receiver) {
 				if (typeof target[name] !== "undefined") {
 					return target[name];
-				} else {
-					return target._row.table.componentFunctionBinder.handle(
-						"row",
-						target._row,
-						name
-					);
+				}else {
+					return target._row.table.componentFunctionBinder.handle("row", target._row, name);
 				}
-			},
+			}
 		});
 	}
 
-	getData(transform) {
+	getData(transform){
 		return this._row.getData(transform);
 	}
 
-	getElement() {
+	getElement(){
 		return this._row.getElement();
 	}
 
-	getTable() {
+	getTable(){
 		return this._row.table;
 	}
 
-	getCells() {
+	getCells(){
 		var cells = [];
 
-		this._row.getCells().forEach(function (cell) {
+		this._row.getCells().forEach(function(cell){
 			cells.push(cell.getComponent());
 		});
 
 		return cells;
 	}
 
-	getCell(column) {
+	getCell(column){
 		var cell = this._row.getCell(column);
 		return cell ? cell.getComponent() : false;
 	}
 
-	_getSelf() {
+	_getSelf(){
 		return this._row;
 	}
 }
 
 //public cell object
 class CellComponent {
-	constructor(cell) {
+
+	constructor (cell){
 		this._cell = cell;
 
 		return new Proxy(this, {
-			get: function (target, name, receiver) {
+			get: function(target, name, receiver) {
 				if (typeof target[name] !== "undefined") {
 					return target[name];
-				} else {
-					return target._cell.table.componentFunctionBinder.handle(
-						"cell",
-						target._cell,
-						name
-					);
+				}else {
+					return target._cell.table.componentFunctionBinder.handle("cell", target._cell, name);
 				}
-			},
+			}
 		});
 	}
 
-	getValue() {
+	getValue(){
 		return this._cell.getValue();
 	}
 
-	getOldValue() {
+	getOldValue(){
 		return this._cell.getOldValue();
 	}
 
-	getInitialValue() {
+	getInitialValue(){
 		return this._cell.initialValue;
 	}
 
-	getElement() {
+	getElement(){
 		return this._cell.getElement();
 	}
 
-	getRow() {
+	getRow(){
 		return this._cell.row.getComponent();
 	}
 
-	getData() {
+	getData(){
 		return this._cell.row.getData();
 	}
 
-	getField() {
+	getField(){
 		return this._cell.column.getField();
 	}
 
-	getColumn() {
+	getColumn(){
 		return this._cell.column.getComponent();
 	}
 
-	setValue(value, mutate) {
-		if (typeof mutate == "undefined") {
+	setValue(value, mutate){
+		if(typeof mutate == "undefined"){
 			mutate = true;
 		}
 
 		this._cell.setValue(value, mutate);
 	}
 
-	restoreOldValue() {
+	restoreOldValue(){
 		this._cell.setValueActual(this._cell.getOldValue());
 	}
 
-	restoreInitialValue() {
+	restoreInitialValue(){
 		this._cell.setValueActual(this._cell.initialValue);
 	}
 
-	checkHeight() {
+	checkHeight(){
 		this._cell.checkHeight();
 	}
 
-	getTable() {
+	getTable(){
 		return this._cell.table;
 	}
 
-	_getSelf() {
+	_getSelf(){
 		return this._cell;
 	}
 }
 
-class Cell extends CoreFeature {
-	constructor(column, row) {
+class Cell extends CoreFeature{
+	constructor(column, row){
 		super(column.table);
 
 		this.table = column.table;
@@ -1630,7 +1550,7 @@ class Cell extends CoreFeature {
 
 	//////////////// Setup Functions /////////////////
 	//generate element
-	build() {
+	build(){
 		this.generateElement();
 
 		this.setWidth();
@@ -1642,45 +1562,45 @@ class Cell extends CoreFeature {
 		this.initialValue = this.value;
 	}
 
-	generateElement() {
-		this.element = document.createElement("div");
+	generateElement(){
+		this.element = document.createElement('div');
 		this.element.className = "tabulator-cell";
 		this.element.setAttribute("role", "gridcell");
 	}
 
-	_configureCell() {
+	_configureCell(){
 		var element = this.element,
-			field = this.column.getField(),
-			vertAligns = {
-				top: "flex-start",
-				bottom: "flex-end",
-				middle: "center",
-			},
-			hozAligns = {
-				left: "flex-start",
-				right: "flex-end",
-				center: "center",
-			};
+		field = this.column.getField(),
+		vertAligns = {
+			top:"flex-start",
+			bottom:"flex-end",
+			middle:"center",
+		},
+		hozAligns = {
+			left:"flex-start",
+			right:"flex-end",
+			center:"center",
+		};
 
 		//set text alignment
 		element.style.textAlign = this.column.hozAlign;
 
-		if (this.column.vertAlign) {
+		if(this.column.vertAlign){
 			element.style.display = "inline-flex";
 
 			element.style.alignItems = vertAligns[this.column.vertAlign] || "";
 
-			if (this.column.hozAlign) {
+			if(this.column.hozAlign){
 				element.style.justifyContent = hozAligns[this.column.hozAlign] || "";
 			}
 		}
 
-		if (field) {
+		if(field){
 			element.setAttribute("tabulator-field", field);
 		}
 
 		//add class to cell if needed
-		if (this.column.definition.cssClass) {
+		if(this.column.definition.cssClass){
 			var classNames = this.column.definition.cssClass.split(" ");
 			classNames.forEach((className) => {
 				element.classList.add(className);
@@ -1690,35 +1610,32 @@ class Cell extends CoreFeature {
 		this.dispatch("cell-init", this);
 
 		//hide cell if not visible
-		if (!this.column.visible) {
+		if(!this.column.visible){
 			this.hide();
 		}
 	}
 
 	//generate cell contents
-	_generateContents() {
+	_generateContents(){
 		var val;
 
 		val = this.chain("cell-format", this, null, () => {
-			return (this.element.innerHTML = this.value);
+			return this.element.innerHTML = this.value;
 		});
 
-		switch (typeof val) {
+		switch(typeof val){
 			case "object":
-				if (val instanceof Node) {
+				if(val instanceof Node){
+
 					//clear previous cell contents
-					while (this.element.firstChild)
-						this.element.removeChild(this.element.firstChild);
+					while(this.element.firstChild) this.element.removeChild(this.element.firstChild);
 
 					this.element.appendChild(val);
-				} else {
+				}else {
 					this.element.innerHTML = "";
 
-					if (val != null) {
-						console.warn(
-							"Format Error - Formatter has returned a type of object, the only valid formatter object return is an instance of Node, the formatter returned:",
-							val
-						);
+					if(val != null){
+						console.warn("Format Error - Formatter has returned a type of object, the only valid formatter object return is an instance of Node, the formatter returned:", val);
 					}
 				}
 				break;
@@ -1730,15 +1647,15 @@ class Cell extends CoreFeature {
 		}
 	}
 
-	cellRendered() {
+	cellRendered(){
 		this.dispatch("cell-rendered", this);
 	}
 
 	//////////////////// Getters ////////////////////
-	getElement(containerOnly) {
-		if (!this.loaded) {
+	getElement(containerOnly){
+		if(!this.loaded){
 			this.loaded = true;
-			if (!containerOnly) {
+			if(!containerOnly){
 				this.layoutElement();
 			}
 		}
@@ -1746,56 +1663,57 @@ class Cell extends CoreFeature {
 		return this.element;
 	}
 
-	getValue() {
+	getValue(){
 		return this.value;
 	}
 
-	getOldValue() {
+	getOldValue(){
 		return this.oldValue;
 	}
 
 	//////////////////// Actions ////////////////////
-	setValue(value, mutate, force) {
+	setValue(value, mutate, force){
 		var changed = this.setValueProcessData(value, mutate, force);
 
-		if (changed) {
+		if(changed){
 			this.dispatch("cell-value-updated", this);
 
 			this.cellRendered();
 
-			if (this.column.definition.cellEdited) {
+			if(this.column.definition.cellEdited){
 				this.column.definition.cellEdited.call(this.table, this.getComponent());
 			}
 
 			this.dispatchExternal("cellEdited", this.getComponent());
 
-			if (this.subscribedExternal("dataChanged")) {
+			if(this.subscribedExternal("dataChanged")){
 				this.dispatchExternal("dataChanged", this.table.rowManager.getData());
 			}
 		}
 	}
 
-	setValueProcessData(value, mutate, force) {
+	setValueProcessData(value, mutate, force){
 		var changed = false;
 
-		if (this.value !== value || force) {
+		if(this.value !== value || force){
+
 			changed = true;
 
-			if (mutate) {
+			if(mutate){
 				value = this.chain("cell-value-changing", [this, value], null, value);
 			}
 		}
 
 		this.setValueActual(value);
 
-		if (changed) {
+		if(changed){
 			this.dispatch("cell-value-changed", this);
 		}
 
 		return changed;
 	}
 
-	setValueActual(value) {
+	setValueActual(value){
 		this.oldValue = this.value;
 
 		this.value = value;
@@ -1806,76 +1724,76 @@ class Cell extends CoreFeature {
 
 		this.dispatch("cell-value-save-after", this);
 
-		if (this.loaded) {
+		if(this.loaded){
 			this.layoutElement();
 		}
 	}
 
-	layoutElement() {
+	layoutElement(){
 		this._generateContents();
 
 		this.dispatch("cell-layout", this);
 	}
 
-	setWidth() {
+	setWidth(){
 		this.width = this.column.width;
 		this.element.style.width = this.column.widthStyled;
 	}
 
-	clearWidth() {
+	clearWidth(){
 		this.width = "";
 		this.element.style.width = "";
 	}
 
-	getWidth() {
+	getWidth(){
 		return this.width || this.element.offsetWidth;
 	}
 
-	setMinWidth() {
+	setMinWidth(){
 		this.minWidth = this.column.minWidth;
 		this.element.style.minWidth = this.column.minWidthStyled;
 	}
 
-	setMaxWidth() {
+	setMaxWidth(){
 		this.maxWidth = this.column.maxWidth;
 		this.element.style.maxWidth = this.column.maxWidthStyled;
 	}
 
-	checkHeight() {
+	checkHeight(){
 		// var height = this.element.css("height");
 		this.row.reinitializeHeight();
 	}
 
-	clearHeight() {
+	clearHeight(){
 		this.element.style.height = "";
 		this.height = null;
 
 		this.dispatch("cell-height", this, "");
 	}
 
-	setHeight() {
+	setHeight(){
 		this.height = this.row.height;
 		this.element.style.height = this.row.heightStyled;
 
 		this.dispatch("cell-height", this, this.row.heightStyled);
 	}
 
-	getHeight() {
+	getHeight(){
 		return this.height || this.element.offsetHeight;
 	}
 
-	show() {
+	show(){
 		this.element.style.display = this.column.vertAlign ? "inline-flex" : "";
 	}
 
-	hide() {
+	hide(){
 		this.element.style.display = "none";
 	}
 
-	delete() {
+	delete(){
 		this.dispatch("cell-delete", this);
 
-		if (!this.table.rowManager.redrawBlock && this.element.parentNode) {
+		if(!this.table.rowManager.redrawBlock && this.element.parentNode){
 			this.element.parentNode.removeChild(this.element);
 		}
 
@@ -1885,13 +1803,13 @@ class Cell extends CoreFeature {
 		this.calcs = {};
 	}
 
-	getIndex() {
+	getIndex(){
 		return this.row.getCellIndex(this);
 	}
 
 	//////////////// Object Generation /////////////////
-	getComponent() {
-		if (!this.component) {
+	getComponent(){
+		if(!this.component){
 			this.component = new CellComponent(this);
 		}
 
@@ -1901,34 +1819,30 @@ class Cell extends CoreFeature {
 
 //public column object
 class ColumnComponent {
-	constructor(column) {
+	constructor (column){
 		this._column = column;
 		this.type = "ColumnComponent";
 
 		return new Proxy(this, {
-			get: function (target, name, receiver) {
+			get: function(target, name, receiver) {
 				if (typeof target[name] !== "undefined") {
 					return target[name];
-				} else {
-					return target._column.table.componentFunctionBinder.handle(
-						"column",
-						target._column,
-						name
-					);
+				}else {
+					return target._column.table.componentFunctionBinder.handle("column", target._column, name);
 				}
-			},
+			}
 		});
 	}
 
-	getElement() {
+	getElement(){
 		return this._column.getElement();
 	}
 
-	getDefinition() {
+	getDefinition(){
 		return this._column.getDefinition();
 	}
 
-	getField() {
+	getField(){
 		return this._column.getField();
 	}
 
@@ -1936,57 +1850,57 @@ class ColumnComponent {
 		return this._column.getTitleDownload();
 	}
 
-	getCells() {
+	getCells(){
 		var cells = [];
 
-		this._column.cells.forEach(function (cell) {
+		this._column.cells.forEach(function(cell){
 			cells.push(cell.getComponent());
 		});
 
 		return cells;
 	}
 
-	isVisible() {
+	isVisible(){
 		return this._column.visible;
 	}
 
-	show() {
-		if (this._column.isGroup) {
-			this._column.columns.forEach(function (column) {
+	show(){
+		if(this._column.isGroup){
+			this._column.columns.forEach(function(column){
 				column.show();
 			});
-		} else {
+		}else {
 			this._column.show();
 		}
 	}
 
-	hide() {
-		if (this._column.isGroup) {
-			this._column.columns.forEach(function (column) {
+	hide(){
+		if(this._column.isGroup){
+			this._column.columns.forEach(function(column){
 				column.hide();
 			});
-		} else {
+		}else {
 			this._column.hide();
 		}
 	}
 
-	toggle() {
-		if (this._column.visible) {
+	toggle(){
+		if(this._column.visible){
 			this.hide();
-		} else {
+		}else {
 			this.show();
 		}
 	}
 
-	delete() {
+	delete(){
 		return this._column.delete();
 	}
 
-	getSubColumns() {
+	getSubColumns(){
 		var output = [];
 
-		if (this._column.columns.length) {
-			this._column.columns.forEach(function (column) {
+		if(this._column.columns.length){
+			this._column.columns.forEach(function(column){
 				output.push(column.getComponent());
 			});
 		}
@@ -1994,65 +1908,59 @@ class ColumnComponent {
 		return output;
 	}
 
-	getParentColumn() {
-		return this._column.parent instanceof Column
-			? this._column.parent.getComponent()
-			: false;
+	getParentColumn(){
+		return this._column.parent instanceof Column ? this._column.parent.getComponent() : false;
 	}
 
-	_getSelf() {
+	_getSelf(){
 		return this._column;
 	}
 
-	scrollTo() {
+	scrollTo(){
 		return this._column.table.columnManager.scrollToColumn(this._column);
 	}
 
-	getTable() {
+	getTable(){
 		return this._column.table;
 	}
 
-	move(to, after) {
+	move(to, after){
 		var toColumn = this._column.table.columnManager.findColumn(to);
 
-		if (toColumn) {
-			this._column.table.columnManager.moveColumn(
-				this._column,
-				toColumn,
-				after
-			);
-		} else {
+		if(toColumn){
+			this._column.table.columnManager.moveColumn(this._column, toColumn, after);
+		}else {
 			console.warn("Move Error - No matching column found:", toColumn);
 		}
 	}
 
-	getNextColumn() {
+	getNextColumn(){
 		var nextCol = this._column.nextColumn();
 
 		return nextCol ? nextCol.getComponent() : false;
 	}
 
-	getPrevColumn() {
+	getPrevColumn(){
 		var prevCol = this._column.prevColumn();
 
 		return prevCol ? prevCol.getComponent() : false;
 	}
 
-	updateDefinition(updates) {
+	updateDefinition(updates){
 		return this._column.updateDefinition(updates);
 	}
 
-	getWidth() {
+	getWidth(){
 		return this._column.getWidth();
 	}
 
-	setWidth(width) {
+	setWidth(width){
 		var result;
 
-		if (width === true) {
-			result = this._column.reinitializeWidth(true);
-		} else {
-			result = this._column.setWidth(width);
+		if(width === true){
+			result =  this._column.reinitializeWidth(true);
+		}else {
+			result =  this._column.setWidth(width);
 		}
 
 		this._column.table.columnManager.rerenderColumns(true);
@@ -2062,25 +1970,26 @@ class ColumnComponent {
 }
 
 var defaultColumnOptions = {
-	title: undefined,
-	field: undefined,
-	columns: undefined,
-	visible: undefined,
-	hozAlign: undefined,
-	vertAlign: undefined,
-	width: undefined,
-	minWidth: 40,
-	maxWidth: undefined,
-	maxInitialWidth: undefined,
-	cssClass: undefined,
-	variableHeight: undefined,
-	headerVertical: undefined,
-	headerHozAlign: undefined,
-	editableTitle: undefined,
+	"title": undefined,
+	"field": undefined,
+	"columns": undefined,
+	"visible": undefined,
+	"hozAlign": undefined,
+	"vertAlign": undefined,
+	"width": undefined,
+	"minWidth": 40,
+	"maxWidth": undefined,
+	"maxInitialWidth": undefined,
+	"cssClass": undefined,
+	"variableHeight": undefined,
+	"headerVertical": undefined,
+	"headerHozAlign": undefined,
+	"editableTitle": undefined,
 };
 
-class Column extends CoreFeature {
-	constructor(def, parent) {
+class Column extends CoreFeature{
+
+	constructor(def, parent){
 		super(parent.table);
 
 		this.definition = def; //column definition
@@ -2098,7 +2007,7 @@ class Column extends CoreFeature {
 		this.vertAlign = ""; //vert text alignment
 
 		//multi dimensional filed handling
-		this.field = "";
+		this.field ="";
 		this.fieldStructure = "";
 		this.getFieldValue = "";
 		this.setFieldValue = "";
@@ -2126,7 +2035,8 @@ class Column extends CoreFeature {
 		this.component = null;
 
 		//initialize column
-		if (this.definition.columns) {
+		if(this.definition.columns){
+
 			this.isGroup = true;
 
 			this.definition.columns.forEach((def, i) => {
@@ -2135,21 +2045,21 @@ class Column extends CoreFeature {
 			});
 
 			this.checkColumnVisibility();
-		} else {
+		}else {
 			parent.registerColumnField(this);
 		}
 
 		this._initialize();
 	}
 
-	createElement() {
+	createElement (){
 		var el = document.createElement("div");
 
 		el.classList.add("tabulator-col");
 		el.setAttribute("role", "columnheader");
 		el.setAttribute("aria-sort", "none");
 
-		switch (this.table.options.columnHeaderVertAlign) {
+		switch(this.table.options.columnHeaderVertAlign){
 			case "middle":
 				el.style.justifyContent = "center";
 				break;
@@ -2161,7 +2071,7 @@ class Column extends CoreFeature {
 		return el;
 	}
 
-	createGroupElement() {
+	createGroupElement (){
 		var el = document.createElement("div");
 
 		el.classList.add("tabulator-col-group-cols");
@@ -2169,82 +2079,67 @@ class Column extends CoreFeature {
 		return el;
 	}
 
-	mapDefinitions() {
+	mapDefinitions(){
 		var defaults = this.table.options.columnDefaults;
 
 		//map columnDefaults onto column definitions
-		if (defaults) {
-			for (let key in defaults) {
-				if (typeof this.definition[key] === "undefined") {
+		if(defaults){
+			for(let key in defaults){
+				if(typeof this.definition[key] === "undefined"){
 					this.definition[key] = defaults[key];
 				}
 			}
 		}
 
-		this.definition = this.table.columnManager.optionsList.generate(
-			Column.defaultOptionList,
-			this.definition
-		);
+		this.definition = this.table.columnManager.optionsList.generate(Column.defaultOptionList, this.definition);
 	}
 
-	checkDefinition() {
+	checkDefinition(){
 		Object.keys(this.definition).forEach((key) => {
-			if (Column.defaultOptionList.indexOf(key) === -1) {
-				console.warn(
-					"Invalid column definition option in '" +
-						(this.field || this.definition.title) +
-						"' column:",
-					key
-				);
+			if(Column.defaultOptionList.indexOf(key) === -1){
+				console.warn("Invalid column definition option in '" + (this.field || this.definition.title) + "' column:", key);
 			}
 		});
 	}
 
-	setField(field) {
+	setField(field){
 		this.field = field;
-		this.fieldStructure = field
-			? this.table.options.nestedFieldSeparator
-				? field.split(this.table.options.nestedFieldSeparator)
-				: [field]
-			: [];
-		this.getFieldValue =
-			this.fieldStructure.length > 1 ? this._getNestedData : this._getFlatData;
-		this.setFieldValue =
-			this.fieldStructure.length > 1 ? this._setNestedData : this._setFlatData;
+		this.fieldStructure = field ? (this.table.options.nestedFieldSeparator ? field.split(this.table.options.nestedFieldSeparator) : [field]) : [];
+		this.getFieldValue = this.fieldStructure.length > 1 ? this._getNestedData : this._getFlatData;
+		this.setFieldValue = this.fieldStructure.length > 1 ? this._setNestedData : this._setFlatData;
 	}
 
 	//register column position with column manager
-	registerColumnPosition(column) {
+	registerColumnPosition(column){
 		this.parent.registerColumnPosition(column);
 	}
 
 	//register column position with column manager
-	registerColumnField(column) {
+	registerColumnField(column){
 		this.parent.registerColumnField(column);
 	}
 
 	//trigger position registration
-	reRegisterPosition() {
-		if (this.isGroup) {
-			this.columns.forEach(function (column) {
+	reRegisterPosition(){
+		if(this.isGroup){
+			this.columns.forEach(function(column){
 				column.reRegisterPosition();
 			});
-		} else {
+		}else {
 			this.registerColumnPosition(this);
 		}
 	}
 
 	//build header element
-	_initialize() {
+	_initialize(){
 		var def = this.definition;
 
-		while (this.element.firstChild)
-			this.element.removeChild(this.element.firstChild);
+		while(this.element.firstChild) this.element.removeChild(this.element.firstChild);
 
-		if (def.headerVertical) {
+		if(def.headerVertical){
 			this.element.classList.add("tabulator-col-vertical");
 
-			if (def.headerVertical === "flip") {
+			if(def.headerVertical === "flip"){
 				this.element.classList.add("tabulator-col-vertical-flip");
 			}
 		}
@@ -2253,9 +2148,9 @@ class Column extends CoreFeature {
 
 		this.element.appendChild(this.contentElement);
 
-		if (this.isGroup) {
+		if(this.isGroup){
 			this._buildGroupHeader();
-		} else {
+		}else {
 			this._buildColumnHeader();
 		}
 
@@ -2263,29 +2158,29 @@ class Column extends CoreFeature {
 	}
 
 	//build header element for header
-	_buildColumnHeader() {
+	_buildColumnHeader(){
 		var def = this.definition;
 
 		this.dispatch("column-layout", this);
 
 		//set column visibility
-		if (typeof def.visible != "undefined") {
-			if (def.visible) {
+		if(typeof def.visible != "undefined"){
+			if(def.visible){
 				this.show(true);
-			} else {
+			}else {
 				this.hide(true);
 			}
 		}
 
 		//assign additional css classes to column header
-		if (def.cssClass) {
+		if(def.cssClass){
 			var classNames = def.cssClass.split(" ");
 			classNames.forEach((className) => {
 				this.element.classList.add(className);
 			});
 		}
 
-		if (def.field) {
+		if(def.field){
 			this.element.setAttribute("tabulator-field", def.field);
 		}
 
@@ -2295,8 +2190,8 @@ class Column extends CoreFeature {
 		if (def.maxInitialWidth) {
 			this.maxInitialWidth = parseInt(def.maxInitialWidth);
 		}
-
-		if (def.maxWidth) {
+		
+		if(def.maxWidth){
 			this.setMaxWidth(parseInt(def.maxWidth));
 		}
 
@@ -2309,7 +2204,7 @@ class Column extends CoreFeature {
 		this.titleElement.style.textAlign = this.definition.headerHozAlign;
 	}
 
-	_buildColumnHeaderContent() {
+	_buildColumnHeaderContent(){
 		var contentElement = document.createElement("div");
 		contentElement.classList.add("tabulator-col-content");
 
@@ -2326,13 +2221,13 @@ class Column extends CoreFeature {
 	}
 
 	//build title element of column
-	_buildColumnHeaderTitle() {
+	_buildColumnHeaderTitle(){
 		var def = this.definition;
 
 		var titleHolderElement = document.createElement("div");
 		titleHolderElement.classList.add("tabulator-col-title");
 
-		if (def.editableTitle) {
+		if(def.editableTitle){
 			var titleElement = document.createElement("input");
 			titleElement.classList.add("tabulator-title-editor");
 
@@ -2348,47 +2243,39 @@ class Column extends CoreFeature {
 
 			titleHolderElement.appendChild(titleElement);
 
-			if (def.field) {
+			if(def.field){
 				this.langBind("columns|" + def.field, (text) => {
-					titleElement.value = text || def.title || "&nbsp;";
+					titleElement.value = text || (def.title || "&nbsp;");
 				});
-			} else {
-				titleElement.value = def.title || "&nbsp;";
+			}else {
+				titleElement.value  = def.title || "&nbsp;";
 			}
-		} else {
-			if (def.field) {
+
+		}else {
+			if(def.field){
 				this.langBind("columns|" + def.field, (text) => {
-					this._formatColumnHeaderTitle(
-						titleHolderElement,
-						text || def.title || "&nbsp;"
-					);
+					this._formatColumnHeaderTitle(titleHolderElement, text || (def.title || "&nbsp;"));
 				});
-			} else {
-				this._formatColumnHeaderTitle(
-					titleHolderElement,
-					def.title || "&nbsp;"
-				);
+			}else {
+				this._formatColumnHeaderTitle(titleHolderElement, def.title || "&nbsp;");
 			}
 		}
 
 		return titleHolderElement;
 	}
 
-	_formatColumnHeaderTitle(el, title) {
+	_formatColumnHeaderTitle(el, title){
 		var contents = this.chain("column-format", [this, title, el], null, () => {
 			return title;
 		});
 
-		switch (typeof contents) {
+		switch(typeof contents){
 			case "object":
-				if (contents instanceof Node) {
+				if(contents instanceof Node){
 					el.appendChild(contents);
-				} else {
+				}else {
 					el.innerHTML = "";
-					console.warn(
-						"Format Error - Title formatter has returned a type of object, the only valid formatter object return is an instance of Node, the formatter returned:",
-						contents
-					);
+					console.warn("Format Error - Title formatter has returned a type of object, the only valid formatter object return is an instance of Node, the formatter returned:", contents);
 				}
 				break;
 			case "undefined":
@@ -2400,13 +2287,13 @@ class Column extends CoreFeature {
 	}
 
 	//build header element for column group
-	_buildGroupHeader() {
+	_buildGroupHeader(){
 		this.element.classList.add("tabulator-col-group");
 		this.element.setAttribute("role", "columngroup");
 		this.element.setAttribute("aria-title", this.definition.title);
 
 		//asign additional css classes to column header
-		if (this.definition.cssClass) {
+		if(this.definition.cssClass){
 			var classNames = this.definition.cssClass.split(" ");
 			classNames.forEach((className) => {
 				this.element.classList.add(className);
@@ -2419,23 +2306,24 @@ class Column extends CoreFeature {
 	}
 
 	//flat field lookup
-	_getFlatData(data) {
+	_getFlatData(data){
 		return data[this.field];
 	}
 
 	//nested field lookup
-	_getNestedData(data) {
+	_getNestedData(data){
 		var dataObj = data,
-			structure = this.fieldStructure,
-			length = structure.length,
-			output;
+		structure = this.fieldStructure,
+		length = structure.length,
+		output;
 
-		for (let i = 0; i < length; i++) {
+		for(let i = 0; i < length; i++){
+
 			dataObj = dataObj[structure[i]];
 
 			output = dataObj;
 
-			if (!dataObj) {
+			if(!dataObj){
 				break;
 			}
 		}
@@ -2444,26 +2332,27 @@ class Column extends CoreFeature {
 	}
 
 	//flat field set
-	_setFlatData(data, value) {
-		if (this.field) {
+	_setFlatData(data, value){
+		if(this.field){
 			data[this.field] = value;
 		}
 	}
 
 	//nested field set
-	_setNestedData(data, value) {
+	_setNestedData(data, value){
 		var dataObj = data,
-			structure = this.fieldStructure,
-			length = structure.length;
+		structure = this.fieldStructure,
+		length = structure.length;
 
-		for (let i = 0; i < length; i++) {
-			if (i == length - 1) {
+		for(let i = 0; i < length; i++){
+
+			if(i == length -1){
 				dataObj[structure[i]] = value;
-			} else {
-				if (!dataObj[structure[i]]) {
-					if (typeof value !== "undefined") {
+			}else {
+				if(!dataObj[structure[i]]){
+					if(typeof value !== "undefined"){
 						dataObj[structure[i]] = {};
-					} else {
+					}else {
 						break;
 					}
 				}
@@ -2474,34 +2363,30 @@ class Column extends CoreFeature {
 	}
 
 	//attach column to this group
-	attachColumn(column) {
-		if (this.groupElement) {
+	attachColumn(column){
+		if(this.groupElement){
 			this.columns.push(column);
 			this.groupElement.appendChild(column.getElement());
 
 			column.columnRendered();
-		} else {
-			console.warn(
-				"Column Warning - Column being attached to another column instead of column group"
-			);
+		}else {
+			console.warn("Column Warning - Column being attached to another column instead of column group");
 		}
 	}
 
 	//vertically align header in column
-	verticalAlign(alignment, height) {
+	verticalAlign(alignment, height){
+
 		//calculate height of column header and group holder element
-		var parentHeight = this.parent.isGroup
-			? this.parent.getGroupElement().clientHeight
-			: height || this.parent.getHeadersElement().clientHeight;
+		var parentHeight = this.parent.isGroup ? this.parent.getGroupElement().clientHeight : (height || this.parent.getHeadersElement().clientHeight);
 		// var parentHeight = this.parent.isGroup ? this.parent.getGroupElement().clientHeight : this.parent.getHeadersElement().clientHeight;
 
 		this.element.style.height = parentHeight + "px";
 
 		this.dispatch("column-height", this, this.element.style.height);
 
-		if (this.isGroup) {
-			this.groupElement.style.minHeight =
-				parentHeight - this.contentElement.offsetHeight + "px";
+		if(this.isGroup){
+			this.groupElement.style.minHeight = (parentHeight - this.contentElement.offsetHeight) + "px";
 		}
 
 		//vertically align cell contents
@@ -2513,19 +2398,19 @@ class Column extends CoreFeature {
 		// 	}
 		// }
 
-		this.columns.forEach(function (column) {
+		this.columns.forEach(function(column){
 			column.verticalAlign(alignment);
 		});
 	}
 
 	//clear vertical alignment
-	clearVerticalAlign() {
+	clearVerticalAlign(){
 		this.element.style.paddingTop = "";
 		this.element.style.height = "";
 		this.element.style.minHeight = "";
 		this.groupElement.style.minHeight = "";
 
-		this.columns.forEach(function (column) {
+		this.columns.forEach(function(column){
 			column.clearVerticalAlign();
 		});
 
@@ -2534,17 +2419,17 @@ class Column extends CoreFeature {
 
 	//// Retrieve Column Information ////
 	//return column header element
-	getElement() {
+	getElement(){
 		return this.element;
 	}
 
 	//return column group element
-	getGroupElement() {
+	getGroupElement(){
 		return this.groupElement;
 	}
 
 	//return field name
-	getField() {
+	getField(){
 		return this.field;
 	}
 
@@ -2553,68 +2438,68 @@ class Column extends CoreFeature {
 	}
 
 	//return the first column in a group
-	getFirstColumn() {
-		if (!this.isGroup) {
+	getFirstColumn(){
+		if(!this.isGroup){
 			return this;
-		} else {
-			if (this.columns.length) {
+		}else {
+			if(this.columns.length){
 				return this.columns[0].getFirstColumn();
-			} else {
+			}else {
 				return false;
 			}
 		}
 	}
 
 	//return the last column in a group
-	getLastColumn() {
-		if (!this.isGroup) {
+	getLastColumn(){
+		if(!this.isGroup){
 			return this;
-		} else {
-			if (this.columns.length) {
-				return this.columns[this.columns.length - 1].getLastColumn();
-			} else {
+		}else {
+			if(this.columns.length){
+				return this.columns[this.columns.length -1].getLastColumn();
+			}else {
 				return false;
 			}
 		}
 	}
 
 	//return all columns in a group
-	getColumns(traverse) {
+	getColumns(traverse){
 		var columns = [];
 
-		if (traverse) {
+		if(traverse){
 			this.columns.forEach((column) => {
 				columns.push(column);
-
+					
 				columns = columns.concat(column.getColumns(true));
 			});
-		} else {
+		}else {
 			columns = this.columns;
 		}
-
+		
 		return columns;
 	}
 
 	//return all columns in a group
-	getCells() {
+	getCells(){
 		return this.cells;
 	}
 
 	//retrieve the top column in a group of columns
-	getTopColumn() {
-		if (this.parent.isGroup) {
+	getTopColumn(){
+		if(this.parent.isGroup){
 			return this.parent.getTopColumn();
-		} else {
+		}else {
 			return this;
 		}
 	}
 
 	//return column definition object
-	getDefinition(updateBranches) {
+	getDefinition(updateBranches){
 		var colDefs = [];
 
-		if (this.isGroup && updateBranches) {
-			this.columns.forEach(function (column) {
+		if(this.isGroup && updateBranches){
+			this.columns.forEach(function(column){
 				colDefs.push(column.getDefinition(true));
 			});
 
@@ -2625,43 +2510,39 @@ class Column extends CoreFeature {
 	}
 
 	//////////////////// Actions ////////////////////
-	checkColumnVisibility() {
+	checkColumnVisibility(){
 		var visible = false;
 
-		this.columns.forEach(function (column) {
-			if (column.visible) {
+		this.columns.forEach(function(column){
+			if(column.visible){
 				visible = true;
 			}
 		});
 
-		if (visible) {
+		if(visible){
 			this.show();
-			this.dispatchExternal(
-				"columnVisibilityChanged",
-				this.getComponent(),
-				false
-			);
-		} else {
+			this.dispatchExternal("columnVisibilityChanged", this.getComponent(), false);
+		}else {
 			this.hide();
 		}
 	}
 
 	//show column
-	show(silent, responsiveToggle) {
-		if (!this.visible) {
+	show(silent, responsiveToggle){
+		if(!this.visible){
 			this.visible = true;
 
 			this.element.style.display = "";
 
-			if (this.parent.isGroup) {
+			if(this.parent.isGroup){
 				this.parent.checkColumnVisibility();
 			}
 
-			this.cells.forEach(function (cell) {
+			this.cells.forEach(function(cell){
 				cell.show();
 			});
 
-			if (!this.isGroup && this.width === null) {
+			if(!this.isGroup && this.width === null){
 				this.reinitializeWidth();
 			}
 
@@ -2669,106 +2550,96 @@ class Column extends CoreFeature {
 
 			this.dispatch("column-show", this, responsiveToggle);
 
-			if (!silent) {
-				this.dispatchExternal(
-					"columnVisibilityChanged",
-					this.getComponent(),
-					true
-				);
+			if(!silent){
+				this.dispatchExternal("columnVisibilityChanged", this.getComponent(), true);
 			}
 
-			if (this.parent.isGroup) {
+			if(this.parent.isGroup){
 				this.parent.matchChildWidths();
 			}
 
-			if (!this.silent) {
+			if(!this.silent){
 				this.table.columnManager.rerenderColumns();
 			}
 		}
 	}
 
 	//hide column
-	hide(silent, responsiveToggle) {
-		if (this.visible) {
+	hide(silent, responsiveToggle){
+		if(this.visible){
 			this.visible = false;
 
 			this.element.style.display = "none";
 
 			this.table.columnManager.verticalAlignHeaders();
 
-			if (this.parent.isGroup) {
+			if(this.parent.isGroup){
 				this.parent.checkColumnVisibility();
 			}
 
-			this.cells.forEach(function (cell) {
+			this.cells.forEach(function(cell){
 				cell.hide();
 			});
 
 			this.dispatch("column-hide", this, responsiveToggle);
 
-			if (!silent) {
-				this.dispatchExternal(
-					"columnVisibilityChanged",
-					this.getComponent(),
-					false
-				);
+			if(!silent){
+				this.dispatchExternal("columnVisibilityChanged", this.getComponent(), false);
 			}
 
-			if (this.parent.isGroup) {
+			if(this.parent.isGroup){
 				this.parent.matchChildWidths();
 			}
 
-			if (!this.silent) {
+			if(!this.silent){
 				this.table.columnManager.rerenderColumns();
 			}
 		}
 	}
 
-	matchChildWidths() {
+	matchChildWidths(){
 		var childWidth = 0;
 
-		if (this.contentElement && this.columns.length) {
-			this.columns.forEach(function (column) {
-				if (column.visible) {
+		if(this.contentElement && this.columns.length){
+			this.columns.forEach(function(column){
+				if(column.visible){
 					childWidth += column.getWidth();
 				}
 			});
 
-			this.contentElement.style.maxWidth = childWidth - 1 + "px";
+			this.contentElement.style.maxWidth = (childWidth - 1) + "px";
 
-			if (this.parent.isGroup) {
+			if(this.parent.isGroup){
 				this.parent.matchChildWidths();
 			}
 		}
 	}
 
-	removeChild(child) {
+	removeChild(child){
 		var index = this.columns.indexOf(child);
 
-		if (index > -1) {
+		if(index > -1){
 			this.columns.splice(index, 1);
 		}
 
-		if (!this.columns.length) {
+		if(!this.columns.length){
 			this.delete();
 		}
 	}
 
-	setWidth(width) {
+	setWidth(width){
 		this.widthFixed = true;
 		this.setWidthActual(width);
 	}
 
-	setWidthActual(width) {
-		if (isNaN(width)) {
-			width = Math.floor(
-				(this.table.element.clientWidth / 100) * parseInt(width)
-			);
+	setWidthActual(width){
+		if(isNaN(width)){
+			width = Math.floor((this.table.element.clientWidth/100) * parseInt(width));
 		}
 
 		width = Math.max(this.minWidth, width);
 
-		if (this.maxWidth) {
+		if(this.maxWidth){
 			width = Math.min(this.maxWidth, width);
 		}
 
@@ -2777,75 +2648,67 @@ class Column extends CoreFeature {
 
 		this.element.style.width = this.widthStyled;
 
-		if (!this.isGroup) {
-			this.cells.forEach(function (cell) {
+		if(!this.isGroup){
+			this.cells.forEach(function(cell){
 				cell.setWidth();
 			});
 		}
 
-		if (this.parent.isGroup) {
+		if(this.parent.isGroup){
 			this.parent.matchChildWidths();
 		}
 
 		this.dispatch("column-width", this);
 	}
 
-	checkCellHeights() {
+	checkCellHeights(){
 		var rows = [];
 
-		this.cells.forEach(function (cell) {
-			if (cell.row.heightInitialized) {
-				if (cell.row.getElement().offsetParent !== null) {
+		this.cells.forEach(function(cell){
+			if(cell.row.heightInitialized){
+				if(cell.row.getElement().offsetParent !== null){
 					rows.push(cell.row);
 					cell.row.clearCellHeight();
-				} else {
+				}else {
 					cell.row.heightInitialized = false;
 				}
 			}
 		});
 
-		rows.forEach(function (row) {
+		rows.forEach(function(row){
 			row.calcHeight();
 		});
 
-		rows.forEach(function (row) {
+		rows.forEach(function(row){
 			row.setCellHeight();
 		});
 	}
 
-	getWidth() {
+	getWidth(){
 		var width = 0;
 
-		if (this.isGroup) {
-			this.columns.forEach(function (column) {
-				if (column.visible) {
+		if(this.isGroup){
+			this.columns.forEach(function(column){
+				if(column.visible){
 					width += column.getWidth();
 				}
 			});
-		} else {
+		}else {
 			width = this.width;
 		}
 
 		return width;
 	}
 
-	getHeight() {
+	getHeight(){
 		return Math.ceil(this.element.getBoundingClientRect().height);
 	}
 
-	setMinWidth(minWidth) {
-		if (this.maxWidth && minWidth > this.maxWidth) {
+	setMinWidth(minWidth){
+		if(this.maxWidth && minWidth > this.maxWidth){
 			minWidth = this.maxWidth;
 
-			console.warn(
-				"the minWidth (" +
-					minWidth +
-					"px) for column '" +
-					this.field +
-					"' cannot be bigger that its maxWidth (" +
-					this.maxWidthStyled +
-					")"
-			);
+			console.warn("the minWidth ("+ minWidth + "px) for column '" + this.field + "' cannot be bigger that its maxWidth ("+ this.maxWidthStyled + ")");
 		}
 
 		this.minWidth = minWidth;
@@ -2853,24 +2716,16 @@ class Column extends CoreFeature {
 
 		this.element.style.minWidth = this.minWidthStyled;
 
-		this.cells.forEach(function (cell) {
+		this.cells.forEach(function(cell){
 			cell.setMinWidth();
 		});
 	}
 
-	setMaxWidth(maxWidth) {
-		if (this.minWidth && maxWidth < this.minWidth) {
+	setMaxWidth(maxWidth){
+		if(this.minWidth && maxWidth < this.minWidth){
 			maxWidth = this.minWidth;
 
-			console.warn(
-				"the maxWidth (" +
-					maxWidth +
-					"px) for column '" +
-					this.field +
-					"' cannot be smaller that its minWidth (" +
-					this.minWidthStyled +
-					")"
-			);
+			console.warn("the maxWidth ("+ maxWidth + "px) for column '" + this.field + "' cannot be smaller that its minWidth ("+ this.minWidthStyled + ")");
 		}
 
 		this.maxWidth = maxWidth;
@@ -2878,15 +2733,15 @@ class Column extends CoreFeature {
 
 		this.element.style.maxWidth = this.maxWidthStyled;
 
-		this.cells.forEach(function (cell) {
+		this.cells.forEach(function(cell){
 			cell.setMaxWidth();
 		});
 	}
 
-	delete() {
+	delete(){
 		return new Promise((resolve, reject) => {
-			if (this.isGroup) {
-				this.columns.forEach(function (column) {
+			if(this.isGroup){
+				this.columns.forEach(function(column){
 					column.delete();
 				});
 			}
@@ -2895,11 +2750,11 @@ class Column extends CoreFeature {
 
 			var cellCount = this.cells.length;
 
-			for (let i = 0; i < cellCount; i++) {
+			for(let i = 0; i < cellCount; i++){
 				this.cells[0].delete();
 			}
 
-			if (this.element.parentNode) {
+			if(this.element.parentNode){
 				this.element.parentNode.removeChild(this.element);
 			}
 
@@ -2908,7 +2763,7 @@ class Column extends CoreFeature {
 			this.titleElement = false;
 			this.groupElement = false;
 
-			if (this.parent.isGroup) {
+			if(this.parent.isGroup){
 				this.parent.removeChild(this);
 			}
 
@@ -2920,8 +2775,8 @@ class Column extends CoreFeature {
 		});
 	}
 
-	columnRendered() {
-		if (this.titleFormatterRendered) {
+	columnRendered(){
+		if(this.titleFormatterRendered){
 			this.titleFormatterRendered();
 		}
 
@@ -2930,7 +2785,7 @@ class Column extends CoreFeature {
 
 	//////////////// Cell Management /////////////////
 	//generate cell for this column
-	generateCell(row) {
+	generateCell(row){
 		var cell = new Cell(this, row);
 
 		this.cells.push(cell);
@@ -2938,35 +2793,31 @@ class Column extends CoreFeature {
 		return cell;
 	}
 
-	nextColumn() {
+	nextColumn(){
 		var index = this.table.columnManager.findColumnIndex(this);
 		return index > -1 ? this._nextVisibleColumn(index + 1) : false;
 	}
 
-	_nextVisibleColumn(index) {
+	_nextVisibleColumn(index){
 		var column = this.table.columnManager.getColumnByIndex(index);
-		return !column || column.visible
-			? column
-			: this._nextVisibleColumn(index + 1);
+		return !column || column.visible ? column : this._nextVisibleColumn(index + 1);
 	}
 
-	prevColumn() {
+	prevColumn(){
 		var index = this.table.columnManager.findColumnIndex(this);
 		return index > -1 ? this._prevVisibleColumn(index - 1) : false;
 	}
 
-	_prevVisibleColumn(index) {
+	_prevVisibleColumn(index){
 		var column = this.table.columnManager.getColumnByIndex(index);
-		return !column || column.visible
-			? column
-			: this._prevVisibleColumn(index - 1);
+		return !column || column.visible ? column : this._prevVisibleColumn(index - 1);
 	}
 
-	reinitializeWidth(force) {
+	reinitializeWidth(force){
 		this.widthFixed = false;
 
 		//set width if present
-		if (typeof this.definition.width !== "undefined" && !force) {
+		if(typeof this.definition.width !== "undefined" && !force){
 			// maxInitialWidth ignored here as width specified
 			this.setWidth(this.definition.width);
 		}
@@ -2979,12 +2830,12 @@ class Column extends CoreFeature {
 	}
 
 	//set column width to maximum cell width for non group columns
-	fitToData(force) {
-		if (this.isGroup) {
+	fitToData(force){
+		if(this.isGroup){
 			return;
 		}
 
-		if (!this.widthFixed) {
+		if(!this.widthFixed){
 			this.element.style.width = "";
 
 			this.cells.forEach((cell) => {
@@ -2994,16 +2845,16 @@ class Column extends CoreFeature {
 
 		var maxWidth = this.element.offsetWidth;
 
-		if (!this.width || !this.widthFixed) {
+		if(!this.width || !this.widthFixed){
 			this.cells.forEach((cell) => {
 				var width = cell.getWidth();
 
-				if (width > maxWidth) {
+				if(width > maxWidth){
 					maxWidth = width;
 				}
 			});
 
-			if (maxWidth) {
+			if(maxWidth){
 				var setTo = maxWidth + 1;
 				if (this.maxInitialWidth && !force) {
 					setTo = Math.min(setTo, this.maxInitialWidth);
@@ -3013,54 +2864,48 @@ class Column extends CoreFeature {
 		}
 	}
 
-	updateDefinition(updates) {
+	updateDefinition(updates){
 		var definition;
 
-		if (!this.isGroup) {
-			if (!this.parent.isGroup) {
+		if(!this.isGroup){
+			if(!this.parent.isGroup){
 				definition = Object.assign({}, this.getDefinition());
 				definition = Object.assign(definition, updates);
 
-				return this.table.columnManager
-					.addColumn(definition, false, this)
+				return this.table.columnManager.addColumn(definition, false, this)
 					.then((column) => {
-						if (definition.field == this.field) {
+
+						if(definition.field == this.field){
 							this.field = false; //clear field name to prevent deletion of duplicate column from arrays
 						}
 
-						return this.delete().then(() => {
-							return column.getComponent();
-						});
+						return this.delete()
+							.then(() => {
+								return column.getComponent();
+							});
+
 					});
-			} else {
-				console.error(
-					"Column Update Error - The updateDefinition function is only available on ungrouped columns"
-				);
-				return Promise.reject(
-					"Column Update Error - The updateDefinition function is only available on columns, not column groups"
-				);
+			}else {
+				console.error("Column Update Error - The updateDefinition function is only available on ungrouped columns");
+				return Promise.reject("Column Update Error - The updateDefinition function is only available on columns, not column groups");
 			}
-		} else {
-			console.error(
-				"Column Update Error - The updateDefinition function is only available on ungrouped columns"
-			);
-			return Promise.reject(
-				"Column Update Error - The updateDefinition function is only available on columns, not column groups"
-			);
+		}else {
+			console.error("Column Update Error - The updateDefinition function is only available on ungrouped columns");
+			return Promise.reject("Column Update Error - The updateDefinition function is only available on columns, not column groups");
 		}
 	}
 
-	deleteCell(cell) {
+	deleteCell(cell){
 		var index = this.cells.indexOf(cell);
 
-		if (index > -1) {
+		if(index > -1){
 			this.cells.splice(index, 1);
 		}
 	}
 
 	//////////////// Object Generation /////////////////
-	getComponent() {
-		if (!this.component) {
+	getComponent(){
+		if(!this.component){
 			this.component = new ColumnComponent(this);
 		}
 
@@ -3072,106 +2917,103 @@ Column.defaultOptionList = defaultColumnOptions;
 
 //public row object
 class RowComponent {
-	constructor(row) {
+
+	constructor (row){
 		this._row = row;
 
 		return new Proxy(this, {
-			get: function (target, name, receiver) {
+			get: function(target, name, receiver) {
 				if (typeof target[name] !== "undefined") {
 					return target[name];
-				} else {
-					return target._row.table.componentFunctionBinder.handle(
-						"row",
-						target._row,
-						name
-					);
+				}else {
+					return target._row.table.componentFunctionBinder.handle("row", target._row, name);
 				}
-			},
+			}
 		});
 	}
 
-	getData(transform) {
+	getData(transform){
 		return this._row.getData(transform);
 	}
 
-	getElement() {
+	getElement(){
 		return this._row.getElement();
 	}
 
-	getCells() {
+	getCells(){
 		var cells = [];
 
-		this._row.getCells().forEach(function (cell) {
+		this._row.getCells().forEach(function(cell){
 			cells.push(cell.getComponent());
 		});
 
 		return cells;
 	}
 
-	getCell(column) {
+	getCell(column){
 		var cell = this._row.getCell(column);
 		return cell ? cell.getComponent() : false;
 	}
 
-	getIndex() {
+	getIndex(){
 		return this._row.getData("data")[this._row.table.options.index];
 	}
 
-	getPosition() {
+	getPosition(){
 		return this._row.getPosition();
 	}
 
-	watchPosition(callback) {
+	watchPosition(callback){
 		return this._row.watchPosition(callback);
 	}
 
-	delete() {
+	delete(){
 		return this._row.delete();
 	}
 
-	scrollTo() {
+	scrollTo(){
 		return this._row.table.rowManager.scrollToRow(this._row);
 	}
 
-	move(to, after) {
+	move(to, after){
 		this._row.moveToRow(to, after);
 	}
 
-	update(data) {
+	update(data){
 		return this._row.updateData(data);
 	}
 
-	normalizeHeight() {
+	normalizeHeight(){
 		this._row.normalizeHeight(true);
 	}
 
-	_getSelf() {
+	_getSelf(){
 		return this._row;
 	}
 
-	reformat() {
+	reformat(){
 		return this._row.reinitialize();
 	}
 
-	getTable() {
+	getTable(){
 		return this._row.table;
 	}
 
-	getNextRow() {
+	getNextRow(){
 		var row = this._row.nextRow();
 		return row ? row.getComponent() : row;
 	}
 
-	getPrevRow() {
+	getPrevRow(){
 		var row = this._row.prevRow();
 		return row ? row.getComponent() : row;
 	}
 }
 
-class Row extends CoreFeature {
-	constructor(data, parent, type = "row") {
+class Row extends CoreFeature{
+	constructor (data, parent, type = "row"){
 		super(parent.table);
-
+		
 		this.parent = parent;
 		this.data = {};
 		this.type = type; //type of element
@@ -3186,431 +3028,414 @@ class Row extends CoreFeature {
 		this.heightInitialized = false; //element has resized cells to fit
 		this.position = 0; //store position of element in row list
 		this.positionWatchers = [];
-
+		
 		this.component = null;
-
+		
 		this.created = false;
-
+		
 		this.setData(data);
 	}
-
-	create() {
-		if (!this.created) {
+	
+	create(){
+		if(!this.created){
 			this.created = true;
 			this.generateElement();
 		}
 	}
-
-	createElement() {
+	
+	createElement (){
 		var el = document.createElement("div");
-
+		
 		el.classList.add("tabulator-row");
 		el.setAttribute("role", "row");
-
+		
 		this.element = el;
 	}
-
-	getElement() {
+	
+	getElement(){
 		this.create();
 		return this.element;
 	}
-
-	detachElement() {
-		if (this.element && this.element.parentNode) {
+	
+	detachElement(){
+		if (this.element && this.element.parentNode){
 			this.element.parentNode.removeChild(this.element);
 		}
 	}
-
-	generateElement() {
+	
+	generateElement(){
 		this.createElement();
 		this.dispatch("row-init", this);
 	}
-
-	generateCells() {
+	
+	generateCells(){
 		this.cells = this.table.columnManager.generateCells(this);
 	}
-
+	
 	//functions to setup on first render
-	initialize(force) {
+	initialize(force){
 		this.create();
-
-		if (!this.initialized || force) {
+		
+		if(!this.initialized || force){
+			
 			this.deleteCells();
-
-			while (this.element.firstChild)
-				this.element.removeChild(this.element.firstChild);
-
+			
+			while(this.element.firstChild) this.element.removeChild(this.element.firstChild);
+			
 			this.dispatch("row-layout-before", this);
-
+			
 			this.generateCells();
-
+			
 			this.initialized = true;
-
+			
 			this.table.columnManager.renderer.renderRowCells(this);
-
-			if (force) {
+			
+			if(force){
 				this.normalizeHeight();
 			}
-
+			
 			this.dispatch("row-layout", this);
-
-			if (this.table.options.rowFormatter) {
+			
+			if(this.table.options.rowFormatter){
 				this.table.options.rowFormatter(this.getComponent());
 			}
-
+			
 			this.dispatch("row-layout-after", this);
-		} else {
+		}else {
 			this.table.columnManager.renderer.rerenderRowCells(this);
 		}
 	}
-
-	reinitializeHeight() {
+	
+	reinitializeHeight(){
 		this.heightInitialized = false;
-
-		if (this.element && this.element.offsetParent !== null) {
+		
+		if(this.element && this.element.offsetParent !== null){
 			this.normalizeHeight(true);
 		}
 	}
 
-	deinitialize() {
+	deinitialize(){
 		this.initialized = false;
 	}
-
-	deinitializeHeight() {
+	
+	deinitializeHeight(){
 		this.heightInitialized = false;
 	}
-
-	reinitialize(children) {
+	
+	reinitialize(children){
 		this.initialized = false;
 		this.heightInitialized = false;
-
-		if (!this.manualHeight) {
+		
+		if(!this.manualHeight){
 			this.height = 0;
 			this.heightStyled = "";
 		}
-
-		if (this.element && this.element.offsetParent !== null) {
+		
+		if(this.element && this.element.offsetParent !== null){
 			this.initialize(true);
 		}
-
+		
 		this.dispatch("row-relayout", this);
 	}
-
+	
 	//get heights when doing bulk row style calcs in virtual DOM
-	calcHeight(force) {
+	calcHeight(force){
 		var maxHeight = 0,
-			minHeight;
-
-		if (this.table.options.rowHeight) {
+		minHeight;
+		
+		if(this.table.options.rowHeight){
 			this.height = this.table.options.rowHeight;
-		} else {
-			minHeight = this.table.options.resizableRows
-				? this.element.clientHeight
-				: 0;
-
-			this.cells.forEach(function (cell) {
+		}else {
+			minHeight = this.table.options.resizableRows ? this.element.clientHeight : 0;
+			
+			this.cells.forEach(function(cell){
 				var height = cell.getHeight();
-				if (height > maxHeight) {
+				if(height > maxHeight){
 					maxHeight = height;
 				}
 			});
-
-			if (force) {
+			
+			if(force){
 				this.height = Math.max(maxHeight, minHeight);
-			} else {
-				this.height = this.manualHeight
-					? this.height
-					: Math.max(maxHeight, minHeight);
+			}else {
+				this.height = this.manualHeight ? this.height : Math.max(maxHeight, minHeight);
 			}
 		}
-
+		
 		this.heightStyled = this.height ? this.height + "px" : "";
 		this.outerHeight = this.element.offsetHeight;
 	}
-
+	
 	//set of cells
-	setCellHeight() {
-		this.cells.forEach(function (cell) {
+	setCellHeight(){
+		this.cells.forEach(function(cell){
 			cell.setHeight();
 		});
-
+		
 		this.heightInitialized = true;
 	}
-
-	clearCellHeight() {
-		this.cells.forEach(function (cell) {
+	
+	clearCellHeight(){
+		this.cells.forEach(function(cell){
 			cell.clearHeight();
 		});
 	}
-
+	
 	//normalize the height of elements in the row
-	normalizeHeight(force) {
-		if (force && !this.table.options.rowHeight) {
+	normalizeHeight(force){
+		if(force && !this.table.options.rowHeight){
 			this.clearCellHeight();
 		}
-
+		
 		this.calcHeight(force);
-
+		
 		this.setCellHeight();
 	}
-
+	
 	//set height of rows
-	setHeight(height, force) {
-		if (this.height != height || force) {
+	setHeight(height, force){
+		if(this.height != height || force){
+			
 			this.manualHeight = true;
-
+			
 			this.height = height;
 			this.heightStyled = height ? height + "px" : "";
-
+			
 			this.setCellHeight();
-
+			
 			// this.outerHeight = this.element.outerHeight();
 			this.outerHeight = this.element.offsetHeight;
 		}
 	}
-
+	
 	//return rows outer height
-	getHeight() {
+	getHeight(){
 		return this.outerHeight;
 	}
-
+	
 	//return rows outer Width
-	getWidth() {
+	getWidth(){
 		return this.element.offsetWidth;
 	}
-
+	
 	//////////////// Cell Management /////////////////
-	deleteCell(cell) {
+	deleteCell(cell){
 		var index = this.cells.indexOf(cell);
-
-		if (index > -1) {
+		
+		if(index > -1){
 			this.cells.splice(index, 1);
 		}
 	}
-
+	
 	//////////////// Data Management /////////////////
-	setData(data) {
-		this.data = this.chain(
-			"row-data-init-before",
-			[this, data],
-			undefined,
-			data
-		);
-
+	setData(data){
+		this.data = this.chain("row-data-init-before", [this, data], undefined, data);
+		
 		this.dispatch("row-data-init-after", this);
 	}
-
+	
 	//update the rows data
-	updateData(updatedData) {
+	updateData(updatedData){
 		var visible = this.element && Helpers.elVisible(this.element),
-			tempData = {},
-			newRowData;
-
+		tempData = {},
+		newRowData;
+		
 		return new Promise((resolve, reject) => {
-			if (typeof updatedData === "string") {
+			
+			if(typeof updatedData === "string"){
 				updatedData = JSON.parse(updatedData);
 			}
-
+			
 			this.dispatch("row-data-save-before", this);
-
-			if (this.subscribed("row-data-changing")) {
+			
+			if(this.subscribed("row-data-changing")){
 				tempData = Object.assign(tempData, this.data);
 				tempData = Object.assign(tempData, updatedData);
 			}
-
-			newRowData = this.chain(
-				"row-data-changing",
-				[this, tempData, updatedData],
-				null,
-				updatedData
-			);
-
+			
+			newRowData = this.chain("row-data-changing", [this, tempData, updatedData], null, updatedData);
+			
 			//set data
 			for (let attrname in newRowData) {
 				this.data[attrname] = newRowData[attrname];
 			}
-
+			
 			this.dispatch("row-data-save-after", this);
-
+			
 			//update affected cells only
 			for (let attrname in updatedData) {
+				
 				let columns = this.table.columnManager.getColumnsByFieldRoot(attrname);
-
+				
 				columns.forEach((column) => {
 					let cell = this.getCell(column.getField());
-
-					if (cell) {
+					
+					if(cell){
 						let value = column.getFieldValue(newRowData);
-						if (cell.getValue() != value) {
+						if(cell.getValue() != value){
 							cell.setValueProcessData(value);
-
-							if (visible) {
+							
+							if(visible){
 								cell.cellRendered();
 							}
 						}
 					}
 				});
 			}
-
+			
 			//Partial reinitialization if visible
-			if (visible) {
+			if(visible){
 				this.normalizeHeight(true);
-
-				if (this.table.options.rowFormatter) {
+				
+				if(this.table.options.rowFormatter){
 					this.table.options.rowFormatter(this.getComponent());
 				}
-			} else {
+			}else {
 				this.initialized = false;
 				this.height = 0;
 				this.heightStyled = "";
 			}
-
+			
 			this.dispatch("row-data-changed", this, visible, updatedData);
-
+			
 			//this.reinitialize();
-
+			
 			this.dispatchExternal("rowUpdated", this.getComponent());
-
-			if (this.subscribedExternal("dataChanged")) {
+			
+			if(this.subscribedExternal("dataChanged")){
 				this.dispatchExternal("dataChanged", this.table.rowManager.getData());
 			}
-
+			
 			resolve();
 		});
 	}
-
-	getData(transform) {
-		if (transform) {
-			return this.chain(
-				"row-data-retrieve",
-				[this, transform],
-				null,
-				this.data
-			);
+	
+	getData(transform){
+		if(transform){
+			return this.chain("row-data-retrieve", [this, transform], null, this.data);
 		}
-
+		
 		return this.data;
 	}
-
-	getCell(column) {
+	
+	getCell(column){
 		var match = false;
-
+		
 		column = this.table.columnManager.findColumn(column);
-
-		if (!this.initialized) {
+		
+		if(!this.initialized){
 			this.generateCells();
 		}
-
-		match = this.cells.find(function (cell) {
+		
+		match = this.cells.find(function(cell){
 			return cell.column === column;
 		});
-
+		
 		return match;
 	}
-
-	getCellIndex(findCell) {
-		return this.cells.findIndex(function (cell) {
+	
+	getCellIndex(findCell){
+		return this.cells.findIndex(function(cell){
 			return cell === findCell;
 		});
 	}
-
-	findCell(subject) {
+	
+	findCell(subject){
 		return this.cells.find((cell) => {
 			return cell.element === subject;
 		});
 	}
-
-	getCells() {
-		if (!this.initialized) {
+	
+	getCells(){
+		if(!this.initialized){
 			this.generateCells();
 		}
-
+		
 		return this.cells;
 	}
-
-	nextRow() {
+	
+	nextRow(){
 		var row = this.table.rowManager.nextDisplayRow(this, true);
 		return row || false;
 	}
-
-	prevRow() {
+	
+	prevRow(){
 		var row = this.table.rowManager.prevDisplayRow(this, true);
 		return row || false;
 	}
-
-	moveToRow(to, before) {
+	
+	moveToRow(to, before){
 		var toRow = this.table.rowManager.findRow(to);
-
-		if (toRow) {
+		
+		if(toRow){
 			this.table.rowManager.moveRowActual(this, toRow, !before);
 			this.table.rowManager.refreshActiveData("display", false, true);
-		} else {
+		}else {
 			console.warn("Move Error - No matching row found:", to);
 		}
 	}
-
+	
 	///////////////////// Actions  /////////////////////
-	delete() {
+	delete(){
 		this.dispatch("row-delete", this);
-
+		
 		this.deleteActual();
-
+		
 		return Promise.resolve();
 	}
-
-	deleteActual(blockRedraw) {
+	
+	deleteActual(blockRedraw){
 		this.detachModules();
-
+		
 		this.table.rowManager.deleteRow(this, blockRedraw);
-
+		
 		this.deleteCells();
-
+		
 		this.initialized = false;
 		this.heightInitialized = false;
 		this.element = false;
-
+		
 		this.dispatch("row-deleted", this);
 	}
-
-	detachModules() {
+	
+	detachModules(){
 		this.dispatch("row-deleting", this);
 	}
-
-	deleteCells() {
+	
+	deleteCells(){
 		var cellCount = this.cells.length;
-
-		for (let i = 0; i < cellCount; i++) {
+		
+		for(let i = 0; i < cellCount; i++){
 			this.cells[0].delete();
 		}
 	}
-
-	wipe() {
+	
+	wipe(){
 		this.detachModules();
 		this.deleteCells();
-
-		if (this.element) {
-			while (this.element.firstChild)
-				this.element.removeChild(this.element.firstChild);
-
-			if (this.element.parentNode) {
+		
+		if(this.element){
+			while(this.element.firstChild) this.element.removeChild(this.element.firstChild);
+			
+			if(this.element.parentNode){
 				this.element.parentNode.removeChild(this.element);
 			}
 		}
-
+		
 		this.element = false;
 		this.modules = {};
 	}
 
-	isDisplayed() {
+	isDisplayed(){
 		return this.table.rowManager.getDisplayRows().includes(this);
 	}
 
-	getPosition() {
+	getPosition(){
 		return this.isDisplayed() ? this.position : false;
 	}
 
-	setPosition(position) {
-		if (position != this.position) {
+	setPosition(position){
+		if(position != this.position){
 			this.position = position;
 
 			this.positionWatchers.forEach((callback) => {
@@ -3619,34 +3444,33 @@ class Row extends CoreFeature {
 		}
 	}
 
-	watchPosition(callback) {
+	watchPosition(callback){
 		this.positionWatchers.push(callback);
 
 		callback(this.position);
 	}
-
-	getGroup() {
+	
+	getGroup(){
 		return this.modules.group || false;
 	}
-
+	
 	//////////////// Object Generation /////////////////
-	getComponent() {
-		if (!this.component) {
+	getComponent(){
+		if(!this.component){
 			this.component = new RowComponent(this);
 		}
-
+		
 		return this.component;
 	}
 }
 
 var defaultCalculations = {
-	avg: function (values, data, calcParams) {
+	"avg":function(values, data, calcParams){
 		var output = 0,
-			precision =
-				typeof calcParams.precision !== "undefined" ? calcParams.precision : 2;
+		precision = typeof calcParams.precision !== "undefined" ? calcParams.precision : 2;
 
-		if (values.length) {
-			output = values.reduce(function (sum, value) {
+		if(values.length){
+			output = values.reduce(function(sum, value){
 				return Number(sum) + Number(value);
 			});
 
@@ -3657,57 +3481,42 @@ var defaultCalculations = {
 
 		return parseFloat(output).toString();
 	},
-	max: function (values, data, calcParams) {
+	"max":function(values, data, calcParams){
 		var output = null,
-			precision =
-				typeof calcParams.precision !== "undefined"
-					? calcParams.precision
-					: false;
+		precision = typeof calcParams.precision !== "undefined" ? calcParams.precision : false;
 
-		values.forEach(function (value) {
+		values.forEach(function(value){
+
 			value = Number(value);
 
-			if (value > output || output === null) {
+			if(value > output || output === null){
 				output = value;
 			}
 		});
 
-		return output !== null
-			? precision !== false
-				? output.toFixed(precision)
-				: output
-			: "";
+		return output !== null ? (precision !== false ? output.toFixed(precision) : output) : "";
 	},
-	min: function (values, data, calcParams) {
+	"min":function(values, data, calcParams){
 		var output = null,
-			precision =
-				typeof calcParams.precision !== "undefined"
-					? calcParams.precision
-					: false;
+		precision = typeof calcParams.precision !== "undefined" ? calcParams.precision : false;
 
-		values.forEach(function (value) {
+		values.forEach(function(value){
+
 			value = Number(value);
 
-			if (value < output || output === null) {
+			if(value < output || output === null){
 				output = value;
 			}
 		});
 
-		return output !== null
-			? precision !== false
-				? output.toFixed(precision)
-				: output
-			: "";
+		return output !== null ? (precision !== false ? output.toFixed(precision) : output) : "";
 	},
-	sum: function (values, data, calcParams) {
+	"sum":function(values, data, calcParams){
 		var output = 0,
-			precision =
-				typeof calcParams.precision !== "undefined"
-					? calcParams.precision
-					: false;
+		precision = typeof calcParams.precision !== "undefined" ? calcParams.precision : false;
 
-		if (values.length) {
-			values.forEach(function (value) {
+		if(values.length){
+			values.forEach(function(value){
 				value = Number(value);
 
 				output += !isNaN(value) ? Number(value) : 0;
@@ -3716,24 +3525,24 @@ var defaultCalculations = {
 
 		return precision !== false ? output.toFixed(precision) : output;
 	},
-	concat: function (values, data, calcParams) {
+	"concat":function(values, data, calcParams){
 		var output = 0;
 
-		if (values.length) {
-			output = values.reduce(function (sum, value) {
+		if(values.length){
+			output = values.reduce(function(sum, value){
 				return String(sum) + String(value);
 			});
 		}
 
 		return output;
 	},
-	count: function (values, data, calcParams) {
+	"count":function(values, data, calcParams){
 		var output = 0;
 
-		if (values.length) {
-			values.forEach(function (value) {
-				if (value) {
-					output++;
+		if(values.length){
+			values.forEach(function(value){
+				if(value){
+					output ++;
 				}
 			});
 		}
@@ -3742,8 +3551,9 @@ var defaultCalculations = {
 	},
 };
 
-class ColumnCalcs extends Module {
-	constructor(table) {
+class ColumnCalcs extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.topCalcs = [];
@@ -3768,14 +3578,14 @@ class ColumnCalcs extends Module {
 		this.registerColumnOption("bottomCalcFormatterParams");
 	}
 
-	createElement() {
+	createElement (){
 		var el = document.createElement("div");
 		el.classList.add("tabulator-calcs-holder");
 		return el;
 	}
 
-	initialize() {
-		this.genColumn = new Column({ field: "value" }, this);
+	initialize(){
+		this.genColumn = new Column({field:"value"}, this);
 
 		this.subscribe("cell-value-changed", this.cellValueChanged.bind(this));
 		this.subscribe("column-init", this.initializeColumnCheck.bind(this));
@@ -3792,18 +3602,19 @@ class ColumnCalcs extends Module {
 		this.registerTableFunction("recalc", this.userRecalc.bind(this));
 	}
 
-	tableRedraw(force) {
+	tableRedraw(force){
 		this.recalc(this.table.rowManager.activeRows);
 
-		if (force) {
+		if(force){
 			this.redraw();
 		}
 	}
 
+
 	///////////////////////////////////
 	///////// Table Functions /////////
 	///////////////////////////////////
-	userRecalc() {
+	userRecalc(){
 		this.recalc(this.table.rowManager.activeRows);
 	}
 
@@ -3811,213 +3622,198 @@ class ColumnCalcs extends Module {
 	///////// Internal Logic //////////
 	///////////////////////////////////
 
-	visibleRows(viewable, rows) {
-		if (this.topRow) {
+	visibleRows(viewable, rows){
+		if(this.topRow){
 			rows.unshift(this.topRow);
 		}
 
-		if (this.botRow) {
+		if(this.botRow){
 			rows.push(this.botRow);
 		}
-
+	
 		return rows;
 	}
 
-	rowsUpdated(row) {
-		if (this.table.options.groupBy) {
+	rowsUpdated(row){
+		if(this.table.options.groupBy){
 			this.recalcRowGroup(row);
-		} else {
+		}else {
 			this.recalcActiveRows();
 		}
 	}
 
-	recalcActiveRowsRefresh() {
-		if (
-			this.table.options.groupBy &&
-			this.table.options.dataTreeStartExpanded &&
-			this.table.options.dataTree
-		) {
+	recalcActiveRowsRefresh(){
+		if(this.table.options.groupBy && this.table.options.dataTreeStartExpanded && this.table.options.dataTree){
 			this.recalcAll();
-		} else {
+		}else {
 			this.recalcActiveRows();
 		}
 	}
 
-	recalcActiveRows() {
+	recalcActiveRows(){
 		this.recalc(this.table.rowManager.activeRows);
 	}
 
-	cellValueChanged(cell) {
-		if (cell.column.definition.topCalc || cell.column.definition.bottomCalc) {
-			if (this.table.options.groupBy) {
-				if (
-					this.table.options.columnCalcs == "table" ||
-					this.table.options.columnCalcs == "both"
-				) {
+	cellValueChanged(cell){
+		if(cell.column.definition.topCalc || cell.column.definition.bottomCalc){
+			if(this.table.options.groupBy){
+				if(this.table.options.columnCalcs == "table" || this.table.options.columnCalcs == "both"){
 					this.recalcActiveRows();
 				}
 
-				if (this.table.options.columnCalcs != "table") {
+				if(this.table.options.columnCalcs != "table"){
 					this.recalcRowGroup(cell.row);
 				}
-			} else {
+			}else {
 				this.recalcActiveRows();
 			}
 		}
 	}
 
-	initializeColumnCheck(column) {
-		if (column.definition.topCalc || column.definition.bottomCalc) {
+	initializeColumnCheck(column){
+		if(column.definition.topCalc || column.definition.bottomCalc){
 			this.initializeColumn(column);
 		}
 	}
 
 	//initialize column calcs
-	initializeColumn(column) {
+	initializeColumn(column){
 		var def = column.definition;
 
 		var config = {
-			topCalcParams: def.topCalcParams || {},
-			botCalcParams: def.bottomCalcParams || {},
+			topCalcParams:def.topCalcParams || {},
+			botCalcParams:def.bottomCalcParams || {},
 		};
 
-		if (def.topCalc) {
-			switch (typeof def.topCalc) {
+		if(def.topCalc){
+
+			switch(typeof def.topCalc){
 				case "string":
-					if (ColumnCalcs.calculations[def.topCalc]) {
+					if(ColumnCalcs.calculations[def.topCalc]){
 						config.topCalc = ColumnCalcs.calculations[def.topCalc];
-					} else {
-						console.warn(
-							"Column Calc Error - No such calculation found, ignoring: ",
-							def.topCalc
-						);
+					}else {
+						console.warn("Column Calc Error - No such calculation found, ignoring: ", def.topCalc);
 					}
 					break;
 
 				case "function":
 					config.topCalc = def.topCalc;
 					break;
+
 			}
 
-			if (config.topCalc) {
+			if(config.topCalc){
 				column.modules.columnCalcs = config;
 				this.topCalcs.push(column);
 
-				if (this.table.options.columnCalcs != "group") {
+				if(this.table.options.columnCalcs != "group"){
 					this.initializeTopRow();
 				}
 			}
+
 		}
 
-		if (def.bottomCalc) {
-			switch (typeof def.bottomCalc) {
+		if(def.bottomCalc){
+			switch(typeof def.bottomCalc){
 				case "string":
-					if (ColumnCalcs.calculations[def.bottomCalc]) {
+					if(ColumnCalcs.calculations[def.bottomCalc]){
 						config.botCalc = ColumnCalcs.calculations[def.bottomCalc];
-					} else {
-						console.warn(
-							"Column Calc Error - No such calculation found, ignoring: ",
-							def.bottomCalc
-						);
+					}else {
+						console.warn("Column Calc Error - No such calculation found, ignoring: ", def.bottomCalc);
 					}
 					break;
 
 				case "function":
 					config.botCalc = def.bottomCalc;
 					break;
+
 			}
 
-			if (config.botCalc) {
+			if(config.botCalc){
 				column.modules.columnCalcs = config;
 				this.botCalcs.push(column);
 
-				if (this.table.options.columnCalcs != "group") {
+				if(this.table.options.columnCalcs != "group"){
 					this.initializeBottomRow();
 				}
 			}
 		}
+
 	}
 
 	//dummy functions to handle being mock column manager
-	registerColumnField() {}
+	registerColumnField(){}
 
-	removeCalcs() {
+	removeCalcs(){
 		var changed = false;
 
-		if (this.topInitialized) {
+		if(this.topInitialized){
 			this.topInitialized = false;
 			this.topElement.parentNode.removeChild(this.topElement);
 			changed = true;
 		}
 
-		if (this.botInitialized) {
+		if(this.botInitialized){
 			this.botInitialized = false;
 			this.footerRemove(this.botElement);
 			changed = true;
 		}
 
-		if (changed) {
+		if(changed){
 			this.table.rowManager.adjustTableSize();
 		}
 	}
 
-	initializeTopRow() {
-		if (!this.topInitialized) {
-			this.table.columnManager
-				.getElement()
-				.insertBefore(
-					this.topElement,
-					this.table.columnManager.headersElement.nextSibling
-				);
+	initializeTopRow(){
+		if(!this.topInitialized){
+			this.table.columnManager.getElement().insertBefore(this.topElement, this.table.columnManager.headersElement.nextSibling);
 			this.topInitialized = true;
 		}
 	}
 
-	initializeBottomRow() {
-		if (!this.botInitialized) {
+	initializeBottomRow(){
+		if(!this.botInitialized){
 			this.footerPrepend(this.botElement);
 			this.botInitialized = true;
 		}
 	}
 
-	scrollHorizontal(left) {
-		if (this.botInitialized && this.botRow) {
-			if (this.table.rtl) {
-				this.botRow.getElement().style.marginRight = left + "px";
-			} else {
-				this.botRow.getElement().style.marginLeft = -left + "px";
-			}
+	scrollHorizontal(left){
+		if(this.botInitialized && this.botRow){
+			if(this.table.rtl){
+				this.botRow.getElement().style.marginRight = (left) + "px";
+			}else {
+				this.botRow.getElement().style.marginLeft = (-left) + "px";
+			}	
 		}
 	}
 
-	recalc(rows) {
+	recalc(rows){
 		var data, row;
 
-		if (this.topInitialized || this.botInitialized) {
+		if(this.topInitialized || this.botInitialized){
 			data = this.rowsToData(rows);
 
-			if (this.topInitialized) {
-				if (this.topRow) {
+			if(this.topInitialized){
+				if(this.topRow){
 					this.topRow.deleteCells();
 				}
 
 				row = this.generateRow("top", data);
 				this.topRow = row;
-				while (this.topElement.firstChild)
-					this.topElement.removeChild(this.topElement.firstChild);
+				while(this.topElement.firstChild) this.topElement.removeChild(this.topElement.firstChild);
 				this.topElement.appendChild(row.getElement());
 				row.initialize(true);
 			}
 
-			if (this.botInitialized) {
-				if (this.botRow) {
+			if(this.botInitialized){
+				if(this.botRow){
 					this.botRow.deleteCells();
 				}
 
 				row = this.generateRow("bottom", data);
 				this.botRow = row;
-				while (this.botElement.firstChild)
-					this.botElement.removeChild(this.botElement.firstChild);
+				while(this.botElement.firstChild) this.botElement.removeChild(this.botElement.firstChild);
 				this.botElement.appendChild(row.getElement());
 				row.initialize(true);
 			}
@@ -4025,26 +3821,24 @@ class ColumnCalcs extends Module {
 			this.table.rowManager.adjustTableSize();
 
 			//set resizable handles
-			if (this.table.modExists("frozenColumns")) {
+			if(this.table.modExists("frozenColumns")){
 				this.table.modules.frozenColumns.layout();
 			}
 		}
 	}
 
-	recalcRowGroup(row) {
+	recalcRowGroup(row){
 		this.recalcGroup(this.table.modules.groupRows.getRowGroup(row));
 	}
 
-	recalcAll() {
-		if (this.topCalcs.length || this.botCalcs.length) {
-			if (this.table.options.columnCalcs !== "group") {
+	recalcAll(){
+		if(this.topCalcs.length || this.botCalcs.length){
+			if(this.table.options.columnCalcs !== "group"){
 				this.recalcActiveRows();
 			}
 
-			if (
-				this.table.options.groupBy &&
-				this.table.options.columnCalcs !== "table"
-			) {
+			if(this.table.options.groupBy && this.table.options.columnCalcs !== "table"){
+
 				var groups = this.table.modules.groupRows.getChildGroups();
 
 				groups.forEach((group) => {
@@ -4054,12 +3848,12 @@ class ColumnCalcs extends Module {
 		}
 	}
 
-	recalcGroup(group) {
+	recalcGroup(group){
 		var data, rowData;
 
-		if (group) {
-			if (group.calcs) {
-				if (group.calcs.bottom) {
+		if(group){
+			if(group.calcs){
+				if(group.calcs.bottom){
 					data = this.rowsToData(group.rows);
 					rowData = this.generateRowData("bottom", data);
 
@@ -4067,7 +3861,7 @@ class ColumnCalcs extends Module {
 					group.calcs.bottom.reinitialize();
 				}
 
-				if (group.calcs.top) {
+				if(group.calcs.top){
 					data = this.rowsToData(group.rows);
 					rowData = this.generateRowData("top", data);
 
@@ -4079,28 +3873,23 @@ class ColumnCalcs extends Module {
 	}
 
 	//generate top stats row
-	generateTopRow(rows) {
+	generateTopRow(rows){
 		return this.generateRow("top", this.rowsToData(rows));
 	}
 	//generate bottom stats row
-	generateBottomRow(rows) {
+	generateBottomRow(rows){
 		return this.generateRow("bottom", this.rowsToData(rows));
 	}
 
-	rowsToData(rows) {
+	rowsToData(rows){
 		var data = [];
-
+		
 		rows.forEach((row) => {
 			data.push(row.getData());
 
-			if (
-				this.table.options.dataTree &&
-				this.table.options.dataTreeChildColumnCalcs
-			) {
-				if (row.modules.dataTree && row.modules.dataTree.open) {
-					var children = this.rowsToData(
-						this.table.modules.dataTree.getFilteredTreeChildren(row)
-					);
+			if(this.table.options.dataTree && this.table.options.dataTreeChildColumnCalcs){
+				if(row.modules.dataTree && row.modules.dataTree.open){
+					var children = this.rowsToData(this.table.modules.dataTree.getFilteredTreeChildren(row));
 					data = data.concat(children);
 				}
 			}
@@ -4110,17 +3899,17 @@ class ColumnCalcs extends Module {
 	}
 
 	//generate stats row
-	generateRow(pos, data) {
+	generateRow(pos, data){
 		var rowData = this.generateRowData(pos, data),
-			row;
+		row;
 
-		if (this.table.modExists("mutator")) {
+		if(this.table.modExists("mutator")){
 			this.table.modules.mutator.disable();
 		}
 
 		row = new Row(rowData, this, "calc");
 
-		if (this.table.modExists("mutator")) {
+		if(this.table.modExists("mutator")){
 			this.table.modules.mutator.enable();
 		}
 
@@ -4129,7 +3918,7 @@ class ColumnCalcs extends Module {
 		row.component = false;
 
 		row.getComponent = () => {
-			if (!row.component) {
+			if(!row.component){
 				row.component = new CalcComponent(row);
 			}
 
@@ -4137,27 +3926,24 @@ class ColumnCalcs extends Module {
 		};
 
 		row.generateCells = () => {
+
 			var cells = [];
 
 			this.table.columnManager.columnsByIndex.forEach((column) => {
+
 				//set field name of mock column
 				this.genColumn.setField(column.getField());
 				this.genColumn.hozAlign = column.hozAlign;
 
-				if (
-					column.definition[pos + "CalcFormatter"] &&
-					this.table.modExists("format")
-				) {
+				if(column.definition[pos + "CalcFormatter"] && this.table.modExists("format")){
 					this.genColumn.modules.format = {
-						formatter: this.table.modules.format.getFormatter(
-							column.definition[pos + "CalcFormatter"]
-						),
+						formatter: this.table.modules.format.getFormatter(column.definition[pos + "CalcFormatter"]),
 						params: column.definition[pos + "CalcFormatterParams"] || {},
 					};
-				} else {
+				}else {
 					this.genColumn.modules.format = {
 						formatter: this.table.modules.format.getFormatter("plaintext"),
-						params: {},
+						params:{}
 					};
 				}
 
@@ -4173,7 +3959,7 @@ class ColumnCalcs extends Module {
 				column.cells.push(cell);
 				cells.push(cell);
 
-				if (!column.visible) {
+				if(!column.visible){
 					cell.hide();
 				}
 			});
@@ -4185,67 +3971,60 @@ class ColumnCalcs extends Module {
 	}
 
 	//generate stats row
-	generateRowData(pos, data) {
+	generateRowData(pos, data){
 		var rowData = {},
-			calcs = pos == "top" ? this.topCalcs : this.botCalcs,
-			type = pos == "top" ? "topCalc" : "botCalc",
-			params,
-			paramKey;
+		calcs = pos == "top" ? this.topCalcs : this.botCalcs,
+		type = pos == "top" ? "topCalc" : "botCalc",
+		params, paramKey;
 
-		calcs.forEach(function (column) {
+		calcs.forEach(function(column){
 			var values = [];
 
-			if (column.modules.columnCalcs && column.modules.columnCalcs[type]) {
-				data.forEach(function (item) {
+			if(column.modules.columnCalcs && column.modules.columnCalcs[type]){
+				data.forEach(function(item){
 					values.push(column.getFieldValue(item));
 				});
 
 				paramKey = type + "Params";
-				params =
-					typeof column.modules.columnCalcs[paramKey] === "function"
-						? column.modules.columnCalcs[paramKey](values, data)
-						: column.modules.columnCalcs[paramKey];
+				params = typeof column.modules.columnCalcs[paramKey] === "function" ? column.modules.columnCalcs[paramKey](values, data) : column.modules.columnCalcs[paramKey];
 
-				column.setFieldValue(
-					rowData,
-					column.modules.columnCalcs[type](values, data, params)
-				);
+				column.setFieldValue(rowData, column.modules.columnCalcs[type](values, data, params));
 			}
 		});
 
 		return rowData;
 	}
 
-	hasTopCalcs() {
-		return !!this.topCalcs.length;
+	hasTopCalcs(){
+		return	!!(this.topCalcs.length);
 	}
 
-	hasBottomCalcs() {
-		return !!this.botCalcs.length;
+	hasBottomCalcs(){
+		return	!!(this.botCalcs.length);
 	}
 
 	//handle table redraw
-	redraw() {
-		if (this.topRow) {
+	redraw(){
+		if(this.topRow){
 			this.topRow.normalizeHeight(true);
 		}
-		if (this.botRow) {
+		if(this.botRow){
 			this.botRow.normalizeHeight(true);
 		}
 	}
 
 	//return the calculated
-	getResults() {
+	getResults(){
 		var results = {},
-			groups;
+		groups;
 
-		if (this.table.options.groupBy && this.table.modExists("groupRows")) {
+		if(this.table.options.groupBy && this.table.modExists("groupRows")){
 			groups = this.table.modules.groupRows.getGroups(true);
 
 			groups.forEach((group) => {
 				results[group.getKey()] = this.getGroupResults(group);
 			});
-		} else {
+		}else {
 			results = {
 				top: this.topRow ? this.topRow.getData() : {},
 				bottom: this.botRow ? this.botRow.getData() : {},
@@ -4256,11 +4035,11 @@ class ColumnCalcs extends Module {
 	}
 
 	//get results from a group
-	getGroupResults(group) {
+	getGroupResults(group){
 		var groupObj = group._getSelf(),
-			subGroups = group.getSubGroups(),
-			subGroupResults = {},
-			results = {};
+		subGroups = group.getSubGroups(),
+		subGroupResults = {},
+		results = {};
 
 		subGroups.forEach((subgroup) => {
 			subGroupResults[subgroup.getKey()] = this.getGroupResults(subgroup);
@@ -4281,8 +4060,9 @@ ColumnCalcs.moduleName = "columnCalcs";
 //load defaults
 ColumnCalcs.calculations = defaultCalculations;
 
-class DataTree extends Module {
-	constructor(table) {
+class DataTree extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.indent = 10;
@@ -4292,125 +4072,93 @@ class DataTree extends Module {
 		this.branchEl = null;
 		this.elementField = false;
 
-		this.startOpen = function () {};
-
-		this.displayIndex = 0;
+		this.startOpen = function(){};
 
 		this.registerTableOption("dataTree", false); //enable data tree
 		this.registerTableOption("dataTreeFilter", true); //filter child rows
 		this.registerTableOption("dataTreeSort", true); //sort child rows
 		this.registerTableOption("dataTreeElementColumn", false);
-		this.registerTableOption("dataTreeBranchElement", true); //show data tree branch element
+		this.registerTableOption("dataTreeBranchElement", true);//show data tree branch element
 		this.registerTableOption("dataTreeChildIndent", 9); //data tree child indent in px
-		this.registerTableOption("dataTreeChildField", "_children"); //data tre column field to look for child rows
-		this.registerTableOption("dataTreeCollapseElement", false); //data tree row collapse element
-		this.registerTableOption("dataTreeExpandElement", false); //data tree row expand element
+		this.registerTableOption("dataTreeChildField", "_children");//data tre column field to look for child rows
+		this.registerTableOption("dataTreeCollapseElement", false);//data tree row collapse element
+		this.registerTableOption("dataTreeExpandElement", false);//data tree row expand element
 		this.registerTableOption("dataTreeStartExpanded", false);
-		this.registerTableOption("dataTreeChildColumnCalcs", false); //include visible data tree rows in column calculations
-		this.registerTableOption("dataTreeSelectPropagate", false); //selecting a parent row selects its children
+		this.registerTableOption("dataTreeChildColumnCalcs", false);//include visible data tree rows in column calculations
+		this.registerTableOption("dataTreeSelectPropagate", false);//selecting a parent row selects its children
 
 		//register component functions
-		this.registerComponentFunction(
-			"row",
-			"treeCollapse",
-			this.collapseRow.bind(this)
-		);
-		this.registerComponentFunction(
-			"row",
-			"treeExpand",
-			this.expandRow.bind(this)
-		);
-		this.registerComponentFunction(
-			"row",
-			"treeToggle",
-			this.toggleRow.bind(this)
-		);
-		this.registerComponentFunction(
-			"row",
-			"getTreeParent",
-			this.getTreeParent.bind(this)
-		);
-		this.registerComponentFunction(
-			"row",
-			"getTreeChildren",
-			this.getRowChildren.bind(this)
-		);
-		this.registerComponentFunction(
-			"row",
-			"addTreeChild",
-			this.addTreeChildRow.bind(this)
-		);
-		this.registerComponentFunction(
-			"row",
-			"isTreeExpanded",
-			this.isRowExpanded.bind(this)
-		);
+		this.registerComponentFunction("row", "treeCollapse", this.collapseRow.bind(this));
+		this.registerComponentFunction("row", "treeExpand", this.expandRow.bind(this));
+		this.registerComponentFunction("row", "treeToggle", this.toggleRow.bind(this));
+		this.registerComponentFunction("row", "getTreeParent", this.getTreeParent.bind(this));
+		this.registerComponentFunction("row", "getTreeChildren", this.getRowChildren.bind(this));
+		this.registerComponentFunction("row", "addTreeChild", this.addTreeChildRow.bind(this));
+		this.registerComponentFunction("row", "isTreeExpanded", this.isRowExpanded.bind(this));
 	}
 
-	initialize() {
-		if (this.table.options.dataTree) {
+	initialize(){
+		if(this.table.options.dataTree){
 			var dummyEl = null,
-				options = this.table.options;
+			options = this.table.options;
 
 			this.field = options.dataTreeChildField;
 			this.indent = options.dataTreeChildIndent;
 
-			if (this.options("movableRows")) {
-				console.warn(
-					"The movableRows option is not available with dataTree enabled, moving of child rows could result in unpredictable behavior"
-				);
+			if(this.options("movableRows")){
+				console.warn("The movableRows option is not available with dataTree enabled, moving of child rows could result in unpredictable behavior");
 			}
 
-			if (options.dataTreeBranchElement) {
-				if (options.dataTreeBranchElement === true) {
+			if(options.dataTreeBranchElement){
+
+				if(options.dataTreeBranchElement === true){
 					this.branchEl = document.createElement("div");
 					this.branchEl.classList.add("tabulator-data-tree-branch");
-				} else {
-					if (typeof options.dataTreeBranchElement === "string") {
+				}else {
+					if(typeof options.dataTreeBranchElement === "string"){
 						dummyEl = document.createElement("div");
 						dummyEl.innerHTML = options.dataTreeBranchElement;
 						this.branchEl = dummyEl.firstChild;
-					} else {
+					}else {
 						this.branchEl = options.dataTreeBranchElement;
 					}
 				}
 			}
 
-			if (options.dataTreeCollapseElement) {
-				if (typeof options.dataTreeCollapseElement === "string") {
+			if(options.dataTreeCollapseElement){
+				if(typeof options.dataTreeCollapseElement === "string"){
 					dummyEl = document.createElement("div");
 					dummyEl.innerHTML = options.dataTreeCollapseElement;
 					this.collapseEl = dummyEl.firstChild;
-				} else {
+				}else {
 					this.collapseEl = options.dataTreeCollapseElement;
 				}
-			} else {
+			}else {
 				this.collapseEl = document.createElement("div");
 				this.collapseEl.classList.add("tabulator-data-tree-control");
 				this.collapseEl.tabIndex = 0;
-				this.collapseEl.innerHTML =
-					"<div class='tabulator-data-tree-control-collapse'></div>";
+				this.collapseEl.innerHTML = "<div class='tabulator-data-tree-control-collapse'></div>";
 			}
 
-			if (options.dataTreeExpandElement) {
-				if (typeof options.dataTreeExpandElement === "string") {
+			if(options.dataTreeExpandElement){
+				if(typeof options.dataTreeExpandElement === "string"){
 					dummyEl = document.createElement("div");
 					dummyEl.innerHTML = options.dataTreeExpandElement;
 					this.expandEl = dummyEl.firstChild;
-				} else {
+				}else {
 					this.expandEl = options.dataTreeExpandElement;
 				}
-			} else {
+			}else {
 				this.expandEl = document.createElement("div");
 				this.expandEl.classList.add("tabulator-data-tree-control");
 				this.expandEl.tabIndex = 0;
-				this.expandEl.innerHTML =
-					"<div class='tabulator-data-tree-control-expand'></div>";
+				this.expandEl.innerHTML = "<div class='tabulator-data-tree-control-expand'></div>";
 			}
 
-			switch (typeof options.dataTreeStartExpanded) {
+
+			switch(typeof options.dataTreeStartExpanded){
 				case "boolean":
-					this.startOpen = function (row, index) {
+					this.startOpen = function(row, index){
 						return options.dataTreeStartExpanded;
 					};
 					break;
@@ -4420,7 +4168,7 @@ class DataTree extends Module {
 					break;
 
 				default:
-					this.startOpen = function (row, index) {
+					this.startOpen = function(row, index){
 						return options.dataTreeStartExpanded[index];
 					};
 					break;
@@ -4428,7 +4176,7 @@ class DataTree extends Module {
 
 			this.subscribe("row-init", this.initializeRow.bind(this));
 			this.subscribe("row-layout-after", this.layoutRow.bind(this));
-			this.subscribe("row-deleted", this.rowDelete.bind(this), 0);
+			this.subscribe("row-deleted", this.rowDelete.bind(this),0);
 			this.subscribe("row-data-changed", this.rowDataChanged.bind(this), 10);
 			this.subscribe("cell-value-updated", this.cellValueChanged.bind(this));
 			this.subscribe("edit-cancelled", this.cellValueChanged.bind(this));
@@ -4440,31 +4188,29 @@ class DataTree extends Module {
 		}
 	}
 
-	tableRedrawing(force) {
+	tableRedrawing(force){
 		var rows;
 
-		if (force) {
+		if(force){
 			rows = this.table.rowManager.getRows();
-
+			
 			rows.forEach((row) => {
 				this.reinitializeRowChildren(row);
 			});
 		}
 	}
 
-	initializeElementField() {
+	initializeElementField(){
 		var firstCol = this.table.columnManager.getFirstVisibleColumn();
 
-		this.elementField =
-			this.table.options.dataTreeElementColumn ||
-			(firstCol ? firstCol.field : false);
+		this.elementField = this.table.options.dataTreeElementColumn || (firstCol ? firstCol.field : false);
 	}
-
-	getRowChildren(row) {
+	
+	getRowChildren(row){
 		return this.getTreeChildren(row, true);
 	}
 
-	columnMoving() {
+	columnMoving(){
 		var rows = [];
 
 		this.table.rowManager.rows.forEach((row) => {
@@ -4474,89 +4220,71 @@ class DataTree extends Module {
 		return rows;
 	}
 
-	rowDataChanged(row, visible, updatedData) {
-		if (this.redrawNeeded(updatedData)) {
+	rowDataChanged(row, visible, updatedData){
+		if(this.redrawNeeded(updatedData)){
 			this.initializeRow(row);
 
-			if (visible) {
+			if(visible){
 				this.layoutRow(row);
 				this.refreshData(true);
 			}
 		}
 	}
 
-	cellValueChanged(cell) {
+	cellValueChanged(cell){
 		var field = cell.column.getField();
 
-		if (field === this.elementField) {
+		if(field === this.elementField){
 			this.layoutRow(cell.row);
 		}
 	}
 
-	initializeRow(row) {
+	initializeRow(row){
 		var childArray = row.getData()[this.field];
 		var isArray = Array.isArray(childArray);
 
-		var children =
-			isArray ||
-			(!isArray && typeof childArray === "object" && childArray !== null);
+		var children = isArray || (!isArray && typeof childArray === "object" && childArray !== null);
 
-		if (!children && row.modules.dataTree && row.modules.dataTree.branchEl) {
-			row.modules.dataTree.branchEl.parentNode.removeChild(
-				row.modules.dataTree.branchEl
-			);
+		if(!children && row.modules.dataTree && row.modules.dataTree.branchEl){
+			row.modules.dataTree.branchEl.parentNode.removeChild(row.modules.dataTree.branchEl);
 		}
 
-		if (!children && row.modules.dataTree && row.modules.dataTree.controlEl) {
-			row.modules.dataTree.controlEl.parentNode.removeChild(
-				row.modules.dataTree.controlEl
-			);
+		if(!children && row.modules.dataTree && row.modules.dataTree.controlEl){
+			row.modules.dataTree.controlEl.parentNode.removeChild(row.modules.dataTree.controlEl);
 		}
 
 		row.modules.dataTree = {
 			index: row.modules.dataTree ? row.modules.dataTree.index : 0,
-			open: children
-				? row.modules.dataTree
-					? row.modules.dataTree.open
-					: this.startOpen(row.getComponent(), 0)
-				: false,
-			controlEl:
-				row.modules.dataTree && children
-					? row.modules.dataTree.controlEl
-					: false,
-			branchEl:
-				row.modules.dataTree && children
-					? row.modules.dataTree.branchEl
-					: false,
+			open: children ? (row.modules.dataTree ? row.modules.dataTree.open : this.startOpen(row.getComponent(), 0)) : false,
+			controlEl: row.modules.dataTree && children ? row.modules.dataTree.controlEl : false,
+			branchEl: row.modules.dataTree && children ? row.modules.dataTree.branchEl : false,
 			parent: row.modules.dataTree ? row.modules.dataTree.parent : false,
-			children: children,
+			children:children,
 		};
 	}
 
-	reinitializeRowChildren(row) {
+	reinitializeRowChildren(row){
 		var children = this.getTreeChildren(row, false, true);
 
-		children.forEach(function (child) {
+		children.forEach(function(child){
 			child.reinitialize(true);
 		});
 	}
 
-	layoutRow(row) {
-		var cell = this.elementField
-				? row.getCell(this.elementField)
-				: row.getCells()[0],
-			el = cell.getElement(),
-			config = row.modules.dataTree;
+	layoutRow(row){
+		var cell = this.elementField ? row.getCell(this.elementField) : row.getCells()[0],
+		el = cell.getElement(),
+		config = row.modules.dataTree;
 
-		if (config.branchEl) {
-			if (config.branchEl.parentNode) {
+		if(config.branchEl){
+			if(config.branchEl.parentNode){
 				config.branchEl.parentNode.removeChild(config.branchEl);
 			}
 			config.branchEl = false;
 		}
 
-		if (config.controlEl) {
-			if (config.controlEl.parentNode) {
+		if(config.controlEl){
+			if(config.controlEl.parentNode){
 				config.controlEl.parentNode.removeChild(config.controlEl);
 			}
 			config.controlEl = false;
@@ -4566,60 +4294,42 @@ class DataTree extends Module {
 
 		row.getElement().classList.add("tabulator-tree-level-" + config.index);
 
-		if (config.index) {
-			if (this.branchEl) {
+		if(config.index){
+			if(this.branchEl){
 				config.branchEl = this.branchEl.cloneNode(true);
 				el.insertBefore(config.branchEl, el.firstChild);
 
-				if (this.table.rtl) {
-					config.branchEl.style.marginRight =
-						(config.branchEl.offsetWidth + config.branchEl.style.marginLeft) *
-							(config.index - 1) +
-						config.index * this.indent +
-						"px";
-				} else {
-					config.branchEl.style.marginLeft =
-						(config.branchEl.offsetWidth + config.branchEl.style.marginRight) *
-							(config.index - 1) +
-						config.index * this.indent +
-						"px";
+				if(this.table.rtl){
+					config.branchEl.style.marginRight = (((config.branchEl.offsetWidth + config.branchEl.style.marginLeft) * (config.index - 1)) + (config.index * this.indent)) + "px";
+				}else {
+					config.branchEl.style.marginLeft = (((config.branchEl.offsetWidth + config.branchEl.style.marginRight) * (config.index - 1)) + (config.index * this.indent)) + "px";
 				}
-			} else {
-				if (this.table.rtl) {
-					el.style.paddingRight =
-						parseInt(
-							window
-								.getComputedStyle(el, null)
-								.getPropertyValue("padding-right")
-						) +
-						config.index * this.indent +
-						"px";
-				} else {
-					el.style.paddingLeft =
-						parseInt(
-							window.getComputedStyle(el, null).getPropertyValue("padding-left")
-						) +
-						config.index * this.indent +
-						"px";
+			}else {
+
+				if(this.table.rtl){
+					el.style.paddingRight = parseInt(window.getComputedStyle(el, null).getPropertyValue('padding-right')) + (config.index * this.indent) + "px";
+				}else {
+					el.style.paddingLeft = parseInt(window.getComputedStyle(el, null).getPropertyValue('padding-left')) + (config.index * this.indent) + "px";
 				}
 			}
 		}
 	}
 
-	generateControlElement(row, el) {
+	generateControlElement(row, el){
 		var config = row.modules.dataTree,
-			oldControl = config.controlEl;
+		oldControl = config.controlEl;
 
 		el = el || row.getCells()[0].getElement();
 
-		if (config.children !== false) {
-			if (config.open) {
+		if(config.children !== false){
+
+			if(config.open){
 				config.controlEl = this.collapseEl.cloneNode(true);
 				config.controlEl.addEventListener("click", (e) => {
 					e.stopPropagation();
 					this.collapseRow(row);
 				});
-			} else {
+			}else {
 				config.controlEl = this.expandEl.cloneNode(true);
 				config.controlEl.addEventListener("click", (e) => {
 					e.stopPropagation();
@@ -4631,23 +4341,15 @@ class DataTree extends Module {
 				e.stopPropagation();
 			});
 
-			if (oldControl && oldControl.parentNode === el) {
-				oldControl.parentNode.replaceChild(config.controlEl, oldControl);
-			} else {
+			if(oldControl && oldControl.parentNode === el){
+				oldControl.parentNode.replaceChild(config.controlEl,oldControl);
+			}else {
 				el.insertBefore(config.controlEl, el.firstChild);
 			}
 		}
 	}
 
-	setDisplayIndex(index) {
-		this.displayIndex = index;
-	}
-
-	getDisplayIndex() {
-		return this.displayIndex;
-	}
-
-	getRows(rows) {
+	getRows(rows){
 		var output = [];
 
 		rows.forEach((row, i) => {
@@ -4655,12 +4357,13 @@ class DataTree extends Module {
 
 			output.push(row);
 
-			if (row instanceof Row) {
+			if(row instanceof Row){
+
 				row.create();
 
 				config = row.modules.dataTree.children;
 
-				if (!config.index && config.children !== false) {
+				if(!config.index && config.children !== false){
 					children = this.getChildren(row);
 
 					children.forEach((child) => {
@@ -4674,23 +4377,23 @@ class DataTree extends Module {
 		return output;
 	}
 
-	getChildren(row, allChildren) {
+	getChildren(row, allChildren){
 		var config = row.modules.dataTree,
-			children = [],
-			output = [];
+		children = [],
+		output = [];
 
-		if (config.children !== false && (config.open || allChildren)) {
-			if (!Array.isArray(config.children)) {
+		if(config.children !== false && (config.open || allChildren)){
+			if(!Array.isArray(config.children)){
 				config.children = this.generateChildren(row);
 			}
 
-			if (this.table.modExists("filter") && this.table.options.dataTreeFilter) {
+			if(this.table.modExists("filter") && this.table.options.dataTreeFilter){
 				children = this.table.modules.filter.filter(config.children);
-			} else {
+			}else {
 				children = config.children;
 			}
 
-			if (this.table.modExists("sort") && this.table.options.dataTreeSort) {
+			if(this.table.modExists("sort") && this.table.options.dataTreeSort){
 				this.table.modules.sort.sort(children);
 			}
 
@@ -4708,12 +4411,12 @@ class DataTree extends Module {
 		return output;
 	}
 
-	generateChildren(row) {
+	generateChildren(row){
 		var children = [];
 
 		var childArray = row.getData()[this.field];
 
-		if (!Array.isArray(childArray)) {
+		if(!Array.isArray(childArray)){
 			childArray = [childArray];
 		}
 
@@ -4725,11 +4428,8 @@ class DataTree extends Module {
 			childRow.modules.dataTree.index = row.modules.dataTree.index + 1;
 			childRow.modules.dataTree.parent = row;
 
-			if (childRow.modules.dataTree.children) {
-				childRow.modules.dataTree.open = this.startOpen(
-					childRow.getComponent(),
-					childRow.modules.dataTree.index
-				);
+			if(childRow.modules.dataTree.children){
+				childRow.modules.dataTree.open = this.startOpen(childRow.getComponent(), childRow.modules.dataTree.index);
 			}
 			children.push(childRow);
 		});
@@ -4737,88 +4437,76 @@ class DataTree extends Module {
 		return children;
 	}
 
-	expandRow(row, silent) {
+	expandRow(row, silent){
 		var config = row.modules.dataTree;
 
-		if (config.children !== false) {
+		if(config.children !== false){
 			config.open = true;
 
 			row.reinitialize();
 
 			this.refreshData(true);
 
-			this.dispatchExternal(
-				"dataTreeRowExpanded",
-				row.getComponent(),
-				row.modules.dataTree.index
-			);
+			this.dispatchExternal("dataTreeRowExpanded", row.getComponent(), row.modules.dataTree.index);
 		}
 	}
 
-	collapseRow(row) {
+	collapseRow(row){
 		var config = row.modules.dataTree;
 
-		if (config.children !== false) {
+		if(config.children !== false){
 			config.open = false;
 
 			row.reinitialize();
 
 			this.refreshData(true);
 
-			this.dispatchExternal(
-				"dataTreeRowCollapsed",
-				row.getComponent(),
-				row.modules.dataTree.index
-			);
+			this.dispatchExternal("dataTreeRowCollapsed", row.getComponent(), row.modules.dataTree.index);
 		}
 	}
 
-	toggleRow(row) {
+	toggleRow(row){
 		var config = row.modules.dataTree;
 
-		if (config.children !== false) {
-			if (config.open) {
+		if(config.children !== false){
+			if(config.open){
 				this.collapseRow(row);
-			} else {
+			}else {
 				this.expandRow(row);
 			}
 		}
 	}
 
-	isRowExpanded(row) {
+	isRowExpanded(row){
 		return row.modules.dataTree.open;
 	}
 
-	getTreeParent(row) {
-		return row.modules.dataTree.parent
-			? row.modules.dataTree.parent.getComponent()
-			: false;
+	getTreeParent(row){
+		return row.modules.dataTree.parent ? row.modules.dataTree.parent.getComponent() : false;
 	}
 
-	getTreeParentRoot(row) {
-		return row.modules.dataTree && row.modules.dataTree.parent
-			? this.getTreeParentRoot(row.modules.dataTree.parent)
-			: row;
+	getTreeParentRoot(row){
+		return row.modules.dataTree && row.modules.dataTree.parent ? this.getTreeParentRoot(row.modules.dataTree.parent) : row;
 	}
 
-	getFilteredTreeChildren(row) {
+	getFilteredTreeChildren(row){
 		var config = row.modules.dataTree,
-			output = [],
-			children;
+		output = [], children;
 
-		if (config.children) {
-			if (!Array.isArray(config.children)) {
+		if(config.children){
+
+			if(!Array.isArray(config.children)){
 				config.children = this.generateChildren(row);
 			}
 
-			if (this.table.modExists("filter") && this.table.options.dataTreeFilter) {
+			if(this.table.modExists("filter") && this.table.options.dataTreeFilter){
 				children = this.table.modules.filter.filter(config.children);
-			} else {
+			}else {
 				children = config.children;
 			}
 
 			children.forEach((childRow) => {
-				if (childRow instanceof Row) {
+				if(childRow instanceof Row){
 					output.push(childRow);
 				}
 			});
@@ -4827,18 +4515,18 @@ class DataTree extends Module {
 		return output;
 	}
 
-	rowDelete(row) {
+	rowDelete(row){
 		var parent = row.modules.dataTree.parent,
-			childIndex;
+		childIndex;
 
-		if (parent) {
+		if(parent){
 			childIndex = this.findChildIndex(row, parent);
 
-			if (childIndex !== false) {
+			if(childIndex !== false){
 				parent.data[this.field].splice(childIndex, 1);
 			}
 
-			if (!parent.data[this.field].length) {
+			if(!parent.data[this.field].length){
 				delete parent.data[this.field];
 			}
 
@@ -4849,34 +4537,31 @@ class DataTree extends Module {
 		this.refreshData(true);
 	}
 
-	addTreeChildRow(row, data, top, index) {
+	addTreeChildRow(row, data, top, index){
 		var childIndex = false;
 
-		if (typeof data === "string") {
+		if(typeof data === "string"){
 			data = JSON.parse(data);
 		}
 
-		if (!Array.isArray(row.data[this.field])) {
+		if(!Array.isArray(row.data[this.field])){
 			row.data[this.field] = [];
 
-			row.modules.dataTree.open = this.startOpen(
-				row.getComponent(),
-				row.modules.dataTree.index
-			);
+			row.modules.dataTree.open = this.startOpen(row.getComponent(), row.modules.dataTree.index);
 		}
 
-		if (typeof index !== "undefined") {
+		if(typeof index !== "undefined"){
 			childIndex = this.findChildIndex(index, row);
 
-			if (childIndex !== false) {
-				row.data[this.field].splice(top ? childIndex : childIndex + 1, 0, data);
+			if(childIndex !== false){
+				row.data[this.field].splice((top ? childIndex : childIndex + 1), 0, data);
 			}
 		}
 
-		if (childIndex === false) {
-			if (top) {
+		if(childIndex === false){
+			if(top){
 				row.data[this.field].unshift(data);
-			} else {
+			}else {
 				row.data[this.field].push(data);
 			}
 		}
@@ -4887,49 +4572,47 @@ class DataTree extends Module {
 		this.refreshData(true);
 	}
 
-	findChildIndex(subject, parent) {
+	findChildIndex(subject, parent){
 		var match = false;
 
-		if (typeof subject == "object") {
-			if (subject instanceof Row) {
+		if(typeof subject == "object"){
+
+			if(subject instanceof Row){
 				//subject is row element
 				match = subject.data;
-			} else if (subject instanceof RowComponent) {
+			}else if(subject instanceof RowComponent){
 				//subject is public row component
 				match = subject._getSelf().data;
-			} else if (
-				typeof HTMLElement !== "undefined" &&
-				subject instanceof HTMLElement
-			) {
-				if (parent.modules.dataTree) {
+			}else if(typeof HTMLElement !== "undefined" && subject instanceof HTMLElement){
+				if(parent.modules.dataTree){
 					match = parent.modules.dataTree.children.find((childRow) => {
-						return childRow instanceof Row
-							? childRow.element === subject
-							: false;
+						return childRow instanceof Row ? childRow.element === subject : false;
 					});
 
-					if (match) {
+					if(match){
 						match = match.data;
 					}
 				}
-			} else if (subject === null) {
+			}else if(subject === null){
 				match = false;
 			}
-		} else if (typeof subject == "undefined") {
+
+		}else if(typeof subject == "undefined"){
 			match = false;
-		} else {
+		}else {
 			//subject should be treated as the index of the row
 			match = parent.data[this.field].find((row) => {
 				return row.data[this.table.options.index] == subject;
 			});
 		}
 
-		if (match) {
-			if (Array.isArray(parent.data[this.field])) {
+		if(match){
+
+			if(Array.isArray(parent.data[this.field])){
 				match = parent.data[this.field].indexOf(match);
 			}
 
-			if (match == -1) {
+			if(match == -1){
 				match = false;
 			}
 		}
@@ -4939,23 +4622,22 @@ class DataTree extends Module {
 		return match;
 	}
 
-	getTreeChildren(row, component, recurse) {
+	getTreeChildren(row, component, recurse){
 		var config = row.modules.dataTree,
-			output = [];
+		output = [];
 
-		if (config.children) {
-			if (!Array.isArray(config.children)) {
+		if(config.children){
+
+			if(!Array.isArray(config.children)){
 				config.children = this.generateChildren(row);
 			}
 
 			config.children.forEach((childRow) => {
-				if (childRow instanceof Row) {
+				if(childRow instanceof Row){
 					output.push(component ? childRow.getComponent() : childRow);
 
-					if (recurse) {
-						output = output.concat(
-							this.getTreeChildren(childRow, component, recurse)
-						);
+					if(recurse){
+						output = output.concat(this.getTreeChildren(childRow, component, recurse));
 					}
 				}
 			});
@@ -4964,58 +4646,48 @@ class DataTree extends Module {
 		return output;
 	}
 
-	getChildField() {
+	getChildField(){
 		return this.field;
 	}
 
-	redrawNeeded(data) {
-		return (
-			(this.field ? typeof data[this.field] !== "undefined" : false) ||
-			(this.elementField
-				? typeof data[this.elementField] !== "undefined"
-				: false)
-		);
+	redrawNeeded(data){
+		return (this.field ? typeof data[this.field] !== "undefined" : false) || (this.elementField ? typeof data[this.elementField] !== "undefined" : false);
 	}
 }
 
 DataTree.moduleName = "dataTree";
 
-function csv(list, options = {}, setFileContents) {
+function csv(list, options = {}, setFileContents){
 	var delimiter = options.delimiter ? options.delimiter : ",",
-		fileContents = [],
-		headers = [];
+	fileContents = [],
+	headers = [];
 
 	list.forEach((row) => {
 		var item = [];
 
-		switch (row.type) {
+		switch(row.type){
 			case "group":
-				console.warn(
-					"Download Warning - CSV downloader cannot process row groups"
-				);
+				console.warn("Download Warning - CSV downloader cannot process row groups");
 				break;
 
 			case "calc":
-				console.warn(
-					"Download Warning - CSV downloader cannot process column calculations"
-				);
+				console.warn("Download Warning - CSV downloader cannot process column calculations");
 				break;
 
 			case "header":
 				row.columns.forEach((col, i) => {
-					if (col && col.depth === 1) {
-						headers[i] =
-							typeof col.value == "undefined" || col.value === null
-								? ""
-								: '"' + String(col.value).split('"').join('""') + '"';
+					if(col && col.depth === 1){
+						headers[i] = typeof col.value == "undefined"  || col.value === null ? "" : ('"' + String(col.value).split('"').join('""') + '"');
 					}
 				});
 				break;
 
 			case "row":
 				row.columns.forEach((col) => {
-					if (col) {
-						switch (typeof col.value) {
+
+					if(col){
+
+						switch(typeof col.value){
 							case "object":
 								col.value = col.value !== null ? JSON.stringify(col.value) : "";
 								break;
@@ -5034,46 +4706,41 @@ function csv(list, options = {}, setFileContents) {
 		}
 	});
 
-	if (headers.length) {
+	if(headers.length){
 		fileContents.unshift(headers.join(delimiter));
 	}
 
 	fileContents = fileContents.join("\n");
 
-	if (options.bom) {
+	if(options.bom){
 		fileContents = "\ufeff" + fileContents;
 	}
 
 	setFileContents(fileContents, "text/csv");
 }
 
-function json(list, options, setFileContents) {
+function json(list, options, setFileContents){
 	var fileContents = [];
 
 	list.forEach((row) => {
 		var item = {};
 
-		switch (row.type) {
+		switch(row.type){
 			case "header":
 				break;
 
 			case "group":
-				console.warn(
-					"Download Warning - JSON downloader cannot process row groups"
-				);
+				console.warn("Download Warning - JSON downloader cannot process row groups");
 				break;
 
 			case "calc":
-				console.warn(
-					"Download Warning - JSON downloader cannot process column calculations"
-				);
+				console.warn("Download Warning - JSON downloader cannot process column calculations");
 				break;
 
 			case "row":
 				row.columns.forEach((col) => {
-					if (col) {
-						item[col.component.getTitleDownload() || col.component.getField()] =
-							col.value;
+					if(col){
+						item[col.component.getTitleDownload() || col.component.getField()] = col.value;
 					}
 				});
 
@@ -5082,41 +4749,41 @@ function json(list, options, setFileContents) {
 		}
 	});
 
-	fileContents = JSON.stringify(fileContents, null, "\t");
+	fileContents = JSON.stringify(fileContents, null, '\t');
 
 	setFileContents(fileContents, "application/json");
 }
 
-function pdf(list, options = {}, setFileContents) {
+function pdf(list, options = {}, setFileContents){
 	var header = [],
-		body = [],
-		autoTableParams = {},
-		rowGroupStyles = options.rowGroupStyles || {
-			fontStyle: "bold",
-			fontSize: 12,
-			cellPadding: 6,
-			fillColor: 220,
-		},
-		rowCalcStyles = options.rowCalcStyles || {
-			fontStyle: "bold",
-			fontSize: 10,
-			cellPadding: 4,
-			fillColor: 232,
-		},
-		jsPDFParams = options.jsPDF || {},
-		title = options.title ? options.title : "";
+	body = [],
+	autoTableParams = {},
+	rowGroupStyles = options.rowGroupStyles || {
+		fontStyle: "bold",
+		fontSize: 12,
+		cellPadding: 6,
+		fillColor: 220,
+	},
+	rowCalcStyles = options.rowCalcStyles || {
+		fontStyle: "bold",
+		fontSize: 10,
+		cellPadding: 4,
+		fillColor: 232,
+	},
+	jsPDFParams = options.jsPDF || {},
+	title = options.title ? options.title : "";
 
-	if (!jsPDFParams.orientation) {
+	if(!jsPDFParams.orientation){
 		jsPDFParams.orientation = options.orientation || "landscape";
 	}
 
-	if (!jsPDFParams.unit) {
+	if(!jsPDFParams.unit){
 		jsPDFParams.unit = "pt";
 	}
 
 	//parse row list
 	list.forEach((row) => {
-		switch (row.type) {
+		switch(row.type){
 			case "header":
 				header.push(parseRow(row));
 				break;
@@ -5135,14 +4802,14 @@ function pdf(list, options = {}, setFileContents) {
 		}
 	});
 
-	function parseRow(row, styles) {
+	function parseRow(row, styles){
 		var rowData = [];
 
-		row.columns.forEach((col) => {
+		row.columns.forEach((col) =>{
 			var cell;
 
-			if (col) {
-				switch (typeof col.value) {
+			if(col){
+				switch(typeof col.value){
 					case "object":
 						col.value = col.value !== null ? JSON.stringify(col.value) : "";
 						break;
@@ -5153,12 +4820,12 @@ function pdf(list, options = {}, setFileContents) {
 				}
 
 				cell = {
-					content: col.value,
-					colSpan: col.width,
-					rowSpan: col.height,
+					content:col.value,
+					colSpan:col.width,
+					rowSpan:col.height,
 				};
 
-				if (styles) {
+				if(styles){
 					cell.styles = styles;
 				}
 
@@ -5169,19 +4836,20 @@ function pdf(list, options = {}, setFileContents) {
 		return rowData;
 	}
 
+
 	//configure PDF
 	var doc = new jspdf.jsPDF(jsPDFParams); //set document to landscape, better for most tables
 
-	if (options.autoTable) {
-		if (typeof options.autoTable === "function") {
+	if(options.autoTable){
+		if(typeof options.autoTable === "function"){
 			autoTableParams = options.autoTable(doc) || {};
-		} else {
+		}else {
 			autoTableParams = options.autoTable;
 		}
 	}
 
-	if (title) {
-		autoTableParams.didDrawPage = function (data) {
+	if(title){
+		autoTableParams.didDrawPage = function(data) {
 			doc.text(title, 40, 30);
 		};
 	}
@@ -5191,61 +4859,44 @@ function pdf(list, options = {}, setFileContents) {
 
 	doc.autoTable(autoTableParams);
 
-	if (options.documentProcessing) {
+	if(options.documentProcessing){
 		options.documentProcessing(doc);
 	}
 
 	setFileContents(doc.output("arraybuffer"), "application/pdf");
 }
 
-function xlsx(list, options, setFileContents) {
+function xlsx(list, options, setFileContents){
 	var self = this,
-		sheetName = options.sheetName || "Sheet1",
-		workbook = XLSX.utils.book_new(),
-		tableFeatures = new CoreFeature(this),
-		output;
+	sheetName = options.sheetName || "Sheet1",
+	workbook = XLSX.utils.book_new(),
+	tableFeatures = new CoreFeature(this),
+	output;
 
 	workbook.SheetNames = [];
 	workbook.Sheets = {};
 
-	function generateSheet() {
+	function generateSheet(){
 		var rows = [],
-			merges = [],
-			worksheet = {},
-			range = {
-				s: { c: 0, r: 0 },
-				e: {
-					c: list[0]
-						? list[0].columns.reduce(
-								(a, b) => a + (b && b.width ? b.width : 1),
-								0
-						  )
-						: 0,
-					r: list.length,
-				},
-			};
+		merges = [],
+		worksheet = {},
+		range = {s: {c:0, r:0}, e: {c:(list[0] ? list[0].columns.reduce((a, b) => a + (b && b.width ? b.width : 1), 0) : 0), r:list.length }};
 
 		//parse row list
 		list.forEach((row, i) => {
 			var rowData = [];
 
-			row.columns.forEach(function (col, j) {
-				if (col) {
-					rowData.push(
-						!(col.value instanceof Date) && typeof col.value === "object"
-							? JSON.stringify(col.value)
-							: col.value
-					);
+			row.columns.forEach(function(col, j){
 
-					if (col.width > 1 || col.height > -1) {
-						if (col.height > 1 || col.width > 1) {
-							merges.push({
-								s: { r: i, c: j },
-								e: { r: i + col.height - 1, c: j + col.width - 1 },
-							});
+				if(col){
+					rowData.push(!(col.value instanceof Date) && typeof col.value === "object" ? JSON.stringify(col.value) : col.value);
+
+					if(col.width > 1 || col.height > -1){
+						if(col.height > 1 || col.width > 1){
+							merges.push({s:{r:i,c:j},e:{r:i + col.height - 1,c:j + col.width - 1}});
 						}
 					}
-				} else {
+				}else {
 					rowData.push("");
 				}
 			});
@@ -5256,49 +4907,46 @@ function xlsx(list, options, setFileContents) {
 		//convert rows to worksheet
 		XLSX.utils.sheet_add_aoa(worksheet, rows);
 
-		worksheet["!ref"] = XLSX.utils.encode_range(range);
+		worksheet['!ref'] = XLSX.utils.encode_range(range);
 
-		if (merges.length) {
+		if(merges.length){
 			worksheet["!merges"] = merges;
 		}
 
 		return worksheet;
 	}
 
-	if (options.sheetOnly) {
+	if(options.sheetOnly){
 		setFileContents(generateSheet());
 		return;
 	}
 
-	if (options.sheets) {
-		for (var sheet in options.sheets) {
-			if (options.sheets[sheet] === true) {
+	if(options.sheets){
+		for(var sheet in options.sheets){
+
+			if(options.sheets[sheet] === true){
 				workbook.SheetNames.push(sheet);
 				workbook.Sheets[sheet] = generateSheet();
-			} else {
+			}else {
+
 				workbook.SheetNames.push(sheet);
 
-				tableFeatures.commsSend(
-					options.sheets[sheet],
-					"download",
-					"intercept",
-					{
-						type: "xlsx",
-						options: { sheetOnly: true },
-						active: self.active,
-						intercept: function (data) {
-							workbook.Sheets[sheet] = data;
-						},
+				tableFeatures.commsSend(options.sheets[sheet], "download", "intercept",{
+					type:"xlsx",
+					options:{sheetOnly:true},
+					active:self.active,
+					intercept:function(data){
+						workbook.Sheets[sheet] = data;
 					}
-				);
+				});
 			}
 		}
-	} else {
+	}else {
 		workbook.SheetNames.push(sheetName);
 		workbook.Sheets[sheetName] = generateSheet();
 	}
 
-	if (options.documentProcessing) {
+	if(options.documentProcessing){
 		workbook = options.documentProcessing(workbook);
 	}
 
@@ -5306,26 +4954,22 @@ function xlsx(list, options, setFileContents) {
 	function s2ab(s) {
 		var buf = new ArrayBuffer(s.length);
 		var view = new Uint8Array(buf);
-		for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
+		for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
 		return buf;
 	}
 
-	output = XLSX.write(workbook, {
-		bookType: "xlsx",
-		bookSST: true,
-		type: "binary",
-	});
+	output = XLSX.write(workbook, {bookType:'xlsx', bookSST:true, type: 'binary'});
 
 	setFileContents(s2ab(output), "application/octet-stream");
 }
 
-function html(list, options, setFileContents) {
-	if (this.modExists("export", true)) {
+function html(list, options, setFileContents){
+	if(this.modExists("export", true)){
 		setFileContents(this.modules.export.generateHTMLTable(list), "text/html");
 	}
 }
 
-function jsonLines(list, options, setFileContents) {
+function jsonLines (list, options, setFileContents) {
 	const fileContents = [];
 
 	list.forEach((row) => {
@@ -5336,22 +4980,17 @@ function jsonLines(list, options, setFileContents) {
 				break;
 
 			case "group":
-				console.warn(
-					"Download Warning - JSON downloader cannot process row groups"
-				);
+				console.warn("Download Warning - JSON downloader cannot process row groups");
 				break;
 
 			case "calc":
-				console.warn(
-					"Download Warning - JSON downloader cannot process column calculations"
-				);
+				console.warn("Download Warning - JSON downloader cannot process column calculations");
 				break;
 
 			case "row":
 				row.columns.forEach((col) => {
 					if (col) {
-						item[col.component.getTitleDownload() || col.component.getField()] =
-							col.value;
+						item[col.component.getTitleDownload() || col.component.getField()] = col.value;
 					}
 				});
 
@@ -5364,20 +5003,21 @@ function jsonLines(list, options, setFileContents) {
 }
 
 var defaultDownloaders = {
-	csv: csv,
-	json: json,
-	jsonLines: jsonLines,
-	pdf: pdf,
-	xlsx: xlsx,
-	html: html,
+	csv:csv,
+	json:json,
+	jsonLines:jsonLines,
+	pdf:pdf,
+	xlsx:xlsx,
+	html:html,
 };
 
-class Download extends Module {
-	constructor(table) {
+class Download extends Module{
+
+	constructor(table){
 		super(table);
 
-		this.registerTableOption("downloadEncoder", function (data, mimeType) {
-			return new Blob([data], { type: mimeType });
+		this.registerTableOption("downloadEncoder", function(data, mimeType){
+			return new Blob([data],{type:mimeType});
 		}); //function to manipulate download data
 		this.registerTableOption("downloadReady", undefined); //warn of function deprecation
 		this.registerTableOption("downloadConfig", {}); //download config
@@ -5387,22 +5027,22 @@ class Download extends Module {
 		this.registerColumnOption("titleDownload");
 	}
 
-	initialize() {
+	initialize(){
 		this.deprecatedOptionsCheck();
 
 		this.registerTableFunction("download", this.download.bind(this));
 		this.registerTableFunction("downloadToTab", this.downloadToTab.bind(this));
 	}
 
-	deprecatedOptionsCheck() {
+	deprecatedOptionsCheck(){
 		this.deprecationCheck("downloadReady", "downloadEncoder");
-	}
+	}	
 
 	///////////////////////////////////
 	///////// Table Functions /////////
 	///////////////////////////////////
 
-	downloadToTab(type, filename, options, active) {
+	downloadToTab(type, filename, options, active){
 		this.download(type, filename, options, active, true);
 	}
 
@@ -5411,66 +5051,57 @@ class Download extends Module {
 	///////////////////////////////////
 
 	//trigger file download
-	download(type, filename, options, range, interceptCallback) {
+	download(type, filename, options, range, interceptCallback){
 		var downloadFunc = false;
 
-		function buildLink(data, mime) {
-			if (interceptCallback) {
-				if (interceptCallback === true) {
+		function buildLink(data, mime){
+			if(interceptCallback){
+				if(interceptCallback === true){
 					this.triggerDownload(data, mime, type, filename, true);
-				} else {
+				}else {
 					interceptCallback(data);
 				}
-			} else {
+
+			}else {
 				this.triggerDownload(data, mime, type, filename);
 			}
 		}
 
-		if (typeof type == "function") {
+		if(typeof type == "function"){
 			downloadFunc = type;
-		} else {
-			if (Download.downloaders[type]) {
+		}else {
+			if(Download.downloaders[type]){
 				downloadFunc = Download.downloaders[type];
-			} else {
+			}else {
 				console.warn("Download Error - No such download type found: ", type);
 			}
 		}
 
-		if (downloadFunc) {
+		if(downloadFunc){
 			var list = this.generateExportList(range);
 
-			downloadFunc.call(this.table, list, options || {}, buildLink.bind(this));
+			downloadFunc.call(this.table, list , options || {}, buildLink.bind(this));
 		}
 	}
 
-	generateExportList(range) {
-		var list = this.table.modules.export.generateExportList(
-			this.table.options.downloadConfig,
-			false,
-			range || this.table.options.downloadRowRange,
-			"download"
-		);
+	generateExportList(range){
+		var list = this.table.modules.export.generateExportList(this.table.options.downloadConfig, false, range || this.table.options.downloadRowRange, "download");
 
 		//assign group header formatter
 		var groupHeader = this.table.options.groupHeaderDownload;
 
-		if (groupHeader && !Array.isArray(groupHeader)) {
+		if(groupHeader && !Array.isArray(groupHeader)){
 			groupHeader = [groupHeader];
 		}
 
 		list.forEach((row) => {
 			var group;
 
-			if (row.type === "group") {
+			if(row.type === "group"){
 				group = row.columns[0];
 
-				if (groupHeader && groupHeader[row.indent]) {
-					group.value = groupHeader[row.indent](
-						group.value,
-						row.component._group.getRowCount(),
-						row.component._group.getData(),
-						row.component
-					);
+				if(groupHeader && groupHeader[row.indent]){
+					group.value = groupHeader[row.indent](group.value, row.component._group.getRowCount(), row.component._group.getData(), row.component);
 				}
 			}
 		});
@@ -5478,28 +5109,26 @@ class Download extends Module {
 		return list;
 	}
 
-	triggerDownload(data, mime, type, filename, newTab) {
-		var element = document.createElement("a"),
-			blob = this.table.options.downloadEncoder(data, mime);
+	triggerDownload(data, mime, type, filename, newTab){
+		var element = document.createElement('a'),
+		blob = this.table.options.downloadEncoder(data, mime);
 
-		if (blob) {
-			if (newTab) {
+		if(blob){
+			if(newTab){
 				window.open(window.URL.createObjectURL(blob));
-			} else {
-				filename =
-					filename ||
-					"Tabulator." + (typeof type === "function" ? "txt" : type);
-
-				if (navigator.msSaveOrOpenBlob) {
+			}else {
+				filename = filename || "Tabulator." + (typeof type === "function" ? "txt" : type);
+				
+				if(navigator.msSaveOrOpenBlob){
 					navigator.msSaveOrOpenBlob(blob, filename);
-				} else {
-					element.setAttribute("href", window.URL.createObjectURL(blob));
+				}else {
+					element.setAttribute('href', window.URL.createObjectURL(blob));
 
 					//set file title
-					element.setAttribute("download", filename);
+					element.setAttribute('download', filename);
 
 					//trigger download
-					element.style.display = "none";
+					element.style.display = 'none';
 					document.body.appendChild(element);
 					element.click();
 
@@ -5512,8 +5141,8 @@ class Download extends Module {
 		}
 	}
 
-	commsReceived(table, action, data) {
-		switch (action) {
+	commsReceived(table, action, data){
+		switch(action){
 			case "intercept":
 				this.download(data.type, "", data.options, data.active, data.intercept);
 				break;
@@ -5526,47 +5155,33 @@ Download.moduleName = "download";
 //load defaults
 Download.downloaders = defaultDownloaders;
 
-function maskInput(el, options) {
+function maskInput(el, options){
 	var mask = options.mask,
-		maskLetter =
-			typeof options.maskLetterChar !== "undefined"
-				? options.maskLetterChar
-				: "A",
-		maskNumber =
-			typeof options.maskNumberChar !== "undefined"
-				? options.maskNumberChar
-				: "9",
-		maskWildcard =
-			typeof options.maskWildcardChar !== "undefined"
-				? options.maskWildcardChar
-				: "*";
+	maskLetter = typeof options.maskLetterChar !== "undefined" ? options.maskLetterChar : "A",
+	maskNumber = typeof options.maskNumberChar !== "undefined" ? options.maskNumberChar : "9",
+	maskWildcard = typeof options.maskWildcardChar !== "undefined" ? options.maskWildcardChar : "*";
 
-	function fillSymbols(index) {
+	function fillSymbols(index){
 		var symbol = mask[index];
-		if (
-			typeof symbol !== "undefined" &&
-			symbol !== maskWildcard &&
-			symbol !== maskLetter &&
-			symbol !== maskNumber
-		) {
+		if(typeof symbol !== "undefined" && symbol !== maskWildcard && symbol !== maskLetter && symbol !== maskNumber){
 			el.value = el.value + "" + symbol;
-			fillSymbols(index + 1);
+			fillSymbols(index+1);
 		}
 	}
 
 	el.addEventListener("keydown", (e) => {
 		var index = el.value.length,
-			char = e.key;
+		char = e.key;
 
-		if (e.keyCode > 46) {
-			if (index >= mask.length) {
+		if(e.keyCode > 46){
+			if(index >= mask.length){
 				e.preventDefault();
 				e.stopPropagation();
 				return false;
-			} else {
-				switch (mask[index]) {
+			}else {
+				switch(mask[index]){
 					case maskLetter:
-						if (char.toUpperCase() == char.toLowerCase()) {
+						if(char.toUpperCase() == char.toLowerCase()){
 							e.preventDefault();
 							e.stopPropagation();
 							return false;
@@ -5574,7 +5189,7 @@ function maskInput(el, options) {
 						break;
 
 					case maskNumber:
-						if (isNaN(char)) {
+						if(isNaN(char)){
 							e.preventDefault();
 							e.stopPropagation();
 							return false;
@@ -5585,7 +5200,7 @@ function maskInput(el, options) {
 						break;
 
 					default:
-						if (char !== mask[index]) {
+						if(char !== mask[index]){
 							e.preventDefault();
 							e.stopPropagation();
 							return false;
@@ -5598,27 +5213,28 @@ function maskInput(el, options) {
 	});
 
 	el.addEventListener("keyup", (e) => {
-		if (e.keyCode > 46) {
-			if (options.maskAutoFill) {
+		if(e.keyCode > 46){
+			if(options.maskAutoFill){
 				fillSymbols(el.value.length);
 			}
 		}
 	});
 
-	if (!el.placeholder) {
+
+	if(!el.placeholder){
 		el.placeholder = mask;
 	}
 
-	if (options.maskAutoFill) {
+	if(options.maskAutoFill){
 		fillSymbols(el.value.length);
 	}
 }
 
 //input element
-function input(cell, onRendered, success, cancel, editorParams) {
+function input(cell, onRendered, success, cancel, editorParams){
 	//create and style input
 	var cellValue = cell.getValue(),
-		input = document.createElement("input");
+	input = document.createElement("input");
 
 	input.setAttribute("type", editorParams.search ? "search" : "text");
 
@@ -5626,18 +5242,12 @@ function input(cell, onRendered, success, cancel, editorParams) {
 	input.style.width = "100%";
 	input.style.boxSizing = "border-box";
 
-	if (
-		editorParams.elementAttributes &&
-		typeof editorParams.elementAttributes == "object"
-	) {
-		for (let key in editorParams.elementAttributes) {
-			if (key.charAt(0) == "+") {
+	if(editorParams.elementAttributes && typeof editorParams.elementAttributes == "object"){
+		for (let key in editorParams.elementAttributes){
+			if(key.charAt(0) == "+"){
 				key = key.slice(1);
-				input.setAttribute(
-					key,
-					input.getAttribute(key) + editorParams.elementAttributes["+" + key]
-				);
-			} else {
+				input.setAttribute(key, input.getAttribute(key) + editorParams.elementAttributes["+" + key]);
+			}else {
 				input.setAttribute(key, editorParams.elementAttributes[key]);
 			}
 		}
@@ -5645,25 +5255,21 @@ function input(cell, onRendered, success, cancel, editorParams) {
 
 	input.value = typeof cellValue !== "undefined" ? cellValue : "";
 
-	onRendered(function () {
-		input.focus({ preventScroll: true });
+	onRendered(function(){
+		input.focus({preventScroll: true});
 		input.style.height = "100%";
 
-		if (editorParams.selectContents) {
+		if(editorParams.selectContents){
 			input.select();
 		}
 	});
 
-	function onChange(e) {
-		if (
-			((cellValue === null || typeof cellValue === "undefined") &&
-				input.value !== "") ||
-			input.value !== cellValue
-		) {
-			if (success(input.value)) {
+	function onChange(e){
+		if(((cellValue === null || typeof cellValue === "undefined") && input.value !== "") || input.value !== cellValue){
+			if(success(input.value)){
 				cellValue = input.value; //persist value if successfully validated incase editor is used as header filter
 			}
-		} else {
+		}else {
 			cancel();
 		}
 	}
@@ -5673,8 +5279,8 @@ function input(cell, onRendered, success, cancel, editorParams) {
 	input.addEventListener("blur", onChange);
 
 	//submit new value on enter
-	input.addEventListener("keydown", function (e) {
-		switch (e.keyCode) {
+	input.addEventListener("keydown", function(e){
+		switch(e.keyCode){
 			// case 9:
 			case 13:
 				onChange();
@@ -5691,7 +5297,7 @@ function input(cell, onRendered, success, cancel, editorParams) {
 		}
 	});
 
-	if (editorParams.mask) {
+	if(editorParams.mask){
 		maskInput(input, editorParams);
 	}
 
@@ -5699,14 +5305,12 @@ function input(cell, onRendered, success, cancel, editorParams) {
 }
 
 //resizable text area element
-function textarea(cell, onRendered, success, cancel, editorParams) {
+function textarea(cell, onRendered, success, cancel, editorParams){
 	var cellValue = cell.getValue(),
-		vertNav = editorParams.verticalNavigation || "hybrid",
-		value = String(
-			cellValue !== null && typeof cellValue !== "undefined" ? cellValue : ""
-		),
-		input = document.createElement("textarea"),
-		scrollHeight = 0;
+	vertNav = editorParams.verticalNavigation || "hybrid",
+	value = String(cellValue !== null && typeof cellValue !== "undefined"  ? cellValue : ""),
+	input = document.createElement("textarea"),
+	scrollHeight = 0;
 
 	//create and style input
 	input.style.display = "block";
@@ -5717,18 +5321,12 @@ function textarea(cell, onRendered, success, cancel, editorParams) {
 	input.style.whiteSpace = "pre-wrap";
 	input.style.resize = "none";
 
-	if (
-		editorParams.elementAttributes &&
-		typeof editorParams.elementAttributes == "object"
-	) {
-		for (let key in editorParams.elementAttributes) {
-			if (key.charAt(0) == "+") {
+	if(editorParams.elementAttributes && typeof editorParams.elementAttributes == "object"){
+		for (let key in editorParams.elementAttributes){
+			if(key.charAt(0) == "+"){
 				key = key.slice(1);
-				input.setAttribute(
-					key,
-					input.getAttribute(key) + editorParams.elementAttributes["+" + key]
-				);
-			} else {
+				input.setAttribute(key, input.getAttribute(key) + editorParams.elementAttributes["+" + key]);
+			}else {
 				input.setAttribute(key, editorParams.elementAttributes[key]);
 			}
 		}
@@ -5736,33 +5334,31 @@ function textarea(cell, onRendered, success, cancel, editorParams) {
 
 	input.value = value;
 
-	onRendered(function () {
-		input.focus({ preventScroll: true });
+	onRendered(function(){
+		input.focus({preventScroll: true});
 		input.style.height = "100%";
 
 		input.scrollHeight;
 		input.style.height = input.scrollHeight + "px";
 		cell.getRow().normalizeHeight();
 
-		if (editorParams.selectContents) {
+		if(editorParams.selectContents){
 			input.select();
 		}
 	});
 
-	function onChange(e) {
-		if (
-			((cellValue === null || typeof cellValue === "undefined") &&
-				input.value !== "") ||
-			input.value !== cellValue
-		) {
-			if (success(input.value)) {
+	function onChange(e){
+
+		if(((cellValue === null || typeof cellValue === "undefined") && input.value !== "") || input.value !== cellValue){
+
+			if(success(input.value)){
 				cellValue = input.value; //persist value if successfully validated incase editor is used as header filter
 			}
 
-			setTimeout(function () {
+			setTimeout(function(){
 				cell.getRow().normalizeHeight();
-			}, 300);
-		} else {
+			},300);
+		}else {
 			cancel();
 		}
 	}
@@ -5771,23 +5367,26 @@ function textarea(cell, onRendered, success, cancel, editorParams) {
 	input.addEventListener("change", onChange);
 	input.addEventListener("blur", onChange);
 
-	input.addEventListener("keyup", function () {
+	input.addEventListener("keyup", function(){
+
 		input.style.height = "";
 
 		var heightNow = input.scrollHeight;
 
 		input.style.height = heightNow + "px";
 
-		if (heightNow != scrollHeight) {
+		if(heightNow != scrollHeight){
 			scrollHeight = heightNow;
 			cell.getRow().normalizeHeight();
 		}
 	});
 
-	input.addEventListener("keydown", function (e) {
-		switch (e.keyCode) {
+	input.addEventListener("keydown", function(e){
+
+		switch(e.keyCode){
+
 			case 13:
-				if (e.shiftKey && editorParams.shiftEnterSubmit) {
+				if(e.shiftKey && editorParams.shiftEnterSubmit){
 					onChange();
 				}
 				break;
@@ -5797,10 +5396,7 @@ function textarea(cell, onRendered, success, cancel, editorParams) {
 				break;
 
 			case 38: //up arrow
-				if (
-					vertNav == "editor" ||
-					(vertNav == "hybrid" && input.selectionStart)
-				) {
+				if(vertNav == "editor" || (vertNav == "hybrid" && input.selectionStart)){
 					e.stopImmediatePropagation();
 					e.stopPropagation();
 				}
@@ -5808,10 +5404,7 @@ function textarea(cell, onRendered, success, cancel, editorParams) {
 				break;
 
 			case 40: //down arrow
-				if (
-					vertNav == "editor" ||
-					(vertNav == "hybrid" && input.selectionStart !== input.value.length)
-				) {
+				if(vertNav == "editor" || (vertNav == "hybrid" && input.selectionStart !== input.value.length)){
 					e.stopImmediatePropagation();
 					e.stopPropagation();
 				}
@@ -5824,7 +5417,7 @@ function textarea(cell, onRendered, success, cancel, editorParams) {
 		}
 	});
 
-	if (editorParams.mask) {
+	if(editorParams.mask){
 		maskInput(input, editorParams);
 	}
 
@@ -5832,22 +5425,22 @@ function textarea(cell, onRendered, success, cancel, editorParams) {
 }
 
 //input element with type of number
-function number(cell, onRendered, success, cancel, editorParams) {
+function number(cell, onRendered, success, cancel, editorParams){
 	var cellValue = cell.getValue(),
-		vertNav = editorParams.verticalNavigation || "editor",
-		input = document.createElement("input");
+	vertNav = editorParams.verticalNavigation || "editor",
+	input = document.createElement("input");
 
 	input.setAttribute("type", "number");
 
-	if (typeof editorParams.max != "undefined") {
+	if(typeof editorParams.max != "undefined"){
 		input.setAttribute("max", editorParams.max);
 	}
 
-	if (typeof editorParams.min != "undefined") {
+	if(typeof editorParams.min != "undefined"){
 		input.setAttribute("min", editorParams.min);
 	}
 
-	if (typeof editorParams.step != "undefined") {
+	if(typeof editorParams.step != "undefined"){
 		input.setAttribute("step", editorParams.step);
 	}
 
@@ -5856,18 +5449,12 @@ function number(cell, onRendered, success, cancel, editorParams) {
 	input.style.width = "100%";
 	input.style.boxSizing = "border-box";
 
-	if (
-		editorParams.elementAttributes &&
-		typeof editorParams.elementAttributes == "object"
-	) {
-		for (let key in editorParams.elementAttributes) {
-			if (key.charAt(0) == "+") {
+	if(editorParams.elementAttributes && typeof editorParams.elementAttributes == "object"){
+		for (let key in editorParams.elementAttributes){
+			if(key.charAt(0) == "+"){
 				key = key.slice(1);
-				input.setAttribute(
-					key,
-					input.getAttribute(key) + editorParams.elementAttributes["+" + key]
-				);
-			} else {
+				input.setAttribute(key, input.getAttribute(key) + editorParams.elementAttributes["+" + key]);
+			}else {
 				input.setAttribute(key, editorParams.elementAttributes[key]);
 			}
 		}
@@ -5875,7 +5462,7 @@ function number(cell, onRendered, success, cancel, editorParams) {
 
 	input.value = cellValue;
 
-	var blurFunc = function (e) {
+	var blurFunc = function(e){
 		onChange();
 	};
 
@@ -5883,38 +5470,38 @@ function number(cell, onRendered, success, cancel, editorParams) {
 		//submit new value on blur
 		input.removeEventListener("blur", blurFunc);
 
-		input.focus({ preventScroll: true });
+		input.focus({preventScroll: true});
 		input.style.height = "100%";
 
 		//submit new value on blur
 		input.addEventListener("blur", blurFunc);
 
-		if (editorParams.selectContents) {
+		if(editorParams.selectContents){
 			input.select();
 		}
 	});
 
-	function onChange() {
+	function onChange(){
 		var value = input.value;
 
-		if (!isNaN(value) && value !== "") {
+		if(!isNaN(value) && value !==""){
 			value = Number(value);
 		}
 
-		if (value !== cellValue) {
-			if (success(value)) {
+		if(value !== cellValue){
+			if(success(value)){
 				cellValue = value; //persist value if successfully validated incase editor is used as header filter
 			}
-		} else {
+		}else {
 			cancel();
 		}
 	}
 
 	//submit new value on enter
-	input.addEventListener("keydown", function (e) {
-		switch (e.keyCode) {
+	input.addEventListener("keydown", function(e){
+		switch(e.keyCode){
 			case 13:
-				// case 9:
+			// case 9:
 				onChange();
 				break;
 
@@ -5924,7 +5511,7 @@ function number(cell, onRendered, success, cancel, editorParams) {
 
 			case 38: //up arrow
 			case 40: //down arrow
-				if (vertNav == "editor") {
+				if(vertNav == "editor"){
 					e.stopImmediatePropagation();
 					e.stopPropagation();
 				}
@@ -5937,7 +5524,7 @@ function number(cell, onRendered, success, cancel, editorParams) {
 		}
 	});
 
-	if (editorParams.mask) {
+	if(editorParams.mask){
 		maskInput(input, editorParams);
 	}
 
@@ -5945,9 +5532,9 @@ function number(cell, onRendered, success, cancel, editorParams) {
 }
 
 //input element with type of number
-function range(cell, onRendered, success, cancel, editorParams) {
+function range(cell, onRendered, success, cancel, editorParams){
 	var cellValue = cell.getValue(),
-		input = document.createElement("input");
+	input = document.createElement("input");
 
 	input.setAttribute("type", "range");
 
@@ -5968,18 +5555,12 @@ function range(cell, onRendered, success, cancel, editorParams) {
 	input.style.width = "100%";
 	input.style.boxSizing = "border-box";
 
-	if (
-		editorParams.elementAttributes &&
-		typeof editorParams.elementAttributes == "object"
-	) {
-		for (let key in editorParams.elementAttributes) {
-			if (key.charAt(0) == "+") {
+	if(editorParams.elementAttributes && typeof editorParams.elementAttributes == "object"){
+		for (let key in editorParams.elementAttributes){
+			if(key.charAt(0) == "+"){
 				key = key.slice(1);
-				input.setAttribute(
-					key,
-					input.getAttribute(key) + editorParams.elementAttributes["+" + key]
-				);
-			} else {
+				input.setAttribute(key, input.getAttribute(key) + editorParams.elementAttributes["+" + key]);
+			}else {
 				input.setAttribute(key, editorParams.elementAttributes[key]);
 			}
 		}
@@ -5988,36 +5569,36 @@ function range(cell, onRendered, success, cancel, editorParams) {
 	input.value = cellValue;
 
 	onRendered(function () {
-		input.focus({ preventScroll: true });
+		input.focus({preventScroll: true});
 		input.style.height = "100%";
 	});
 
-	function onChange() {
+	function onChange(){
 		var value = input.value;
 
-		if (!isNaN(value) && value !== "") {
+		if(!isNaN(value) && value !==""){
 			value = Number(value);
 		}
 
-		if (value != cellValue) {
-			if (success(value)) {
+		if(value != cellValue){
+			if(success(value)){
 				cellValue = value; //persist value if successfully validated incase editor is used as header filter
 			}
-		} else {
+		}else {
 			cancel();
 		}
 	}
 
 	//submit new value on blur
-	input.addEventListener("blur", function (e) {
+	input.addEventListener("blur", function(e){
 		onChange();
 	});
 
 	//submit new value on enter
-	input.addEventListener("keydown", function (e) {
-		switch (e.keyCode) {
+	input.addEventListener("keydown", function(e){
+		switch(e.keyCode){
 			case 13:
-				// case 9:
+			// case 9:
 				onChange();
 				break;
 
@@ -6031,720 +5612,626 @@ function range(cell, onRendered, success, cancel, editorParams) {
 }
 
 //input element
-function date(cell, onRendered, success, cancel, editorParams) {
+function date(cell, onRendered, success, cancel, editorParams){
 	var inputFormat = editorParams.format,
-		DT = inputFormat ? window.DateTime || luxon.DateTime : null;
-
+	DT = inputFormat ? (window.DateTime || luxon.DateTime) : null;
+	
 	//create and style input
 	var cellValue = cell.getValue(),
-		input = document.createElement("input");
-
-	function convertDate(value) {
+	input = document.createElement("input");
+	
+	function convertDate(value){
 		var newDatetime;
-
-		if (DT.isDateTime(value)) {
+		
+		if(DT.isDateTime(value)){
 			newDatetime = value;
-		} else if (inputFormat === "iso") {
+		}else if(inputFormat === "iso"){
 			newDatetime = DT.fromISO(String(value));
-		} else {
+		}else {
 			newDatetime = DT.fromFormat(String(value), inputFormat);
 		}
-
+		
 		return newDatetime.toFormat("yyyy-MM-dd");
 	}
-
+	
 	input.type = "date";
 	input.style.padding = "4px";
 	input.style.width = "100%";
 	input.style.boxSizing = "border-box";
 
-	if (editorParams.max) {
-		input.setAttribute(
-			"max",
-			inputFormat ? convertDate(editorParams.max) : editorParams.max
-		);
+	if(editorParams.max){
+		input.setAttribute("max", inputFormat ? convertDate(editorParams.max) : editorParams.max);
 	}
 
-	if (editorParams.min) {
-		input.setAttribute(
-			"min",
-			inputFormat ? convertDate(editorParams.min) : editorParams.min
-		);
+	if(editorParams.min){
+		input.setAttribute("min", inputFormat ? convertDate(editorParams.min) : editorParams.min);
 	}
-
-	if (
-		editorParams.elementAttributes &&
-		typeof editorParams.elementAttributes == "object"
-	) {
-		for (let key in editorParams.elementAttributes) {
-			if (key.charAt(0) == "+") {
+	
+	if(editorParams.elementAttributes && typeof editorParams.elementAttributes == "object"){
+		for (let key in editorParams.elementAttributes){
+			if(key.charAt(0) == "+"){
 				key = key.slice(1);
-				input.setAttribute(
-					key,
-					input.getAttribute(key) + editorParams.elementAttributes["+" + key]
-				);
-			} else {
+				input.setAttribute(key, input.getAttribute(key) + editorParams.elementAttributes["+" + key]);
+			}else {
 				input.setAttribute(key, editorParams.elementAttributes[key]);
 			}
 		}
 	}
-
+	
 	cellValue = typeof cellValue !== "undefined" ? cellValue : "";
-
-	if (inputFormat) {
-		if (DT) {
-			cellValue = convertDate(cellValue);
-		} else {
-			console.error(
-				"Editor Error - 'date' editor 'inputFormat' param is dependant on luxon.js"
-			);
+	
+	if(inputFormat){
+		if(DT){		
+			cellValue = convertDate(cellValue);			
+		}else {
+			console.error("Editor Error - 'date' editor 'inputFormat' param is dependant on luxon.js");
 		}
 	}
-
+	
 	input.value = cellValue;
-
-	onRendered(function () {
-		input.focus({ preventScroll: true });
+	
+	onRendered(function(){
+		input.focus({preventScroll: true});
 		input.style.height = "100%";
-
-		if (editorParams.selectContents) {
+		
+		if(editorParams.selectContents){
 			input.select();
 		}
 	});
-
-	function onChange(e) {
+	
+	function onChange(e){
 		var value = input.value;
-
-		if (
-			((cellValue === null || typeof cellValue === "undefined") &&
-				value !== "") ||
-			value !== cellValue
-		) {
-			if (value && inputFormat) {
-				value = DT.fromFormat(String(value), "yyyy-MM-dd").toFormat(
-					inputFormat
-				);
+		
+		if(((cellValue === null || typeof cellValue === "undefined") && value !== "") || value !== cellValue){
+			
+			if(value && inputFormat){
+				value = DT.fromFormat(String(value), "yyyy-MM-dd").toFormat(inputFormat);
 			}
-
-			if (success(value)) {
+			
+			if(success(value)){
 				cellValue = input.value; //persist value if successfully validated incase editor is used as header filter
 			}
-		} else {
+		}else {
 			cancel();
 		}
 	}
-
+	
 	//submit new value on blur or change
 	input.addEventListener("change", onChange);
 	input.addEventListener("blur", onChange);
-
+	
 	//submit new value on enter
-	input.addEventListener("keydown", function (e) {
-		switch (e.keyCode) {
+	input.addEventListener("keydown", function(e){
+		switch(e.keyCode){
 			// case 9:
 			case 13:
 				onChange();
 				break;
-
+			
 			case 27:
 				cancel();
 				break;
-
+			
 			case 35:
 			case 36:
 				e.stopPropagation();
 				break;
 		}
 	});
-
+	
 	return input;
 }
 
 //input element
-function time(cell, onRendered, success, cancel, editorParams) {
+function time(cell, onRendered, success, cancel, editorParams){
 	var inputFormat = editorParams.format,
-		DT = inputFormat ? window.DateTime || luxon.DateTime : null,
-		newDatetime;
+	DT = inputFormat ? (window.DateTime || luxon.DateTime) : null, 
+	newDatetime;
 
 	//create and style input
 	var cellValue = cell.getValue(),
-		input = document.createElement("input");
-
+	input = document.createElement("input");
+	
 	input.type = "time";
 	input.style.padding = "4px";
 	input.style.width = "100%";
 	input.style.boxSizing = "border-box";
-
-	if (
-		editorParams.elementAttributes &&
-		typeof editorParams.elementAttributes == "object"
-	) {
-		for (let key in editorParams.elementAttributes) {
-			if (key.charAt(0) == "+") {
+	
+	if(editorParams.elementAttributes && typeof editorParams.elementAttributes == "object"){
+		for (let key in editorParams.elementAttributes){
+			if(key.charAt(0) == "+"){
 				key = key.slice(1);
-				input.setAttribute(
-					key,
-					input.getAttribute(key) + editorParams.elementAttributes["+" + key]
-				);
-			} else {
+				input.setAttribute(key, input.getAttribute(key) + editorParams.elementAttributes["+" + key]);
+			}else {
 				input.setAttribute(key, editorParams.elementAttributes[key]);
 			}
 		}
 	}
-
+	
 	cellValue = typeof cellValue !== "undefined" ? cellValue : "";
-
-	if (inputFormat) {
-		if (DT) {
-			if (DT.isDateTime(cellValue)) {
+	
+	if(inputFormat){
+		if(DT){
+			if(DT.isDateTime(cellValue)){
 				newDatetime = cellValue;
-			} else if (inputFormat === "iso") {
+			}else if(inputFormat === "iso"){
 				newDatetime = DT.fromISO(String(cellValue));
-			} else {
+			}else {
 				newDatetime = DT.fromFormat(String(cellValue), inputFormat);
 			}
 
 			cellValue = newDatetime.toFormat("hh:mm");
-		} else {
-			console.error(
-				"Editor Error - 'date' editor 'inputFormat' param is dependant on luxon.js"
-			);
+
+		}else {
+			console.error("Editor Error - 'date' editor 'inputFormat' param is dependant on luxon.js");
 		}
 	}
 
 	input.value = cellValue;
-
-	onRendered(function () {
-		input.focus({ preventScroll: true });
+	
+	onRendered(function(){
+		input.focus({preventScroll: true});
 		input.style.height = "100%";
-
-		if (editorParams.selectContents) {
+		
+		if(editorParams.selectContents){
 			input.select();
 		}
 	});
-
-	function onChange(e) {
+	
+	function onChange(e){
 		var value = input.value;
 
-		if (
-			((cellValue === null || typeof cellValue === "undefined") &&
-				value !== "") ||
-			value !== cellValue
-		) {
-			if (value && inputFormat) {
+		if(((cellValue === null || typeof cellValue === "undefined") && value !== "") || value !== cellValue){
+
+			if(value && inputFormat){
 				value = DT.fromFormat(String(value), "hh:mm").toFormat(inputFormat);
 			}
 
-			if (success(value)) {
+			if(success(value)){
 				cellValue = input.value; //persist value if successfully validated incase editor is used as header filter
 			}
-		} else {
+		}else {
 			cancel();
 		}
 	}
-
+	
 	//submit new value on blur or change
 	input.addEventListener("change", onChange);
 	input.addEventListener("blur", onChange);
-
+	
 	//submit new value on enter
-	input.addEventListener("keydown", function (e) {
-		switch (e.keyCode) {
+	input.addEventListener("keydown", function(e){
+		switch(e.keyCode){
 			// case 9:
 			case 13:
 				onChange();
 				break;
-
+			
 			case 27:
 				cancel();
 				break;
-
+			
 			case 35:
 			case 36:
 				e.stopPropagation();
 				break;
 		}
 	});
-
+	
 	return input;
 }
 
 //input element
-function datetime(cell, onRendered, success, cancel, editorParams) {
+function datetime(cell, onRendered, success, cancel, editorParams){
 	var inputFormat = editorParams.format,
-		DT = inputFormat ? window.DateTime || luxon.DateTime : null,
-		newDatetime;
+	DT = inputFormat ? (window.DateTime || luxon.DateTime) : null, 
+	newDatetime;
 
 	//create and style input
 	var cellValue = cell.getValue(),
-		input = document.createElement("input");
-
+	input = document.createElement("input");
+	
 	input.type = "datetime-local";
 	input.style.padding = "4px";
 	input.style.width = "100%";
 	input.style.boxSizing = "border-box";
-
-	if (
-		editorParams.elementAttributes &&
-		typeof editorParams.elementAttributes == "object"
-	) {
-		for (let key in editorParams.elementAttributes) {
-			if (key.charAt(0) == "+") {
+	
+	if(editorParams.elementAttributes && typeof editorParams.elementAttributes == "object"){
+		for (let key in editorParams.elementAttributes){
+			if(key.charAt(0) == "+"){
 				key = key.slice(1);
-				input.setAttribute(
-					key,
-					input.getAttribute(key) + editorParams.elementAttributes["+" + key]
-				);
-			} else {
+				input.setAttribute(key, input.getAttribute(key) + editorParams.elementAttributes["+" + key]);
+			}else {
 				input.setAttribute(key, editorParams.elementAttributes[key]);
 			}
 		}
 	}
-
+	
 	cellValue = typeof cellValue !== "undefined" ? cellValue : "";
-
-	if (inputFormat) {
-		if (DT) {
-			if (DT.isDateTime(cellValue)) {
+	
+	if(inputFormat){
+		if(DT){
+			if(DT.isDateTime(cellValue)){
 				newDatetime = cellValue;
-			} else if (inputFormat === "iso") {
+			}else if(inputFormat === "iso"){
 				newDatetime = DT.fromISO(String(cellValue));
-			} else {
+			}else {
 				newDatetime = DT.fromFormat(String(cellValue), inputFormat);
 			}
 
-			cellValue =
-				newDatetime.toFormat("yyyy-MM-dd") +
-				"T" +
-				newDatetime.toFormat("hh:mm");
-		} else {
-			console.error(
-				"Editor Error - 'date' editor 'inputFormat' param is dependant on luxon.js"
-			);
+			cellValue = newDatetime.toFormat("yyyy-MM-dd")  + "T" + newDatetime.toFormat("hh:mm");
+		}else {
+			console.error("Editor Error - 'date' editor 'inputFormat' param is dependant on luxon.js");
 		}
 	}
 
 	input.value = cellValue;
-
-	onRendered(function () {
-		input.focus({ preventScroll: true });
+	
+	onRendered(function(){
+		input.focus({preventScroll: true});
 		input.style.height = "100%";
-
-		if (editorParams.selectContents) {
+		
+		if(editorParams.selectContents){
 			input.select();
 		}
 	});
-
-	function onChange(e) {
+	
+	function onChange(e){
 		var value = input.value;
 
-		if (
-			((cellValue === null || typeof cellValue === "undefined") &&
-				value !== "") ||
-			value !== cellValue
-		) {
-			if (value && inputFormat) {
+		if(((cellValue === null || typeof cellValue === "undefined") && value !== "") || value !== cellValue){
+
+			if(value && inputFormat){
 				value = DT.fromISO(String(value)).toFormat(inputFormat);
 			}
 
-			if (success(value)) {
+			if(success(value)){
 				cellValue = input.value; //persist value if successfully validated incase editor is used as header filter
 			}
-		} else {
+		}else {
 			cancel();
 		}
 	}
-
+	
 	//submit new value on blur or change
 	input.addEventListener("change", onChange);
 	input.addEventListener("blur", onChange);
-
+	
 	//submit new value on enter
-	input.addEventListener("keydown", function (e) {
-		switch (e.keyCode) {
+	input.addEventListener("keydown", function(e){
+		switch(e.keyCode){
 			// case 9:
 			case 13:
 				onChange();
 				break;
-
+			
 			case 27:
 				cancel();
 				break;
-
+			
 			case 35:
 			case 36:
 				e.stopPropagation();
 				break;
 		}
 	});
-
+	
 	return input;
 }
 
-class Edit {
-	constructor(editor, cell, onRendered, success, cancel, editorParams) {
+class Edit{
+	constructor(editor, cell, onRendered, success, cancel, editorParams){
 		this.edit = editor;
 		this.table = editor.table;
 		this.cell = cell;
 		this.params = this._initializeParams(editorParams);
-
+		
 		this.data = [];
 		this.displayItems = [];
 		this.currentItems = [];
 		this.focusedItem = null;
-
+		
 		this.input = this._createInputElement();
 		this.listEl = this._createListElement();
-
-		this.initialValues = null;
-
+		
+		this.initialValues = null; 
+		
 		this.isFilter = !cell._getSelf;
-
+		
 		this.filterTimeout = null;
 		this.filtered = false;
 		this.typing = false;
-
-		this.values = [];
-		this.popup = null;
-
+		
+		this.values = []; 
+		this.popup = null;  
+		
 		this.listIteration = 0;
-
-		this.lastAction = "";
-
+		
+		this.lastAction="";
+		
 		this.blurable = true;
-
+		
 		this.actions = {
-			success: success,
-			cancel: cancel,
+			success:success,
+			cancel:cancel
 		};
-
+		
 		this._deprecatedOptionsCheck();
 		this._initializeValue();
-
+		
 		onRendered(this._onRendered.bind(this));
 	}
-
-	_deprecatedOptionsCheck() {
-		if (this.params.listItemFormatter) {
-			this.cell
-				.getTable()
-				.deprecationAdvisor.msg(
-					"The listItemFormatter editor param has been deprecated, please see the latest editor documentation for updated options"
-				);
+	
+	_deprecatedOptionsCheck(){
+		if(this.params.listItemFormatter){
+			this.cell.getTable().deprecationAdvisor.msg("The listItemFormatter editor param has been deprecated, please see the latest editor documentation for updated options");
 		}
-
-		if (this.params.sortValuesList) {
-			this.cell
-				.getTable()
-				.deprecationAdvisor.msg(
-					"The sortValuesList editor param has been deprecated, please see the latest editor documentation for updated options"
-				);
+		
+		if(this.params.sortValuesList){
+			this.cell.getTable().deprecationAdvisor.msg("The sortValuesList editor param has been deprecated, please see the latest editor documentation for updated options");
 		}
-
-		if (this.params.searchFunc) {
-			this.cell
-				.getTable()
-				.deprecationAdvisor.msg(
-					"The searchFunc editor param has been deprecated, please see the latest editor documentation for updated options"
-				);
+		
+		if(this.params.searchFunc){
+			this.cell.getTable().deprecationAdvisor.msg("The searchFunc editor param has been deprecated, please see the latest editor documentation for updated options");
 		}
-
-		if (this.params.searchingPlaceholder) {
-			this.cell
-				.getTable()
-				.deprecationAdvisor.msg(
-					"The searchingPlaceholder editor param has been deprecated, please see the latest editor documentation for updated options"
-				);
+		
+		if(this.params.searchingPlaceholder){
+			this.cell.getTable().deprecationAdvisor.msg("The searchingPlaceholder editor param has been deprecated, please see the latest editor documentation for updated options");
 		}
 	}
-
-	_initializeValue() {
+	
+	_initializeValue(){
 		var initialValue = this.cell.getValue();
-
-		if (
-			typeof initialValue === "undefined" &&
-			typeof this.params.defaultValue !== "undefined"
-		) {
+		
+		if(typeof initialValue === "undefined" && typeof this.params.defaultValue !== "undefined"){
 			initialValue = this.params.defaultValue;
 		}
-
-		this.initialValues = this.params.multiselect
-			? initialValue
-			: [initialValue];
-
-		if (this.isFilter) {
+		
+		this.initialValues = this.params.multiselect ? initialValue : [initialValue];
+		
+		if(this.isFilter){
 			this.input.value = this.initialValues ? this.initialValues.join(",") : "";
-			this.headerFilterInitialListGen();
+			this.headerFilterInitialListGen();            
 		}
 	}
-
-	_onRendered() {
+	
+	_onRendered(){
 		var cellEl = this.cell.getElement();
-
-		function clickStop(e) {
+		
+		function clickStop(e){
 			e.stopPropagation();
 		}
-
+		
 		this.input.style.height = "100%";
-		this.input.focus({ preventScroll: true });
-
+		this.input.focus({preventScroll: true});
+		
+		
 		cellEl.addEventListener("click", clickStop);
-
+		
 		setTimeout(() => {
 			cellEl.removeEventListener("click", clickStop);
 		}, 1000);
-
+		
 		this.input.addEventListener("mousedown", this._preventPopupBlur.bind(this));
 	}
-
-	_createListElement() {
+	
+	_createListElement(){
 		var listEl = document.createElement("div");
 		listEl.classList.add("tabulator-edit-list");
-
+		
 		listEl.addEventListener("mousedown", this._preventBlur.bind(this));
 		listEl.addEventListener("keydown", this._inputKeyDown.bind(this));
-
+		
 		return listEl;
 	}
-
-	_setListWidth() {
+	
+	_setListWidth(){
 		var element = this.isFilter ? this.input : this.cell.getElement();
-
+		
 		this.listEl.style.minWidth = element.offsetWidth + "px";
-
-		if (this.params.maxWidth) {
-			if (this.params.maxWidth === true) {
+		
+		if(this.params.maxWidth){
+			if(this.params.maxWidth === true){
 				this.listEl.style.maxWidth = element.offsetWidth + "px";
-			} else if (typeof this.params.maxWidth === "number") {
+			}else if(typeof this.params.maxWidth === "number"){
 				this.listEl.style.maxWidth = this.params.maxWidth + "px";
-			} else {
+			}else {
 				this.listEl.style.maxWidth = this.params.maxWidth;
 			}
 		}
+		
 	}
-
-	_createInputElement() {
+	
+	_createInputElement(){
 		var attribs = this.params.elementAttributes;
 		var input = document.createElement("input");
-
+		
 		input.setAttribute("type", this.params.clearable ? "search" : "text");
-
+		
 		input.style.padding = "4px";
 		input.style.width = "100%";
 		input.style.boxSizing = "border-box";
-
-		if (!this.params.autocomplete) {
+		
+		if(!this.params.autocomplete){
 			input.style.cursor = "default";
 			input.style.caretColor = "transparent";
 			// input.readOnly = (this.edit.currentCell != false);
 		}
-
-		if (attribs && typeof attribs == "object") {
-			for (let key in attribs) {
-				if (key.charAt(0) == "+") {
+		
+		if(attribs && typeof attribs == "object"){
+			for (let key in attribs){
+				if(key.charAt(0) == "+"){
 					key = key.slice(1);
 					input.setAttribute(key, input.getAttribute(key) + attribs["+" + key]);
-				} else {
+				}else {
 					input.setAttribute(key, attribs[key]);
 				}
 			}
 		}
-
-		if (this.params.mask) {
+		
+		if(this.params.mask){
 			maskInput(input, this.params);
 		}
-
+		
 		this._bindInputEvents(input);
-
+		
 		return input;
 	}
-
-	_initializeParams(params) {
+	
+	_initializeParams(params){
 		var valueKeys = ["values", "valuesURL", "valuesLookup"],
-			valueCheck;
-
+		valueCheck;
+		
 		params = Object.assign({}, params);
-
+		
 		params.verticalNavigation = params.verticalNavigation || "editor";
-		params.placeholderLoading =
-			typeof params.placeholderLoading === "undefined"
-				? "Searching ..."
-				: params.placeholderLoading;
-		params.placeholderEmpty =
-			typeof params.placeholderEmpty === "undefined"
-				? "No Results Found"
-				: params.placeholderEmpty;
-		params.filterDelay =
-			typeof params.filterDelay === "undefined" ? 300 : params.filterDelay;
-
-		params.emptyValue = Object.keys(params).includes("emptyValue")
-			? params.emptyValue
-			: "";
-
-		valueCheck = Object.keys(params).filter((key) =>
-			valueKeys.includes(key)
-		).length;
-
-		if (!valueCheck) {
-			console.warn(
-				"list editor config error - either the values, valuesURL, or valuesLookup option must be set"
-			);
-		} else if (valueCheck > 1) {
-			console.warn(
-				"list editor config error - only one of the values, valuesURL, or valuesLookup options can be set on the same editor"
-			);
+		params.placeholderLoading = typeof params.placeholderLoading === "undefined" ? "Searching ..." : params.placeholderLoading;
+		params.placeholderEmpty = typeof params.placeholderEmpty === "undefined" ? "No Results Found" : params.placeholderEmpty;
+		params.filterDelay = typeof params.filterDelay === "undefined" ? 300 : params.filterDelay;
+		
+		params.emptyValue = Object.keys(params).includes("emptyValue") ? params.emptyValue : "";
+		
+		valueCheck = Object.keys(params).filter(key => valueKeys.includes(key)).length;
+		
+		if(!valueCheck){
+			console.warn("list editor config error - either the values, valuesURL, or valuesLookup option must be set");
+		}else if(valueCheck > 1){
+			console.warn("list editor config error - only one of the values, valuesURL, or valuesLookup options can be set on the same editor");
 		}
-
-		if (params.autocomplete) {
-			if (params.multiselect) {
+		
+		if(params.autocomplete){
+			if(params.multiselect){
 				params.multiselect = false;
-				console.warn(
-					"list editor config error - multiselect option is not available when autocomplete is enabled"
-				);
+				console.warn("list editor config error - multiselect option is not available when autocomplete is enabled");
 			}
-		} else {
-			if (params.freetext) {
+		}else {
+			if(params.freetext){
 				params.freetext = false;
-				console.warn(
-					"list editor config error - freetext option is only available when autocomplete is enabled"
-				);
+				console.warn("list editor config error - freetext option is only available when autocomplete is enabled");
 			}
-
-			if (params.filterFunc) {
+			
+			if(params.filterFunc){
 				params.filterFunc = false;
-				console.warn(
-					"list editor config error - filterFunc option is only available when autocomplete is enabled"
-				);
+				console.warn("list editor config error - filterFunc option is only available when autocomplete is enabled");
 			}
-
-			if (params.filterRemote) {
+			
+			if(params.filterRemote){
 				params.filterRemote = false;
-				console.warn(
-					"list editor config error - filterRemote option is only available when autocomplete is enabled"
-				);
+				console.warn("list editor config error - filterRemote option is only available when autocomplete is enabled");
 			}
-
-			if (params.mask) {
+			
+			if(params.mask){
 				params.mask = false;
-				console.warn(
-					"list editor config error - mask option is only available when autocomplete is enabled"
-				);
+				console.warn("list editor config error - mask option is only available when autocomplete is enabled");
 			}
-
-			if (params.allowEmpty) {
+			
+			if(params.allowEmpty){
 				params.allowEmpty = false;
-				console.warn(
-					"list editor config error - allowEmpty option is only available when autocomplete is enabled"
-				);
+				console.warn("list editor config error - allowEmpty option is only available when autocomplete is enabled");
 			}
-
-			if (params.listOnEmpty) {
+			
+			if(params.listOnEmpty){
 				params.listOnEmpty = false;
-				console.warn(
-					"list editor config error - listOnEmpty option is only available when autocomplete is enabled"
-				);
+				console.warn("list editor config error - listOnEmpty option is only available when autocomplete is enabled");
 			}
 		}
-
-		if (
-			params.filterRemote &&
-			!(typeof params.valuesLookup === "function" || params.valuesURL)
-		) {
+		
+		if(params.filterRemote && !(typeof params.valuesLookup === "function" || params.valuesURL)){
 			params.filterRemote = false;
-			console.warn(
-				"list editor config error - filterRemote option should only be used when values list is populated from a remote source"
-			);
+			console.warn("list editor config error - filterRemote option should only be used when values list is populated from a remote source");
 		}
 		return params;
 	}
 	//////////////////////////////////////
 	////////// Event Handling ////////////
 	//////////////////////////////////////
-
-	_bindInputEvents(input) {
+	
+	_bindInputEvents(input){
 		input.addEventListener("focus", this._inputFocus.bind(this));
 		input.addEventListener("click", this._inputClick.bind(this));
 		input.addEventListener("blur", this._inputBlur.bind(this));
 		input.addEventListener("keydown", this._inputKeyDown.bind(this));
 		input.addEventListener("search", this._inputSearch.bind(this));
-
-		if (this.params.autocomplete) {
+		
+		if(this.params.autocomplete){
 			input.addEventListener("keyup", this._inputKeyUp.bind(this));
 		}
 	}
-
-	_inputFocus(e) {
+	
+	
+	_inputFocus(e){
 		this.rebuildOptionsList();
 	}
-
-	_filter() {
-		if (this.params.filterRemote) {
+	
+	_filter(){
+		if(this.params.filterRemote){
 			clearTimeout(this.filterTimeout);
-
+			
 			this.filterTimeout = setTimeout(() => {
 				this.rebuildOptionsList();
 			}, this.params.filterDelay);
-		} else {
+		}else {
 			this._filterList();
 		}
 	}
-
-	_inputClick(e) {
+	
+	_inputClick(e){
 		e.stopPropagation();
 	}
-
-	_inputBlur(e) {
-		if (this.blurable) {
-			if (this.popup) {
+	
+	_inputBlur(e){
+		if(this.blurable){
+			if(this.popup){
 				this.popup.hide();
-			} else {
+			}else {
 				this._resolveValue(true);
 			}
 		}
 	}
-
-	_inputSearch() {
+	
+	_inputSearch(){
 		this._clearChoices();
 	}
-
-	_inputKeyDown(e) {
-		switch (e.keyCode) {
+	
+	_inputKeyDown(e){
+		switch(e.keyCode){
+			
 			case 38: //up arrow
 				this._keyUp(e);
 				break;
-
+			
 			case 40: //down arrow
 				this._keyDown(e);
 				break;
-
+			
 			case 37: //left arrow
 			case 39: //right arrow
 				this._keySide(e);
 				break;
-
+			
 			case 13: //enter
 				this._keyEnter();
 				break;
-
+			
 			case 27: //escape
 				this._keyEsc();
 				break;
-
+			
 			case 36: //home
 			case 35: //end
 				this._keyHomeEnd(e);
 				break;
-
+			
 			case 9: //tab
 				break;
-
+			
 			default:
 				this._keySelectLetter(e);
 		}
 	}
-
-	_inputKeyUp(e) {
-		switch (e.keyCode) {
+	
+	_inputKeyUp(e){
+		switch(e.keyCode){
 			case 38: //up arrow
 			case 37: //left arrow
 			case 39: //up arrow
@@ -6752,778 +6239,734 @@ class Edit {
 			case 13: //enter
 			case 27: //escape
 				break;
-
+			
 			default:
 				this._keyAutoCompLetter(e);
 		}
 	}
-
-	_preventPopupBlur() {
-		if (this.popup) {
+	
+	_preventPopupBlur(){
+		if(this.popup){
 			this.popup.blockHide();
 		}
-
-		setTimeout(() => {
-			if (this.popup) {
+		
+		setTimeout(() =>{
+			if(this.popup){
 				this.popup.restoreHide();
 			}
 		}, 10);
 	}
-
-	_preventBlur() {
+	
+	_preventBlur(){
 		this.blurable = false;
-
-		setTimeout(() => {
+		
+		setTimeout(() =>{
 			this.blurable = true;
 		}, 10);
 	}
-
+	
 	//////////////////////////////////////
 	//////// Keyboard Navigation /////////
 	//////////////////////////////////////
-
-	_keyUp(e) {
+	
+	_keyUp(e){
 		var index = this.displayItems.indexOf(this.focusedItem);
-
-		if (
-			this.params.verticalNavigation == "editor" ||
-			(this.params.verticalNavigation == "hybrid" && index)
-		) {
+		
+		if(this.params.verticalNavigation == "editor" || (this.params.verticalNavigation == "hybrid" && index)){
 			e.stopImmediatePropagation();
 			e.stopPropagation();
 			e.preventDefault();
-
-			if (index > 0) {
+			
+			if(index > 0){
 				this._focusItem(this.displayItems[index - 1]);
 			}
 		}
 	}
-
-	_keyDown(e) {
+	
+	_keyDown(e){
 		var index = this.displayItems.indexOf(this.focusedItem);
-
-		if (
-			this.params.verticalNavigation == "editor" ||
-			(this.params.verticalNavigation == "hybrid" &&
-				index < this.displayItems.length - 1)
-		) {
+		
+		if(this.params.verticalNavigation == "editor" || (this.params.verticalNavigation == "hybrid" && index < this.displayItems.length - 1)){
 			e.stopImmediatePropagation();
 			e.stopPropagation();
 			e.preventDefault();
-
-			if (index < this.displayItems.length - 1) {
-				if (index == -1) {
+			
+			if(index < this.displayItems.length - 1){
+				if(index == -1){
 					this._focusItem(this.displayItems[0]);
-				} else {
+				}else {
 					this._focusItem(this.displayItems[index + 1]);
 				}
 			}
 		}
 	}
-
-	_keySide(e) {
+	
+	_keySide(e){
 		e.stopImmediatePropagation();
 		e.stopPropagation();
 		e.preventDefault();
 	}
-
-	_keyEnter(e) {
-		if (this.params.autocomplete && this.lastAction === "typing") {
+	
+	_keyEnter(e){
+		if(this.params.autocomplete && this.lastAction === "typing"){
 			this._resolveValue(true);
-		} else {
-			if (this.focusedItem) {
+		}else {
+			if(this.focusedItem){
 				this._chooseItem(this.focusedItem);
 			}
 		}
 	}
-
-	_keyEsc(e) {
+	
+	_keyEsc(e){
 		this._cancel();
 	}
-
-	_keyHomeEnd(e) {
-		if (this.params.autocomplete) {
+	
+	_keyHomeEnd(e){
+		if(this.params.autocomplete){
 			//prevent table navigation while using input element
 			e.stopImmediatePropagation();
 		}
 	}
-
-	_keySelectLetter(e) {
-		if (!this.params.autocomplete) {
+	
+	_keySelectLetter(e){
+		if(!this.params.autocomplete){
 			// if(this.edit.currentCell === false){
 			e.preventDefault();
 			// }
-
-			if (e.keyCode >= 38 && e.keyCode <= 90) {
+			
+			if(e.keyCode >= 38 && e.keyCode <= 90){
 				this._scrollToValue(e.keyCode);
 			}
 		}
 	}
-
-	_keyAutoCompLetter(e) {
+	
+	_keyAutoCompLetter(e){
 		this._filter();
 		this.lastAction = "typing";
 		this.typing = true;
 	}
-
-	_scrollToValue(char) {
+	
+	
+	_scrollToValue(char){
 		clearTimeout(this.filterTimeout);
-
+		
 		var character = String.fromCharCode(char).toLowerCase();
 		this.filterTerm += character.toLowerCase();
-
+		
 		var match = this.displayItems.find((item) => {
-			return (
-				typeof item.label !== "undefined" &&
-				item.label.toLowerCase().startsWith(this.filterTerm)
-			);
+			return typeof item.label !== "undefined" && item.label.toLowerCase().startsWith(this.filterTerm);
 		});
-
-		if (match) {
+		
+		if(match){
 			this._focusItem(match);
 		}
-
+		
 		this.filterTimeout = setTimeout(() => {
 			this.filterTerm = "";
 		}, 800);
 	}
-
-	_focusItem(item) {
+	
+	_focusItem(item){
 		this.lastAction = "focus";
-
-		if (this.focusedItem && this.focusedItem.element) {
+		
+		if(this.focusedItem && this.focusedItem.element){
 			this.focusedItem.element.classList.remove("focused");
 		}
-
+		
 		this.focusedItem = item;
-
-		if (item && item.element) {
+		
+		if(item && item.element){
 			item.element.classList.add("focused");
-			item.element.scrollIntoView({
-				behavior: "smooth",
-				block: "nearest",
-				inline: "start",
-			});
+			item.element.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'start'});
 		}
 	}
-
+	
+	
 	//////////////////////////////////////
 	/////// Data List Generation /////////
 	//////////////////////////////////////
-	headerFilterInitialListGen() {
+	headerFilterInitialListGen(){
 		this._generateOptions(true);
 	}
-
-	rebuildOptionsList() {
+	
+	rebuildOptionsList(){
 		this._generateOptions()
 			.then(this._sortOptions.bind(this))
 			.then(this._buildList.bind(this))
 			.then(this._showList.bind(this))
 			.catch((e) => {
-				if (!Number.isInteger(e)) {
+				if(!Number.isInteger(e)){
 					console.error("List generation error", e);
 				}
 			});
 	}
-
-	_filterList() {
+	
+	_filterList(){
 		this._buildList(this._filterOptions());
 		this._showList();
 	}
-
-	_generateOptions(silent) {
+	
+	_generateOptions(silent){
 		var values = [];
-		var iteration = ++this.listIteration;
-
+		var iteration = ++ this.listIteration;
+		
 		this.filtered = false;
-
-		if (this.params.values) {
+		
+		if(this.params.values){
 			values = this.params.values;
-		} else if (this.params.valuesURL) {
+		}else if (this.params.valuesURL){
 			values = this._ajaxRequest(this.params.valuesURL, this.input.value);
-		} else {
-			if (typeof this.params.valuesLookup === "function") {
+		}else {
+			if(typeof this.params.valuesLookup === "function"){
 				values = this.params.valuesLookup(this.cell, this.input.value);
-			} else if (this.params.valuesLookup) {
+			}else if(this.params.valuesLookup){
 				values = this._uniqueColumnValues(this.params.valuesLookupField);
 			}
 		}
-
-		if (values instanceof Promise) {
-			if (!silent) {
+		
+		if(values instanceof Promise){
+			if(!silent){
 				this._addPlaceholder(this.params.placeholderLoading);
 			}
-
-			return values.then().then((responseValues) => {
-				if (this.listIteration === iteration) {
-					return this._parseList(responseValues);
-				} else {
-					return Promise.reject(iteration);
-				}
-			});
-		} else {
+			
+			return values.then()
+				.then((responseValues) => {
+					if(this.listIteration === iteration){
+						return this._parseList(responseValues);
+					}else {
+						return Promise.reject(iteration);
+					}
+				});
+		}else {
 			return Promise.resolve(this._parseList(values));
 		}
 	}
-
-	_addPlaceholder(contents) {
+	
+	_addPlaceholder(contents){
 		var placeholder = document.createElement("div");
-
-		if (typeof contents === "function") {
+		
+		if(typeof contents === "function"){
 			contents = contents(this.cell.getComponent(), this.listEl);
 		}
-
-		if (contents) {
+		
+		if(contents){
 			this._clearList();
-
-			if (contents instanceof HTMLElement) {
+			
+			if(contents instanceof HTMLElement){
 				placeholder = contents;
-			} else {
+			}else {
 				placeholder.classList.add("tabulator-edit-list-placeholder");
 				placeholder.innerHTML = contents;
 			}
-
+			
 			this.listEl.appendChild(placeholder);
-
+			
 			this._showList();
 		}
 	}
-
-	_ajaxRequest(url, term) {
-		var params = this.params.filterRemote ? { term: term } : {};
+	
+	_ajaxRequest(url, term){
+		var params = this.params.filterRemote ? {term:term} : {};
 		url = urlBuilder(url, {}, params);
-
+		
 		return fetch(url)
-			.then((response) => {
-				if (response.ok) {
-					return response.json().catch((error) => {
-						console.warn("List Ajax Load Error - Invalid JSON returned", error);
-						return Promise.reject(error);
-					});
-				} else {
-					console.error(
-						"List Ajax Load Error - Connection Error: " + response.status,
-						response.statusText
-					);
+			.then((response)=>{
+				if(response.ok) {
+					return response.json()
+						.catch((error)=>{
+							console.warn("List Ajax Load Error - Invalid JSON returned", error);
+							return Promise.reject(error);
+						});
+				}else {
+					console.error("List Ajax Load Error - Connection Error: " + response.status, response.statusText);
 					return Promise.reject(response);
 				}
 			})
-			.catch((error) => {
+			.catch((error)=>{
 				console.error("List Ajax Load Error - Connection Error: ", error);
 				return Promise.reject(error);
 			});
 	}
-
-	_uniqueColumnValues(field) {
+	
+	_uniqueColumnValues(field){
 		var output = {},
-			data = this.table.getData(this.params.valuesLookup),
-			column;
-
-		if (field) {
+		data = this.table.getData(this.params.valuesLookup),
+		column;
+		
+		if(field){
 			column = this.table.columnManager.getColumnByField(field);
-		} else {
+		}else {
 			column = this.cell.getColumn()._getSelf();
 		}
-
-		if (column) {
+		
+		if(column){
 			data.forEach((row) => {
 				var val = column.getFieldValue(row);
-
-				if (val !== null && typeof val !== "undefined" && val !== "") {
+				
+				if(val !== null && typeof val !== "undefined" && val !== ""){
 					output[val] = true;
 				}
 			});
-		} else {
-			console.warn(
-				"unable to find matching column to create select lookup list:",
-				field
-			);
+		}else {
+			console.warn("unable to find matching column to create select lookup list:", field);
 			output = [];
 		}
-
+		
 		return Object.keys(output);
 	}
-
-	_parseList(inputValues) {
+	
+	
+	_parseList(inputValues){
 		var data = [];
-
-		if (!Array.isArray(inputValues)) {
+		
+		if(!Array.isArray(inputValues)){
 			inputValues = Object.entries(inputValues).map(([key, value]) => {
 				return {
-					label: value,
-					value: key,
+					label:value,
+					value:key,
 				};
 			});
 		}
-
+		
 		inputValues.forEach((value) => {
-			if (typeof value !== "object") {
+			if(typeof value !== "object"){
 				value = {
-					label: value,
-					value: value,
+					label:value,
+					value:value,
 				};
 			}
-
+			
 			this._parseListItem(value, data, 0);
 		});
-
-		if (!this.currentItems.length && this.params.freetext) {
+		
+		if(!this.currentItems.length && this.params.freetext){
 			this.input.value = this.initialValues;
 			this.typing = true;
 			this.lastAction = "typing";
 		}
-
+		
 		this.data = data;
-
-		return data;
+		
+		return data;    
 	}
-
-	_parseListItem(option, data, level) {
+	
+	_parseListItem(option, data, level){
 		var item = {};
-
-		if (option.options) {
+		
+		if(option.options){
 			item = this._parseListGroup(option, level + 1);
-		} else {
+		}else {
 			item = {
-				label: option.label,
-				value: option.value,
-				itemParams: option.itemParams,
+				label:option.label,
+				value:option.value,
+				itemParams:option.itemParams,
 				elementAttributes: option.elementAttributes,
-				element: false,
-				selected: false,
-				visible: true,
-				level: level,
-				original: option,
+				element:false,
+				selected:false,
+				visible:true,
+				level:level,
+				original:option,
 			};
-
-			if (this.initialValues && this.initialValues.indexOf(option.value) > -1) {
+			
+			if(this.initialValues && this.initialValues.indexOf(option.value) > -1){
 				this._chooseItem(item, true);
 			}
 		}
-
+		
 		data.push(item);
 	}
-
-	_parseListGroup(option, level) {
+	
+	_parseListGroup(option, level){
 		var item = {
-			label: option.label,
-			group: true,
-			itemParams: option.itemParams,
-			elementAttributes: option.elementAttributes,
-			element: false,
-			visible: true,
-			level: level,
-			options: [],
-			original: option,
+			label:option.label,
+			group:true,
+			itemParams:option.itemParams,
+			elementAttributes:option.elementAttributes,
+			element:false,
+			visible:true,
+			level:level,
+			options:[],
+			original:option,
 		};
-
+		
 		option.options.forEach((child) => {
 			this._parseListItem(child, item.options, level);
 		});
-
+		
 		return item;
 	}
-
-	_sortOptions(options) {
+	
+	_sortOptions(options){
 		var sorter;
-
-		if (this.params.sort) {
-			sorter =
-				typeof this.params.sort === "function"
-					? this.params.sort
-					: this._defaultSortFunction.bind(this);
-
+		
+		if(this.params.sort){
+			sorter = typeof this.params.sort === "function" ? this.params.sort : this._defaultSortFunction.bind(this);
+			
 			this._sortGroup(sorter, options);
 		}
-
+		
 		return options;
 	}
-
-	_sortGroup(sorter, options) {
-		options.sort((a, b) => {
+	
+	_sortGroup(sorter, options){
+		options.sort((a,b) => {
 			return sorter(a.label, b.label, a.value, b.value, a.original, b.original);
 		});
-
+		
 		options.forEach((option) => {
-			if (option.group) {
+			if(option.group){
 				this._sortGroup(sorter, option.options);
 			}
 		});
 	}
-
-	_defaultSortFunction(as, bs) {
-		var a,
-			b,
-			a1,
-			b1,
-			i = 0,
-			L,
-			rx = /(\d+)|(\D+)/g,
-			rd = /\d/;
+	
+	_defaultSortFunction(as, bs){
+		var a, b, a1, b1, i= 0, L, rx = /(\d+)|(\D+)/g, rd = /\d/;
 		var emptyAlign = 0;
-
-		if (this.params.sort === "desc") {
+		
+		if(this.params.sort === "desc"){
 			[as, bs] = [bs, as];
 		}
-
+		
 		//handle empty values
-		if (!as && as !== 0) {
-			emptyAlign = !bs && bs !== 0 ? 0 : -1;
-		} else if (!bs && bs !== 0) {
-			emptyAlign = 1;
-		} else {
-			if (isFinite(as) && isFinite(bs)) return as - bs;
+		if(!as && as!== 0){
+			emptyAlign =  !bs && bs!== 0 ? 0 : -1;
+		}else if(!bs && bs!== 0){
+			emptyAlign =  1;
+		}else {
+			if(isFinite(as) && isFinite(bs)) return as - bs;
 			a = String(as).toLowerCase();
 			b = String(bs).toLowerCase();
-			if (a === b) return 0;
-			if (!(rd.test(a) && rd.test(b))) return a > b ? 1 : -1;
+			if(a === b) return 0;
+			if(!(rd.test(a) && rd.test(b))) return a > b ? 1 : -1;
 			a = a.match(rx);
 			b = b.match(rx);
 			L = a.length > b.length ? b.length : a.length;
-			while (i < L) {
-				a1 = a[i];
-				b1 = b[i++];
-				if (a1 !== b1) {
-					if (isFinite(a1) && isFinite(b1)) {
-						if (a1.charAt(0) === "0") a1 = "." + a1;
-						if (b1.charAt(0) === "0") b1 = "." + b1;
+			while(i < L){
+				a1= a[i];
+				b1= b[i++];
+				if(a1 !== b1){
+					if(isFinite(a1) && isFinite(b1)){
+						if(a1.charAt(0) === "0") a1 = "." + a1;
+						if(b1.charAt(0) === "0") b1 = "." + b1;
 						return a1 - b1;
-					} else return a1 > b1 ? 1 : -1;
+					}
+					else return a1 > b1 ? 1 : -1;
 				}
 			}
-
+			
 			return a.length > b.length;
 		}
-
+		
 		return emptyAlign;
 	}
-
-	_filterOptions() {
+	
+	_filterOptions(){
 		var filterFunc = this.params.filterFunc || this._defaultFilterFunc,
-			term = this.input.value;
-
-		if (term) {
+		term = this.input.value;
+		
+		if(term){
 			this.filtered = true;
-
+			
 			this.data.forEach((item) => {
 				this._filterItem(filterFunc, term, item);
 			});
-		} else {
+		}else {
 			this.filtered = false;
 		}
-
+		
 		return this.data;
 	}
-
-	_filterItem(func, term, item) {
+	
+	_filterItem(func, term, item){
 		var matches = false;
-
-		if (!item.group) {
+		
+		if(!item.group){
 			item.visible = func(term, item.label, item.value, item.original);
-		} else {
+		}else {
 			item.options.forEach((option) => {
-				if (this._filterItem(func, term, option)) {
+				if(this._filterItem(func, term, option)){
 					matches = true;
 				}
 			});
-
+			
 			item.visible = matches;
 		}
-
+		
 		return item.visible;
 	}
-
-	_defaultFilterFunc(term, label, value, item) {
+	
+	_defaultFilterFunc(term, label, value, item){
 		term = String(term).toLowerCase();
-
-		if (label !== null && typeof label !== "undefined") {
-			if (
-				String(label).toLowerCase().indexOf(term) > -1 ||
-				String(value).toLowerCase().indexOf(term) > -1
-			) {
+		
+		if(label !== null && typeof label !== "undefined"){
+			if(String(label).toLowerCase().indexOf(term) > -1 || String(value).toLowerCase().indexOf(term) > -1){
 				return true;
 			}
 		}
-
+		
 		return false;
 	}
-
+	
 	//////////////////////////////////////
 	/////////// Display List /////////////
 	//////////////////////////////////////
-
-	_clearList() {
-		while (this.listEl.firstChild)
-			this.listEl.removeChild(this.listEl.firstChild);
-
+	
+	_clearList(){
+		while(this.listEl.firstChild) this.listEl.removeChild(this.listEl.firstChild);
+		
 		this.displayItems = [];
 	}
-
-	_buildList(data) {
+	
+	_buildList(data){
 		this._clearList();
-
+		
 		data.forEach((option) => {
 			this._buildItem(option);
 		});
-
-		if (!this.displayItems.length) {
+		
+		if(!this.displayItems.length){
 			this._addPlaceholder(this.params.placeholderEmpty);
-		}
+		}  
 	}
-
-	_buildItem(item) {
+	
+	_buildItem(item){
 		var el = item.element,
-			contents;
-
-		if (!this.filtered || item.visible) {
-			if (!el) {
+		contents;
+		
+		if(!this.filtered || item.visible){
+			
+			if(!el){
 				el = document.createElement("div");
 				el.tabIndex = 0;
-
-				contents = this.params.itemFormatter
-					? this.params.itemFormatter(item.label, item.value, item.original, el)
-					: item.label;
-
-				if (contents instanceof HTMLElement) {
+				
+				contents = this.params.itemFormatter ? this.params.itemFormatter(item.label, item.value, item.original, el) : item.label;
+				
+				if(contents instanceof HTMLElement){
 					el.appendChild(contents);
-				} else {
+				}else {
 					el.innerHTML = contents;
 				}
-
-				if (item.group) {
+				
+				if(item.group){
 					el.classList.add("tabulator-edit-list-group");
-				} else {
+				}else {
 					el.classList.add("tabulator-edit-list-item");
 				}
-
+				
 				el.classList.add("tabulator-edit-list-group-level-" + item.level);
-
-				if (
-					item.elementAttributes &&
-					typeof item.elementAttributes == "object"
-				) {
-					for (let key in item.elementAttributes) {
-						if (key.charAt(0) == "+") {
+				
+				if(item.elementAttributes && typeof item.elementAttributes == "object"){
+					for (let key in item.elementAttributes){
+						if(key.charAt(0) == "+"){
 							key = key.slice(1);
-							el.setAttribute(
-								key,
-								this.input.getAttribute(key) + item.elementAttributes["+" + key]
-							);
-						} else {
+							el.setAttribute(key, this.input.getAttribute(key) + item.elementAttributes["+" + key]);
+						}else {
 							el.setAttribute(key, item.elementAttributes[key]);
 						}
 					}
 				}
-
-				if (item.group) {
+				
+				if(item.group){
 					el.addEventListener("click", this._groupClick.bind(this, item));
-				} else {
+				}else {
 					el.addEventListener("click", this._itemClick.bind(this, item));
 				}
-
+				
 				el.addEventListener("mousedown", this._preventBlur.bind(this));
-
+				
 				item.element = el;
 			}
-
+			
 			this._styleItem(item);
-
+			
 			this.listEl.appendChild(el);
-
-			if (item.group) {
+			
+			if(item.group){
 				item.options.forEach((option) => {
 					this._buildItem(option);
 				});
-			} else {
+			}else {
 				this.displayItems.push(item);
 			}
 		}
 	}
-
-	_showList() {
+	
+	_showList(){
 		var startVis = this.popup && this.popup.isVisible();
-
-		if (this.input.parentNode) {
-			if (
-				this.params.autocomplete &&
-				this.input.value === "" &&
-				!this.params.listOnEmpty
-			) {
-				if (this.popup) {
+		
+		if(this.input.parentNode){
+			if(this.params.autocomplete && this.input.value === "" && !this.params.listOnEmpty){
+				if(this.popup){
 					this.popup.hide(true);
 				}
 				return;
 			}
-
+			
 			this._setListWidth();
-
-			if (!this.popup) {
+			
+			if(!this.popup){
 				this.popup = this.edit.popup(this.listEl);
 			}
-
+			
 			this.popup.show(this.cell.getElement(), "bottom");
-
-			if (!startVis) {
+			
+			if(!startVis){
 				setTimeout(() => {
 					this.popup.hideOnBlur(this._resolveValue.bind(this, true));
 				}, 10);
 			}
 		}
 	}
-
-	_styleItem(item) {
-		if (item && item.element) {
-			if (item.selected) {
+	
+	_styleItem(item){
+		if(item && item.element){
+			if(item.selected){
 				item.element.classList.add("active");
-			} else {
+			}else {
 				item.element.classList.remove("active");
 			}
 		}
 	}
-
+	
 	//////////////////////////////////////
 	///////// User Interaction ///////////
 	//////////////////////////////////////
-
-	_itemClick(item, e) {
+	
+	_itemClick(item, e){
 		e.stopPropagation();
-
+		
 		this._chooseItem(item);
 	}
-
-	_groupClick(item, e) {
+	
+	_groupClick(item, e){
 		e.stopPropagation();
 	}
-
+	
+	
 	//////////////////////////////////////
 	////// Current Item Management ///////
 	//////////////////////////////////////
-
-	_cancel() {
+	
+	_cancel(){
 		this.popup.hide(true);
 		this.actions.cancel();
 	}
-
-	_clearChoices() {
+	
+	_clearChoices(){
 		this.typing = true;
-
+		
 		this.currentItems.forEach((item) => {
 			item.selected = false;
 			this._styleItem(item);
 		});
-
+		
 		this.currentItems = [];
-
+		
 		this.focusedItem = null;
 	}
-
-	_chooseItem(item, silent) {
+	
+	_chooseItem(item, silent){
 		var index;
-
+		
 		this.typing = false;
-
-		if (this.params.multiselect) {
+		
+		if(this.params.multiselect){
 			index = this.currentItems.indexOf(item);
-
-			if (index > -1) {
+			
+			if(index > -1){
 				this.currentItems.splice(index, 1);
 				item.selected = false;
-			} else {
+			}else {
 				this.currentItems.push(item);
 				item.selected = true;
 			}
-
-			this.input.value = this.currentItems.map((item) => item.label).join(",");
-
+			
+			this.input.value = this.currentItems.map(item => item.label).join(",");
+			
 			this._styleItem(item);
-		} else {
+			
+		}else {
 			this.currentItems = [item];
 			item.selected = true;
-
+			
 			this.input.value = item.label;
-
+			
 			this._styleItem(item);
-
-			if (!silent) {
+			
+			if(!silent){
 				this._resolveValue();
 			}
 		}
-
+		
 		this._focusItem(item);
 	}
-
-	_resolveValue(blur) {
+	
+	_resolveValue(blur){
 		var output, initialValue;
 
-		if (this.popup) {
+		if(this.popup){
 			this.popup.hide(true);
 		}
-
-		if (this.params.multiselect) {
-			output = this.currentItems.map((item) => item.value);
-		} else {
-			if (blur && this.params.autocomplete && this.typing) {
-				if (
-					this.params.freetext ||
-					(this.params.allowEmpty && this.input.value === "")
-				) {
+		
+		if(this.params.multiselect){
+			output = this.currentItems.map(item => item.value);
+		}else {
+			if(blur && this.params.autocomplete && this.typing){
+				if(this.params.freetext || (this.params.allowEmpty && this.input.value === "")){
 					output = this.input.value;
-				} else {
+				}else {
 					this.actions.cancel();
 					return;
 				}
-			} else {
-				if (this.currentItems[0]) {
+			}else {
+				if(this.currentItems[0]){
 					output = this.currentItems[0].value;
-				} else {
+				}else {
 					initialValue = this.initialValues[0];
-
-					if (
-						initialValue === null ||
-						typeof initialValue === "undefined" ||
-						initialValue === ""
-					) {
+					
+					if(initialValue === null || typeof initialValue === "undefined" || initialValue === ""){
 						output = initialValue;
-					} else {
+					}else {
 						output = this.params.emptyValue;
 					}
 				}
+				
 			}
 		}
-
-		if (output === "") {
+		
+		if(output === ""){
 			output = this.params.emptyValue;
 		}
-
+		
 		this.actions.success(output);
-
-		if (this.isFilter) {
+		
+		if(this.isFilter){
 			this.initialValues = output && !Array.isArray(output) ? [output] : output;
 			this.currentItems = [];
 		}
 	}
+	
 }
 
-function select(cell, onRendered, success, cancel, editorParams) {
-	this.deprecationMsg(
-		"The select editor has been deprecated, please use the new list editor"
-	);
+function select(cell, onRendered, success, cancel, editorParams){
+
+	this.deprecationMsg("The select editor has been deprecated, please use the new list editor");
 
 	var list = new Edit(this, cell, onRendered, success, cancel, editorParams);
 
 	return list.input;
 }
 
-function list(cell, onRendered, success, cancel, editorParams) {
+function list(cell, onRendered, success, cancel, editorParams){
 	var list = new Edit(this, cell, onRendered, success, cancel, editorParams);
 
 	return list.input;
 }
 
-function autocomplete(cell, onRendered, success, cancel, editorParams) {
-	this.deprecationMsg(
-		"The autocomplete editor has been deprecated, please use the new list editor with the 'autocomplete' editorParam"
-	);
+function autocomplete(cell, onRendered, success, cancel, editorParams){
+
+	this.deprecationMsg("The autocomplete editor has been deprecated, please use the new list editor with the 'autocomplete' editorParam");
 
 	editorParams.autocomplete = true;
 
@@ -7533,68 +6976,60 @@ function autocomplete(cell, onRendered, success, cancel, editorParams) {
 }
 
 //star rating
-function star(cell, onRendered, success, cancel, editorParams) {
+function star(cell, onRendered, success, cancel, editorParams){
 	var self = this,
-		element = cell.getElement(),
-		value = cell.getValue(),
-		maxStars = element.getElementsByTagName("svg").length || 5,
-		size = element.getElementsByTagName("svg")[0]
-			? element.getElementsByTagName("svg")[0].getAttribute("width")
-			: 14,
-		stars = [],
-		starsHolder = document.createElement("div"),
-		star = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+	element = cell.getElement(),
+	value = cell.getValue(),
+	maxStars = element.getElementsByTagName("svg").length || 5,
+	size = element.getElementsByTagName("svg")[0] ? element.getElementsByTagName("svg")[0].getAttribute("width") : 14,
+	stars = [],
+	starsHolder = document.createElement("div"),
+	star = document.createElementNS('http://www.w3.org/2000/svg', "svg");
+
 
 	//change star type
-	function starChange(val) {
-		stars.forEach(function (star, i) {
-			if (i < val) {
-				if (self.table.browser == "ie") {
+	function starChange(val){
+		stars.forEach(function(star, i){
+			if(i < val){
+				if(self.table.browser == "ie"){
 					star.setAttribute("class", "tabulator-star-active");
-				} else {
-					star.classList.replace(
-						"tabulator-star-inactive",
-						"tabulator-star-active"
-					);
+				}else {
+					star.classList.replace("tabulator-star-inactive", "tabulator-star-active");
 				}
 
-				star.innerHTML =
-					'<polygon fill="#488CE9" stroke="#014AAE" stroke-width="37.6152" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="259.216,29.942 330.27,173.919 489.16,197.007 374.185,309.08 401.33,467.31 259.216,392.612 117.104,467.31 144.25,309.08 29.274,197.007 188.165,173.919 "/>';
-			} else {
-				if (self.table.browser == "ie") {
+				star.innerHTML = '<polygon fill="#488CE9" stroke="#014AAE" stroke-width="37.6152" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="259.216,29.942 330.27,173.919 489.16,197.007 374.185,309.08 401.33,467.31 259.216,392.612 117.104,467.31 144.25,309.08 29.274,197.007 188.165,173.919 "/>';
+			}else {
+				if(self.table.browser == "ie"){
 					star.setAttribute("class", "tabulator-star-inactive");
-				} else {
-					star.classList.replace(
-						"tabulator-star-active",
-						"tabulator-star-inactive"
-					);
+				}else {
+					star.classList.replace("tabulator-star-active", "tabulator-star-inactive");
 				}
 
-				star.innerHTML =
-					'<polygon fill="#010155" stroke="#686868" stroke-width="37.6152" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="259.216,29.942 330.27,173.919 489.16,197.007 374.185,309.08 401.33,467.31 259.216,392.612 117.104,467.31 144.25,309.08 29.274,197.007 188.165,173.919 "/>';
+				star.innerHTML = '<polygon fill="#010155" stroke="#686868" stroke-width="37.6152" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="259.216,29.942 330.27,173.919 489.16,197.007 374.185,309.08 401.33,467.31 259.216,392.612 117.104,467.31 144.25,309.08 29.274,197.007 188.165,173.919 "/>';
 			}
 		});
 	}
 
 	//build stars
-	function buildStar(i) {
-		var starHolder = document.createElement("span");
+	function buildStar(i){
+
+		var starHolder =  document.createElement("span");
 		var nextStar = star.cloneNode(true);
 
 		stars.push(nextStar);
 
-		starHolder.addEventListener("mouseenter", function (e) {
+		starHolder.addEventListener("mouseenter", function(e){
 			e.stopPropagation();
 			e.stopImmediatePropagation();
 			starChange(i);
 		});
 
-		starHolder.addEventListener("mousemove", function (e) {
+		starHolder.addEventListener("mousemove", function(e){
 			e.stopPropagation();
 			e.stopImmediatePropagation();
 		});
 
-		starHolder.addEventListener("click", function (e) {
+		starHolder.addEventListener("click", function(e){
 			e.stopPropagation();
 			e.stopImmediatePropagation();
 			success(i);
@@ -7603,10 +7038,11 @@ function star(cell, onRendered, success, cancel, editorParams) {
 
 		starHolder.appendChild(nextStar);
 		starsHolder.appendChild(starHolder);
+
 	}
 
 	//handle keyboard navigation value change
-	function changeValue(val) {
+	function changeValue(val){
 		value = val;
 		starChange(val);
 	}
@@ -7628,26 +7064,19 @@ function star(cell, onRendered, success, cancel, editorParams) {
 	star.setAttribute("xml:space", "preserve");
 	star.style.padding = "0 1px";
 
-	if (
-		editorParams.elementAttributes &&
-		typeof editorParams.elementAttributes == "object"
-	) {
-		for (let key in editorParams.elementAttributes) {
-			if (key.charAt(0) == "+") {
+	if(editorParams.elementAttributes && typeof editorParams.elementAttributes == "object"){
+		for (let key in editorParams.elementAttributes){
+			if(key.charAt(0) == "+"){
 				key = key.slice(1);
-				starsHolder.setAttribute(
-					key,
-					starsHolder.getAttribute(key) +
-						editorParams.elementAttributes["+" + key]
-				);
-			} else {
+				starsHolder.setAttribute(key, starsHolder.getAttribute(key) + editorParams.elementAttributes["+" + key]);
+			}else {
 				starsHolder.setAttribute(key, editorParams.elementAttributes[key]);
 			}
 		}
 	}
 
 	//create correct number of stars
-	for (var i = 1; i <= maxStars; i++) {
+	for(var i=1;i<= maxStars;i++){
 		buildStar(i);
 	}
 
@@ -7657,21 +7086,21 @@ function star(cell, onRendered, success, cancel, editorParams) {
 	// set initial styling of stars
 	starChange(value);
 
-	starsHolder.addEventListener("mousemove", function (e) {
+	starsHolder.addEventListener("mousemove", function(e){
 		starChange(0);
 	});
 
-	starsHolder.addEventListener("click", function (e) {
+	starsHolder.addEventListener("click", function(e){
 		success(0);
 	});
 
-	element.addEventListener("blur", function (e) {
+	element.addEventListener("blur", function(e){
 		cancel();
 	});
 
 	//allow key based navigation
-	element.addEventListener("keydown", function (e) {
-		switch (e.keyCode) {
+	element.addEventListener("keydown", function(e){
+		switch(e.keyCode){
 			case 39: //right arrow
 				changeValue(value + 1);
 				break;
@@ -7694,41 +7123,21 @@ function star(cell, onRendered, success, cancel, editorParams) {
 }
 
 //draggable progress bar
-function progress(cell, onRendered, success, cancel, editorParams) {
+function progress(cell, onRendered, success, cancel, editorParams){
 	var element = cell.getElement(),
-		max =
-			typeof editorParams.max === "undefined"
-				? (element.getElementsByTagName("div")[0] &&
-						element.getElementsByTagName("div")[0].getAttribute("max")) ||
-				  100
-				: editorParams.max,
-		min =
-			typeof editorParams.min === "undefined"
-				? (element.getElementsByTagName("div")[0] &&
-						element.getElementsByTagName("div")[0].getAttribute("min")) ||
-				  0
-				: editorParams.min,
-		percent = (max - min) / 100,
-		value = cell.getValue() || 0,
-		handle = document.createElement("div"),
-		bar = document.createElement("div"),
-		mouseDrag,
-		mouseDragWidth;
+	max = typeof editorParams.max === "undefined" ? ((element.getElementsByTagName("div")[0] && element.getElementsByTagName("div")[0].getAttribute("max")) || 100) : editorParams.max,
+	min = typeof editorParams.min === "undefined" ? ((element.getElementsByTagName("div")[0] && element.getElementsByTagName("div")[0].getAttribute("min")) || 0) : editorParams.min,
+	percent = (max - min) / 100,
+	value = cell.getValue() || 0,
+	handle = document.createElement("div"),
+	bar = document.createElement("div"),
+	mouseDrag, mouseDragWidth;
 
 	//set new value
-	function updateValue() {
+	function updateValue(){
 		var style = window.getComputedStyle(element, null);
 
-		var calcVal =
-			percent *
-				Math.round(
-					bar.offsetWidth /
-						((element.clientWidth -
-							parseInt(style.getPropertyValue("padding-left")) -
-							parseInt(style.getPropertyValue("padding-right"))) /
-							100)
-				) +
-			min;
+		var calcVal = (percent * Math.round(bar.offsetWidth / ((element.clientWidth - parseInt(style.getPropertyValue("padding-left")) - parseInt(style.getPropertyValue("padding-right")))/100))) + min;
 		success(calcVal);
 		element.setAttribute("aria-valuenow", calcVal);
 		element.setAttribute("aria-label", value);
@@ -7754,18 +7163,12 @@ function progress(cell, onRendered, success, cancel, editorParams) {
 	bar.style.maxWidth = "100%";
 	bar.style.minWidth = "0%";
 
-	if (
-		editorParams.elementAttributes &&
-		typeof editorParams.elementAttributes == "object"
-	) {
-		for (let key in editorParams.elementAttributes) {
-			if (key.charAt(0) == "+") {
+	if(editorParams.elementAttributes && typeof editorParams.elementAttributes == "object"){
+		for (let key in editorParams.elementAttributes){
+			if(key.charAt(0) == "+"){
 				key = key.slice(1);
-				bar.setAttribute(
-					key,
-					bar.getAttribute(key) + editorParams.elementAttributes["+" + key]
-				);
-			} else {
+				bar.setAttribute(key, bar.getAttribute(key) + editorParams.elementAttributes["+" + key]);
+			}else {
 				bar.setAttribute(key, editorParams.elementAttributes[key]);
 			}
 		}
@@ -7788,23 +7191,23 @@ function progress(cell, onRendered, success, cancel, editorParams) {
 
 	bar.appendChild(handle);
 
-	handle.addEventListener("mousedown", function (e) {
+	handle.addEventListener("mousedown", function(e){
 		mouseDrag = e.screenX;
 		mouseDragWidth = bar.offsetWidth;
 	});
 
-	handle.addEventListener("mouseover", function () {
+	handle.addEventListener("mouseover", function(){
 		handle.style.cursor = "ew-resize";
 	});
 
-	element.addEventListener("mousemove", function (e) {
-		if (mouseDrag) {
-			bar.style.width = mouseDragWidth + e.screenX - mouseDrag + "px";
+	element.addEventListener("mousemove", function(e){
+		if(mouseDrag){
+			bar.style.width = (mouseDragWidth + e.screenX - mouseDrag) + "px";
 		}
 	});
 
-	element.addEventListener("mouseup", function (e) {
-		if (mouseDrag) {
+	element.addEventListener("mouseup", function(e){
+		if(mouseDrag){
 			e.stopPropagation();
 			e.stopImmediatePropagation();
 
@@ -7816,16 +7219,16 @@ function progress(cell, onRendered, success, cancel, editorParams) {
 	});
 
 	//allow key based navigation
-	element.addEventListener("keydown", function (e) {
-		switch (e.keyCode) {
+	element.addEventListener("keydown", function(e){
+		switch(e.keyCode){
 			case 39: //right arrow
 				e.preventDefault();
-				bar.style.width = bar.clientWidth + element.clientWidth / 100 + "px";
+				bar.style.width = (bar.clientWidth + element.clientWidth/100) + "px";
 				break;
 
 			case 37: //left arrow
 				e.preventDefault();
-				bar.style.width = bar.clientWidth - element.clientWidth / 100 + "px";
+				bar.style.width = (bar.clientWidth - element.clientWidth/100) + "px";
 				break;
 
 			case 9: //tab
@@ -7836,10 +7239,11 @@ function progress(cell, onRendered, success, cancel, editorParams) {
 			case 27: //escape
 				cancel();
 				break;
+
 		}
 	});
 
-	element.addEventListener("blur", function () {
+	element.addEventListener("blur", function(){
 		cancel();
 	});
 
@@ -7847,34 +7251,25 @@ function progress(cell, onRendered, success, cancel, editorParams) {
 }
 
 //checkbox
-function tickCross(cell, onRendered, success, cancel, editorParams) {
+function tickCross(cell, onRendered, success, cancel, editorParams){
 	var value = cell.getValue(),
-		input = document.createElement("input"),
-		tristate = editorParams.tristate,
-		indetermValue =
-			typeof editorParams.indeterminateValue === "undefined"
-				? null
-				: editorParams.indeterminateValue,
-		indetermState = false,
-		trueValueSet = Object.keys(editorParams).includes("trueValue"),
-		falseValueSet = Object.keys(editorParams).includes("falseValue");
+	input = document.createElement("input"),
+	tristate = editorParams.tristate,
+	indetermValue = typeof editorParams.indeterminateValue === "undefined" ? null : editorParams.indeterminateValue,
+	indetermState = false,
+	trueValueSet = Object.keys(editorParams).includes("trueValue"),
+	falseValueSet = Object.keys(editorParams).includes("falseValue");
 
 	input.setAttribute("type", "checkbox");
 	input.style.marginTop = "5px";
 	input.style.boxSizing = "border-box";
 
-	if (
-		editorParams.elementAttributes &&
-		typeof editorParams.elementAttributes == "object"
-	) {
-		for (let key in editorParams.elementAttributes) {
-			if (key.charAt(0) == "+") {
+	if(editorParams.elementAttributes && typeof editorParams.elementAttributes == "object"){
+		for (let key in editorParams.elementAttributes){
+			if(key.charAt(0) == "+"){
 				key = key.slice(1);
-				input.setAttribute(
-					key,
-					input.getAttribute(key) + editorParams.elementAttributes["+" + key]
-				);
-			} else {
+				input.setAttribute(key, input.getAttribute(key) + editorParams.elementAttributes["+" + key]);
+			}else {
 				input.setAttribute(key, editorParams.elementAttributes[key]);
 			}
 		}
@@ -7882,76 +7277,70 @@ function tickCross(cell, onRendered, success, cancel, editorParams) {
 
 	input.value = value;
 
-	if (
-		tristate &&
-		(typeof value === "undefined" || value === indetermValue || value === "")
-	) {
+	if(tristate && (typeof value === "undefined" || value === indetermValue || value === "")){
 		indetermState = true;
 		input.indeterminate = true;
 	}
 
-	if (this.table.browser != "firefox") {
-		//prevent blur issue on mac firefox
-		onRendered(function () {
-			input.focus({ preventScroll: true });
+	if(this.table.browser != "firefox"){ //prevent blur issue on mac firefox
+		onRendered(function(){
+			input.focus({preventScroll: true});
 		});
 	}
 
-	input.checked = trueValueSet
-		? value === editorParams.trueValue
-		: value === true || value === "true" || value === "True" || value === 1;
+	input.checked = trueValueSet ? value === editorParams.trueValue : (value === true || value === "true" || value === "True" || value === 1);
 
-	onRendered(function () {
+	onRendered(function(){
 		input.focus();
 	});
 
-	function setValue(blur) {
+	function setValue(blur){
 		var checkedValue = input.checked;
 
-		if (trueValueSet && checkedValue) {
+		if(trueValueSet && checkedValue){
 			checkedValue = editorParams.trueValue;
-		} else if (falseValueSet && !checkedValue) {
+		}else if(falseValueSet && !checkedValue){
 			checkedValue = editorParams.falseValue;
 		}
 
-		if (tristate) {
-			if (!blur) {
-				if (input.checked && !indetermState) {
+		if(tristate){
+			if(!blur){
+				if(input.checked && !indetermState){
 					input.checked = false;
 					input.indeterminate = true;
 					indetermState = true;
 					return indetermValue;
-				} else {
+				}else {
 					indetermState = false;
 					return checkedValue;
 				}
-			} else {
-				if (indetermState) {
+			}else {
+				if(indetermState){
 					return indetermValue;
-				} else {
+				}else {
 					return checkedValue;
 				}
 			}
-		} else {
+		}else {
 			return checkedValue;
 		}
 	}
 
 	//submit new value on blur
-	input.addEventListener("change", function (e) {
+	input.addEventListener("change", function(e){
 		success(setValue());
 	});
 
-	input.addEventListener("blur", function (e) {
+	input.addEventListener("blur", function(e){
 		success(setValue(true));
 	});
 
 	//submit new value on enter
-	input.addEventListener("keydown", function (e) {
-		if (e.keyCode == 13) {
+	input.addEventListener("keydown", function(e){
+		if(e.keyCode == 13){
 			success(setValue());
 		}
-		if (e.keyCode == 27) {
+		if(e.keyCode == 27){
 			cancel();
 		}
 	});
@@ -7960,106 +7349,65 @@ function tickCross(cell, onRendered, success, cancel, editorParams) {
 }
 
 var defaultEditors = {
-	input: input,
-	textarea: textarea,
-	number: number,
-	range: range,
-	date: date,
-	time: time,
-	datetime: datetime,
-	select: select,
-	list: list,
-	autocomplete: autocomplete,
-	star: star,
-	progress: progress,
-	tickCross: tickCross,
+	input:input,
+	textarea:textarea,
+	number:number,
+	range:range,
+	date:date,
+	time:time,
+	datetime:datetime,
+	select:select,
+	list:list,
+	autocomplete:autocomplete,
+	star:star,
+	progress:progress,
+	tickCross:tickCross,
 };
 
-class Edit$1 extends Module {
-	constructor(table) {
+class Edit$1 extends Module{
+	
+	constructor(table){
 		super(table);
-
+		
 		this.currentCell = false; //hold currently editing cell
 		this.mouseClick = false; //hold mousedown state to prevent click binding being overridden by editor opening
 		this.recursionBlock = false; //prevent focus recursion
 		this.invalidEdit = false;
 		this.editedCells = [];
-
+		
 		this.editors = Edit$1.editors;
-
+		
 		this.registerColumnOption("editable");
 		this.registerColumnOption("editor");
 		this.registerColumnOption("editorParams");
-
+		
 		this.registerColumnOption("cellEditing");
 		this.registerColumnOption("cellEdited");
 		this.registerColumnOption("cellEditCancelled");
-
-		this.registerTableFunction(
-			"getEditedCells",
-			this.getEditedCells.bind(this)
-		);
-		this.registerTableFunction(
-			"clearCellEdited",
-			this.clearCellEdited.bind(this)
-		);
+		
+		this.registerTableFunction("getEditedCells", this.getEditedCells.bind(this));
+		this.registerTableFunction("clearCellEdited", this.clearCellEdited.bind(this));
 		this.registerTableFunction("navigatePrev", this.navigatePrev.bind(this));
 		this.registerTableFunction("navigateNext", this.navigateNext.bind(this));
 		this.registerTableFunction("navigateLeft", this.navigateLeft.bind(this));
 		this.registerTableFunction("navigateRight", this.navigateRight.bind(this));
 		this.registerTableFunction("navigateUp", this.navigateUp.bind(this));
 		this.registerTableFunction("navigateDown", this.navigateDown.bind(this));
-
-		this.registerComponentFunction(
-			"cell",
-			"isEdited",
-			this.cellIsEdited.bind(this)
-		);
-		this.registerComponentFunction(
-			"cell",
-			"clearEdited",
-			this.clearEdited.bind(this)
-		);
+		
+		this.registerComponentFunction("cell", "isEdited", this.cellIsEdited.bind(this));
+		this.registerComponentFunction("cell", "clearEdited", this.clearEdited.bind(this));
 		this.registerComponentFunction("cell", "edit", this.editCell.bind(this));
-		this.registerComponentFunction(
-			"cell",
-			"cancelEdit",
-			this.cellCancelEdit.bind(this)
-		);
-
-		this.registerComponentFunction(
-			"cell",
-			"navigatePrev",
-			this.navigatePrev.bind(this)
-		);
-		this.registerComponentFunction(
-			"cell",
-			"navigateNext",
-			this.navigateNext.bind(this)
-		);
-		this.registerComponentFunction(
-			"cell",
-			"navigateLeft",
-			this.navigateLeft.bind(this)
-		);
-		this.registerComponentFunction(
-			"cell",
-			"navigateRight",
-			this.navigateRight.bind(this)
-		);
-		this.registerComponentFunction(
-			"cell",
-			"navigateUp",
-			this.navigateUp.bind(this)
-		);
-		this.registerComponentFunction(
-			"cell",
-			"navigateDown",
-			this.navigateDown.bind(this)
-		);
+		this.registerComponentFunction("cell", "cancelEdit", this.cellCancelEdit.bind(this));
+		
+		this.registerComponentFunction("cell", "navigatePrev", this.navigatePrev.bind(this));
+		this.registerComponentFunction("cell", "navigateNext", this.navigateNext.bind(this));
+		this.registerComponentFunction("cell", "navigateLeft", this.navigateLeft.bind(this));
+		this.registerComponentFunction("cell", "navigateRight", this.navigateRight.bind(this));
+		this.registerComponentFunction("cell", "navigateUp", this.navigateUp.bind(this));
+		this.registerComponentFunction("cell", "navigateDown", this.navigateDown.bind(this));
 	}
-
-	initialize() {
+	
+	initialize(){
 		this.subscribe("cell-init", this.bindEditor.bind(this));
 		this.subscribe("cell-delete", this.clearEdited.bind(this));
 		this.subscribe("cell-value-changed", this.updateCellClass.bind(this));
@@ -8067,53 +7415,39 @@ class Edit$1 extends Module {
 		this.subscribe("column-delete", this.columnDeleteCheck.bind(this));
 		this.subscribe("row-deleting", this.rowDeleteCheck.bind(this));
 		this.subscribe("data-refreshing", this.cancelEdit.bind(this));
-
-		this.subscribe(
-			"keybinding-nav-prev",
-			this.navigatePrev.bind(this, undefined)
-		);
-		this.subscribe(
-			"keybinding-nav-next",
-			this.keybindingNavigateNext.bind(this)
-		);
-		this.subscribe(
-			"keybinding-nav-left",
-			this.navigateLeft.bind(this, undefined)
-		);
-		this.subscribe(
-			"keybinding-nav-right",
-			this.navigateRight.bind(this, undefined)
-		);
+		
+		this.subscribe("keybinding-nav-prev", this.navigatePrev.bind(this, undefined));
+		this.subscribe("keybinding-nav-next", this.keybindingNavigateNext.bind(this));
+		this.subscribe("keybinding-nav-left", this.navigateLeft.bind(this, undefined));
+		this.subscribe("keybinding-nav-right", this.navigateRight.bind(this, undefined));
 		this.subscribe("keybinding-nav-up", this.navigateUp.bind(this, undefined));
-		this.subscribe(
-			"keybinding-nav-down",
-			this.navigateDown.bind(this, undefined)
-		);
+		this.subscribe("keybinding-nav-down", this.navigateDown.bind(this, undefined));
 	}
-
+	
+	
 	///////////////////////////////////
 	////// Keybinding Functions ///////
 	///////////////////////////////////
-
-	keybindingNavigateNext(e) {
+	
+	keybindingNavigateNext(e){
 		var cell = this.currentCell,
-			newRow = this.options("tabEndNewRow");
-
-		if (cell) {
-			if (!this.navigateNext(cell, e)) {
-				if (newRow) {
+		newRow = this.options("tabEndNewRow");
+		
+		if(cell){
+			if(!this.navigateNext(cell, e)){
+				if(newRow){
 					cell.getElement().firstChild.blur();
-
-					if (newRow === true) {
+					
+					if(newRow === true){
 						newRow = this.table.addRow({});
-					} else {
-						if (typeof newRow == "function") {
+					}else {
+						if(typeof newRow == "function"){
 							newRow = this.table.addRow(newRow(cell.row.getComponent()));
-						} else {
+						}else {
 							newRow = this.table.addRow(Object.assign({}, newRow));
 						}
 					}
-
+					
 					newRow.then(() => {
 						setTimeout(() => {
 							cell.getComponent().navigateNext();
@@ -8123,449 +7457,440 @@ class Edit$1 extends Module {
 			}
 		}
 	}
-
+	
 	///////////////////////////////////
 	///////// Cell Functions //////////
 	///////////////////////////////////
-
-	cellIsEdited(cell) {
-		return !!cell.modules.edit && cell.modules.edit.edited;
+	
+	cellIsEdited(cell){
+		return !! cell.modules.edit && cell.modules.edit.edited;
 	}
-
-	cellCancelEdit(cell) {
-		if (cell === this.currentCell) {
+	
+	cellCancelEdit(cell){
+		if(cell === this.currentCell){
 			this.table.modules.edit.cancelEdit();
-		} else {
-			console.warn(
-				"Cancel Editor Error - This cell is not currently being edited "
-			);
+		}else {
+			console.warn("Cancel Editor Error - This cell is not currently being edited ");
 		}
 	}
-
+	
+	
 	///////////////////////////////////
 	///////// Table Functions /////////
 	///////////////////////////////////
-	updateCellClass(cell) {
-		if (this.allowEdit(cell)) {
+	updateCellClass(cell){
+		if(this.allowEdit(cell)) {
 			cell.getElement().classList.add("tabulator-editable");
-		} else {
+		}
+		else {
 			cell.getElement().classList.remove("tabulator-editable");
 		}
 	}
-
-	clearCellEdited(cells) {
-		if (!cells) {
+	
+	clearCellEdited(cells){
+		if(!cells){
 			cells = this.table.modules.edit.getEditedCells();
 		}
-
-		if (!Array.isArray(cells)) {
+		
+		if(!Array.isArray(cells)){
 			cells = [cells];
 		}
-
+		
 		cells.forEach((cell) => {
 			this.table.modules.edit.clearEdited(cell._getSelf());
 		});
 	}
-
-	navigatePrev(cell = this.currentCell, e) {
+	
+	navigatePrev(cell = this.currentCell, e){
 		var nextCell, prevRow;
-
-		if (cell) {
-			if (e) {
+		
+		if(cell){
+			
+			if(e){
 				e.preventDefault();
 			}
-
+			
 			nextCell = this.navigateLeft();
-
-			if (nextCell) {
+			
+			if(nextCell){
 				return true;
-			} else {
+			}else {
 				prevRow = this.table.rowManager.prevDisplayRow(cell.row, true);
-
-				if (prevRow) {
+				
+				if(prevRow){
 					nextCell = this.findNextEditableCell(prevRow, prevRow.cells.length);
-
-					if (nextCell) {
+					
+					if(nextCell){
 						nextCell.getComponent().edit();
 						return true;
 					}
 				}
 			}
 		}
-
+		
 		return false;
 	}
-
-	navigateNext(cell = this.currentCell, e) {
+	
+	navigateNext(cell = this.currentCell, e){
 		var nextCell, nextRow;
-
-		if (cell) {
-			if (e) {
+		
+		if(cell){
+			
+			if(e){
 				e.preventDefault();
 			}
-
+			
 			nextCell = this.navigateRight();
-
-			if (nextCell) {
+			
+			if(nextCell){
 				return true;
-			} else {
+			}else {
 				nextRow = this.table.rowManager.nextDisplayRow(cell.row, true);
-
-				if (nextRow) {
+				
+				if(nextRow){
 					nextCell = this.findNextEditableCell(nextRow, -1);
-
-					if (nextCell) {
+					
+					if(nextCell){
 						nextCell.getComponent().edit();
 						return true;
 					}
 				}
 			}
 		}
-
+		
 		return false;
 	}
-
-	navigateLeft(cell = this.currentCell, e) {
+	
+	navigateLeft(cell = this.currentCell, e){
 		var index, nextCell;
-
-		if (cell) {
-			if (e) {
+		
+		if(cell){
+			
+			if(e){
 				e.preventDefault();
 			}
-
+			
 			index = cell.getIndex();
 			nextCell = this.findPrevEditableCell(cell.row, index);
-
-			if (nextCell) {
+			
+			if(nextCell){
 				nextCell.getComponent().edit();
 				return true;
 			}
 		}
-
+		
 		return false;
 	}
-
-	navigateRight(cell = this.currentCell, e) {
+	
+	navigateRight(cell = this.currentCell, e){
 		var index, nextCell;
-
-		if (cell) {
-			if (e) {
+		
+		if(cell){
+			
+			if(e){
 				e.preventDefault();
 			}
-
+			
 			index = cell.getIndex();
 			nextCell = this.findNextEditableCell(cell.row, index);
-
-			if (nextCell) {
+			
+			if(nextCell){
 				nextCell.getComponent().edit();
 				return true;
 			}
 		}
-
+		
 		return false;
 	}
-
-	navigateUp(cell = this.currentCell, e) {
+	
+	navigateUp(cell = this.currentCell, e){
 		var index, nextRow;
-
-		if (cell) {
-			if (e) {
+		
+		if(cell){
+			
+			if(e){
 				e.preventDefault();
 			}
-
+			
 			index = cell.getIndex();
 			nextRow = this.table.rowManager.prevDisplayRow(cell.row, true);
-
-			if (nextRow) {
+			
+			if(nextRow){
 				nextRow.cells[index].getComponent().edit();
 				return true;
 			}
 		}
-
+		
 		return false;
 	}
-
-	navigateDown(cell = this.currentCell, e) {
+	
+	navigateDown(cell = this.currentCell, e){
 		var index, nextRow;
-
-		if (cell) {
-			if (e) {
+		
+		if(cell){
+			
+			if(e){
 				e.preventDefault();
 			}
-
+			
 			index = cell.getIndex();
 			nextRow = this.table.rowManager.nextDisplayRow(cell.row, true);
-
-			if (nextRow) {
+			
+			if(nextRow){
 				nextRow.cells[index].getComponent().edit();
 				return true;
 			}
 		}
-
+		
 		return false;
 	}
-
-	findNextEditableCell(row, index) {
+	
+	findNextEditableCell(row, index){
 		var nextCell = false;
-
-		if (index < row.cells.length - 1) {
-			for (var i = index + 1; i < row.cells.length; i++) {
+		
+		if(index < row.cells.length-1){
+			for(var i = index+1; i < row.cells.length; i++){
 				let cell = row.cells[i];
-
-				if (cell.column.modules.edit && Helpers.elVisible(cell.getElement())) {
+				
+				if(cell.column.modules.edit && Helpers.elVisible(cell.getElement())){
 					let allowEdit = this.allowEdit(cell);
-
-					if (allowEdit) {
+					
+					if(allowEdit){
 						nextCell = cell;
 						break;
 					}
 				}
 			}
 		}
-
+		
 		return nextCell;
 	}
-
-	findPrevEditableCell(row, index) {
+	
+	findPrevEditableCell(row, index){
 		var prevCell = false;
-
-		if (index > 0) {
-			for (var i = index - 1; i >= 0; i--) {
+		
+		if(index > 0){
+			for(var i = index-1; i >= 0; i--){
 				let cell = row.cells[i];
-
-				if (cell.column.modules.edit && Helpers.elVisible(cell.getElement())) {
+				
+				if(cell.column.modules.edit && Helpers.elVisible(cell.getElement())){
 					let allowEdit = this.allowEdit(cell);
-
-					if (allowEdit) {
+					
+					if(allowEdit){
 						prevCell = cell;
 						break;
 					}
 				}
 			}
 		}
-
+		
 		return prevCell;
 	}
-
+	
 	///////////////////////////////////
 	///////// Internal Logic //////////
 	///////////////////////////////////
-
-	initializeColumnCheck(column) {
-		if (typeof column.definition.editor !== "undefined") {
+	
+	initializeColumnCheck(column){
+		if(typeof column.definition.editor !== "undefined"){
 			this.initializeColumn(column);
 		}
 	}
-
-	columnDeleteCheck(column) {
-		if (this.currentCell && this.currentCell.column === column) {
+	
+	columnDeleteCheck(column){
+		if(this.currentCell && this.currentCell.column === column){
 			this.cancelEdit();
 		}
 	}
-
-	rowDeleteCheck(row) {
-		if (this.currentCell && this.currentCell.row === row) {
+	
+	rowDeleteCheck(row){
+		if(this.currentCell && this.currentCell.row === row){
 			this.cancelEdit();
 		}
 	}
-
+	
 	//initialize column editor
-	initializeColumn(column) {
+	initializeColumn(column){
 		var config = {
-			editor: false,
-			blocked: false,
-			check: column.definition.editable,
-			params: column.definition.editorParams || {},
+			editor:false,
+			blocked:false,
+			check:column.definition.editable,
+			params:column.definition.editorParams || {}
 		};
-
+		
 		//set column editor
-		switch (typeof column.definition.editor) {
+		switch(typeof column.definition.editor){
 			case "string":
-				if (this.editors[column.definition.editor]) {
+				if(this.editors[column.definition.editor]){
 					config.editor = this.editors[column.definition.editor];
-				} else {
-					console.warn(
-						"Editor Error - No such editor found: ",
-						column.definition.editor
-					);
+				}else {
+					console.warn("Editor Error - No such editor found: ", column.definition.editor);
 				}
 				break;
-
+			
 			case "function":
 				config.editor = column.definition.editor;
 				break;
-
+			
 			case "boolean":
-				if (column.definition.editor === true) {
-					if (typeof column.definition.formatter !== "function") {
-						if (this.editors[column.definition.formatter]) {
+				if(column.definition.editor === true){
+					if(typeof column.definition.formatter !== "function"){
+						if(this.editors[column.definition.formatter]){
 							config.editor = this.editors[column.definition.formatter];
-						} else {
+						}else {
 							config.editor = this.editors["input"];
 						}
-					} else {
-						console.warn(
-							"Editor Error - Cannot auto lookup editor for a custom formatter: ",
-							column.definition.formatter
-						);
+					}else {
+						console.warn("Editor Error - Cannot auto lookup editor for a custom formatter: ", column.definition.formatter);
 					}
 				}
 				break;
 		}
-
-		if (config.editor) {
+		
+		if(config.editor){
 			column.modules.edit = config;
 		}
 	}
-
-	getCurrentCell() {
+	
+	getCurrentCell(){
 		return this.currentCell ? this.currentCell.getComponent() : false;
 	}
-
-	clearEditor(cancel) {
+	
+	clearEditor(cancel){
 		var cell = this.currentCell,
-			cellEl;
-
+		cellEl;
+		
 		this.invalidEdit = false;
-
-		if (cell) {
+		
+		if(cell){
 			this.currentCell = false;
-
+			
 			cellEl = cell.getElement();
-
+			
 			this.dispatch("edit-editor-clear", cell, cancel);
-
+			
 			cellEl.classList.remove("tabulator-editing");
-
-			while (cellEl.firstChild) cellEl.removeChild(cellEl.firstChild);
-
+			
+			while(cellEl.firstChild) cellEl.removeChild(cellEl.firstChild);
+			
 			cell.row.getElement().classList.remove("tabulator-editing");
-
+			
 			cell.table.element.classList.remove("tabulator-editing");
 		}
 	}
-
-	cancelEdit() {
-		if (this.currentCell) {
+	
+	cancelEdit(){
+		if(this.currentCell){
 			var cell = this.currentCell;
 			var component = this.currentCell.getComponent();
-
+			
 			this.clearEditor(true);
 			cell.setValueActual(cell.getValue());
 			cell.cellRendered();
-
-			if (
-				cell.column.definition.editor == "textarea" ||
-				cell.column.definition.variableHeight
-			) {
+			
+			if(cell.column.definition.editor == "textarea" || cell.column.definition.variableHeight){
 				cell.row.normalizeHeight(true);
 			}
-
-			if (cell.column.definition.cellEditCancelled) {
+			
+			if(cell.column.definition.cellEditCancelled){
 				cell.column.definition.cellEditCancelled.call(this.table, component);
 			}
-
+			
 			this.dispatch("edit-cancelled", cell);
 			this.dispatchExternal("cellEditCancelled", component);
 		}
 	}
-
+	
 	//return a formatted value for a cell
-	bindEditor(cell) {
-		if (cell.column.modules.edit) {
+	bindEditor(cell){
+		if(cell.column.modules.edit){
 			var self = this,
-				element = cell.getElement(true);
-
+			element = cell.getElement(true);
+			
 			this.updateCellClass(cell);
 			element.setAttribute("tabindex", 0);
-
-			element.addEventListener("click", function (e) {
-				if (!element.classList.contains("tabulator-editing")) {
-					element.focus({ preventScroll: true });
+			
+			element.addEventListener("click", function(e){
+				if(!element.classList.contains("tabulator-editing")){
+					element.focus({preventScroll: true});
 				}
 			});
-
-			element.addEventListener("mousedown", function (e) {
+			
+			element.addEventListener("mousedown", function(e){
 				if (e.button === 2) {
 					e.preventDefault();
-				} else {
+				}else {
 					self.mouseClick = true;
 				}
 			});
-
-			element.addEventListener("focus", function (e) {
-				if (!self.recursionBlock) {
+			
+			element.addEventListener("focus", function(e){
+				if(!self.recursionBlock){
 					self.edit(cell, e, false);
 				}
 			});
 		}
 	}
-
-	focusCellNoEvent(cell, block) {
+	
+	focusCellNoEvent(cell, block){
 		this.recursionBlock = true;
-
-		if (!(block && this.table.browser === "ie")) {
-			cell.getElement().focus({ preventScroll: true });
+		
+		if(!(block && this.table.browser === "ie")){
+			cell.getElement().focus({preventScroll: true});
 		}
-
+		
 		this.recursionBlock = false;
 	}
-
-	editCell(cell, forceEdit) {
+	
+	editCell(cell, forceEdit){
 		this.focusCellNoEvent(cell);
 		this.edit(cell, false, forceEdit);
 	}
-
-	focusScrollAdjust(cell) {
-		if (this.table.rowManager.getRenderMode() == "virtual") {
+	
+	focusScrollAdjust(cell){
+		if(this.table.rowManager.getRenderMode() == "virtual"){
 			var topEdge = this.table.rowManager.element.scrollTop,
-				bottomEdge =
-					this.table.rowManager.element.clientHeight +
-					this.table.rowManager.element.scrollTop,
-				rowEl = cell.row.getElement();
-
-			if (rowEl.offsetTop < topEdge) {
-				this.table.rowManager.element.scrollTop -= topEdge - rowEl.offsetTop;
-			} else {
-				if (rowEl.offsetTop + rowEl.offsetHeight > bottomEdge) {
-					this.table.rowManager.element.scrollTop +=
-						rowEl.offsetTop + rowEl.offsetHeight - bottomEdge;
+			bottomEdge = this.table.rowManager.element.clientHeight + this.table.rowManager.element.scrollTop,
+			rowEl = cell.row.getElement();
+			
+			if(rowEl.offsetTop < topEdge){
+				this.table.rowManager.element.scrollTop -= (topEdge - rowEl.offsetTop);
+			}else {
+				if(rowEl.offsetTop + rowEl.offsetHeight  > bottomEdge){
+					this.table.rowManager.element.scrollTop += (rowEl.offsetTop + rowEl.offsetHeight - bottomEdge);
 				}
 			}
-
+			
 			var leftEdge = this.table.rowManager.element.scrollLeft,
-				rightEdge =
-					this.table.rowManager.element.clientWidth +
-					this.table.rowManager.element.scrollLeft,
-				cellEl = cell.getElement();
-
-			if (this.table.modExists("frozenColumns")) {
+			rightEdge = this.table.rowManager.element.clientWidth + this.table.rowManager.element.scrollLeft,
+			cellEl = cell.getElement();
+			
+			if(this.table.modExists("frozenColumns")){
 				leftEdge += parseInt(this.table.modules.frozenColumns.leftMargin);
 				rightEdge -= parseInt(this.table.modules.frozenColumns.rightMargin);
 			}
-
-			if (this.table.options.renderHorizontal === "virtual") {
+			
+			if(this.table.options.renderHorizontal === "virtual"){
 				leftEdge -= parseInt(this.table.columnManager.renderer.vDomPadLeft);
 				rightEdge -= parseInt(this.table.columnManager.renderer.vDomPadLeft);
 			}
-
-			if (cellEl.offsetLeft < leftEdge) {
-				this.table.rowManager.element.scrollLeft -=
-					leftEdge - cellEl.offsetLeft;
-			} else {
-				if (cellEl.offsetLeft + cellEl.offsetWidth > rightEdge) {
-					this.table.rowManager.element.scrollLeft +=
-						cellEl.offsetLeft + cellEl.offsetWidth - rightEdge;
+			
+			if(cellEl.offsetLeft < leftEdge){
+				
+				this.table.rowManager.element.scrollLeft -= (leftEdge - cellEl.offsetLeft);
+			}else {
+				if(cellEl.offsetLeft + cellEl.offsetWidth  > rightEdge){
+					this.table.rowManager.element.scrollLeft += (cellEl.offsetLeft + cellEl.offsetWidth - rightEdge);
 				}
 			}
 		}
 	}
-
+	
 	allowEdit(cell) {
 		var check = cell.column.modules.edit ? true : false;
 
-		if (cell.column.modules.edit) {
-			switch (typeof cell.column.modules.edit.check) {
+		if(cell.column.modules.edit){
+			switch(typeof cell.column.modules.edit.check){
 				case "function":
 					check = cell.column.modules.edit.check(cell.getComponent());
 					break;
@@ -8582,49 +7907,45 @@ class Edit$1 extends Module {
 
 		return check;
 	}
-
-	edit(cell, e, forceEdit) {
+	
+	edit(cell, e, forceEdit){
 		var self = this,
-			allowEdit = true,
-			rendered = function () {},
-			element = cell.getElement(),
-			cellEditor,
-			component,
-			params;
-
+		allowEdit = true,
+		rendered = function(){},
+		element = cell.getElement(),
+		cellEditor, component, params;
+		
 		//prevent editing if another cell is refusing to leave focus (eg. validation fail)
-		if (this.currentCell) {
-			if (!this.invalidEdit) {
+		if(this.currentCell){
+			if(!this.invalidEdit){
 				this.cancelEdit();
 			}
 			return;
 		}
-
+		
 		//handle successful value change
-		function success(value) {
-			if (self.currentCell === cell) {
+		function success(value){
+			if(self.currentCell === cell){
 				var valid = self.chain("edit-success", [cell, value], true, true);
-
-				if (
-					valid === true ||
-					self.table.options.validationMode === "highlight"
-				) {
+				
+				if(valid === true || self.table.options.validationMode === "highlight"){
 					self.clearEditor();
-
-					if (!cell.modules.edit) {
+					
+					
+					if(!cell.modules.edit){
 						cell.modules.edit = {};
 					}
-
+					
 					cell.modules.edit.edited = true;
-
-					if (self.editedCells.indexOf(cell) == -1) {
+					
+					if(self.editedCells.indexOf(cell) == -1){
 						self.editedCells.push(cell);
 					}
-
+					
 					cell.setValue(value, true);
-
+					
 					return valid === true;
-				} else {
+				}else {
 					self.invalidEdit = true;
 					self.focusCellNoEvent(cell, true);
 					rendered();
@@ -8632,131 +7953,121 @@ class Edit$1 extends Module {
 				}
 			}
 		}
-
+		
 		//handle aborted edit
-		function cancel() {
-			if (self.currentCell === cell) {
+		function cancel(){
+			if(self.currentCell === cell){
 				self.cancelEdit();
 			}
 		}
-
-		function onRendered(callback) {
+		
+		function onRendered(callback){
 			rendered = callback;
 		}
-
-		if (!cell.column.modules.edit.blocked) {
-			if (e) {
+		
+		if(!cell.column.modules.edit.blocked){
+			if(e){
 				e.stopPropagation();
 			}
-
+			
 			allowEdit = this.allowEdit(cell);
-
-			if (allowEdit || forceEdit) {
+			
+			if(allowEdit || forceEdit){
+				
 				self.cancelEdit();
-
+				
 				self.currentCell = cell;
-
+				
 				this.focusScrollAdjust(cell);
-
+				
 				component = cell.getComponent();
-
-				if (this.mouseClick) {
+				
+				if(this.mouseClick){
 					this.mouseClick = false;
-
-					if (cell.column.definition.cellClick) {
+					
+					if(cell.column.definition.cellClick){
 						cell.column.definition.cellClick.call(this.table, e, component);
 					}
 				}
-
-				if (cell.column.definition.cellEditing) {
+				
+				if(cell.column.definition.cellEditing){
 					cell.column.definition.cellEditing.call(this.table, component);
 				}
-
+				
 				this.dispatch("cell-editing", cell);
 				this.dispatchExternal("cellEditing", component);
-
-				params =
-					typeof cell.column.modules.edit.params === "function"
-						? cell.column.modules.edit.params(component)
-						: cell.column.modules.edit.params;
-
-				cellEditor = cell.column.modules.edit.editor.call(
-					self,
-					component,
-					onRendered,
-					success,
-					cancel,
-					params
-				);
-
+				
+				params = typeof cell.column.modules.edit.params === "function" ? cell.column.modules.edit.params(component) : cell.column.modules.edit.params;
+				
+				cellEditor = cell.column.modules.edit.editor.call(self, component, onRendered, success, cancel, params);
+				
 				//if editor returned, add to DOM, if false, abort edit
-				if (cellEditor !== false) {
-					if (cellEditor instanceof Node) {
+				if(cellEditor !== false){
+					
+					if(cellEditor instanceof Node){
 						element.classList.add("tabulator-editing");
 						cell.row.getElement().classList.add("tabulator-editing");
 						cell.table.element.classList.add("tabulator-editing");
-						while (element.firstChild) element.removeChild(element.firstChild);
+						while(element.firstChild) element.removeChild(element.firstChild);
 						element.appendChild(cellEditor);
-
+						
 						//trigger onRendered Callback
 						rendered();
-
+						
 						//prevent editing from triggering rowClick event
 						var children = element.children;
-
+						
 						for (var i = 0; i < children.length; i++) {
-							children[i].addEventListener("click", function (e) {
+							children[i].addEventListener("click", function(e){
 								e.stopPropagation();
 							});
 						}
-					} else {
-						console.warn(
-							"Edit Error - Editor should return an instance of Node, the editor returned:",
-							cellEditor
-						);
+					}else {
+						console.warn("Edit Error - Editor should return an instance of Node, the editor returned:", cellEditor);
 						element.blur();
 						return false;
 					}
-				} else {
+					
+				}else {
 					element.blur();
 					return false;
 				}
-
+				
 				return true;
-			} else {
+			}else {
 				this.mouseClick = false;
 				element.blur();
 				return false;
 			}
-		} else {
+		}else {
 			this.mouseClick = false;
 			element.blur();
 			return false;
 		}
 	}
-
-	getEditedCells() {
+	
+	getEditedCells(){
 		var output = [];
-
+		
 		this.editedCells.forEach((cell) => {
 			output.push(cell.getComponent());
 		});
-
+		
 		return output;
 	}
-
-	clearEdited(cell) {
+	
+	clearEdited(cell){
 		var editIndex;
-
-		if (cell.modules.edit && cell.modules.edit.edited) {
+		
+		if(cell.modules.edit && cell.modules.edit.edited){
 			cell.modules.edit.edited = false;
-
+			
 			this.dispatch("edit-edited-clear", cell);
 		}
-
+		
 		editIndex = this.editedCells.indexOf(cell);
-
-		if (editIndex > -1) {
+		
+		if(editIndex > -1){
 			this.editedCells.splice(editIndex, 1);
 		}
 	}
@@ -8767,8 +8078,8 @@ Edit$1.moduleName = "edit";
 //load defaults
 Edit$1.editors = defaultEditors;
 
-class ExportRow {
-	constructor(type, columns, component, indent) {
+class ExportRow{
+	constructor(type, columns, component, indent){
 		this.type = type;
 		this.columns = columns;
 		this.component = component || false;
@@ -8776,8 +8087,8 @@ class ExportRow {
 	}
 }
 
-class ExportColumn {
-	constructor(value, component, width, height, depth) {
+class ExportColumn{
+	constructor(value, component, width, height, depth){
 		this.value = value;
 		this.component = component || false;
 		this.width = width;
@@ -8786,8 +8097,9 @@ class ExportColumn {
 	}
 }
 
-class Export extends Module {
-	constructor(table) {
+class Export extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.config = {};
@@ -8800,7 +8112,7 @@ class Export extends Module {
 		this.registerColumnOption("titleHtmlOutput");
 	}
 
-	initialize() {
+	initialize(){
 		this.registerTableFunction("getHtml", this.getHtml.bind(this));
 	}
 
@@ -8808,43 +8120,41 @@ class Export extends Module {
 	///////// Table Functions /////////
 	///////////////////////////////////
 
+
 	///////////////////////////////////
 	///////// Internal Logic //////////
 	///////////////////////////////////
 
-	generateExportList(config, style, range, colVisProp) {
+	generateExportList(config, style, range, colVisProp){
 		this.cloneTableStyle = style;
 		this.config = config || {};
 		this.colVisProp = colVisProp;
 
-		var headers =
-			this.config.columnHeaders !== false
-				? this.headersToExportRows(this.generateColumnGroupHeaders())
-				: [];
+		var headers = this.config.columnHeaders !== false ? this.headersToExportRows(this.generateColumnGroupHeaders()) : [];
 		var body = this.bodyToExportRows(this.rowLookup(range));
 
 		return headers.concat(body);
 	}
 
-	generateTable(config, style, range, colVisProp) {
+	generateTable(config, style, range, colVisProp){
 		var list = this.generateExportList(config, style, range, colVisProp);
 
 		return this.generateTableElement(list);
 	}
 
-	rowLookup(range) {
+	rowLookup(range){
 		var rows = [];
 
-		if (typeof range == "function") {
-			range.call(this.table).forEach((row) => {
+		if(typeof range == "function"){
+			range.call(this.table).forEach((row) =>{
 				row = this.table.rowManager.findRow(row);
 
-				if (row) {
+				if(row){
 					rows.push(row);
 				}
 			});
-		} else {
-			switch (range) {
+		}else {
+			switch(range){
 				case true:
 				case "visible":
 					rows = this.table.rowManager.getVisibleRows(false, true);
@@ -8860,11 +8170,9 @@ class Export extends Module {
 
 				case "active":
 				default:
-					if (this.table.options.pagination) {
-						rows = this.table.rowManager.getDisplayRows(
-							this.table.rowManager.displayRows.length - 2
-						);
-					} else {
+					if(this.table.options.pagination){
+						rows = this.table.rowManager.getDisplayRows(this.table.rowManager.displayRows.length - 2);
+					}else {
 						rows = this.table.rowManager.getDisplayRows();
 					}
 			}
@@ -8873,18 +8181,15 @@ class Export extends Module {
 		return Object.assign([], rows);
 	}
 
-	generateColumnGroupHeaders() {
+	generateColumnGroupHeaders(){
 		var output = [];
 
-		var columns =
-			this.config.columnGroups !== false
-				? this.table.columnManager.columns
-				: this.table.columnManager.columnsByIndex;
+		var columns = this.config.columnGroups !== false ? this.table.columnManager.columns : this.table.columnManager.columnsByIndex;
 
 		columns.forEach((column) => {
 			var colData = this.processColumnGroup(column);
 
-			if (colData) {
+			if(colData){
 				output.push(colData);
 			}
 		});
@@ -8892,33 +8197,29 @@ class Export extends Module {
 		return output;
 	}
 
-	processColumnGroup(column) {
+	processColumnGroup(column){
 		var subGroups = column.columns,
-			maxDepth = 0,
-			title =
-				column.definition[
-					"title" +
-						(this.colVisProp.charAt(0).toUpperCase() + this.colVisProp.slice(1))
-				] || column.definition.title;
+		maxDepth = 0,
+		title = column.definition["title" + (this.colVisProp.charAt(0).toUpperCase() + this.colVisProp.slice(1))] || column.definition.title;
 
 		var groupData = {
-			title: title,
-			column: column,
-			depth: 1,
+			title:title,
+			column:column,
+			depth:1,
 		};
 
-		if (subGroups.length) {
+		if(subGroups.length){
 			groupData.subGroups = [];
 			groupData.width = 0;
 
 			subGroups.forEach((subGroup) => {
 				var subGroupData = this.processColumnGroup(subGroup);
 
-				if (subGroupData) {
+				if(subGroupData){
 					groupData.width += subGroupData.width;
 					groupData.subGroups.push(subGroupData);
 
-					if (subGroupData.depth > maxDepth) {
+					if(subGroupData.depth > maxDepth){
 						maxDepth = subGroupData.depth;
 					}
 				}
@@ -8926,13 +8227,13 @@ class Export extends Module {
 
 			groupData.depth += maxDepth;
 
-			if (!groupData.width) {
+			if(!groupData.width){
 				return false;
 			}
-		} else {
-			if (this.columnVisCheck(column)) {
+		}else {
+			if(this.columnVisCheck(column)){
 				groupData.width = 1;
-			} else {
+			}else {
 				return false;
 			}
 		}
@@ -8940,37 +8241,37 @@ class Export extends Module {
 		return groupData;
 	}
 
-	columnVisCheck(column) {
+	columnVisCheck(column){
 		var visProp = column.definition[this.colVisProp];
 
-		if (typeof visProp === "function") {
+		if(typeof visProp === "function"){
 			visProp = visProp.call(this.table, column.getComponent());
 		}
 
-		return (
-			visProp !== false && (column.visible || (!column.visible && visProp))
-		);
+		return visProp !== false && (column.visible || (!column.visible && visProp));
 	}
 
-	headersToExportRows(columns) {
+	headersToExportRows(columns){
 		var headers = [],
-			headerDepth = 0,
-			exportRows = [];
+		headerDepth = 0,
+		exportRows = [];
 
-		function parseColumnGroup(column, level) {
+		function parseColumnGroup(column, level){
+
 			var depth = headerDepth - level;
 
-			if (typeof headers[level] === "undefined") {
+			if(typeof headers[level] === "undefined"){
 				headers[level] = [];
 			}
 
-			column.height = column.subGroups ? 1 : depth - column.depth + 1;
+			column.height = column.subGroups ? 1 : (depth - column.depth) + 1;
 
 			headers[level].push(column);
 
-			if (column.height > 1) {
-				for (let i = 1; i < column.height; i++) {
-					if (typeof headers[level + i] === "undefined") {
+			if(column.height > 1){
+				for(let i = 1; i < column.height; i ++){
+
+					if(typeof headers[level + i] === "undefined"){
 						headers[level + i] = [];
 					}
 
@@ -8978,46 +8279,38 @@ class Export extends Module {
 				}
 			}
 
-			if (column.width > 1) {
-				for (let i = 1; i < column.width; i++) {
+			if(column.width > 1){
+				for(let i = 1; i < column.width; i ++){
 					headers[level].push(false);
 				}
 			}
 
-			if (column.subGroups) {
-				column.subGroups.forEach(function (subGroup) {
-					parseColumnGroup(subGroup, level + 1);
+			if(column.subGroups){
+				column.subGroups.forEach(function(subGroup){
+					parseColumnGroup(subGroup, level+1);
 				});
 			}
 		}
 
 		//calculate maximum header depth
-		columns.forEach(function (column) {
-			if (column.depth > headerDepth) {
+		columns.forEach(function(column){
+			if(column.depth > headerDepth){
 				headerDepth = column.depth;
 			}
 		});
 
-		columns.forEach(function (column) {
-			parseColumnGroup(column, 0);
+		columns.forEach(function(column){
+			parseColumnGroup(column,0);
 		});
 
 		headers.forEach((header) => {
 			var columns = [];
 
 			header.forEach((col) => {
-				if (col) {
+				if(col){
 					let title = typeof col.title === "undefined" ? "" : col.title;
-					columns.push(
-						new ExportColumn(
-							title,
-							col.column.getComponent(),
-							col.width,
-							col.height,
-							col.depth
-						)
-					);
-				} else {
+					columns.push(new ExportColumn(title, col.column.getComponent(), col.width, col.height, col.depth));
+				}else {
 					columns.push(null);
 				}
 			});
@@ -9028,7 +8321,8 @@ class Export extends Module {
 		return exportRows;
 	}
 
-	bodyToExportRows(rows) {
+	bodyToExportRows(rows){
+
 		var columns = [];
 		var exportRows = [];
 
@@ -9038,21 +8332,18 @@ class Export extends Module {
 			}
 		});
 
-		if (
-			this.config.columnCalcs !== false &&
-			this.table.modExists("columnCalcs")
-		) {
-			if (this.table.modules.columnCalcs.topInitialized) {
+		if(this.config.columnCalcs !== false && this.table.modExists("columnCalcs")){
+			if(this.table.modules.columnCalcs.topInitialized){
 				rows.unshift(this.table.modules.columnCalcs.topRow);
 			}
 
-			if (this.table.modules.columnCalcs.botInitialized) {
+			if(this.table.modules.columnCalcs.botInitialized){
 				rows.push(this.table.modules.columnCalcs.botRow);
 			}
 		}
 
 		rows = rows.filter((row) => {
-			switch (row.type) {
+			switch(row.type){
 				case "group":
 					return this.config.rowGroups !== false;
 
@@ -9060,11 +8351,7 @@ class Export extends Module {
 					return this.config.columnCalcs !== false;
 
 				case "row":
-					return !(
-						this.table.options.dataTree &&
-						this.config.dataTree === false &&
-						row.modules.dataTree.parent
-					);
+					return !(this.table.options.dataTree && this.config.dataTree === false && row.modules.dataTree.parent);
 			}
 
 			return true;
@@ -9075,98 +8362,64 @@ class Export extends Module {
 			var exportCols = [];
 			var indent = 0;
 
-			switch (row.type) {
+			switch(row.type){
 				case "group":
 					indent = row.level;
-					exportCols.push(
-						new ExportColumn(row.key, row.getComponent(), columns.length, 1)
-					);
+					exportCols.push(new ExportColumn(row.key, row.getComponent(), columns.length, 1));
 					break;
 
-				case "calc":
-				case "row":
+				case "calc" :
+				case "row" :
 					columns.forEach((col) => {
-						exportCols.push(
-							new ExportColumn(col._column.getFieldValue(rowData), col, 1, 1)
-						);
+						exportCols.push(new ExportColumn(col._column.getFieldValue(rowData), col, 1, 1));
 					});
 
-					if (this.table.options.dataTree && this.config.dataTree !== false) {
+					if(this.table.options.dataTree && this.config.dataTree !== false){
 						indent = row.modules.dataTree.index;
 					}
 					break;
 			}
 
-			exportRows.push(
-				new ExportRow(row.type, exportCols, row.getComponent(), indent)
-			);
+			exportRows.push(new ExportRow(row.type, exportCols, row.getComponent(), indent));
 		});
 
 		return exportRows;
 	}
 
-	generateTableElement(list) {
+	generateTableElement(list){
 		var table = document.createElement("table"),
-			headerEl = document.createElement("thead"),
-			bodyEl = document.createElement("tbody"),
-			styles = this.lookupTableStyles(),
-			rowFormatter =
-				this.table.options[
-					"rowFormatter" +
-						(this.colVisProp.charAt(0).toUpperCase() + this.colVisProp.slice(1))
-				],
-			setup = {};
+		headerEl = document.createElement("thead"),
+		bodyEl = document.createElement("tbody"),
+		styles = this.lookupTableStyles(),
+		rowFormatter = this.table.options["rowFormatter" + (this.colVisProp.charAt(0).toUpperCase() + this.colVisProp.slice(1))],
+		setup = {};
 
-		setup.rowFormatter =
-			rowFormatter !== null ? rowFormatter : this.table.options.rowFormatter;
+		setup.rowFormatter = rowFormatter !== null ? rowFormatter : this.table.options.rowFormatter;
 
-		if (
-			this.table.options.dataTree &&
-			this.config.dataTree !== false &&
-			this.table.modExists("columnCalcs")
-		) {
+		if(this.table.options.dataTree &&this.config.dataTree !== false && this.table.modExists("columnCalcs")){
 			setup.treeElementField = this.table.modules.dataTree.elementField;
 		}
 
 		//assign group header formatter
-		setup.groupHeader =
-			this.table.options[
-				"groupHeader" +
-					(this.colVisProp.charAt(0).toUpperCase() + this.colVisProp.slice(1))
-			];
+		setup.groupHeader = this.table.options["groupHeader" + (this.colVisProp.charAt(0).toUpperCase() + this.colVisProp.slice(1))];
 
-		if (setup.groupHeader && !Array.isArray(setup.groupHeader)) {
+		if(setup.groupHeader && !Array.isArray(setup.groupHeader)){
 			setup.groupHeader = [setup.groupHeader];
 		}
 
 		table.classList.add("tabulator-print-table");
 
-		this.mapElementStyles(
-			this.table.columnManager.getHeadersElement(),
-			headerEl,
-			[
-				"border-top",
-				"border-left",
-				"border-right",
-				"border-bottom",
-				"background-color",
-				"color",
-				"font-weight",
-				"font-family",
-				"font-size",
-			]
-		);
+		this.mapElementStyles(this.table.columnManager.getHeadersElement(), headerEl, ["border-top", "border-left", "border-right", "border-bottom", "background-color", "color", "font-weight", "font-family", "font-size"]);
 
-		if (list.length > 1000) {
-			console.warn(
-				"It may take a long time to render an HTML table with more than 1000 rows"
-			);
+
+		if(list.length > 1000){
+			console.warn("It may take a long time to render an HTML table with more than 1000 rows");
 		}
 
 		list.forEach((row, i) => {
 			let rowEl;
 
-			switch (row.type) {
+			switch(row.type){
 				case "header":
 					headerEl.appendChild(this.generateHeaderElement(row, setup, styles));
 					break;
@@ -9182,64 +8435,36 @@ class Export extends Module {
 				case "row":
 					rowEl = this.generateRowElement(row, setup, styles);
 
-					this.mapElementStyles(
-						i % 2 && styles.evenRow ? styles.evenRow : styles.oddRow,
-						rowEl,
-						[
-							"border-top",
-							"border-left",
-							"border-right",
-							"border-bottom",
-							"color",
-							"font-weight",
-							"font-family",
-							"font-size",
-							"background-color",
-						]
-					);
+					this.mapElementStyles(((i % 2) && styles.evenRow) ? styles.evenRow : styles.oddRow, rowEl, ["border-top", "border-left", "border-right", "border-bottom", "color", "font-weight", "font-family", "font-size", "background-color"]);
 					bodyEl.appendChild(rowEl);
 					break;
 			}
 		});
 
-		if (headerEl.innerHTML) {
+		if(headerEl.innerHTML){
 			table.appendChild(headerEl);
 		}
 
 		table.appendChild(bodyEl);
 
-		this.mapElementStyles(this.table.element, table, [
-			"border-top",
-			"border-left",
-			"border-right",
-			"border-bottom",
-		]);
+
+		this.mapElementStyles(this.table.element, table, ["border-top", "border-left", "border-right", "border-bottom"]);
 		return table;
 	}
 
-	lookupTableStyles() {
+	lookupTableStyles(){
 		var styles = {};
 
 		//lookup row styles
-		if (this.cloneTableStyle && window.getComputedStyle) {
-			styles.oddRow = this.table.element.querySelector(
-				".tabulator-row-odd:not(.tabulator-group):not(.tabulator-calcs)"
-			);
-			styles.evenRow = this.table.element.querySelector(
-				".tabulator-row-even:not(.tabulator-group):not(.tabulator-calcs)"
-			);
-			styles.calcRow = this.table.element.querySelector(
-				".tabulator-row.tabulator-calcs"
-			);
-			styles.firstRow = this.table.element.querySelector(
-				".tabulator-row:not(.tabulator-group):not(.tabulator-calcs)"
-			);
-			styles.firstGroup =
-				this.table.element.getElementsByClassName("tabulator-group")[0];
+		if(this.cloneTableStyle && window.getComputedStyle){
+			styles.oddRow = this.table.element.querySelector(".tabulator-row-odd:not(.tabulator-group):not(.tabulator-calcs)");
+			styles.evenRow = this.table.element.querySelector(".tabulator-row-even:not(.tabulator-group):not(.tabulator-calcs)");
+			styles.calcRow = this.table.element.querySelector(".tabulator-row.tabulator-calcs");
+			styles.firstRow = this.table.element.querySelector(".tabulator-row:not(.tabulator-group):not(.tabulator-calcs)");
+			styles.firstGroup = this.table.element.getElementsByClassName("tabulator-group")[0];
 
-			if (styles.firstRow) {
-				styles.styleCells =
-					styles.firstRow.getElementsByClassName("tabulator-cell");
+			if(styles.firstRow){
+				styles.styleCells = styles.firstRow.getElementsByClassName("tabulator-cell");
 				styles.firstCell = styles.styleCells[0];
 				styles.lastCell = styles.styleCells[styles.styleCells.length - 1];
 			}
@@ -9248,65 +8473,40 @@ class Export extends Module {
 		return styles;
 	}
 
-	generateHeaderElement(row, setup, styles) {
+	generateHeaderElement(row, setup, styles){
 		var rowEl = document.createElement("tr");
 
 		row.columns.forEach((column) => {
-			if (column) {
+			if(column){
 				var cellEl = document.createElement("th");
-				var classNames = column.component._column.definition.cssClass
-					? column.component._column.definition.cssClass.split(" ")
-					: [];
+				var classNames = column.component._column.definition.cssClass ? column.component._column.definition.cssClass.split(" ") : [];
 
 				cellEl.colSpan = column.width;
 				cellEl.rowSpan = column.height;
 
 				cellEl.innerHTML = column.value;
 
-				if (this.cloneTableStyle) {
+				if(this.cloneTableStyle){
 					cellEl.style.boxSizing = "border-box";
 				}
 
-				classNames.forEach(function (className) {
+				classNames.forEach(function(className) {
 					cellEl.classList.add(className);
 				});
 
-				this.mapElementStyles(column.component.getElement(), cellEl, [
-					"text-align",
-					"border-top",
-					"border-left",
-					"border-right",
-					"border-bottom",
-					"background-color",
-					"color",
-					"font-weight",
-					"font-family",
-					"font-size",
-				]);
-				this.mapElementStyles(column.component._column.contentElement, cellEl, [
-					"padding-top",
-					"padding-left",
-					"padding-right",
-					"padding-bottom",
-				]);
+				this.mapElementStyles(column.component.getElement(), cellEl, ["text-align", "border-top", "border-left", "border-right", "border-bottom", "background-color", "color", "font-weight", "font-family", "font-size"]);
+				this.mapElementStyles(column.component._column.contentElement, cellEl, ["padding-top", "padding-left", "padding-right", "padding-bottom"]);
 
-				if (column.component._column.visible) {
-					this.mapElementStyles(column.component.getElement(), cellEl, [
-						"width",
-					]);
-				} else {
-					if (column.component._column.definition.width) {
-						cellEl.style.width =
-							column.component._column.definition.width + "px";
+				if(column.component._column.visible){
+					this.mapElementStyles(column.component.getElement(), cellEl, ["width"]);
+				}else {
+					if(column.component._column.definition.width){
+						cellEl.style.width = column.component._column.definition.width + "px";
 					}
 				}
 
-				if (column.component._column.parent) {
-					this.mapElementStyles(
-						column.component._column.parent.groupElement,
-						cellEl,
-						["border-top"]
-					);
+				if(column.component._column.parent){
+					this.mapElementStyles(column.component._column.parent.groupElement, cellEl, ["border-top"]);
 				}
 
 				rowEl.appendChild(cellEl);
@@ -9316,28 +8516,19 @@ class Export extends Module {
 		return rowEl;
 	}
 
-	generateGroupElement(row, setup, styles) {
+	generateGroupElement(row, setup, styles){
+
 		var rowEl = document.createElement("tr"),
-			cellEl = document.createElement("td"),
-			group = row.columns[0];
+		cellEl = document.createElement("td"),
+		group = row.columns[0];
 
 		rowEl.classList.add("tabulator-print-table-row");
 
-		if (setup.groupHeader && setup.groupHeader[row.indent]) {
-			group.value = setup.groupHeader[row.indent](
-				group.value,
-				row.component._group.getRowCount(),
-				row.component._group.getData(),
-				row.component
-			);
-		} else {
-			if (setup.groupHeader !== false) {
-				group.value = row.component._group.generator(
-					group.value,
-					row.component._group.getRowCount(),
-					row.component._group.getData(),
-					row.component
-				);
+		if(setup.groupHeader && setup.groupHeader[row.indent]){
+			group.value = setup.groupHeader[row.indent](group.value, row.component._group.getRowCount(), row.component._group.getData(), row.component);
+		}else {
+			if(setup.groupHeader !== false){
+				group.value = row.component._group.generator(group.value, row.component._group.getRowCount(), row.component._group.getData(), row.component);
 			}
 		}
 
@@ -9347,109 +8538,76 @@ class Export extends Module {
 		rowEl.classList.add("tabulator-print-table-group");
 		rowEl.classList.add("tabulator-group-level-" + row.indent);
 
-		if (group.component.isVisible()) {
+		if(group.component.isVisible()){
 			rowEl.classList.add("tabulator-group-visible");
 		}
 
-		this.mapElementStyles(styles.firstGroup, rowEl, [
-			"border-top",
-			"border-left",
-			"border-right",
-			"border-bottom",
-			"color",
-			"font-weight",
-			"font-family",
-			"font-size",
-			"background-color",
-		]);
-		this.mapElementStyles(styles.firstGroup, cellEl, [
-			"padding-top",
-			"padding-left",
-			"padding-right",
-			"padding-bottom",
-		]);
+		this.mapElementStyles(styles.firstGroup, rowEl, ["border-top", "border-left", "border-right", "border-bottom", "color", "font-weight", "font-family", "font-size", "background-color"]);
+		this.mapElementStyles(styles.firstGroup, cellEl, ["padding-top", "padding-left", "padding-right", "padding-bottom"]);
 
 		rowEl.appendChild(cellEl);
 
 		return rowEl;
 	}
 
-	generateCalcElement(row, setup, styles) {
+	generateCalcElement(row, setup, styles){
 		var rowEl = this.generateRowElement(row, setup, styles);
 
 		rowEl.classList.add("tabulator-print-table-calcs");
-		this.mapElementStyles(styles.calcRow, rowEl, [
-			"border-top",
-			"border-left",
-			"border-right",
-			"border-bottom",
-			"color",
-			"font-weight",
-			"font-family",
-			"font-size",
-			"background-color",
-		]);
+		this.mapElementStyles(styles.calcRow, rowEl, ["border-top", "border-left", "border-right", "border-bottom", "color", "font-weight", "font-family", "font-size", "background-color"]);
 
 		return rowEl;
 	}
 
-	generateRowElement(row, setup, styles) {
+	generateRowElement(row, setup, styles){
 		var rowEl = document.createElement("tr");
 
 		rowEl.classList.add("tabulator-print-table-row");
 
 		row.columns.forEach((col, i) => {
-			if (col) {
+			if(col){
 				var cellEl = document.createElement("td"),
-					column = col.component._column,
-					index = this.table.columnManager.findColumnIndex(column),
-					value = col.value,
-					cellStyle;
+				column = col.component._column,
+				index = this.table.columnManager.findColumnIndex(column),
+				value = col.value,
+				cellStyle;
 
 				var cellWrapper = {
-					modules: {},
-					getValue: function () {
+					modules:{},
+					getValue:function(){
 						return value;
 					},
-					getField: function () {
+					getField:function(){
 						return column.definition.field;
 					},
-					getElement: function () {
+					getElement:function(){
 						return cellEl;
 					},
-					getColumn: function () {
+					getColumn:function(){
 						return column.getComponent();
 					},
-					getData: function () {
+					getData:function(){
 						return row.component.getData();
 					},
-					getRow: function () {
+					getRow:function(){
 						return row.component;
 					},
-					getComponent: function () {
+					getComponent:function(){
 						return cellWrapper;
 					},
-					column: column,
+					column:column,
 				};
 
-				var classNames = column.definition.cssClass
-					? column.definition.cssClass.split(" ")
-					: [];
+				var classNames = column.definition.cssClass ? column.definition.cssClass.split(" ") : [];
 
-				classNames.forEach(function (className) {
+				classNames.forEach(function(className) {
 					cellEl.classList.add(className);
 				});
 
-				if (
-					this.table.modExists("format") &&
-					this.config.formatCells !== false
-				) {
-					value = this.table.modules.format.formatExportValue(
-						cellWrapper,
-						this.colVisProp
-					);
-				} else {
-					switch (typeof value) {
+				if(this.table.modExists("format") && this.config.formatCells !== false){
+					value = this.table.modules.format.formatExportValue(cellWrapper, this.colVisProp);
+				}else {
+					switch(typeof value){
 						case "object":
 							value = value !== null ? JSON.stringify(value) : "";
 							break;
@@ -9460,70 +8618,40 @@ class Export extends Module {
 					}
 				}
 
-				if (value instanceof Node) {
+				if(value instanceof Node){
 					cellEl.appendChild(value);
-				} else {
+				}else {
 					cellEl.innerHTML = value;
 				}
 
-				cellStyle =
-					styles.styleCells && styles.styleCells[index]
-						? styles.styleCells[index]
-						: styles.firstCell;
+				cellStyle = styles.styleCells && styles.styleCells[index] ? styles.styleCells[index] : styles.firstCell;
 
-				if (cellStyle) {
-					this.mapElementStyles(cellStyle, cellEl, [
-						"padding-top",
-						"padding-left",
-						"padding-right",
-						"padding-bottom",
-						"border-top",
-						"border-left",
-						"border-right",
-						"border-bottom",
-						"color",
-						"font-weight",
-						"font-family",
-						"font-size",
-						"text-align",
-					]);
+				if(cellStyle){
+					this.mapElementStyles(cellStyle, cellEl, ["padding-top", "padding-left", "padding-right", "padding-bottom", "border-top", "border-left", "border-right", "border-bottom", "color", "font-weight", "font-family", "font-size", "text-align"]);
 
-					if (column.definition.align) {
+					if(column.definition.align){
 						cellEl.style.textAlign = column.definition.align;
 					}
 				}
 
-				if (this.table.options.dataTree && this.config.dataTree !== false) {
-					if (
-						(setup.treeElementField &&
-							setup.treeElementField == column.field) ||
-						(!setup.treeElementField && i == 0)
-					) {
-						if (row.component._row.modules.dataTree.controlEl) {
-							cellEl.insertBefore(
-								row.component._row.modules.dataTree.controlEl.cloneNode(true),
-								cellEl.firstChild
-							);
+				if(this.table.options.dataTree && this.config.dataTree !== false){
+					if((setup.treeElementField && setup.treeElementField == column.field) || (!setup.treeElementField && i == 0)){
+						if(row.component._row.modules.dataTree.controlEl){
+							cellEl.insertBefore(row.component._row.modules.dataTree.controlEl.cloneNode(true), cellEl.firstChild);
 						}
-						if (row.component._row.modules.dataTree.branchEl) {
-							cellEl.insertBefore(
-								row.component._row.modules.dataTree.branchEl.cloneNode(true),
-								cellEl.firstChild
-							);
+						if(row.component._row.modules.dataTree.branchEl){
+							cellEl.insertBefore(row.component._row.modules.dataTree.branchEl.cloneNode(true), cellEl.firstChild);
 						}
 					}
 				}
 
 				rowEl.appendChild(cellEl);
 
-				if (
-					cellWrapper.modules.format &&
-					cellWrapper.modules.format.renderedCallback
-				) {
+				if(cellWrapper.modules.format && cellWrapper.modules.format.renderedCallback){
 					cellWrapper.modules.format.renderedCallback();
 				}
 
-				if (setup.rowFormatter && this.config.formatCells !== false) {
+				if(setup.rowFormatter && this.config.formatCells !== false){
 					setup.rowFormatter(row.component);
 				}
 			}
@@ -9532,7 +8660,7 @@ class Export extends Module {
 		return rowEl;
 	}
 
-	generateHTMLTable(list) {
+	generateHTMLTable(list){
 		var holder = document.createElement("div");
 
 		holder.appendChild(this.generateTableElement(list));
@@ -9540,41 +8668,37 @@ class Export extends Module {
 		return holder.innerHTML;
 	}
 
-	getHtml(visible, style, config, colVisProp) {
-		var list = this.generateExportList(
-			config || this.table.options.htmlOutputConfig,
-			style,
-			visible,
-			colVisProp || "htmlOutput"
-		);
+	getHtml(visible, style, config, colVisProp){
+		var list = this.generateExportList(config || this.table.options.htmlOutputConfig, style, visible, colVisProp || "htmlOutput");
 
 		return this.generateHTMLTable(list);
 	}
 
-	mapElementStyles(from, to, props) {
-		if (this.cloneTableStyle && from && to) {
+	mapElementStyles(from, to, props){
+		if(this.cloneTableStyle && from && to){
+
 			var lookup = {
-				"background-color": "backgroundColor",
-				color: "fontColor",
-				width: "width",
-				"font-weight": "fontWeight",
-				"font-family": "fontFamily",
-				"font-size": "fontSize",
-				"text-align": "textAlign",
-				"border-top": "borderTop",
-				"border-left": "borderLeft",
-				"border-right": "borderRight",
-				"border-bottom": "borderBottom",
-				"padding-top": "paddingTop",
-				"padding-left": "paddingLeft",
-				"padding-right": "paddingRight",
-				"padding-bottom": "paddingBottom",
+				"background-color" : "backgroundColor",
+				"color" : "fontColor",
+				"width" : "width",
+				"font-weight" : "fontWeight",
+				"font-family" : "fontFamily",
+				"font-size" : "fontSize",
+				"text-align" : "textAlign",
+				"border-top" : "borderTop",
+				"border-left" : "borderLeft",
+				"border-right" : "borderRight",
+				"border-bottom" : "borderBottom",
+				"padding-top" : "paddingTop",
+				"padding-left" : "paddingLeft",
+				"padding-right" : "paddingRight",
+				"padding-bottom" : "paddingBottom",
 			};
 
-			if (window.getComputedStyle) {
+			if(window.getComputedStyle){
 				var fromStyle = window.getComputedStyle(from);
 
-				props.forEach(function (prop) {
+				props.forEach(function(prop){
 					to.style[lookup[prop]] = fromStyle.getPropertyValue(prop);
 				});
 			}
@@ -9585,38 +8709,40 @@ class Export extends Module {
 Export.moduleName = "export";
 
 var defaultFilters = {
+
 	//equal to
-	"=": function (filterVal, rowVal, rowData, filterParams) {
+	"=":function(filterVal, rowVal, rowData, filterParams){
 		return rowVal == filterVal ? true : false;
 	},
 
 	//less than
-	"<": function (filterVal, rowVal, rowData, filterParams) {
+	"<":function(filterVal, rowVal, rowData, filterParams){
 		return rowVal < filterVal ? true : false;
 	},
 
 	//less than or equal to
-	"<=": function (filterVal, rowVal, rowData, filterParams) {
+	"<=":function(filterVal, rowVal, rowData, filterParams){
 		return rowVal <= filterVal ? true : false;
 	},
 
 	//greater than
-	">": function (filterVal, rowVal, rowData, filterParams) {
+	">":function(filterVal, rowVal, rowData, filterParams){
 		return rowVal > filterVal ? true : false;
 	},
 
 	//greater than or equal to
-	">=": function (filterVal, rowVal, rowData, filterParams) {
+	">=":function(filterVal, rowVal, rowData, filterParams){
 		return rowVal >= filterVal ? true : false;
 	},
 
 	//not equal to
-	"!=": function (filterVal, rowVal, rowData, filterParams) {
+	"!=":function(filterVal, rowVal, rowData, filterParams){
 		return rowVal != filterVal ? true : false;
 	},
 
-	regex: function (filterVal, rowVal, rowData, filterParams) {
-		if (typeof filterVal == "string") {
+	"regex":function(filterVal, rowVal, rowData, filterParams){
+
+		if(typeof filterVal == "string"){
 			filterVal = new RegExp(filterVal);
 		}
 
@@ -9624,84 +8750,76 @@ var defaultFilters = {
 	},
 
 	//contains the string
-	like: function (filterVal, rowVal, rowData, filterParams) {
-		if (filterVal === null || typeof filterVal === "undefined") {
+	"like":function(filterVal, rowVal, rowData, filterParams){
+		if(filterVal === null || typeof filterVal === "undefined"){
 			return rowVal === filterVal ? true : false;
-		} else {
-			if (typeof rowVal !== "undefined" && rowVal !== null) {
-				return (
-					String(rowVal).toLowerCase().indexOf(filterVal.toLowerCase()) > -1
-				);
-			} else {
+		}else {
+			if(typeof rowVal !== 'undefined' && rowVal !== null){
+				return String(rowVal).toLowerCase().indexOf(filterVal.toLowerCase()) > -1;
+			}
+			else {
 				return false;
 			}
 		}
 	},
 
 	//contains the keywords
-	keywords: function (filterVal, rowVal, rowData, filterParams) {
-		var keywords = filterVal
-				.toLowerCase()
-				.split(
-					typeof filterParams.separator === "undefined"
-						? " "
-						: filterParams.separator
-				),
-			value = String(
-				rowVal === null || typeof rowVal === "undefined" ? "" : rowVal
-			).toLowerCase(),
-			matches = [];
+	"keywords":function(filterVal, rowVal, rowData, filterParams){
+		var keywords = filterVal.toLowerCase().split(typeof filterParams.separator === "undefined" ? " " : filterParams.separator),
+		value = String(rowVal === null || typeof rowVal === "undefined" ? "" : rowVal).toLowerCase(),
+		matches = [];
 
-		keywords.forEach((keyword) => {
-			if (value.includes(keyword)) {
+		keywords.forEach((keyword) =>{
+			if(value.includes(keyword)){
 				matches.push(true);
 			}
 		});
 
-		return filterParams.matchAll
-			? matches.length === keywords.length
-			: !!matches.length;
+		return filterParams.matchAll ? matches.length === keywords.length : !!matches.length;
 	},
 
 	//starts with the string
-	starts: function (filterVal, rowVal, rowData, filterParams) {
-		if (filterVal === null || typeof filterVal === "undefined") {
+	"starts":function(filterVal, rowVal, rowData, filterParams){
+		if(filterVal === null || typeof filterVal === "undefined"){
 			return rowVal === filterVal ? true : false;
-		} else {
-			if (typeof rowVal !== "undefined" && rowVal !== null) {
+		}else {
+			if(typeof rowVal !== 'undefined' && rowVal !== null){
 				return String(rowVal).toLowerCase().startsWith(filterVal.toLowerCase());
-			} else {
+			}
+			else {
 				return false;
 			}
 		}
 	},
 
 	//ends with the string
-	ends: function (filterVal, rowVal, rowData, filterParams) {
-		if (filterVal === null || typeof filterVal === "undefined") {
+	"ends":function(filterVal, rowVal, rowData, filterParams){
+		if(filterVal === null || typeof filterVal === "undefined"){
 			return rowVal === filterVal ? true : false;
-		} else {
-			if (typeof rowVal !== "undefined" && rowVal !== null) {
+		}else {
+			if(typeof rowVal !== 'undefined' && rowVal !== null){
 				return String(rowVal).toLowerCase().endsWith(filterVal.toLowerCase());
-			} else {
+			}
+			else {
 				return false;
 			}
 		}
 	},
 
 	//in array
-	in: function (filterVal, rowVal, rowData, filterParams) {
-		if (Array.isArray(filterVal)) {
+	"in":function(filterVal, rowVal, rowData, filterParams){
+		if(Array.isArray(filterVal)){
 			return filterVal.length ? filterVal.indexOf(rowVal) > -1 : true;
-		} else {
+		}else {
 			console.warn("Filter Error - filter value is not an array:", filterVal);
 			return false;
 		}
 	},
 };
 
-class Filter extends Module {
-	constructor(table) {
+class Filter extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.filterList = []; //hold filter list
@@ -9732,95 +8850,50 @@ class Filter extends Module {
 		this.registerTableFunction("searchData", this.searchData.bind(this));
 
 		this.registerTableFunction("setFilter", this.userSetFilter.bind(this));
-		this.registerTableFunction(
-			"refreshFilter",
-			this.userRefreshFilter.bind(this)
-		);
+		this.registerTableFunction("refreshFilter", this.userRefreshFilter.bind(this));
 		this.registerTableFunction("addFilter", this.userAddFilter.bind(this));
 		this.registerTableFunction("getFilters", this.getFilters.bind(this));
-		this.registerTableFunction(
-			"setHeaderFilterFocus",
-			this.userSetHeaderFilterFocus.bind(this)
-		);
-		this.registerTableFunction(
-			"getHeaderFilterValue",
-			this.userGetHeaderFilterValue.bind(this)
-		);
-		this.registerTableFunction(
-			"setHeaderFilterValue",
-			this.userSetHeaderFilterValue.bind(this)
-		);
-		this.registerTableFunction(
-			"getHeaderFilters",
-			this.getHeaderFilters.bind(this)
-		);
-		this.registerTableFunction(
-			"removeFilter",
-			this.userRemoveFilter.bind(this)
-		);
+		this.registerTableFunction("setHeaderFilterFocus", this.userSetHeaderFilterFocus.bind(this));
+		this.registerTableFunction("getHeaderFilterValue", this.userGetHeaderFilterValue.bind(this));
+		this.registerTableFunction("setHeaderFilterValue", this.userSetHeaderFilterValue.bind(this));
+		this.registerTableFunction("getHeaderFilters", this.getHeaderFilters.bind(this));
+		this.registerTableFunction("removeFilter", this.userRemoveFilter.bind(this));
 		this.registerTableFunction("clearFilter", this.userClearFilter.bind(this));
-		this.registerTableFunction(
-			"clearHeaderFilter",
-			this.userClearHeaderFilter.bind(this)
-		);
+		this.registerTableFunction("clearHeaderFilter", this.userClearHeaderFilter.bind(this));
 
-		this.registerComponentFunction(
-			"column",
-			"headerFilterFocus",
-			this.setHeaderFilterFocus.bind(this)
-		);
-		this.registerComponentFunction(
-			"column",
-			"reloadHeaderFilter",
-			this.reloadHeaderFilter.bind(this)
-		);
-		this.registerComponentFunction(
-			"column",
-			"getHeaderFilterValue",
-			this.getHeaderFilterValue.bind(this)
-		);
-		this.registerComponentFunction(
-			"column",
-			"setHeaderFilterValue",
-			this.setHeaderFilterValue.bind(this)
-		);
+		this.registerComponentFunction("column", "headerFilterFocus", this.setHeaderFilterFocus.bind(this));
+		this.registerComponentFunction("column", "reloadHeaderFilter", this.reloadHeaderFilter.bind(this));
+		this.registerComponentFunction("column", "getHeaderFilterValue", this.getHeaderFilterValue.bind(this));
+		this.registerComponentFunction("column", "setHeaderFilterValue", this.setHeaderFilterValue.bind(this));
 	}
 
-	initialize() {
+	initialize(){
 		this.subscribe("column-init", this.initializeColumnHeaderFilter.bind(this));
-		this.subscribe(
-			"column-width-fit-before",
-			this.hideHeaderFilterElements.bind(this)
-		);
-		this.subscribe(
-			"column-width-fit-after",
-			this.showHeaderFilterElements.bind(this)
-		);
+		this.subscribe("column-width-fit-before", this.hideHeaderFilterElements.bind(this));
+		this.subscribe("column-width-fit-after", this.showHeaderFilterElements.bind(this));
 		this.subscribe("table-built", this.tableBuilt.bind(this));
 
-		if (this.table.options.filterMode === "remote") {
+		if(this.table.options.filterMode === "remote"){
 			this.subscribe("data-params", this.remoteFilterParams.bind(this));
 		}
 
 		this.registerDataHandler(this.filter.bind(this), 10);
 	}
 
-	tableBuilt() {
-		if (this.table.options.initialFilter) {
+	tableBuilt(){
+		if(this.table.options.initialFilter){
 			this.setFilter(this.table.options.initialFilter);
 		}
 
-		if (this.table.options.initialHeaderFilter) {
+		if(this.table.options.initialHeaderFilter){
 			this.table.options.initialHeaderFilter.forEach((item) => {
+
 				var column = this.table.columnManager.findColumn(item.field);
 
-				if (column) {
+				if(column){
 					this.setHeaderFilterValue(column, item.value);
-				} else {
-					console.warn(
-						"Column Filter Error - No matching column found:",
-						item.field
-					);
+				}else {
+					console.warn("Column Filter Error - No matching column found:", item.field);
 					return false;
 				}
 			});
@@ -9829,7 +8902,7 @@ class Filter extends Module {
 		this.tableInitialized = true;
 	}
 
-	remoteFilterParams(data, config, silent, params) {
+	remoteFilterParams(data, config, silent, params){
 		params.filter = this.getFilters(true, true);
 		return params;
 	}
@@ -9839,32 +8912,29 @@ class Filter extends Module {
 	///////////////////////////////////
 
 	//set standard filters
-	userSetFilter(field, type, value, params) {
+	userSetFilter(field, type, value, params){
 		this.setFilter(field, type, value, params);
 		this.refreshFilter();
 	}
 
 	//set standard filters
-	userRefreshFilter() {
+	userRefreshFilter(){
 		this.refreshFilter();
 	}
 
 	//add filter to array
-	userAddFilter(field, type, value, params) {
+	userAddFilter(field, type, value, params){
 		this.addFilter(field, type, value, params);
 		this.refreshFilter();
 	}
 
-	userSetHeaderFilterFocus(field) {
+	userSetHeaderFilterFocus(field){
 		var column = this.table.columnManager.findColumn(field);
 
-		if (column) {
+		if(column){
 			this.setHeaderFilterFocus(column);
-		} else {
-			console.warn(
-				"Column Filter Focus Error - No matching column found:",
-				field
-			);
+		}else {
+			console.warn("Column Filter Focus Error - No matching column found:", field);
 			return false;
 		}
 	}
@@ -9872,49 +8942,50 @@ class Filter extends Module {
 	userGetHeaderFilterValue(field) {
 		var column = this.table.columnManager.findColumn(field);
 
-		if (column) {
+		if(column){
 			return this.getHeaderFilterValue(column);
-		} else {
+		}else {
 			console.warn("Column Filter Error - No matching column found:", field);
 		}
 	}
 
-	userSetHeaderFilterValue(field, value) {
+	userSetHeaderFilterValue(field, value){
 		var column = this.table.columnManager.findColumn(field);
 
-		if (column) {
+		if(column){
 			this.setHeaderFilterValue(column, value);
-		} else {
+		}else {
 			console.warn("Column Filter Error - No matching column found:", field);
 			return false;
 		}
 	}
 
 	//remove filter from array
-	userRemoveFilter(field, type, value) {
+	userRemoveFilter(field, type, value){
 		this.removeFilter(field, type, value);
 		this.refreshFilter();
 	}
 
 	//clear filters
-	userClearFilter(all) {
+	userClearFilter(all){
 		this.clearFilter(all);
 		this.refreshFilter();
 	}
 
 	//clear header filters
-	userClearHeaderFilter() {
+	userClearHeaderFilter(){
 		this.clearHeaderFilter();
 		this.refreshFilter();
 	}
 
+
 	//search for specific row components
-	searchRows(field, type, value) {
+	searchRows(field, type, value){
 		return this.search("rows", field, type, value);
 	}
 
 	//search for specific data
-	searchData(field, type, value) {
+	searchData(field, type, value){
 		return this.search("data", field, type, value);
 	}
 
@@ -9922,15 +8993,13 @@ class Filter extends Module {
 	///////// Internal Logic //////////
 	///////////////////////////////////
 
-	initializeColumnHeaderFilter(column) {
+	initializeColumnHeaderFilter(column){
 		var def = column.definition;
 
-		if (def.headerFilter) {
-			if (typeof def.headerFilterPlaceholder !== "undefined" && def.field) {
-				this.module("localize").setHeaderFilterColumnPlaceholder(
-					def.field,
-					def.headerFilterPlaceholder
-				);
+		if(def.headerFilter){
+
+			if(typeof def.headerFilterPlaceholder !== "undefined" && def.field){
+				this.module("localize").setHeaderFilterColumnPlaceholder(def.field, def.headerFilterPlaceholder);
 			}
 
 			this.initializeColumn(column);
@@ -9938,94 +9007,64 @@ class Filter extends Module {
 	}
 
 	//initialize column header filter
-	initializeColumn(column, value) {
+	initializeColumn(column, value){
 		var self = this,
-			field = column.getField();
+		field = column.getField();
 
 		//handle successfully value change
-		function success(value) {
-			var filterType =
-					(column.modules.filter.tagType == "input" &&
-						column.modules.filter.attrType == "text") ||
-					column.modules.filter.tagType == "textarea"
-						? "partial"
-						: "match",
-				type = "",
-				filterChangeCheck = "",
-				filterFunc;
+		function success(value){
+			var filterType = (column.modules.filter.tagType == "input" && column.modules.filter.attrType == "text") || column.modules.filter.tagType == "textarea" ? "partial" : "match",
+			type = "",
+			filterChangeCheck = "",
+			filterFunc;
 
-			if (
-				typeof column.modules.filter.prevSuccess === "undefined" ||
-				column.modules.filter.prevSuccess !== value
-			) {
+			if(typeof column.modules.filter.prevSuccess === "undefined" || column.modules.filter.prevSuccess !== value){
+
 				column.modules.filter.prevSuccess = value;
 
-				if (!column.modules.filter.emptyFunc(value)) {
+				if(!column.modules.filter.emptyFunc(value)){
 					column.modules.filter.value = value;
 
-					switch (typeof column.definition.headerFilterFunc) {
+					switch(typeof column.definition.headerFilterFunc){
 						case "string":
-							if (Filter.filters[column.definition.headerFilterFunc]) {
+							if(Filter.filters[column.definition.headerFilterFunc]){
 								type = column.definition.headerFilterFunc;
-								filterFunc = function (data) {
+								filterFunc = function(data){
 									var params = column.definition.headerFilterFuncParams || {};
 									var fieldVal = column.getFieldValue(data);
 
-									params =
-										typeof params === "function"
-											? params(value, fieldVal, data)
-											: params;
+									params = typeof params === "function" ? params(value, fieldVal, data) : params;
 
-									return Filter.filters[column.definition.headerFilterFunc](
-										value,
-										fieldVal,
-										data,
-										params
-									);
+									return Filter.filters[column.definition.headerFilterFunc](value, fieldVal, data, params);
 								};
-							} else {
-								console.warn(
-									"Header Filter Error - Matching filter function not found: ",
-									column.definition.headerFilterFunc
-								);
+							}else {
+								console.warn("Header Filter Error - Matching filter function not found: ", column.definition.headerFilterFunc);
 							}
 							break;
 
 						case "function":
-							filterFunc = function (data) {
+							filterFunc = function(data){
 								var params = column.definition.headerFilterFuncParams || {};
 								var fieldVal = column.getFieldValue(data);
 
-								params =
-									typeof params === "function"
-										? params(value, fieldVal, data)
-										: params;
+								params = typeof params === "function" ? params(value, fieldVal, data) : params;
 
-								return column.definition.headerFilterFunc(
-									value,
-									fieldVal,
-									data,
-									params
-								);
+								return column.definition.headerFilterFunc(value, fieldVal, data, params);
 							};
 
 							type = filterFunc;
 							break;
 					}
 
-					if (!filterFunc) {
-						switch (filterType) {
+					if(!filterFunc){
+						switch(filterType){
 							case "partial":
-								filterFunc = function (data) {
+								filterFunc = function(data){
 									var colVal = column.getFieldValue(data);
 
-									if (typeof colVal !== "undefined" && colVal !== null) {
-										return (
-											String(colVal)
-												.toLowerCase()
-												.indexOf(String(value).toLowerCase()) > -1
-										);
-									} else {
+									if(typeof colVal !== 'undefined' && colVal !== null){
+										return String(colVal).toLowerCase().indexOf(String(value).toLowerCase()) > -1;
+									}else {
 										return false;
 									}
 								};
@@ -10033,19 +9072,15 @@ class Filter extends Module {
 								break;
 
 							default:
-								filterFunc = function (data) {
+								filterFunc = function(data){
 									return column.getFieldValue(data) == value;
 								};
 								type = "=";
 						}
 					}
 
-					self.headerFilters[field] = {
-						value: value,
-						func: filterFunc,
-						type: type,
-					};
-				} else {
+					self.headerFilters[field] = {value:value, func:filterFunc, type:type};
+				}else {
 					delete self.headerFilters[field];
 				}
 
@@ -10053,7 +9088,7 @@ class Filter extends Module {
 
 				filterChangeCheck = JSON.stringify(self.headerFilters);
 
-				if (self.prevHeaderFilterChangeCheck !== filterChangeCheck) {
+				if(self.prevHeaderFilterChangeCheck !== filterChangeCheck){
 					self.prevHeaderFilterChangeCheck = filterChangeCheck;
 
 					self.trackChanges();
@@ -10065,73 +9100,53 @@ class Filter extends Module {
 		}
 
 		column.modules.filter = {
-			success: success,
-			attrType: false,
-			tagType: false,
-			emptyFunc: false,
+			success:success,
+			attrType:false,
+			tagType:false,
+			emptyFunc:false,
 		};
 
 		this.generateHeaderFilterElement(column);
 	}
 
-	generateHeaderFilterElement(column, initialValue, reinitialize) {
+	generateHeaderFilterElement(column, initialValue, reinitialize){
 		var self = this,
-			success = column.modules.filter.success,
-			field = column.getField(),
-			filterElement,
-			editor,
-			editorElement,
-			cellWrapper,
-			typingTimer,
-			searchTrigger,
-			params;
+		success = column.modules.filter.success,
+		field = column.getField(),
+		filterElement, editor, editorElement, cellWrapper, typingTimer, searchTrigger, params;
 
 		column.modules.filter.value = initialValue;
 
 		//handle aborted edit
-		function cancel() {}
+		function cancel(){}
 
-		if (
-			column.modules.filter.headerElement &&
-			column.modules.filter.headerElement.parentNode
-		) {
-			column.contentElement.removeChild(
-				column.modules.filter.headerElement.parentNode
-			);
+		if(column.modules.filter.headerElement && column.modules.filter.headerElement.parentNode){
+			column.contentElement.removeChild(column.modules.filter.headerElement.parentNode);
 		}
 
-		if (field) {
+		if(field){
+
 			//set empty value function
-			column.modules.filter.emptyFunc =
-				column.definition.headerFilterEmptyCheck ||
-				function (value) {
-					return !value && value !== 0;
-				};
+			column.modules.filter.emptyFunc = column.definition.headerFilterEmptyCheck || function(value){
+				return !value && value !== 0;
+			};
 
 			filterElement = document.createElement("div");
 			filterElement.classList.add("tabulator-header-filter");
 
 			//set column editor
-			switch (typeof column.definition.headerFilter) {
+			switch(typeof column.definition.headerFilter){
 				case "string":
-					if (self.table.modules.edit.editors[column.definition.headerFilter]) {
-						editor =
-							self.table.modules.edit.editors[column.definition.headerFilter];
+					if(self.table.modules.edit.editors[column.definition.headerFilter]){
+						editor = self.table.modules.edit.editors[column.definition.headerFilter];
 
-						if (
-							(column.definition.headerFilter === "tick" ||
-								column.definition.headerFilter === "tickCross") &&
-							!column.definition.headerFilterEmptyCheck
-						) {
-							column.modules.filter.emptyFunc = function (value) {
+						if((column.definition.headerFilter === "tick" || column.definition.headerFilter === "tickCross") && !column.definition.headerFilterEmptyCheck){
+							column.modules.filter.emptyFunc = function(value){
 								return value !== true && value !== false;
 							};
 						}
-					} else {
-						console.warn(
-							"Filter Error - Cannot build header filter, No such editor found: ",
-							column.definition.editor
-						);
+					}else {
+						console.warn("Filter Error - Cannot build header filter, No such editor found: ", column.definition.editor);
 					}
 					break;
 
@@ -10140,106 +9155,74 @@ class Filter extends Module {
 					break;
 
 				case "boolean":
-					if (column.modules.edit && column.modules.edit.editor) {
+					if(column.modules.edit && column.modules.edit.editor){
 						editor = column.modules.edit.editor;
-					} else {
-						if (
-							column.definition.formatter &&
-							self.table.modules.edit.editors[column.definition.formatter]
-						) {
-							editor =
-								self.table.modules.edit.editors[column.definition.formatter];
+					}else {
+						if(column.definition.formatter && self.table.modules.edit.editors[column.definition.formatter]){
+							editor = self.table.modules.edit.editors[column.definition.formatter];
 
-							if (
-								(column.definition.formatter === "tick" ||
-									column.definition.formatter === "tickCross") &&
-								!column.definition.headerFilterEmptyCheck
-							) {
-								column.modules.filter.emptyFunc = function (value) {
+							if((column.definition.formatter === "tick" || column.definition.formatter === "tickCross") && !column.definition.headerFilterEmptyCheck){
+								column.modules.filter.emptyFunc = function(value){
 									return value !== true && value !== false;
 								};
 							}
-						} else {
+						}else {
 							editor = self.table.modules.edit.editors["input"];
 						}
 					}
 					break;
 			}
 
-			if (editor) {
+			if(editor){
+
 				cellWrapper = {
-					getValue: function () {
+					getValue:function(){
 						return typeof initialValue !== "undefined" ? initialValue : "";
 					},
-					getField: function () {
+					getField:function(){
 						return column.definition.field;
 					},
-					getElement: function () {
+					getElement:function(){
 						return filterElement;
 					},
-					getColumn: function () {
+					getColumn:function(){
 						return column.getComponent();
 					},
-					getTable: () => {
+					getTable:() => {
 						return this.table;
 					},
-					getRow: function () {
+					getRow:function(){
 						return {
-							normalizeHeight: function () {},
+							normalizeHeight:function(){
+
+							}
 						};
-					},
+					}
 				};
 
 				params = column.definition.headerFilterParams || {};
 
-				params =
-					typeof params === "function"
-						? params.call(self.table, cellWrapper)
-						: params;
+				params = typeof params === "function" ? params.call(self.table, cellWrapper) : params;
 
-				editorElement = editor.call(
-					this.table.modules.edit,
-					cellWrapper,
-					function () {},
-					success,
-					cancel,
-					params
-				);
+				editorElement = editor.call(this.table.modules.edit, cellWrapper, function(){}, success, cancel, params);
 
-				if (!editorElement) {
-					console.warn(
-						"Filter Error - Cannot add filter to " +
-							field +
-							" column, editor returned a value of false"
-					);
+				if(!editorElement){
+					console.warn("Filter Error - Cannot add filter to " + field + " column, editor returned a value of false");
 					return;
 				}
 
-				if (!(editorElement instanceof Node)) {
-					console.warn(
-						"Filter Error - Cannot add filter to " +
-							field +
-							" column, editor should return an instance of Node, the editor returned:",
-						editorElement
-					);
+				if(!(editorElement instanceof Node)){
+					console.warn("Filter Error - Cannot add filter to " + field + " column, editor should return an instance of Node, the editor returned:", editorElement);
 					return;
 				}
 
 				//set Placeholder Text
-				self.langBind(
-					"headerFilters|columns|" + column.definition.field,
-					function (value) {
-						editorElement.setAttribute(
-							"placeholder",
-							typeof value !== "undefined" && value
-								? value
-								: self.langText("headerFilters|default")
-						);
-					}
-				);
+				self.langBind("headerFilters|columns|" + column.definition.field, function(value){
+					editorElement.setAttribute("placeholder", typeof value !== "undefined" && value ? value : self.langText("headerFilters|default"));
+				});
 
 				//focus on element on click
-				editorElement.addEventListener("click", function (e) {
+				editorElement.addEventListener("click", function(e){
 					e.stopPropagation();
 					editorElement.focus();
 				});
@@ -10247,11 +9230,9 @@ class Filter extends Module {
 				editorElement.addEventListener("focus", (e) => {
 					var left = this.table.columnManager.element.scrollLeft;
 
-					var headerPos =
-						this.table.rowManager.element.scrollLeft +
-						parseInt(this.table.columnManager.element.style.marginLeft);
+					var headerPos = this.table.rowManager.element.scrollLeft + parseInt(this.table.columnManager.element.style.marginLeft);
 
-					if (left !== headerPos) {
+					if(left !== headerPos){
 						this.table.rowManager.scrollHorizontal(left);
 						this.table.columnManager.scrollHorizontal(left);
 					}
@@ -10260,59 +9241,53 @@ class Filter extends Module {
 				//live update filters as user types
 				typingTimer = false;
 
-				searchTrigger = function (e) {
-					if (typingTimer) {
+				searchTrigger = function(e){
+					if(typingTimer){
 						clearTimeout(typingTimer);
 					}
 
-					typingTimer = setTimeout(function () {
+					typingTimer = setTimeout(function(){
 						success(editorElement.value);
-					}, self.table.options.headerFilterLiveFilterDelay);
+					},self.table.options.headerFilterLiveFilterDelay);
 				};
 
 				column.modules.filter.headerElement = editorElement;
-				column.modules.filter.attrType = editorElement.hasAttribute("type")
-					? editorElement.getAttribute("type").toLowerCase()
-					: "";
+				column.modules.filter.attrType = editorElement.hasAttribute("type") ? editorElement.getAttribute("type").toLowerCase() : "" ;
 				column.modules.filter.tagType = editorElement.tagName.toLowerCase();
 
-				if (column.definition.headerFilterLiveFilter !== false) {
+				if(column.definition.headerFilterLiveFilter !== false){
+
 					if (
 						!(
-							column.definition.headerFilter === "autocomplete" ||
-							column.definition.headerFilter === "tickCross" ||
-							((column.definition.editor === "autocomplete" ||
-								column.definition.editor === "tickCross") &&
-								column.definition.headerFilter === true)
+							column.definition.headerFilter === 'autocomplete' ||
+							column.definition.headerFilter === 'tickCross' ||
+							((column.definition.editor === 'autocomplete' ||
+								column.definition.editor === 'tickCross') &&
+							column.definition.headerFilter === true)
 						)
 					) {
 						editorElement.addEventListener("keyup", searchTrigger);
 						editorElement.addEventListener("search", searchTrigger);
 
+
 						//update number filtered columns on change
-						if (column.modules.filter.attrType == "number") {
-							editorElement.addEventListener("change", function (e) {
+						if(column.modules.filter.attrType == "number"){
+							editorElement.addEventListener("change", function(e){
 								success(editorElement.value);
 							});
 						}
 
 						//change text inputs to search inputs to allow for clearing of field
-						if (
-							column.modules.filter.attrType == "text" &&
-							this.table.browser !== "ie"
-						) {
+						if(column.modules.filter.attrType == "text" && this.table.browser !== "ie"){
 							editorElement.setAttribute("type", "search");
-							// editorElement.off("change blur"); //prevent blur from triggering filter and preventing selection click
+						// editorElement.off("change blur"); //prevent blur from triggering filter and preventing selection click
 						}
+
 					}
 
 					//prevent input and select elements from propagating click to column sorters etc
-					if (
-						column.modules.filter.tagType == "input" ||
-						column.modules.filter.tagType == "select" ||
-						column.modules.filter.tagType == "textarea"
-					) {
-						editorElement.addEventListener("mousedown", function (e) {
+					if(column.modules.filter.tagType == "input" || column.modules.filter.tagType == "select" || column.modules.filter.tagType == "textarea"){
+						editorElement.addEventListener("mousedown",function(e){
 							e.stopPropagation();
 						});
 					}
@@ -10322,97 +9297,78 @@ class Filter extends Module {
 
 				column.contentElement.appendChild(filterElement);
 
-				if (!reinitialize) {
+				if(!reinitialize){
 					self.headerFilterColumns.push(column);
 				}
 			}
-		} else {
-			console.warn(
-				"Filter Error - Cannot add header filter, column has no field set:",
-				column.definition.title
-			);
+		}else {
+			console.warn("Filter Error - Cannot add header filter, column has no field set:", column.definition.title);
 		}
 	}
 
 	//hide all header filter elements (used to ensure correct column widths in "fitData" layout mode)
-	hideHeaderFilterElements() {
-		this.headerFilterColumns.forEach(function (column) {
-			if (column.modules.filter && column.modules.filter.headerElement) {
-				column.modules.filter.headerElement.style.display = "none";
+	hideHeaderFilterElements(){
+		this.headerFilterColumns.forEach(function(column){
+			if(column.modules.filter && column.modules.filter.headerElement){
+				column.modules.filter.headerElement.style.display = 'none';
 			}
 		});
 	}
 
 	//show all header filter elements (used to ensure correct column widths in "fitData" layout mode)
-	showHeaderFilterElements() {
-		this.headerFilterColumns.forEach(function (column) {
-			if (column.modules.filter && column.modules.filter.headerElement) {
-				column.modules.filter.headerElement.style.display = "";
+	showHeaderFilterElements(){
+		this.headerFilterColumns.forEach(function(column){
+			if(column.modules.filter && column.modules.filter.headerElement){
+				column.modules.filter.headerElement.style.display = '';
 			}
 		});
 	}
 
 	//programmatically set focus of header filter
-	setHeaderFilterFocus(column) {
-		if (column.modules.filter && column.modules.filter.headerElement) {
+	setHeaderFilterFocus(column){
+		if(column.modules.filter && column.modules.filter.headerElement){
 			column.modules.filter.headerElement.focus();
-		} else {
-			console.warn(
-				"Column Filter Focus Error - No header filter set on column:",
-				column.getField()
-			);
+		}else {
+			console.warn("Column Filter Focus Error - No header filter set on column:", column.getField());
 		}
 	}
 
 	//programmatically get value of header filter
-	getHeaderFilterValue(column) {
-		if (column.modules.filter && column.modules.filter.headerElement) {
+	getHeaderFilterValue(column){
+		if(column.modules.filter && column.modules.filter.headerElement){
 			return column.modules.filter.value;
 		} else {
-			console.warn(
-				"Column Filter Error - No header filter set on column:",
-				column.getField()
-			);
+			console.warn("Column Filter Error - No header filter set on column:", column.getField());
 		}
 	}
 
 	//programmatically set value of header filter
-	setHeaderFilterValue(column, value) {
-		if (column) {
-			if (column.modules.filter && column.modules.filter.headerElement) {
+	setHeaderFilterValue(column, value){
+		if (column){
+			if(column.modules.filter && column.modules.filter.headerElement){
 				this.generateHeaderFilterElement(column, value, true);
 				column.modules.filter.success(value);
-			} else {
-				console.warn(
-					"Column Filter Error - No header filter set on column:",
-					column.getField()
-				);
+			}else {
+				console.warn("Column Filter Error - No header filter set on column:", column.getField());
 			}
 		}
 	}
 
-	reloadHeaderFilter(column) {
-		if (column) {
-			if (column.modules.filter && column.modules.filter.headerElement) {
-				this.generateHeaderFilterElement(
-					column,
-					column.modules.filter.value,
-					true
-				);
-			} else {
-				console.warn(
-					"Column Filter Error - No header filter set on column:",
-					column.getField()
-				);
+	reloadHeaderFilter(column){
+		if (column){
+			if(column.modules.filter && column.modules.filter.headerElement){
+				this.generateHeaderFilterElement(column, column.modules.filter.value, true);
+			}else {
+				console.warn("Column Filter Error - No header filter set on column:", column.getField());
 			}
 		}
 	}
 
-	refreshFilter() {
-		if (this.tableInitialized) {
-			if (this.table.options.filterMode === "remote") {
+	refreshFilter(){
+		if(this.tableInitialized){
+			if(this.table.options.filterMode === "remote"){
 				this.reloadData(null, false, false);
-			} else {
+			}else {
 				this.refreshData(true);
 			}
 		}
@@ -10423,92 +9379,83 @@ class Filter extends Module {
 	}
 
 	//check if the filters has changed since last use
-	trackChanges() {
+	trackChanges(){
 		this.changed = true;
 		this.dispatch("filter-changed");
 	}
 
 	//check if the filters has changed since last use
-	hasChanged() {
+	hasChanged(){
 		var changed = this.changed;
 		this.changed = false;
 		return changed;
 	}
 
 	//set standard filters
-	setFilter(field, type, value, params) {
+	setFilter(field, type, value, params){
 		this.filterList = [];
 
-		if (!Array.isArray(field)) {
-			field = [{ field: field, type: type, value: value, params: params }];
+		if(!Array.isArray(field)){
+			field = [{field:field, type:type, value:value, params:params}];
 		}
 
 		this.addFilter(field);
 	}
 
 	//add filter to array
-	addFilter(field, type, value, params) {
+	addFilter(field, type, value, params){
 		var changed = false;
 
-		if (!Array.isArray(field)) {
-			field = [{ field: field, type: type, value: value, params: params }];
+		if(!Array.isArray(field)){
+			field = [{field:field, type:type, value:value, params:params}];
 		}
 
 		field.forEach((filter) => {
 			filter = this.findFilter(filter);
 
-			if (filter) {
+			if(filter){
 				this.filterList.push(filter);
 				changed = true;
 			}
 		});
 
-		if (changed) {
+		if(changed){
 			this.trackChanges();
 		}
 	}
 
-	findFilter(filter) {
+	findFilter(filter){
 		var column;
 
-		if (Array.isArray(filter)) {
+		if(Array.isArray(filter)){
 			return this.findSubFilters(filter);
 		}
 
 		var filterFunc = false;
 
-		if (typeof filter.field == "function") {
-			filterFunc = function (data) {
-				return filter.field(data, filter.type || {}); // pass params to custom filter function
+		if(typeof filter.field == "function"){
+			filterFunc = function(data){
+				return filter.field(data, filter.type || {});// pass params to custom filter function
 			};
-		} else {
-			if (Filter.filters[filter.type]) {
+		}else {
+
+			if(Filter.filters[filter.type]){
+
 				column = this.table.columnManager.getColumnByField(filter.field);
 
-				if (column) {
-					filterFunc = function (data) {
-						return Filter.filters[filter.type](
-							filter.value,
-							column.getFieldValue(data),
-							data,
-							filter.params || {}
-						);
+				if(column){
+					filterFunc = function(data){
+						return Filter.filters[filter.type](filter.value, column.getFieldValue(data), data, filter.params || {});
 					};
-				} else {
-					filterFunc = function (data) {
-						return Filter.filters[filter.type](
-							filter.value,
-							data[filter.field],
-							data,
-							filter.params || {}
-						);
+				}else {
+					filterFunc = function(data){
+						return Filter.filters[filter.type](filter.value, data[filter.field], data, filter.params || {});
 					};
 				}
-			} else {
-				console.warn(
-					"Filter Error - No such filter type found, ignoring: ",
-					filter.type
-				);
+
+
+			}else {
+				console.warn("Filter Error - No such filter type found, ignoring: ", filter.type);
 			}
 		}
 
@@ -10517,13 +9464,13 @@ class Filter extends Module {
 		return filter.func ? filter : false;
 	}
 
-	findSubFilters(filters) {
+	findSubFilters(filters){
 		var output = [];
 
 		filters.forEach((filter) => {
 			filter = this.findFilter(filter);
 
-			if (filter) {
+			if(filter){
 				output.push(filter);
 			}
 		});
@@ -10532,16 +9479,16 @@ class Filter extends Module {
 	}
 
 	//get all filters
-	getFilters(all, ajax) {
+	getFilters(all, ajax){
 		var output = [];
 
-		if (all) {
+		if(all){
 			output = this.getHeaderFilters();
 		}
 
-		if (ajax) {
-			output.forEach(function (item) {
-				if (typeof item.type == "function") {
+		if(ajax){
+			output.forEach(function(item){
+				if(typeof item.type == "function"){
 					item.type = "function";
 				}
 			});
@@ -10553,19 +9500,19 @@ class Filter extends Module {
 	}
 
 	//filter to Object
-	filtersToArray(filterList, ajax) {
+	filtersToArray(filterList, ajax){
 		var output = [];
 
 		filterList.forEach((filter) => {
 			var item;
 
-			if (Array.isArray(filter)) {
+			if(Array.isArray(filter)){
 				output.push(this.filtersToArray(filter, ajax));
-			} else {
-				item = { field: filter.field, type: filter.type, value: filter.value };
+			}else {
+				item = {field:filter.field, type:filter.type, value:filter.value};
 
-				if (ajax) {
-					if (typeof item.type == "function") {
+				if(ajax){
+					if(typeof item.type == "function"){
 						item.type = "function";
 					}
 				}
@@ -10578,50 +9525,39 @@ class Filter extends Module {
 	}
 
 	//get all filters
-	getHeaderFilters() {
+	getHeaderFilters(){
 		var output = [];
 
-		for (var key in this.headerFilters) {
-			output.push({
-				field: key,
-				type: this.headerFilters[key].type,
-				value: this.headerFilters[key].value,
-			});
+		for(var key in this.headerFilters){
+			output.push({field:key, type:this.headerFilters[key].type, value:this.headerFilters[key].value});
 		}
 
 		return output;
 	}
 
 	//remove filter from array
-	removeFilter(field, type, value) {
-		if (!Array.isArray(field)) {
-			field = [{ field: field, type: type, value: value }];
+	removeFilter(field, type, value){
+		if(!Array.isArray(field)){
+			field = [{field:field, type:type, value:value}];
 		}
 
 		field.forEach((filter) => {
 			var index = -1;
 
-			if (typeof filter.field == "object") {
+			if(typeof filter.field == "object"){
 				index = this.filterList.findIndex((element) => {
 					return filter === element;
 				});
-			} else {
+			}else {
 				index = this.filterList.findIndex((element) => {
-					return (
-						filter.field === element.field &&
-						filter.type === element.type &&
-						filter.value === element.value
-					);
+					return filter.field === element.field && filter.type === element.type  && filter.value === element.value;
 				});
 			}
 
-			if (index > -1) {
+			if(index > -1){
 				this.filterList.splice(index, 1);
-			} else {
-				console.warn(
-					"Filter Error - No matching filter type found, ignoring: ",
-					filter.type
-				);
+			}else {
+				console.warn("Filter Error - No matching filter type found, ignoring: ", filter.type);
 			}
 		});
 
@@ -10629,10 +9565,10 @@ class Filter extends Module {
 	}
 
 	//clear filters
-	clearFilter(all) {
+	clearFilter(all){
 		this.filterList = [];
 
-		if (all) {
+		if(all){
 			this.clearHeaderFilter();
 		}
 
@@ -10640,12 +9576,12 @@ class Filter extends Module {
 	}
 
 	//clear header filters
-	clearHeaderFilter() {
+	clearHeaderFilter(){
 		this.headerFilters = {};
 		this.prevHeaderFilterChangeCheck = "{}";
 
 		this.headerFilterColumns.forEach((column) => {
-			if (typeof column.modules.filter.value !== "undefined") {
+			if(typeof column.modules.filter.value !== "undefined"){
 				delete column.modules.filter.value;
 			}
 			column.modules.filter.prevSuccess = undefined;
@@ -10656,18 +9592,18 @@ class Filter extends Module {
 	}
 
 	//search data and return matching rows
-	search(searchType, field, type, value) {
+	search (searchType, field, type, value){
 		var activeRows = [],
-			filterList = [];
+		filterList = [];
 
-		if (!Array.isArray(field)) {
-			field = [{ field: field, type: type, value: value }];
+		if(!Array.isArray(field)){
+			field = [{field:field, type:type, value:value}];
 		}
 
 		field.forEach((filter) => {
 			filter = this.findFilter(filter);
 
-			if (filter) {
+			if(filter){
 				filterList.push(filter);
 			}
 		});
@@ -10676,71 +9612,67 @@ class Filter extends Module {
 			var match = true;
 
 			filterList.forEach((filter) => {
-				if (!this.filterRecurse(filter, row.getData())) {
+				if(!this.filterRecurse(filter, row.getData())){
 					match = false;
 				}
 			});
 
-			if (match) {
-				activeRows.push(
-					searchType === "data" ? row.getData("data") : row.getComponent()
-				);
+			if(match){
+				activeRows.push(searchType === "data" ? row.getData("data") : row.getComponent());
 			}
+
 		});
 
 		return activeRows;
 	}
 
 	//filter row array
-	filter(rowList, filters) {
+	filter(rowList, filters){
 		var activeRows = [],
-			activeRowComponents = [];
+		activeRowComponents = [];
 
-		if (this.subscribedExternal("dataFiltering")) {
+		if(this.subscribedExternal("dataFiltering")){
 			this.dispatchExternal("dataFiltering", this.getFilters(true));
 		}
 
-		if (
-			this.table.options.filterMode !== "remote" &&
-			(this.filterList.length || Object.keys(this.headerFilters).length)
-		) {
+		if(this.table.options.filterMode !== "remote" && (this.filterList.length || Object.keys(this.headerFilters).length)){
+
 			rowList.forEach((row) => {
-				if (this.filterRow(row)) {
+				if(this.filterRow(row)){
 					activeRows.push(row);
 				}
 			});
-		} else {
+
+		}else {
 			activeRows = rowList.slice(0);
 		}
 
-		if (this.subscribedExternal("dataFiltered")) {
+		if(this.subscribedExternal("dataFiltered")){
+
 			activeRows.forEach((row) => {
 				activeRowComponents.push(row.getComponent());
 			});
 
-			this.dispatchExternal(
-				"dataFiltered",
-				this.getFilters(true),
-				activeRowComponents
-			);
+			this.dispatchExternal("dataFiltered", this.getFilters(true), activeRowComponents);
 		}
 
 		return activeRows;
 	}
 
 	//filter individual row
-	filterRow(row, filters) {
+	filterRow(row, filters){
 		var match = true,
-			data = row.getData();
+		data = row.getData();
 
 		this.filterList.forEach((filter) => {
-			if (!this.filterRecurse(filter, data)) {
+			if(!this.filterRecurse(filter, data)){
 				match = false;
 			}
 		});
 
-		for (var field in this.headerFilters) {
-			if (!this.headerFilters[field].func(data)) {
+
+		for(var field in this.headerFilters){
+			if(!this.headerFilters[field].func(data)){
 				match = false;
 			}
 		}
@@ -10748,16 +9680,16 @@ class Filter extends Module {
 		return match;
 	}
 
-	filterRecurse(filter, data) {
+	filterRecurse(filter, data){
 		var match = false;
 
-		if (Array.isArray(filter)) {
+		if(Array.isArray(filter)){
 			filter.forEach((subFilter) => {
-				if (this.filterRecurse(subFilter, data)) {
+				if(this.filterRecurse(subFilter, data)){
 					match = true;
 				}
 			});
-		} else {
+		}else {
 			match = filter.func(data);
 		}
 
@@ -10770,42 +9702,36 @@ Filter.moduleName = "filter";
 //load defaults
 Filter.filters = defaultFilters;
 
-function plaintext(cell, formatterParams, onRendered) {
+function plaintext(cell, formatterParams, onRendered){
 	return this.emptyToSpace(this.sanitizeHTML(cell.getValue()));
 }
 
-function html$1(cell, formatterParams, onRendered) {
+function html$1(cell, formatterParams, onRendered){
 	return cell.getValue();
 }
 
-function textarea$1(cell, formatterParams, onRendered) {
+function textarea$1(cell, formatterParams, onRendered){
 	cell.getElement().style.whiteSpace = "pre-wrap";
 	return this.emptyToSpace(this.sanitizeHTML(cell.getValue()));
 }
 
-function money(cell, formatterParams, onRendered) {
+function money(cell, formatterParams, onRendered){
 	var floatVal = parseFloat(cell.getValue()),
-		sign = "",
-		number,
-		integer,
-		decimal,
-		rgx;
+	sign = "",
+	number, integer, decimal, rgx;
 
 	var decimalSym = formatterParams.decimal || ".";
 	var thousandSym = formatterParams.thousand || ",";
 	var negativeSign = formatterParams.negativeSign || "-";
 	var symbol = formatterParams.symbol || "";
 	var after = !!formatterParams.symbolAfter;
-	var precision =
-		typeof formatterParams.precision !== "undefined"
-			? formatterParams.precision
-			: 2;
+	var precision = typeof formatterParams.precision !== "undefined" ? formatterParams.precision : 2;
 
-	if (isNaN(floatVal)) {
+	if(isNaN(floatVal)){
 		return this.emptyToSpace(this.sanitizeHTML(cell.getValue()));
 	}
 
-	if (floatVal < 0) {
+	if(floatVal < 0){
 		floatVal = Math.abs(floatVal);
 		sign = negativeSign;
 	}
@@ -10819,45 +9745,40 @@ function money(cell, formatterParams, onRendered) {
 	if (formatterParams.thousand !== false) {
 		rgx = /(\d+)(\d{3})/;
 
-		while (rgx.test(integer)) {
+		while (rgx.test(integer)){
 			integer = integer.replace(rgx, "$1" + thousandSym + "$2");
 		}
 	}
 
-	return after
-		? sign + integer + decimal + symbol
-		: sign + symbol + integer + decimal;
+	return after ? sign + integer + decimal + symbol : sign + symbol + integer + decimal;
 }
 
-function link(cell, formatterParams, onRendered) {
+function link(cell, formatterParams, onRendered){
 	var value = cell.getValue(),
-		urlPrefix = formatterParams.urlPrefix || "",
-		download = formatterParams.download,
-		label = value,
-		el = document.createElement("a"),
-		data;
+	urlPrefix = formatterParams.urlPrefix || "",
+	download = formatterParams.download,
+	label = value,
+	el = document.createElement("a"),
+	data;
 
-	function labelTraverse(path, data) {
+	function labelTraverse(path, data){
 		var item = path.shift(),
-			value = data[item];
-
-		if (path.length && typeof value === "object") {
+		value = data[item];
+		
+		if(path.length && typeof value === "object"){
 			return labelTraverse(path, value);
 		}
 
 		return value;
 	}
 
-	if (formatterParams.labelField) {
+	if(formatterParams.labelField){
 		data = cell.getData();
-		label = labelTraverse(
-			formatterParams.labelField.split(this.table.options.nestedFieldSeparator),
-			data
-		);
+		label = labelTraverse(formatterParams.labelField.split(this.table.options.nestedFieldSeparator), data);
 	}
 
-	if (formatterParams.label) {
-		switch (typeof formatterParams.label) {
+	if(formatterParams.label){
+		switch(typeof formatterParams.label){
 			case "string":
 				label = formatterParams.label;
 				break;
@@ -10868,14 +9789,14 @@ function link(cell, formatterParams, onRendered) {
 		}
 	}
 
-	if (label) {
-		if (formatterParams.urlField) {
+	if(label){
+		if(formatterParams.urlField){
 			data = cell.getData();
 			value = data[formatterParams.urlField];
 		}
 
-		if (formatterParams.url) {
-			switch (typeof formatterParams.url) {
+		if(formatterParams.url){
+			switch(typeof formatterParams.url){
 				case "string":
 					value = formatterParams.url;
 					break;
@@ -10888,14 +9809,15 @@ function link(cell, formatterParams, onRendered) {
 
 		el.setAttribute("href", urlPrefix + value);
 
-		if (formatterParams.target) {
+		if(formatterParams.target){
 			el.setAttribute("target", formatterParams.target);
 		}
 
-		if (formatterParams.download) {
-			if (typeof download == "function") {
+		if(formatterParams.download){
+
+			if(typeof download == "function"){
 				download = download(cell);
-			} else {
+			}else {
 				download = download === true ? "" : download;
 			}
 
@@ -10905,26 +9827,26 @@ function link(cell, formatterParams, onRendered) {
 		el.innerHTML = this.emptyToSpace(this.sanitizeHTML(label));
 
 		return el;
-	} else {
+	}else {
 		return "&nbsp;";
 	}
 }
 
-function image(cell, formatterParams, onRendered) {
+function image(cell, formatterParams, onRendered){
 	var el = document.createElement("img"),
-		src = cell.getValue();
+	src = cell.getValue();
 
-	if (formatterParams.urlPrefix) {
+	if(formatterParams.urlPrefix){
 		src = formatterParams.urlPrefix + cell.getValue();
 	}
 
-	if (formatterParams.urlSuffix) {
+	if(formatterParams.urlSuffix){
 		src = src + formatterParams.urlSuffix;
 	}
 
 	el.setAttribute("src", src);
 
-	switch (typeof formatterParams.height) {
+	switch(typeof formatterParams.height){
 		case "number":
 			el.style.height = formatterParams.height + "px";
 			break;
@@ -10934,7 +9856,7 @@ function image(cell, formatterParams, onRendered) {
 			break;
 	}
 
-	switch (typeof formatterParams.width) {
+	switch(typeof formatterParams.width){
 		case "number":
 			el.style.width = formatterParams.width + "px";
 			break;
@@ -10944,146 +9866,103 @@ function image(cell, formatterParams, onRendered) {
 			break;
 	}
 
-	el.addEventListener("load", function () {
+	el.addEventListener("load", function(){
 		cell.getRow().normalizeHeight();
 	});
 
 	return el;
 }
 
-function tickCross$1(cell, formatterParams, onRendered) {
+function tickCross$1(cell, formatterParams, onRendered){
 	var value = cell.getValue(),
-		element = cell.getElement(),
-		empty = formatterParams.allowEmpty,
-		truthy = formatterParams.allowTruthy,
-		trueValueSet = Object.keys(formatterParams).includes("trueValue"),
-		tick =
-			typeof formatterParams.tickElement !== "undefined"
-				? formatterParams.tickElement
-				: '<svg enable-background="new 0 0 24 24" height="14" width="14" viewBox="0 0 24 24" xml:space="preserve" ><path fill="#2DC214" clip-rule="evenodd" d="M21.652,3.211c-0.293-0.295-0.77-0.295-1.061,0L9.41,14.34  c-0.293,0.297-0.771,0.297-1.062,0L3.449,9.351C3.304,9.203,3.114,9.13,2.923,9.129C2.73,9.128,2.534,9.201,2.387,9.351  l-2.165,1.946C0.078,11.445,0,11.63,0,11.823c0,0.194,0.078,0.397,0.223,0.544l4.94,5.184c0.292,0.296,0.771,0.776,1.062,1.07  l2.124,2.141c0.292,0.293,0.769,0.293,1.062,0l14.366-14.34c0.293-0.294,0.293-0.777,0-1.071L21.652,3.211z" fill-rule="evenodd"/></svg>',
-		cross =
-			typeof formatterParams.crossElement !== "undefined"
-				? formatterParams.crossElement
-				: '<svg enable-background="new 0 0 24 24" height="14" width="14"  viewBox="0 0 24 24" xml:space="preserve" ><path fill="#CE1515" d="M22.245,4.015c0.313,0.313,0.313,0.826,0,1.139l-6.276,6.27c-0.313,0.312-0.313,0.826,0,1.14l6.273,6.272  c0.313,0.313,0.313,0.826,0,1.14l-2.285,2.277c-0.314,0.312-0.828,0.312-1.142,0l-6.271-6.271c-0.313-0.313-0.828-0.313-1.141,0  l-6.276,6.267c-0.313,0.313-0.828,0.313-1.141,0l-2.282-2.28c-0.313-0.313-0.313-0.826,0-1.14l6.278-6.269  c0.313-0.312,0.313-0.826,0-1.14L1.709,5.147c-0.314-0.313-0.314-0.827,0-1.14l2.284-2.278C4.308,1.417,4.821,1.417,5.135,1.73  L11.405,8c0.314,0.314,0.828,0.314,1.141,0.001l6.276-6.267c0.312-0.312,0.826-0.312,1.141,0L22.245,4.015z"/></svg>';
+	element = cell.getElement(),
+	empty = formatterParams.allowEmpty,
+	truthy = formatterParams.allowTruthy,
+	trueValueSet = Object.keys(formatterParams).includes("trueValue"),
+	tick = typeof formatterParams.tickElement !== "undefined" ? formatterParams.tickElement : '<svg enable-background="new 0 0 24 24" height="14" width="14" viewBox="0 0 24 24" xml:space="preserve" ><path fill="#2DC214" clip-rule="evenodd" d="M21.652,3.211c-0.293-0.295-0.77-0.295-1.061,0L9.41,14.34  c-0.293,0.297-0.771,0.297-1.062,0L3.449,9.351C3.304,9.203,3.114,9.13,2.923,9.129C2.73,9.128,2.534,9.201,2.387,9.351  l-2.165,1.946C0.078,11.445,0,11.63,0,11.823c0,0.194,0.078,0.397,0.223,0.544l4.94,5.184c0.292,0.296,0.771,0.776,1.062,1.07  l2.124,2.141c0.292,0.293,0.769,0.293,1.062,0l14.366-14.34c0.293-0.294,0.293-0.777,0-1.071L21.652,3.211z" fill-rule="evenodd"/></svg>',
+	cross = typeof formatterParams.crossElement !== "undefined" ? formatterParams.crossElement : '<svg enable-background="new 0 0 24 24" height="14" width="14"  viewBox="0 0 24 24" xml:space="preserve" ><path fill="#CE1515" d="M22.245,4.015c0.313,0.313,0.313,0.826,0,1.139l-6.276,6.27c-0.313,0.312-0.313,0.826,0,1.14l6.273,6.272  c0.313,0.313,0.313,0.826,0,1.14l-2.285,2.277c-0.314,0.312-0.828,0.312-1.142,0l-6.271-6.271c-0.313-0.313-0.828-0.313-1.141,0  l-6.276,6.267c-0.313,0.313-0.828,0.313-1.141,0l-2.282-2.28c-0.313-0.313-0.313-0.826,0-1.14l6.278-6.269  c0.313-0.312,0.313-0.826,0-1.14L1.709,5.147c-0.314-0.313-0.314-0.827,0-1.14l2.284-2.278C4.308,1.417,4.821,1.417,5.135,1.73  L11.405,8c0.314,0.314,0.828,0.314,1.141,0.001l6.276-6.267c0.312-0.312,0.826-0.312,1.141,0L22.245,4.015z"/></svg>';
 
-	if (
-		(trueValueSet && value === formatterParams.trueValue) ||
-		(!trueValueSet &&
-			((truthy && value) ||
-				value === true ||
-				value === "true" ||
-				value === "True" ||
-				value === 1 ||
-				value === "1"))
-	) {
+	if((trueValueSet && value === formatterParams.trueValue) || (!trueValueSet && ((truthy && value) || (value === true || value === "true" || value === "True" || value === 1 || value === "1")))){
 		element.setAttribute("aria-checked", true);
 		return tick || "";
-	} else {
-		if (
-			empty &&
-			(value === "null" ||
-				value === "" ||
-				value === null ||
-				typeof value === "undefined")
-		) {
+	}else {
+		if(empty && (value === "null" || value === "" || value === null || typeof value === "undefined")){
 			element.setAttribute("aria-checked", "mixed");
 			return "";
-		} else {
+		}else {
 			element.setAttribute("aria-checked", false);
 			return cross || "";
 		}
 	}
 }
 
-function datetime$1(cell, formatterParams, onRendered) {
+function datetime$1(cell, formatterParams, onRendered){
 	var DT = window.DateTime || luxon.DateTime;
 	var inputFormat = formatterParams.inputFormat || "yyyy-MM-dd HH:mm:ss";
-	var outputFormat = formatterParams.outputFormat || "dd/MM/yyyy HH:mm:ss";
-	var invalid =
-		typeof formatterParams.invalidPlaceholder !== "undefined"
-			? formatterParams.invalidPlaceholder
-			: "";
+	var	outputFormat = formatterParams.outputFormat || "dd/MM/yyyy HH:mm:ss";
+	var	invalid = typeof formatterParams.invalidPlaceholder !== "undefined" ? formatterParams.invalidPlaceholder : "";
 	var value = cell.getValue();
 
-	if (typeof DT != "undefined") {
+	if(typeof DT != "undefined"){
 		var newDatetime;
 
-		if (DT.isDateTime(value)) {
+		if(DT.isDateTime(value)){
 			newDatetime = value;
-		} else if (inputFormat === "iso") {
+		}else if(inputFormat === "iso"){
 			newDatetime = DT.fromISO(String(value));
-		} else {
+		}else {
 			newDatetime = DT.fromFormat(String(value), inputFormat);
 		}
 
-		if (newDatetime.isValid) {
-			if (formatterParams.timezone) {
+		if(newDatetime.isValid){
+			if(formatterParams.timezone){
 				newDatetime = newDatetime.setZone(formatterParams.timezone);
 			}
 
 			return newDatetime.toFormat(outputFormat);
-		} else {
-			if (invalid === true || !value) {
+		}else {
+			if(invalid === true || !value){
 				return value;
-			} else if (typeof invalid === "function") {
+			}else if(typeof invalid === "function"){
 				return invalid(value);
-			} else {
+			}else {
 				return invalid;
 			}
 		}
-	} else {
-		console.error(
-			"Format Error - 'datetime' formatter is dependant on luxon.js"
-		);
+	}else {
+		console.error("Format Error - 'datetime' formatter is dependant on luxon.js");
 	}
 }
 
-function datetimediff(cell, formatterParams, onRendered) {
+function datetimediff (cell, formatterParams, onRendered) {
 	var DT = window.DateTime || luxon.DateTime;
 	var inputFormat = formatterParams.inputFormat || "yyyy-MM-dd HH:mm:ss";
-	var invalid =
-		typeof formatterParams.invalidPlaceholder !== "undefined"
-			? formatterParams.invalidPlaceholder
-			: "";
-	var suffix =
-		typeof formatterParams.suffix !== "undefined"
-			? formatterParams.suffix
-			: false;
-	var unit =
-		typeof formatterParams.unit !== "undefined" ? formatterParams.unit : "days";
-	var humanize =
-		typeof formatterParams.humanize !== "undefined"
-			? formatterParams.humanize
-			: false;
-	var date =
-		typeof formatterParams.date !== "undefined"
-			? formatterParams.date
-			: DT.now();
+	var invalid = typeof formatterParams.invalidPlaceholder !== "undefined" ? formatterParams.invalidPlaceholder : "";
+	var suffix = typeof formatterParams.suffix !== "undefined" ? formatterParams.suffix : false;
+	var unit = typeof formatterParams.unit !== "undefined" ? formatterParams.unit : "days";
+	var humanize = typeof formatterParams.humanize !== "undefined" ? formatterParams.humanize : false;
+	var date = typeof formatterParams.date !== "undefined" ? formatterParams.date : DT.now();
 	var value = cell.getValue();
 
-	if (typeof DT != "undefined") {
+	if(typeof DT != "undefined"){
 		var newDatetime;
 
-		if (DT.isDateTime(value)) {
+		if(DT.isDateTime(value)){
 			newDatetime = value;
-		} else if (inputFormat === "iso") {
+		}else if(inputFormat === "iso"){
 			newDatetime = DT.fromISO(String(value));
-		} else {
+		}else {
 			newDatetime = DT.fromFormat(String(value), inputFormat);
 		}
 
-		if (newDatetime.isValid) {
-			if (humanize) {
-				return (
-					newDatetime.diff(date, unit).toHuman() + (suffix ? " " + suffix : "")
-				);
-			} else {
-				return (
-					parseInt(newDatetime.diff(date, unit)[unit]) +
-					(suffix ? " " + suffix : "")
-				);
+		if (newDatetime.isValid){
+			if(humanize){
+				return newDatetime.diff(date, unit).toHuman()  + (suffix ? " " + suffix : "");
+			}else {
+				return parseInt(newDatetime.diff(date, unit)[unit]) + (suffix ? " " + suffix : "");
 			}
 		} else {
+
 			if (invalid === true) {
 				return value;
 			} else if (typeof invalid === "function") {
@@ -11092,35 +9971,30 @@ function datetimediff(cell, formatterParams, onRendered) {
 				return invalid;
 			}
 		}
-	} else {
-		console.error(
-			"Format Error - 'datetimediff' formatter is dependant on luxon.js"
-		);
+	}else {
+		console.error("Format Error - 'datetimediff' formatter is dependant on luxon.js");
 	}
 }
 
-function lookup(cell, formatterParams, onRendered) {
+function lookup (cell, formatterParams, onRendered) {
 	var value = cell.getValue();
 
 	if (typeof formatterParams[value] === "undefined") {
-		console.warn("Missing display value for " + value);
+		console.warn('Missing display value for ' + value);
 		return value;
 	}
 
 	return formatterParams[value];
 }
 
-function star$1(cell, formatterParams, onRendered) {
+function star$1(cell, formatterParams, onRendered){
 	var value = cell.getValue(),
-		element = cell.getElement(),
-		maxStars =
-			formatterParams && formatterParams.stars ? formatterParams.stars : 5,
-		stars = document.createElement("span"),
-		star = document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-		starActive =
-			'<polygon fill="#FFEA00" stroke="#C1AB60" stroke-width="37.6152" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="259.216,29.942 330.27,173.919 489.16,197.007 374.185,309.08 401.33,467.31 259.216,392.612 117.104,467.31 144.25,309.08 29.274,197.007 188.165,173.919 "/>',
-		starInactive =
-			'<polygon fill="#D2D2D2" stroke="#686868" stroke-width="37.6152" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="259.216,29.942 330.27,173.919 489.16,197.007 374.185,309.08 401.33,467.31 259.216,392.612 117.104,467.31 144.25,309.08 29.274,197.007 188.165,173.919 "/>';
+	element = cell.getElement(),
+	maxStars = formatterParams && formatterParams.stars ? formatterParams.stars : 5,
+	stars = document.createElement("span"),
+	star = document.createElementNS('http://www.w3.org/2000/svg', "svg"),
+	starActive = '<polygon fill="#FFEA00" stroke="#C1AB60" stroke-width="37.6152" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="259.216,29.942 330.27,173.919 489.16,197.007 374.185,309.08 401.33,467.31 259.216,392.612 117.104,467.31 144.25,309.08 29.274,197.007 188.165,173.919 "/>',
+	starInactive = '<polygon fill="#D2D2D2" stroke="#686868" stroke-width="37.6152" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" points="259.216,29.942 330.27,173.919 489.16,197.007 374.185,309.08 401.33,467.31 259.216,392.612 117.104,467.31 144.25,309.08 29.274,197.007 188.165,173.919 "/>';
 
 	//style stars holder
 	stars.style.verticalAlign = "middle";
@@ -11136,7 +10010,7 @@ function star$1(cell, formatterParams, onRendered) {
 
 	value = Math.max(0, Math.min(value, maxStars));
 
-	for (var i = 1; i <= maxStars; i++) {
+	for(var i=1;i<= maxStars;i++){
 		var nextStar = star.cloneNode(true);
 		nextStar.innerHTML = i <= value ? starActive : starInactive;
 
@@ -11152,20 +10026,16 @@ function star$1(cell, formatterParams, onRendered) {
 	return stars;
 }
 
-function traffic(cell, formatterParams, onRendered) {
+function traffic(cell, formatterParams, onRendered){
 	var value = this.sanitizeHTML(cell.getValue()) || 0,
-		el = document.createElement("span"),
-		max = formatterParams && formatterParams.max ? formatterParams.max : 100,
-		min = formatterParams && formatterParams.min ? formatterParams.min : 0,
-		colors =
-			formatterParams && typeof formatterParams.color !== "undefined"
-				? formatterParams.color
-				: ["red", "orange", "green"],
-		color = "#666666",
-		percent,
-		percentValue;
+	el = document.createElement("span"),
+	max = formatterParams && formatterParams.max ? formatterParams.max : 100,
+	min = formatterParams && formatterParams.min ? formatterParams.min : 0,
+	colors = formatterParams && typeof formatterParams.color !== "undefined" ? formatterParams.color : ["red", "orange", "green"],
+	color = "#666666",
+	percent, percentValue;
 
-	if (isNaN(value) || typeof cell.getValue() === "undefined") {
+	if(isNaN(value) || typeof cell.getValue() === "undefined"){
 		return;
 	}
 
@@ -11173,15 +10043,14 @@ function traffic(cell, formatterParams, onRendered) {
 
 	//make sure value is in range
 	percentValue = parseFloat(value) <= max ? parseFloat(value) : max;
-	percentValue =
-		parseFloat(percentValue) >= min ? parseFloat(percentValue) : min;
+	percentValue = parseFloat(percentValue) >= min ? parseFloat(percentValue) : min;
 
 	//workout percentage
 	percent = (max - min) / 100;
 	percentValue = Math.round((percentValue - min) / percent);
 
 	//set color
-	switch (typeof colors) {
+	switch(typeof colors){
 		case "string":
 			color = colors;
 			break;
@@ -11189,7 +10058,7 @@ function traffic(cell, formatterParams, onRendered) {
 			color = colors(value);
 			break;
 		case "object":
-			if (Array.isArray(colors)) {
+			if(Array.isArray(colors)){
 				var unit = 100 / colors.length;
 				var index = Math.floor(percentValue / unit);
 
@@ -11205,32 +10074,24 @@ function traffic(cell, formatterParams, onRendered) {
 	return el;
 }
 
-function progress$1(cell, formatterParams = {}, onRendered) {
-	//progress bar
+function progress$1(cell, formatterParams = {}, onRendered){ //progress bar
 	var value = this.sanitizeHTML(cell.getValue()) || 0,
-		element = cell.getElement(),
-		max = formatterParams.max ? formatterParams.max : 100,
-		min = formatterParams.min ? formatterParams.min : 0,
-		legendAlign = formatterParams.legendAlign
-			? formatterParams.legendAlign
-			: "center",
-		percent,
-		percentValue,
-		color,
-		legend,
-		legendColor;
+	element = cell.getElement(),
+	max = formatterParams.max ? formatterParams.max : 100,
+	min = formatterParams.min ? formatterParams.min : 0,
+	legendAlign = formatterParams.legendAlign ? formatterParams.legendAlign : "center",
+	percent, percentValue, color, legend, legendColor;
 
 	//make sure value is in range
 	percentValue = parseFloat(value) <= max ? parseFloat(value) : max;
-	percentValue =
-		parseFloat(percentValue) >= min ? parseFloat(percentValue) : min;
+	percentValue = parseFloat(percentValue) >= min ? parseFloat(percentValue) : min;
 
 	//workout percentage
 	percent = (max - min) / 100;
 	percentValue = Math.round((percentValue - min) / percent);
 
 	//set bar color
-	switch (typeof formatterParams.color) {
+	switch(typeof formatterParams.color){
 		case "string":
 			color = formatterParams.color;
 			break;
@@ -11238,7 +10099,7 @@ function progress$1(cell, formatterParams = {}, onRendered) {
 			color = formatterParams.color(value);
 			break;
 		case "object":
-			if (Array.isArray(formatterParams.color)) {
+			if(Array.isArray(formatterParams.color)){
 				let unit = 100 / formatterParams.color.length;
 				let index = Math.floor(percentValue / unit);
 
@@ -11252,7 +10113,7 @@ function progress$1(cell, formatterParams = {}, onRendered) {
 	}
 
 	//generate legend
-	switch (typeof formatterParams.legend) {
+	switch(typeof formatterParams.legend){
 		case "string":
 			legend = formatterParams.legend;
 			break;
@@ -11267,7 +10128,7 @@ function progress$1(cell, formatterParams = {}, onRendered) {
 	}
 
 	//set legend color
-	switch (typeof formatterParams.legendColor) {
+	switch(typeof formatterParams.legendColor){
 		case "string":
 			legendColor = formatterParams.legendColor;
 			break;
@@ -11275,7 +10136,7 @@ function progress$1(cell, formatterParams = {}, onRendered) {
 			legendColor = formatterParams.legendColor(value);
 			break;
 		case "object":
-			if (Array.isArray(formatterParams.legendColor)) {
+			if(Array.isArray(formatterParams.legendColor)){
 				let unit = 100 / formatterParams.legendColor.length;
 				let index = Math.floor(percentValue / unit);
 
@@ -11299,15 +10160,15 @@ function progress$1(cell, formatterParams = {}, onRendered) {
 	barEl.style.backgroundColor = color;
 	barEl.style.height = "100%";
 
-	barEl.setAttribute("data-max", max);
-	barEl.setAttribute("data-min", min);
+	barEl.setAttribute('data-max', max);
+	barEl.setAttribute('data-min', min);
 
 	var barContainer = document.createElement("div");
 	barContainer.style.position = "relative";
 	barContainer.style.width = "100%";
 	barContainer.style.height = "100%";
 
-	if (legend) {
+	if(legend){
 		var legendEl = document.createElement("div");
 		legendEl.style.position = "absolute";
 		legendEl.style.top = 0;
@@ -11318,9 +10179,10 @@ function progress$1(cell, formatterParams = {}, onRendered) {
 		legendEl.innerHTML = legend;
 	}
 
-	onRendered(function () {
+	onRendered(function(){
+
 		//handle custom element needed if formatter is to be included in printed/downloaded output
-		if (!(cell instanceof CellComponent)) {
+		if(!(cell instanceof CellComponent)){
 			var holderEl = document.createElement("div");
 			holderEl.style.position = "absolute";
 			holderEl.style.top = "4px";
@@ -11336,7 +10198,7 @@ function progress$1(cell, formatterParams = {}, onRendered) {
 		element.appendChild(barContainer);
 		barContainer.appendChild(barEl);
 
-		if (legend) {
+		if(legend){
 			barContainer.appendChild(legendEl);
 		}
 	});
@@ -11344,62 +10206,62 @@ function progress$1(cell, formatterParams = {}, onRendered) {
 	return "";
 }
 
-function color(cell, formatterParams, onRendered) {
+function color(cell, formatterParams, onRendered){
 	cell.getElement().style.backgroundColor = this.sanitizeHTML(cell.getValue());
 	return "";
 }
 
-function buttonTick(cell, formatterParams, onRendered) {
+function buttonTick(cell, formatterParams, onRendered){
 	return '<svg enable-background="new 0 0 24 24" height="14" width="14" viewBox="0 0 24 24" xml:space="preserve" ><path fill="#2DC214" clip-rule="evenodd" d="M21.652,3.211c-0.293-0.295-0.77-0.295-1.061,0L9.41,14.34  c-0.293,0.297-0.771,0.297-1.062,0L3.449,9.351C3.304,9.203,3.114,9.13,2.923,9.129C2.73,9.128,2.534,9.201,2.387,9.351  l-2.165,1.946C0.078,11.445,0,11.63,0,11.823c0,0.194,0.078,0.397,0.223,0.544l4.94,5.184c0.292,0.296,0.771,0.776,1.062,1.07  l2.124,2.141c0.292,0.293,0.769,0.293,1.062,0l14.366-14.34c0.293-0.294,0.293-0.777,0-1.071L21.652,3.211z" fill-rule="evenodd"/></svg>';
 }
 
-function buttonCross(cell, formatterParams, onRendered) {
+function buttonCross(cell, formatterParams, onRendered){
 	return '<svg enable-background="new 0 0 24 24" height="14" width="14" viewBox="0 0 24 24" xml:space="preserve" ><path fill="#CE1515" d="M22.245,4.015c0.313,0.313,0.313,0.826,0,1.139l-6.276,6.27c-0.313,0.312-0.313,0.826,0,1.14l6.273,6.272  c0.313,0.313,0.313,0.826,0,1.14l-2.285,2.277c-0.314,0.312-0.828,0.312-1.142,0l-6.271-6.271c-0.313-0.313-0.828-0.313-1.141,0  l-6.276,6.267c-0.313,0.313-0.828,0.313-1.141,0l-2.282-2.28c-0.313-0.313-0.313-0.826,0-1.14l6.278-6.269  c0.313-0.312,0.313-0.826,0-1.14L1.709,5.147c-0.314-0.313-0.314-0.827,0-1.14l2.284-2.278C4.308,1.417,4.821,1.417,5.135,1.73  L11.405,8c0.314,0.314,0.828,0.314,1.141,0.001l6.276-6.267c0.312-0.312,0.826-0.312,1.141,0L22.245,4.015z"/></svg>';
 }
 
-function rownum(cell, formatterParams, onRendered) {
+function rownum(cell, formatterParams, onRendered){
 	var content = document.createElement("span");
 	var row = cell.getRow();
 
 	row.watchPosition((position) => {
 		content.innerText = position;
 	});
-
+	
 	return content;
 }
 
-function handle(cell, formatterParams, onRendered) {
+function handle(cell, formatterParams, onRendered){
 	cell.getElement().classList.add("tabulator-row-handle");
 	return "<div class='tabulator-row-handle-box'><div class='tabulator-row-handle-bar'></div><div class='tabulator-row-handle-bar'></div><div class='tabulator-row-handle-bar'></div></div>";
 }
 
-function responsiveCollapse(cell, formatterParams, onRendered) {
+function responsiveCollapse(cell, formatterParams, onRendered){
 	var el = document.createElement("div"),
-		config = cell.getRow()._row.modules.responsiveLayout;
+	config = cell.getRow()._row.modules.responsiveLayout;
 
 	el.classList.add("tabulator-responsive-collapse-toggle");
-	el.innerHTML =
-		"<span class='tabulator-responsive-collapse-toggle-open'>+</span><span class='tabulator-responsive-collapse-toggle-close'>-</span>";
+	el.innerHTML = "<span class='tabulator-responsive-collapse-toggle-open'>+</span><span class='tabulator-responsive-collapse-toggle-close'>-</span>";
 
 	cell.getElement().classList.add("tabulator-row-handle");
 
-	function toggleList(isOpen) {
+	function toggleList(isOpen){
 		var collapseEl = config.element;
 
 		config.open = isOpen;
 
-		if (collapseEl) {
-			if (config.open) {
+		if(collapseEl){
+
+			if(config.open){
 				el.classList.add("open");
-				collapseEl.style.display = "";
-			} else {
+				collapseEl.style.display = '';
+			}else {
 				el.classList.remove("open");
-				collapseEl.style.display = "none";
+				collapseEl.style.display = 'none';
 			}
 		}
 	}
 
-	el.addEventListener("click", function (e) {
+	el.addEventListener("click", function(e){
 		e.stopImmediatePropagation();
 		toggleList(!config.open);
 		cell.getTable().rowManager.adjustTableSize();
@@ -11410,36 +10272,38 @@ function responsiveCollapse(cell, formatterParams, onRendered) {
 	return el;
 }
 
-function rowSelection(cell, formatterParams, onRendered) {
+function rowSelection(cell, formatterParams, onRendered){
 	var checkbox = document.createElement("input");
 	var blocked = false;
 
-	checkbox.type = "checkbox";
+	checkbox.type = 'checkbox';
 
 	checkbox.setAttribute("aria-label", "Select Row");
+	
+	if(this.table.modExists("selectRow", true)){
 
-	if (this.table.modExists("selectRow", true)) {
 		checkbox.addEventListener("click", (e) => {
 			e.stopPropagation();
 		});
 
-		if (typeof cell.getRow == "function") {
+		if(typeof cell.getRow == 'function'){
 			var row = cell.getRow();
 
-			if (row instanceof RowComponent) {
+			if(row instanceof RowComponent){
+
 				checkbox.addEventListener("change", (e) => {
-					if (this.table.options.selectableRangeMode === "click") {
-						if (!blocked) {
+					if(this.table.options.selectableRangeMode === "click"){
+						if(!blocked){
 							row.toggleSelect();
-						} else {
+						}else {
 							blocked = false;
 						}
-					} else {
+					}else {
 						row.toggleSelect();
 					}
 				});
 
-				if (this.table.options.selectableRangeMode === "click") {
+				if(this.table.options.selectableRangeMode === "click"){
 					checkbox.addEventListener("click", (e) => {
 						blocked = true;
 						this.table.modules.selectRow.handleComplexRowClick(row._row, e);
@@ -11448,14 +10312,14 @@ function rowSelection(cell, formatterParams, onRendered) {
 
 				checkbox.checked = row.isSelected && row.isSelected();
 				this.table.modules.selectRow.registerRowSelectCheckbox(row, checkbox);
-			} else {
+			}else {
 				checkbox = "";
 			}
-		} else {
+		}else {
 			checkbox.addEventListener("change", (e) => {
-				if (this.table.modules.selectRow.selectedRows.length) {
+				if(this.table.modules.selectRow.selectedRows.length){
 					this.table.deselectRow();
-				} else {
+				}else {
 					this.table.selectRow(formatterParams.rowRange);
 				}
 			});
@@ -11468,30 +10332,31 @@ function rowSelection(cell, formatterParams, onRendered) {
 }
 
 var defaultFormatters = {
-	plaintext: plaintext,
-	html: html$1,
-	textarea: textarea$1,
-	money: money,
-	link: link,
-	image: image,
-	tickCross: tickCross$1,
-	datetime: datetime$1,
-	datetimediff: datetimediff,
-	lookup: lookup,
-	star: star$1,
-	traffic: traffic,
-	progress: progress$1,
-	color: color,
-	buttonTick: buttonTick,
-	buttonCross: buttonCross,
-	rownum: rownum,
-	handle: handle,
-	responsiveCollapse: responsiveCollapse,
-	rowSelection: rowSelection,
+	plaintext:plaintext,
+	html:html$1,
+	textarea:textarea$1,
+	money:money,
+	link:link,
+	image:image,
+	tickCross:tickCross$1,
+	datetime:datetime$1,
+	datetimediff:datetimediff,
+	lookup:lookup,
+	star:star$1,
+	traffic:traffic,
+	progress:progress$1,
+	color:color,
+	buttonTick:buttonTick,
+	buttonCross:buttonCross,
+	rownum:rownum,
+	handle:handle,
+	responsiveCollapse:responsiveCollapse,
+	rowSelection:rowSelection,
 };
 
-class Format extends Module {
-	constructor(table) {
+class Format extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.registerColumnOption("formatter");
@@ -11507,7 +10372,7 @@ class Format extends Module {
 		this.registerColumnOption("titleFormatterParams");
 	}
 
-	initialize() {
+	initialize(){
 		this.subscribe("cell-format", this.formatValue.bind(this));
 		this.subscribe("cell-rendered", this.cellRendered.bind(this));
 		this.subscribe("column-layout", this.initializeColumn.bind(this));
@@ -11515,44 +10380,33 @@ class Format extends Module {
 	}
 
 	//initialize column formatter
-	initializeColumn(column) {
+	initializeColumn(column){
 		column.modules.format = this.lookupFormatter(column, "");
 
-		if (typeof column.definition.formatterPrint !== "undefined") {
+		if(typeof column.definition.formatterPrint !== "undefined"){
 			column.modules.format.print = this.lookupFormatter(column, "Print");
 		}
 
-		if (typeof column.definition.formatterClipboard !== "undefined") {
-			column.modules.format.clipboard = this.lookupFormatter(
-				column,
-				"Clipboard"
-			);
+		if(typeof column.definition.formatterClipboard !== "undefined"){
+			column.modules.format.clipboard = this.lookupFormatter(column, "Clipboard");
 		}
 
-		if (typeof column.definition.formatterHtmlOutput !== "undefined") {
-			column.modules.format.htmlOutput = this.lookupFormatter(
-				column,
-				"HtmlOutput"
-			);
+		if(typeof column.definition.formatterHtmlOutput !== "undefined"){
+			column.modules.format.htmlOutput = this.lookupFormatter(column, "HtmlOutput");
 		}
 	}
 
-	lookupFormatter(column, type) {
-		var config = {
-				params: column.definition["formatter" + type + "Params"] || {},
-			},
-			formatter = column.definition["formatter" + type];
+	lookupFormatter(column, type){
+		var config = {params:column.definition["formatter" + type + "Params"] || {}},
+		formatter = column.definition["formatter" + type];
 
 		//set column formatter
-		switch (typeof formatter) {
+		switch(typeof formatter){
 			case "string":
-				if (Format.formatters[formatter]) {
+				if(Format.formatters[formatter]){
 					config.formatter = Format.formatters[formatter];
-				} else {
-					console.warn(
-						"Formatter Error - No such formatter found: ",
-						formatter
-					);
+				}else {
+					console.warn("Formatter Error - No such formatter found: ", formatter);
 					config.formatter = Format.formatters.plaintext;
 				}
 				break;
@@ -11569,22 +10423,18 @@ class Format extends Module {
 		return config;
 	}
 
-	cellRendered(cell) {
-		if (
-			cell.modules.format &&
-			cell.modules.format.renderedCallback &&
-			!cell.modules.format.rendered
-		) {
+	cellRendered(cell){
+		if(cell.modules.format && cell.modules.format.renderedCallback && !cell.modules.format.rendered){
 			cell.modules.format.renderedCallback();
 			cell.modules.format.rendered = true;
 		}
 	}
 
 	//return a formatted value for a column header
-	formatHeader(column, title, el) {
+	formatHeader(column, title, el){
 		var formatter, params, onRendered, mockCell;
 
-		if (column.definition.titleFormatter) {
+		if(column.definition.titleFormatter){
 			formatter = this.getFormatter(column.definition.titleFormatter);
 
 			onRendered = (callback) => {
@@ -11592,12 +10442,12 @@ class Format extends Module {
 			};
 
 			mockCell = {
-				getValue: function () {
+				getValue:function(){
 					return title;
 				},
-				getElement: function () {
+				getElement:function(){
 					return el;
-				},
+				}
 			};
 
 			params = column.definition.titleFormatterParams || {};
@@ -11605,21 +10455,19 @@ class Format extends Module {
 			params = typeof params === "function" ? params() : params;
 
 			return formatter.call(this, mockCell, params, onRendered);
-		} else {
+		}else {
 			return title;
 		}
 	}
 
-	//return a formatted value for a cell
-	formatValue(cell) {
-		var component = cell.getComponent(),
-			params =
-				typeof cell.column.modules.format.params === "function"
-					? cell.column.modules.format.params(component)
-					: cell.column.modules.format.params;
 
-		function onRendered(callback) {
-			if (!cell.modules.format) {
+	//return a formatted value for a cell
+	formatValue(cell){
+		var component = cell.getComponent(),
+		params = typeof cell.column.modules.format.params === "function" ? cell.column.modules.format.params(component) : cell.column.modules.format.params;
+
+		function onRendered(callback){
+			if(!cell.modules.format){
 				cell.modules.format = {};
 			}
 
@@ -11627,26 +10475,18 @@ class Format extends Module {
 			cell.modules.format.rendered = false;
 		}
 
-		return cell.column.modules.format.formatter.call(
-			this,
-			component,
-			params,
-			onRendered
-		);
+		return cell.column.modules.format.formatter.call(this, component, params, onRendered);
 	}
 
-	formatExportValue(cell, type) {
+	formatExportValue(cell, type){
 		var formatter = cell.column.modules.format[type],
-			params;
+		params;
 
-		if (formatter) {
-			params =
-				typeof formatter.params === "function"
-					? formatter.params(cell.getComponent())
-					: formatter.params;
+		if(formatter){
+			params = typeof formatter.params === "function" ? formatter.params(cell.getComponent()) : formatter.params;
 
-			function onRendered(callback) {
-				if (!cell.modules.format) {
+			function onRendered(callback){
+				if(!cell.modules.format){
 					cell.modules.format = {};
 				}
 
@@ -11654,55 +10494,46 @@ class Format extends Module {
 				cell.modules.format.rendered = false;
 			}
 
-			return formatter.formatter.call(
-				this,
-				cell.getComponent(),
-				params,
-				onRendered
-			);
-		} else {
+			return formatter.formatter.call(this, cell.getComponent(), params, onRendered);
+
+		}else {
 			return this.formatValue(cell);
 		}
 	}
 
-	sanitizeHTML(value) {
-		if (value) {
+	sanitizeHTML(value){
+		if(value){
 			var entityMap = {
-				"&": "&amp;",
-				"<": "&lt;",
-				">": "&gt;",
-				'"': "&quot;",
-				"'": "&#39;",
-				"/": "&#x2F;",
-				"`": "&#x60;",
-				"=": "&#x3D;",
+				'&': '&amp;',
+				'<': '&lt;',
+				'>': '&gt;',
+				'"': '&quot;',
+				"'": '&#39;',
+				'/': '&#x2F;',
+				'`': '&#x60;',
+				'=': '&#x3D;'
 			};
 
 			return String(value).replace(/[&<>"'`=/]/g, function (s) {
 				return entityMap[s];
 			});
-		} else {
+		}else {
 			return value;
 		}
 	}
 
-	emptyToSpace(value) {
-		return value === null || typeof value === "undefined" || value === ""
-			? "&nbsp;"
-			: value;
+	emptyToSpace(value){
+		return value === null || typeof value === "undefined" || value === "" ? "&nbsp;" : value;
 	}
 
 	//get formatter for cell
-	getFormatter(formatter) {
-		switch (typeof formatter) {
+	getFormatter(formatter){
+		switch(typeof formatter){
 			case "string":
-				if (Format.formatters[formatter]) {
+				if(Format.formatters[formatter]){
 					formatter = Format.formatters[formatter];
-				} else {
-					console.warn(
-						"Formatter Error - No such formatter found: ",
-						formatter
-					);
+				}else {
+					console.warn("Formatter Error - No such formatter found: ", formatter);
 					formatter = Format.formatters.plaintext;
 				}
 				break;
@@ -11725,10 +10556,11 @@ Format.moduleName = "format";
 //load defaults
 Format.formatters = defaultFormatters;
 
-class FrozenColumns extends Module {
-	constructor(table) {
+class FrozenColumns extends Module{
+	
+	constructor(table){
 		super(table);
-
+		
 		this.leftColumns = [];
 		this.rightColumns = [];
 		this.leftMargin = 0;
@@ -11737,12 +10569,12 @@ class FrozenColumns extends Module {
 		this.initializationMode = "left";
 		this.active = false;
 		this.blocked = true;
-
+		
 		this.registerColumnOption("frozen");
 	}
-
+	
 	//reset initial state
-	reset() {
+	reset(){
 		this.initializationMode = "left";
 		this.leftColumns = [];
 		this.rightColumns = [];
@@ -11750,12 +10582,12 @@ class FrozenColumns extends Module {
 		this.rightMargin = 0;
 		this.rightMargin = 0;
 		this.active = false;
-
+		
 		this.table.columnManager.headersElement.style.marginLeft = 0;
 		this.table.columnManager.element.style.paddingRight = 0;
 	}
-
-	initialize() {
+	
+	initialize(){
 		this.subscribe("cell-layout", this.layoutCell.bind(this));
 		this.subscribe("column-init", this.initializeColumn.bind(this));
 		this.subscribe("column-width", this.layout.bind(this));
@@ -11764,317 +10596,299 @@ class FrozenColumns extends Module {
 		this.subscribe("scroll-horizontal", this.scrollHorizontal.bind(this));
 		this.subscribe("scroll-horizontal", this.scrollHorizontal.bind(this));
 		this.subscribe("columns-loading", this.reset.bind(this));
-
+		
 		this.subscribe("column-add", this.reinitializeColumns.bind(this));
 		this.subscribe("column-delete", this.reinitializeColumns.bind(this));
-
+		
 		this.subscribe("table-redraw", this.layout.bind(this));
 		this.subscribe("layout-refreshing", this.blockLayout.bind(this));
 		this.subscribe("layout-refreshed", this.unblockLayout.bind(this));
 	}
-
-	blockLayout() {
+	
+	blockLayout(){
 		this.blocked = true;
 	}
-
-	unblockLayout() {
+	
+	unblockLayout(){
 		this.blocked = false;
 	}
-
-	layoutCell(cell) {
+	
+	layoutCell(cell){
 		this.layoutElement(cell.element, cell.column);
 	}
-
-	reinitializeColumns() {
+	
+	reinitializeColumns(){
 		this.reset();
-
+		
 		this.table.columnManager.columnsByIndex.forEach((column) => {
 			this.initializeColumn(column);
 		});
 	}
-
+	
 	//initialize specific column
-	initializeColumn(column) {
-		var config = { margin: 0, edge: false };
-
-		if (!column.isGroup) {
-			if (this.frozenCheck(column)) {
+	initializeColumn(column){
+		var config = {margin:0, edge:false};
+		
+		if(!column.isGroup){
+			
+			if(this.frozenCheck(column)){
+				
 				config.position = this.initializationMode;
-
-				if (this.initializationMode == "left") {
+				
+				if(this.initializationMode == "left"){
 					this.leftColumns.push(column);
-				} else {
+				}else {
 					this.rightColumns.unshift(column);
 				}
-
+				
 				this.active = true;
-
+				
 				column.modules.frozen = config;
-			} else {
+			}else {
 				this.initializationMode = "right";
 			}
 		}
 	}
-
-	frozenCheck(column) {
-		if (column.parent.isGroup && column.definition.frozen) {
-			console.warn(
-				"Frozen Column Error - Parent column group must be frozen, not individual columns or sub column groups"
-			);
+	
+	frozenCheck(column){
+		if(column.parent.isGroup && column.definition.frozen){
+			console.warn("Frozen Column Error - Parent column group must be frozen, not individual columns or sub column groups");
 		}
-
-		if (column.parent.isGroup) {
+		
+		if(column.parent.isGroup){
 			return this.frozenCheck(column.parent);
-		} else {
+		}else {
 			return column.definition.frozen;
 		}
 	}
-
+	
 	//quick layout to smooth horizontal scrolling
-	scrollHorizontal() {
-		if (this.active) {
+	scrollHorizontal(){	
+		if(this.active){		
 			this.calcMargins(true);
-
+			
 			this.layoutColumnPosition();
-
+			
 			this.layoutCalcRows();
-
+			
 			this.reinitializeRows();
 		}
 	}
-
+	
 	//calculate margins for rows
-	calcMargins(scroll) {
-		if (!scroll) {
-			this.leftMargin =
-				this._calcSpace(this.leftColumns, this.leftColumns.length) + "px";
-			this.rightMargin =
-				this._calcSpace(this.rightColumns, this.rightColumns.length) + "px";
+	calcMargins(scroll){
+		
+		if(!scroll){
+			this.leftMargin = this._calcSpace(this.leftColumns, this.leftColumns.length) + "px";			
+			this.rightMargin = this._calcSpace(this.rightColumns, this.rightColumns.length) + "px";	
 			this.table.rowManager.tableElement.style.marginRight = this.rightMargin;
 		}
-
+		
 		//calculate right frozen columns
-		this.rightPadding =
-			this.table.rowManager.element.clientWidth +
-			this.table.columnManager.scrollLeft;
+		this.rightPadding = this.table.rowManager.element.clientWidth + this.table.columnManager.scrollLeft;
 	}
-
+	
 	//layout calculation rows
-	layoutCalcRows() {
-		if (this.table.modExists("columnCalcs")) {
-			if (
-				this.table.modules.columnCalcs.topInitialized &&
-				this.table.modules.columnCalcs.topRow
-			) {
+	layoutCalcRows(){
+		if(this.table.modExists("columnCalcs")){
+			if(this.table.modules.columnCalcs.topInitialized && this.table.modules.columnCalcs.topRow){
 				this.layoutRow(this.table.modules.columnCalcs.topRow);
 			}
-
-			if (
-				this.table.modules.columnCalcs.botInitialized &&
-				this.table.modules.columnCalcs.botRow
-			) {
+			
+			if(this.table.modules.columnCalcs.botInitialized && this.table.modules.columnCalcs.botRow){
 				this.layoutRow(this.table.modules.columnCalcs.botRow);
 			}
-
-			if (this.table.modExists("groupRows")) {
+			
+			if(this.table.modExists("groupRows")){
 				this.layoutGroupCalcs(this.table.modules.groupRows.getGroups());
 			}
 		}
 	}
-
-	layoutGroupCalcs(groups) {
+	
+	layoutGroupCalcs(groups){
 		groups.forEach((group) => {
-			if (group.calcs.top) {
+			if(group.calcs.top){
 				this.layoutRow(group.calcs.top);
 			}
-
-			if (group.calcs.bottom) {
+			
+			if(group.calcs.bottom){
 				this.layoutRow(group.calcs.bottom);
 			}
-
-			if (group.groupList && group.groupList.length) {
+			
+			if(group.groupList && group.groupList.length){
 				this.layoutGroupCalcs(group.groupList);
 			}
 		});
 	}
-
+	
 	//calculate column positions and layout headers
-	layoutColumnPosition(allCells) {
+	layoutColumnPosition(allCells){
 		var leftParents = [];
-
+		
 		var leftMargin = 0;
 		var rightMargin = 0;
-
+		
 		this.table.columnManager.headersElement.style.marginLeft = this.leftMargin;
 		this.table.columnManager.element.style.paddingRight = this.rightMargin;
-
-		this.leftColumns.forEach((column, i) => {
-			column.modules.frozen.marginValue =
-				leftMargin + this.table.columnManager.scrollLeft;
+		
+		this.leftColumns.forEach((column, i) => {	
+			column.modules.frozen.marginValue = leftMargin + this.table.columnManager.scrollLeft;
 			column.modules.frozen.margin = column.modules.frozen.marginValue + "px";
-
-			if (column.visible) {
+			
+			if(column.visible){
 				leftMargin += column.getWidth();
 			}
-
-			if (i == this.leftColumns.length - 1) {
+			
+			if(i == this.leftColumns.length - 1){
 				column.modules.frozen.edge = true;
-			} else {
+			}else {
 				column.modules.frozen.edge = false;
 			}
-
-			if (column.parent.isGroup) {
+			
+			if(column.parent.isGroup){
 				var parentEl = this.getColGroupParentElement(column);
-				if (!leftParents.includes(parentEl)) {
+				if(!leftParents.includes(parentEl)){
 					this.layoutElement(parentEl, column);
 					leftParents.push(parentEl);
 				}
-
-				if (column.modules.frozen.edge) {
-					parentEl.classList.add(
-						"tabulator-frozen-" + column.modules.frozen.position
-					);
+				
+				if(column.modules.frozen.edge){
+					parentEl.classList.add("tabulator-frozen-" + column.modules.frozen.position);
 				}
-			} else {
+			}else {
 				this.layoutElement(column.getElement(), column);
 			}
-
-			if (allCells) {
+			
+			if(allCells){
 				column.cells.forEach((cell) => {
 					this.layoutElement(cell.getElement(true), column);
 				});
 			}
 		});
-
+		
 		this.rightColumns.forEach((column, i) => {
-			if (column.visible) {
+			
+			if(column.visible){
 				rightMargin += column.getWidth();
 			}
-
+			
 			column.modules.frozen.marginValue = this.rightPadding - rightMargin;
 			column.modules.frozen.margin = column.modules.frozen.marginValue + "px";
-
-			if (i == this.rightColumns.length - 1) {
+			
+			if(i == this.rightColumns.length - 1){
 				column.modules.frozen.edge = true;
-			} else {
+			}else {
 				column.modules.frozen.edge = false;
 			}
-
-			if (column.parent.isGroup) {
+			
+			
+			if(column.parent.isGroup){
 				this.layoutElement(this.getColGroupParentElement(column), column);
-			} else {
+			}else {
 				this.layoutElement(column.getElement(), column);
 			}
-
-			if (allCells) {
+			
+			if(allCells){
 				column.cells.forEach((cell) => {
 					this.layoutElement(cell.getElement(true), column);
 				});
 			}
 		});
 	}
-
-	getColGroupParentElement(column) {
-		return column.parent.isGroup
-			? this.getColGroupParentElement(column.parent)
-			: column.getElement();
+	
+	getColGroupParentElement(column){
+		return column.parent.isGroup ? this.getColGroupParentElement(column.parent) : column.getElement();
 	}
-
+	
 	//layout columns appropriately
-	layout() {
-		if (this.active && !this.blocked) {
+	layout(){	
+		if(this.active && !this.blocked){
 			//calculate row padding
 			this.calcMargins();
-
+			
 			//calculate left columns
 			this.layoutColumnPosition();
 
 			this.reinitializeRows();
-
+			
 			this.layoutCalcRows();
 		}
 	}
-
-	reinitializeRows() {
+	
+	reinitializeRows(){
 		var visibleRows = this.table.rowManager.getVisibleRows(true);
-		var otherRows = this.table.rowManager
-			.getRows()
-			.filter((row) => !visibleRows.includes(row));
-
-		otherRows.forEach((row) => {
+		var otherRows = this.table.rowManager.getRows().filter(row => !visibleRows.includes(row));
+		
+		otherRows.forEach((row) =>{
 			row.deinitialize();
 		});
-
-		visibleRows.forEach((row) => {
-			if (row.type === "row") {
+		
+		visibleRows.forEach((row) =>{
+			if(row.type === "row"){
 				this.layoutRow(row);
 			}
 		});
 	}
-
-	layoutRow(row) {
+	
+	layoutRow(row){
 		// console.trace("row")
 		var rowEl = row.getElement();
-
+		
 		rowEl.style.paddingLeft = this.leftMargin;
-
-		if (
-			this.table.options.layout === "fitDataFill" &&
-			this.rightColumns.length
-		) {
-			this.table.rowManager.getTableElement().style.minWidth =
-				"calc(100% - " + this.rightMargin + ")";
+		
+		if(this.table.options.layout === "fitDataFill" && this.rightColumns.length){
+			this.table.rowManager.getTableElement().style.minWidth = "calc(100% - " + this.rightMargin + ")";
 		}
-
+		
 		this.leftColumns.forEach((column) => {
 			var cell = row.getCell(column);
-
-			if (cell) {
+			
+			if(cell){
 				this.layoutElement(cell.getElement(true), column);
 			}
 		});
-
+		
 		this.rightColumns.forEach((column) => {
 			var cell = row.getCell(column);
-
-			if (cell) {
+			
+			if(cell){
 				this.layoutElement(cell.getElement(true), column);
 			}
 		});
 	}
-
-	layoutElement(element, column) {
-		if (column.modules.frozen) {
+	
+	layoutElement(element, column){
+		
+		if(column.modules.frozen){
 			element.style.position = "absolute";
 			element.style.left = column.modules.frozen.margin;
-
+			
 			element.classList.add("tabulator-frozen");
-
-			if (column.modules.frozen.edge) {
-				element.classList.add(
-					"tabulator-frozen-" + column.modules.frozen.position
-				);
+			
+			if(column.modules.frozen.edge){
+				element.classList.add("tabulator-frozen-" + column.modules.frozen.position);
 			}
 		}
 	}
-
-	_calcSpace(columns, index) {
+	
+	_calcSpace(columns, index){
 		var width = 0;
-
-		for (let i = 0; i < index; i++) {
-			if (columns[i].visible) {
+		
+		for (let i = 0; i < index; i++){
+			if(columns[i].visible){
 				width += columns[i].getWidth();
 			}
 		}
-
+		
 		return width;
 	}
 }
 
 FrozenColumns.moduleName = "frozenColumns";
 
-class FrozenRows extends Module {
-	constructor(table) {
+class FrozenRows extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.topElement = document.createElement("div");
@@ -12082,84 +10896,68 @@ class FrozenRows extends Module {
 
 		//register component functions
 		this.registerComponentFunction("row", "freeze", this.freezeRow.bind(this));
-		this.registerComponentFunction(
-			"row",
-			"unfreeze",
-			this.unfreezeRow.bind(this)
-		);
-		this.registerComponentFunction(
-			"row",
-			"isFrozen",
-			this.isRowFrozen.bind(this)
-		);
+		this.registerComponentFunction("row", "unfreeze", this.unfreezeRow.bind(this));
+		this.registerComponentFunction("row", "isFrozen", this.isRowFrozen.bind(this));
 
 		//register table options
 		this.registerTableOption("frozenRowsField", "id"); //field to choose frozen rows by
 		this.registerTableOption("frozenRows", false); //holder for frozen row identifiers
 	}
 
-	initialize() {
+	initialize(){
 		this.rows = [];
 
 		this.topElement.classList.add("tabulator-frozen-rows-holder");
 
 		// this.table.columnManager.element.append(this.topElement);
-		this.table.columnManager
-			.getElement()
-			.insertBefore(
-				this.topElement,
-				this.table.columnManager.headersElement.nextSibling
-			);
+		this.table.columnManager.getElement().insertBefore(this.topElement, this.table.columnManager.headersElement.nextSibling);
 
 		this.subscribe("row-deleting", this.detachRow.bind(this));
 		this.subscribe("rows-visible", this.visibleRows.bind(this));
 
 		this.registerDisplayHandler(this.getRows.bind(this), 10);
 
-		if (this.table.options.frozenRows) {
+		if(this.table.options.frozenRows){
 			this.subscribe("data-processed", this.initializeRows.bind(this));
 			this.subscribe("row-added", this.initializeRow.bind(this));
 		}
 	}
 
-	initializeRows() {
+	initializeRows(){
 		this.table.rowManager.getRows().forEach((row) => {
 			this.initializeRow(row);
 		});
 	}
 
-	initializeRow(row) {
+	initializeRow(row){
 		var frozenRows = this.table.options.frozenRows,
-			rowType = typeof frozenRows;
+		rowType = typeof frozenRows;
 
-		if (rowType === "number") {
-			if (
-				row.getPosition() &&
-				row.getPosition() + this.rows.length <= frozenRows
-			) {
+		if(rowType === "number"){
+			if(row.getPosition() && (row.getPosition() + this.rows.length) <= frozenRows){
 				this.freezeRow(row);
 			}
-		} else if (rowType === "function") {
-			if (frozenRows.call(this.table, row.getComponent())) {
+		}else if(rowType === "function"){
+			if(frozenRows.call(this.table, row.getComponent())){
 				this.freezeRow(row);
 			}
-		} else if (Array.isArray(frozenRows)) {
-			if (frozenRows.includes(row.data[this.options("frozenRowsField")])) {
+		}else if(Array.isArray(frozenRows)){
+			if(frozenRows.includes(row.data[this.options("frozenRowsField")])){
 				this.freezeRow(row);
 			}
 		}
 	}
 
-	isRowFrozen(row) {
+	isRowFrozen(row){
 		var index = this.rows.indexOf(row);
 		return index > -1;
 	}
 
-	isFrozen() {
+	isFrozen(){
 		return !!this.rows.length;
 	}
 
-	visibleRows(viewable, rows) {
+	visibleRows(viewable, rows){
 		this.rows.forEach((row) => {
 			rows.push(row);
 		});
@@ -12168,13 +10966,13 @@ class FrozenRows extends Module {
 	}
 
 	//filter frozen rows out of display data
-	getRows(rows) {
+	getRows(rows){
 		var output = rows.slice(0);
 
-		this.rows.forEach(function (row) {
+		this.rows.forEach(function(row){
 			var index = output.indexOf(row);
 
-			if (index > -1) {
+			if(index > -1){
 				output.splice(index, 1);
 			}
 		});
@@ -12182,26 +10980,29 @@ class FrozenRows extends Module {
 		return output;
 	}
 
-	freezeRow(row) {
-		if (!row.modules.frozen) {
+	freezeRow(row){
+		if(!row.modules.frozen){
 			row.modules.frozen = true;
 			this.topElement.appendChild(row.getElement());
 			row.initialize();
 			row.normalizeHeight();
-			this.table.rowManager.adjustTableSize();
-
+		
 			this.rows.push(row);
 
 			this.refreshData(false, "display");
 
+			this.table.rowManager.adjustTableSize();
+
 			this.styleRows();
-		} else {
+
+		}else {
 			console.warn("Freeze Error - Row is already frozen");
 		}
 	}
 
-	unfreezeRow(row) {
-		if (row.modules.frozen) {
+	unfreezeRow(row){
+		if(row.modules.frozen){
+
 			row.modules.frozen = false;
 
 			this.detachRow(row);
@@ -12210,21 +11011,22 @@ class FrozenRows extends Module {
 
 			this.refreshData(false, "display");
 
-			if (this.rows.length) {
+			if(this.rows.length){
 				this.styleRows();
 			}
-		} else {
+
+		}else {
 			console.warn("Freeze Error - Row is already unfrozen");
 		}
 	}
 
-	detachRow(row) {
+	detachRow(row){
 		var index = this.rows.indexOf(row);
 
-		if (index > -1) {
+		if(index > -1){
 			var rowEl = row.getElement();
 
-			if (rowEl.parentNode) {
+			if(rowEl.parentNode){
 				rowEl.parentNode.removeChild(rowEl);
 			}
 
@@ -12232,7 +11034,7 @@ class FrozenRows extends Module {
 		}
 	}
 
-	styleRows(row) {
+	styleRows(row){
 		this.rows.forEach((row, i) => {
 			this.table.rowManager.styleRow(row, i);
 		});
@@ -12243,83 +11045,80 @@ FrozenRows.moduleName = "frozenRows";
 
 //public group object
 class GroupComponent {
-	constructor(group) {
+	constructor (group){
 		this._group = group;
 		this.type = "GroupComponent";
 
 		return new Proxy(this, {
-			get: function (target, name, receiver) {
+			get: function(target, name, receiver) {
 				if (typeof target[name] !== "undefined") {
 					return target[name];
-				} else {
-					return target._group.groupManager.table.componentFunctionBinder.handle(
-						"row",
-						target._group,
-						name
-					);
+				}else {
+					return target._group.groupManager.table.componentFunctionBinder.handle("row", target._group, name);
 				}
-			},
+			}
 		});
 	}
 
-	getKey() {
+	getKey(){
 		return this._group.key;
 	}
 
-	getField() {
+	getField(){
 		return this._group.field;
 	}
 
-	getElement() {
+	getElement(){
 		return this._group.element;
 	}
 
-	getRows() {
+	getRows(){
 		return this._group.getRows(true);
 	}
 
-	getSubGroups() {
+	getSubGroups(){
 		return this._group.getSubGroups(true);
 	}
 
-	getParentGroup() {
+	getParentGroup(){
 		return this._group.parent ? this._group.parent.getComponent() : false;
 	}
 
-	isVisible() {
-		return this._group.visible;
+	isVisible(){
+		return this._group._visible;
 	}
 
-	show() {
+	show(){
 		this._group.show();
 	}
 
-	hide() {
+	hide(){
 		this._group.hide();
 	}
 
-	toggle() {
+	toggle(){
 		this._group.toggleVisibility();
 	}
 
-	_getSelf() {
+	_getSelf(){
 		return this._group;
 	}
 
-	getTable() {
+	getTable(){
 		return this._group.groupManager.table;
 	}
 }
 
 //Group functions
-class Group {
-	constructor(groupManager, parent, level, key, field, generator, oldGroup) {
+class Group{
+	
+	constructor(groupManager, parent, level, key, field, generator, oldGroup){
 		this.groupManager = groupManager;
 		this.parent = parent;
 		this.key = key;
 		this.level = level;
 		this.field = field;
-		this.hasSubGroups = level < groupManager.groupIDLookups.length - 1;
+		this.hasSubGroups = level < (groupManager.groupIDLookups.length - 1);
 		this.addRow = this.hasSubGroups ? this._addRowToGroup : this._addRow;
 		this.type = "group"; //type of element
 		this.old = oldGroup;
@@ -12336,83 +11135,70 @@ class Group {
 		this.initialized = false;
 		this.modules = {};
 		this.arrowElement = false;
-
-		this.visible = oldGroup
-			? oldGroup.visible
-			: typeof groupManager.startOpen[level] !== "undefined"
-			? groupManager.startOpen[level]
-			: groupManager.startOpen[0];
-
+		
+		this.visible = oldGroup ? oldGroup.visible : (typeof groupManager.startOpen[level] !== "undefined" ? groupManager.startOpen[level] : groupManager.startOpen[0]);
+		
 		this.component = null;
-
+		
 		this.createElements();
 		this.addBindings();
-
+		
 		this.createValueGroups();
 	}
-
-	wipe() {
-		if (this.groupList.length) {
-			this.groupList.forEach(function (group) {
+	
+	wipe(){
+		if(this.groupList.length){
+			this.groupList.forEach(function(group){
 				group.wipe();
 			});
-		} else {
+		}else {
 			this.rows.forEach((row) => {
-				if (row.modules) {
+				if(row.modules){
 					delete row.modules.group;
 				}
 			});
 		}
-
+		
 		this.element = false;
 		this.arrowElement = false;
 		this.elementContents = false;
 	}
-
-	createElements() {
+	
+	createElements(){
 		var arrow = document.createElement("div");
 		arrow.classList.add("tabulator-arrow");
-
+		
 		this.element = document.createElement("div");
 		this.element.classList.add("tabulator-row");
 		this.element.classList.add("tabulator-group");
 		this.element.classList.add("tabulator-group-level-" + this.level);
 		this.element.setAttribute("role", "rowgroup");
-
+		
 		this.arrowElement = document.createElement("div");
 		this.arrowElement.classList.add("tabulator-group-toggle");
 		this.arrowElement.appendChild(arrow);
-
+		
 		//setup movable rows
-		if (
-			this.groupManager.table.options.movableRows !== false &&
-			this.groupManager.table.modExists("moveRow")
-		) {
+		if(this.groupManager.table.options.movableRows !== false && this.groupManager.table.modExists("moveRow")){
 			this.groupManager.table.modules.moveRow.initializeGroupHeader(this);
 		}
 	}
-
-	createValueGroups() {
+	
+	createValueGroups(){
 		var level = this.level + 1;
-		if (
-			this.groupManager.allowedValues &&
-			this.groupManager.allowedValues[level]
-		) {
+		if(this.groupManager.allowedValues && this.groupManager.allowedValues[level]){
 			this.groupManager.allowedValues[level].forEach((value) => {
 				this._createGroup(value, level);
 			});
 		}
 	}
-
-	addBindings() {
+	
+	addBindings(){
 		var toggleElement;
-
-		if (this.groupManager.table.options.groupToggleElement) {
-			toggleElement =
-				this.groupManager.table.options.groupToggleElement == "arrow"
-					? this.arrowElement
-					: this.element;
-
+		
+		if(this.groupManager.table.options.groupToggleElement){
+			toggleElement = this.groupManager.table.options.groupToggleElement == "arrow" ? this.arrowElement : this.element;
+			
 			toggleElement.addEventListener("click", (e) => {
 				e.stopPropagation();
 				e.stopImmediatePropagation();
@@ -12420,362 +11206,309 @@ class Group {
 			});
 		}
 	}
-
-	_createGroup(groupID, level) {
+	
+	_createGroup(groupID, level){
 		var groupKey = level + "_" + groupID;
-		var group = new Group(
-			this.groupManager,
-			this,
-			level,
-			groupID,
-			this.groupManager.groupIDLookups[level].field,
-			this.groupManager.headerGenerator[level] ||
-				this.groupManager.headerGenerator[0],
-			this.old ? this.old.groups[groupKey] : false
-		);
-
+		var group = new Group(this.groupManager, this, level, groupID,  this.groupManager.groupIDLookups[level].field, this.groupManager.headerGenerator[level] || this.groupManager.headerGenerator[0], this.old ? this.old.groups[groupKey] : false);
+		
 		this.groups[groupKey] = group;
 		this.groupList.push(group);
 	}
-
-	_addRowToGroup(row) {
+	
+	_addRowToGroup(row){
+		
 		var level = this.level + 1;
-
-		if (this.hasSubGroups) {
+		
+		if(this.hasSubGroups){
 			var groupID = this.groupManager.groupIDLookups[level].func(row.getData()),
-				groupKey = level + "_" + groupID;
-
-			if (
-				this.groupManager.allowedValues &&
-				this.groupManager.allowedValues[level]
-			) {
-				if (this.groups[groupKey]) {
+			groupKey = level + "_" + groupID;
+			
+			if(this.groupManager.allowedValues && this.groupManager.allowedValues[level]){
+				if(this.groups[groupKey]){
 					this.groups[groupKey].addRow(row);
 				}
-			} else {
-				if (!this.groups[groupKey]) {
+			}else {
+				if(!this.groups[groupKey]){
 					this._createGroup(groupID, level);
 				}
-
+				
 				this.groups[groupKey].addRow(row);
 			}
 		}
 	}
-
-	_addRow(row) {
+	
+	_addRow(row){
 		this.rows.push(row);
 		row.modules.group = this;
 	}
-
-	insertRow(row, to, after) {
+	
+	insertRow(row, to, after){
 		var data = this.conformRowData({});
-
+		
 		row.updateData(data);
-
+		
 		var toIndex = this.rows.indexOf(to);
-
-		if (toIndex > -1) {
-			if (after) {
-				this.rows.splice(toIndex + 1, 0, row);
-			} else {
+		
+		if(toIndex > -1){
+			if(after){
+				this.rows.splice(toIndex+1, 0, row);
+			}else {
 				this.rows.splice(toIndex, 0, row);
 			}
-		} else {
-			if (after) {
+		}else {
+			if(after){
 				this.rows.push(row);
-			} else {
+			}else {
 				this.rows.unshift(row);
 			}
 		}
-
+		
 		row.modules.group = this;
-
+		
 		this.generateGroupHeaderContents();
-
-		if (
-			this.groupManager.table.modExists("columnCalcs") &&
-			this.groupManager.table.options.columnCalcs != "table"
-		) {
+		
+		if(this.groupManager.table.modExists("columnCalcs") && this.groupManager.table.options.columnCalcs != "table"){
 			this.groupManager.table.modules.columnCalcs.recalcGroup(this);
 		}
-
+		
 		this.groupManager.updateGroupRows(true);
 	}
-
-	scrollHeader(left) {
-		if (this.arrowElement) {
+	
+	scrollHeader(left){
+		if(this.arrowElement){
 			this.arrowElement.style.marginLeft = left;
-
-			this.groupList.forEach(function (child) {
+			
+			this.groupList.forEach(function(child){
 				child.scrollHeader(left);
 			});
 		}
 	}
-
-	getRowIndex(row) {}
-
+	
+	getRowIndex(row){}
+	
 	//update row data to match grouping constraints
-	conformRowData(data) {
-		if (this.field) {
+	conformRowData(data){
+		if(this.field){
 			data[this.field] = this.key;
-		} else {
-			console.warn(
-				"Data Conforming Error - Cannot conform row data to match new group as groupBy is a function"
-			);
+		}else {
+			console.warn("Data Conforming Error - Cannot conform row data to match new group as groupBy is a function");
 		}
-
-		if (this.parent) {
+		
+		if(this.parent){
 			data = this.parent.conformRowData(data);
 		}
-
+		
 		return data;
 	}
-
-	removeRow(row) {
+	
+	removeRow(row){
 		var index = this.rows.indexOf(row);
 		var el = row.getElement();
-
-		if (index > -1) {
+		
+		
+		if(index > -1){
 			this.rows.splice(index, 1);
 		}
-
-		if (!this.groupManager.table.options.groupValues && !this.rows.length) {
-			if (this.parent) {
+		
+		if(!this.groupManager.table.options.groupValues && !this.rows.length){
+			if(this.parent){
 				this.parent.removeGroup(this);
-			} else {
+			}else {
 				this.groupManager.removeGroup(this);
 			}
-
+			
 			this.groupManager.updateGroupRows(true);
-		} else {
-			if (el.parentNode) {
+		}else {
+			
+			if(el.parentNode){
 				el.parentNode.removeChild(el);
 			}
-
+			
 			this.generateGroupHeaderContents();
-
-			if (
-				this.groupManager.table.modExists("columnCalcs") &&
-				this.groupManager.table.options.columnCalcs != "table"
-			) {
+			
+			if(this.groupManager.table.modExists("columnCalcs") && this.groupManager.table.options.columnCalcs != "table"){
 				this.groupManager.table.modules.columnCalcs.recalcGroup(this);
 			}
+			
 		}
 	}
-
-	removeGroup(group) {
+	
+	removeGroup(group){
 		var groupKey = group.level + "_" + group.key,
-			index;
-
-		if (this.groups[groupKey]) {
+		index;
+		
+		if(this.groups[groupKey]){
 			delete this.groups[groupKey];
-
+			
 			index = this.groupList.indexOf(group);
-
-			if (index > -1) {
+			
+			if(index > -1){
 				this.groupList.splice(index, 1);
 			}
-
-			if (!this.groupList.length) {
-				if (this.parent) {
+			
+			if(!this.groupList.length){
+				if(this.parent){
 					this.parent.removeGroup(this);
-				} else {
+				}else {
 					this.groupManager.removeGroup(this);
 				}
 			}
 		}
 	}
-
-	getHeadersAndRows(noCalc) {
+	
+	getHeadersAndRows(noCalc){
 		var output = [];
-
+		
 		output.push(this);
-
+		
 		this._visSet();
-
-		if (this.visible) {
-			if (this.groupList.length) {
-				this.groupList.forEach(function (group) {
+		
+		if(this.visible){
+			if(this.groupList.length){
+				this.groupList.forEach(function(group){
 					output = output.concat(group.getHeadersAndRows(noCalc));
 				});
-			} else {
-				if (
-					!noCalc &&
-					this.groupManager.table.options.columnCalcs != "table" &&
-					this.groupManager.table.modExists("columnCalcs") &&
-					this.groupManager.table.modules.columnCalcs.hasTopCalcs()
-				) {
-					if (this.calcs.top) {
+				
+			}else {
+				if(!noCalc && this.groupManager.table.options.columnCalcs != "table" && this.groupManager.table.modExists("columnCalcs") && this.groupManager.table.modules.columnCalcs.hasTopCalcs()){
+					if(this.calcs.top){
 						this.calcs.top.detachElement();
 						this.calcs.top.deleteCells();
 					}
-
-					this.calcs.top =
-						this.groupManager.table.modules.columnCalcs.generateTopRow(
-							this.rows
-						);
+					
+					this.calcs.top = this.groupManager.table.modules.columnCalcs.generateTopRow(this.rows);
 					output.push(this.calcs.top);
 				}
-
+				
 				output = output.concat(this.rows);
-
-				if (
-					!noCalc &&
-					this.groupManager.table.options.columnCalcs != "table" &&
-					this.groupManager.table.modExists("columnCalcs") &&
-					this.groupManager.table.modules.columnCalcs.hasBottomCalcs()
-				) {
-					if (this.calcs.bottom) {
+				
+				if(!noCalc && this.groupManager.table.options.columnCalcs != "table" &&  this.groupManager.table.modExists("columnCalcs") && this.groupManager.table.modules.columnCalcs.hasBottomCalcs()){
+					if(this.calcs.bottom){
 						this.calcs.bottom.detachElement();
 						this.calcs.bottom.deleteCells();
 					}
-
-					this.calcs.bottom =
-						this.groupManager.table.modules.columnCalcs.generateBottomRow(
-							this.rows
-						);
+					
+					this.calcs.bottom = this.groupManager.table.modules.columnCalcs.generateBottomRow(this.rows);
 					output.push(this.calcs.bottom);
 				}
 			}
-		} else {
-			if (
-				!this.groupList.length &&
-				this.groupManager.table.options.columnCalcs != "table"
-			) {
-				if (this.groupManager.table.modExists("columnCalcs")) {
-					if (
-						!noCalc &&
-						this.groupManager.table.modules.columnCalcs.hasTopCalcs()
-					) {
-						if (this.calcs.top) {
+		}else {
+			if(!this.groupList.length && this.groupManager.table.options.columnCalcs != "table"){
+				
+				if(this.groupManager.table.modExists("columnCalcs")){
+					
+					if(!noCalc && this.groupManager.table.modules.columnCalcs.hasTopCalcs()){
+						if(this.calcs.top){
 							this.calcs.top.detachElement();
 							this.calcs.top.deleteCells();
 						}
-
-						if (this.groupManager.table.options.groupClosedShowCalcs) {
-							this.calcs.top =
-								this.groupManager.table.modules.columnCalcs.generateTopRow(
-									this.rows
-								);
+						
+						if(this.groupManager.table.options.groupClosedShowCalcs){
+							this.calcs.top = this.groupManager.table.modules.columnCalcs.generateTopRow(this.rows);
 							output.push(this.calcs.top);
 						}
 					}
-
-					if (
-						!noCalc &&
-						this.groupManager.table.modules.columnCalcs.hasBottomCalcs()
-					) {
-						if (this.calcs.bottom) {
+					
+					if(!noCalc && this.groupManager.table.modules.columnCalcs.hasBottomCalcs()){
+						if(this.calcs.bottom){
 							this.calcs.bottom.detachElement();
 							this.calcs.bottom.deleteCells();
 						}
-
-						if (this.groupManager.table.options.groupClosedShowCalcs) {
-							this.calcs.bottom =
-								this.groupManager.table.modules.columnCalcs.generateBottomRow(
-									this.rows
-								);
+						
+						if(this.groupManager.table.options.groupClosedShowCalcs){
+							this.calcs.bottom = this.groupManager.table.modules.columnCalcs.generateBottomRow(this.rows);
 							output.push(this.calcs.bottom);
 						}
 					}
 				}
 			}
+			
 		}
-
+		
 		return output;
 	}
-
-	getData(visible, transform) {
+	
+	getData(visible, transform){
 		var output = [];
-
+		
 		this._visSet();
-
-		if (!visible || (visible && this.visible)) {
+		
+		if(!visible || (visible && this.visible)){
 			this.rows.forEach((row) => {
 				output.push(row.getData(transform || "data"));
 			});
 		}
-
+		
 		return output;
 	}
-
-	getRowCount() {
+	
+	getRowCount(){
 		var count = 0;
-
-		if (this.groupList.length) {
+		
+		if(this.groupList.length){
 			this.groupList.forEach((group) => {
 				count += group.getRowCount();
 			});
-		} else {
+		}else {
 			count = this.rows.length;
 		}
 		return count;
 	}
-
-	toggleVisibility() {
-		if (this.visible) {
+	
+	toggleVisibility(){
+		if(this.visible){
 			this.hide();
-		} else {
+		}else {
 			this.show();
 		}
 	}
-
-	hide() {
+	
+	hide(){
 		this.visible = false;
-
-		if (
-			this.groupManager.table.rowManager.getRenderMode() == "basic" &&
-			!this.groupManager.table.options.pagination
-		) {
+		
+		if(this.groupManager.table.rowManager.getRenderMode() == "basic" && !this.groupManager.table.options.pagination){
+			
 			this.element.classList.remove("tabulator-group-visible");
-
-			if (this.groupList.length) {
+			
+			if(this.groupList.length){
 				this.groupList.forEach((group) => {
+					
 					var rows = group.getHeadersAndRows();
-
+					
 					rows.forEach((row) => {
 						row.detachElement();
 					});
 				});
-			} else {
+				
+			}else {
 				this.rows.forEach((row) => {
 					var rowEl = row.getElement();
 					rowEl.parentNode.removeChild(rowEl);
 				});
 			}
-
-			this.groupManager.table.rowManager.setDisplayRows(
-				this.groupManager.updateGroupRows(),
-				this.groupManager.getDisplayIndex()
-			);
-
-			this.groupManager.checkBasicModeGroupHeaderWidth();
-		} else {
+			
+			this.groupManager.updateGroupRows(true);
+			
+		}else {
 			this.groupManager.updateGroupRows(true);
 		}
-
-		this.groupManager.table.externalEvents.dispatch(
-			"groupVisibilityChanged",
-			this.getComponent(),
-			false
-		);
+		
+		this.groupManager.table.externalEvents.dispatch("groupVisibilityChanged", this.getComponent(), false);
 	}
-
-	show() {
+	
+	show(){
 		this.visible = true;
-
-		if (
-			this.groupManager.table.rowManager.getRenderMode() == "basic" &&
-			!this.groupManager.table.options.pagination
-		) {
+		
+		if(this.groupManager.table.rowManager.getRenderMode() == "basic" && !this.groupManager.table.options.pagination){
+			
 			this.element.classList.add("tabulator-group-visible");
-
+			
 			var prev = this.generateElement();
-
-			if (this.groupList.length) {
+			
+			if(this.groupList.length){
 				this.groupList.forEach((group) => {
 					var rows = group.getHeadersAndRows();
-
+					
 					rows.forEach((row) => {
 						var rowEl = row.getElement();
 						prev.parentNode.insertBefore(rowEl, prev.nextSibling);
@@ -12783,7 +11516,8 @@ class Group {
 						prev = rowEl;
 					});
 				});
-			} else {
+				
+			}else {
 				this.rows.forEach((row) => {
 					var rowEl = row.getElement();
 					prev.parentNode.insertBefore(rowEl, prev.nextSibling);
@@ -12792,232 +11526,201 @@ class Group {
 				});
 			}
 
-			this.groupManager.table.rowManager.setDisplayRows(
-				this.groupManager.updateGroupRows(),
-				this.groupManager.getDisplayIndex()
-			);
-
-			this.groupManager.checkBasicModeGroupHeaderWidth();
-		} else {
+			this.groupManager.updateGroupRows(true);
+		}else {
 			this.groupManager.updateGroupRows(true);
 		}
-
-		this.groupManager.table.externalEvents.dispatch(
-			"groupVisibilityChanged",
-			this.getComponent(),
-			true
-		);
+		
+		this.groupManager.table.externalEvents.dispatch("groupVisibilityChanged", this.getComponent(), true);
 	}
-
-	_visSet() {
+	
+	_visSet(){
 		var data = [];
-
-		if (typeof this.visible == "function") {
-			this.rows.forEach(function (row) {
+		
+		if(typeof this.visible == "function"){
+			
+			this.rows.forEach(function(row){
 				data.push(row.getData());
 			});
-
-			this.visible = this.visible(
-				this.key,
-				this.getRowCount(),
-				data,
-				this.getComponent()
-			);
+			
+			this.visible = this.visible(this.key, this.getRowCount(), data, this.getComponent());
 		}
 	}
-
-	getRowGroup(row) {
+	
+	getRowGroup(row){
 		var match = false;
-		if (this.groupList.length) {
-			this.groupList.forEach(function (group) {
+		if(this.groupList.length){
+			this.groupList.forEach(function(group){
 				var result = group.getRowGroup(row);
-
-				if (result) {
+				
+				if(result){
 					match = result;
 				}
 			});
-		} else {
-			if (
-				this.rows.find(function (item) {
-					return item === row;
-				})
-			) {
+		}else {
+			if(this.rows.find(function(item){
+				return item === row;
+			})){
 				match = this;
 			}
 		}
-
+		
 		return match;
 	}
-
-	getSubGroups(component) {
+	
+	getSubGroups(component){
 		var output = [];
-
-		this.groupList.forEach(function (child) {
+		
+		this.groupList.forEach(function(child){
 			output.push(component ? child.getComponent() : child);
 		});
-
+		
 		return output;
 	}
-
-	getRows(component) {
+	
+	getRows(component){
 		var output = [];
-
-		this.rows.forEach(function (row) {
+		
+		this.rows.forEach(function(row){
 			output.push(component ? row.getComponent() : row);
 		});
-
+		
 		return output;
 	}
-
-	generateGroupHeaderContents() {
+	
+	generateGroupHeaderContents(){
 		var data = [];
-
-		this.rows.forEach(function (row) {
+		
+		this.rows.forEach(function(row){
 			data.push(row.getData());
 		});
-
-		this.elementContents = this.generator(
-			this.key,
-			this.getRowCount(),
-			data,
-			this.getComponent()
-		);
-
-		while (this.element.firstChild)
-			this.element.removeChild(this.element.firstChild);
-
-		if (typeof this.elementContents === "string") {
+		
+		this.elementContents = this.generator(this.key, this.getRowCount(), data, this.getComponent());
+		
+		while(this.element.firstChild) this.element.removeChild(this.element.firstChild);
+		
+		if(typeof this.elementContents === "string"){
 			this.element.innerHTML = this.elementContents;
-		} else {
+		}else {
 			this.element.appendChild(this.elementContents);
 		}
-
+		
 		this.element.insertBefore(this.arrowElement, this.element.firstChild);
 	}
-
+	
 	getPath(path = []) {
 		path.unshift(this.key);
-		if (this.parent) {
+		if(this.parent) {
 			this.parent.getPath(path);
 		}
 		return path;
 	}
-
+	
 	////////////// Standard Row Functions //////////////
-
-	getElement() {
+	
+	getElement(){
 		return this.elementContents ? this.element : this.generateElement();
 	}
-
-	generateElement() {
+	
+	generateElement(){
 		this.addBindings = false;
-
+		
 		this._visSet();
-
-		if (this.visible) {
+		
+		if(this.visible){
 			this.element.classList.add("tabulator-group-visible");
-		} else {
+		}else {
 			this.element.classList.remove("tabulator-group-visible");
 		}
-
-		for (var i = 0; i < this.element.childNodes.length; ++i) {
-			this.element.childNodes[i].parentNode.removeChild(
-				this.element.childNodes[i]
-			);
+		
+		for(var i = 0; i < this.element.childNodes.length; ++i){
+			this.element.childNodes[i].parentNode.removeChild(this.element.childNodes[i]);
 		}
-
+		
 		this.generateGroupHeaderContents();
-
+		
 		// this.addBindings();
-
+		
 		return this.element;
 	}
-
-	detachElement() {
-		if (this.element && this.element.parentNode) {
+	
+	detachElement(){
+		if (this.element && this.element.parentNode){
 			this.element.parentNode.removeChild(this.element);
 		}
 	}
-
+	
 	//normalize the height of elements in the row
-	normalizeHeight() {
+	normalizeHeight(){
 		this.setHeight(this.element.clientHeight);
 	}
-
-	initialize(force) {
-		if (!this.initialized || force) {
+	
+	initialize(force){
+		if(!this.initialized || force){
 			this.normalizeHeight();
 			this.initialized = true;
 		}
 	}
-
-	reinitialize() {
+	
+	reinitialize(){
 		this.initialized = false;
 		this.height = 0;
-
-		if (Helpers.elVisible(this.element)) {
+		
+		if(Helpers.elVisible(this.element)){
 			this.initialize(true);
 		}
 	}
-
-	setHeight(height) {
-		if (this.height != height) {
+	
+	setHeight(height){
+		if(this.height != height){
 			this.height = height;
 			this.outerHeight = this.element.offsetHeight;
 		}
 	}
-
+	
 	//return rows outer height
-	getHeight() {
+	getHeight(){
 		return this.outerHeight;
 	}
-
-	getGroup() {
+	
+	getGroup(){
 		return this;
 	}
-
-	reinitializeHeight() {}
-
-	calcHeight() {}
-
-	setCellHeight() {}
-
-	clearCellHeight() {}
-
-	deinitializeHeight() {}
-
+	
+	reinitializeHeight(){}
+	
+	calcHeight(){}
+	
+	setCellHeight(){}
+	
+	clearCellHeight(){}
+	
+	deinitializeHeight(){}
+	
 	//////////////// Object Generation /////////////////
-	getComponent() {
-		if (!this.component) {
+	getComponent(){
+		if(!this.component){
 			this.component = new GroupComponent(this);
 		}
-
+		
 		return this.component;
 	}
 }
 
-class GroupRows extends Module {
-	constructor(table) {
+class GroupRows extends Module{
+	
+	constructor(table){
 		super(table);
-
+		
 		this.groupIDLookups = false; //enable table grouping and set field to group by
-		this.startOpen = [
-			function () {
-				return false;
-			},
-		]; //starting state of group
-		this.headerGenerator = [
-			function () {
-				return "";
-			},
-		];
+		this.startOpen = [function(){return false;}]; //starting state of group
+		this.headerGenerator = [function(){return "";}];
 		this.groupList = []; //ordered list of groups
 		this.allowedValues = false;
 		this.groups = {}; //hold row groups
-		this.displayIndex = 0; //index in display pipeline
-
+		
 		this.displayHandler = this.getRows.bind(this);
-
+		
 		//register table options
 		this.registerTableOption("groupBy", false); //enable table grouping and set field to group by
 		this.registerTableOption("groupStartOpen", true); //starting state of group
@@ -13030,49 +11733,29 @@ class GroupRows extends Module {
 		this.registerTableOption("groupHeaderDownload", null);
 		this.registerTableOption("groupToggleElement", "arrow");
 		this.registerTableOption("groupClosedShowCalcs", false);
-
+		
 		//register table functions
 		this.registerTableFunction("setGroupBy", this.setGroupBy.bind(this));
-		this.registerTableFunction(
-			"setGroupValues",
-			this.setGroupValues.bind(this)
-		);
-		this.registerTableFunction(
-			"setGroupStartOpen",
-			this.setGroupStartOpen.bind(this)
-		);
-		this.registerTableFunction(
-			"setGroupHeader",
-			this.setGroupHeader.bind(this)
-		);
+		this.registerTableFunction("setGroupValues", this.setGroupValues.bind(this));
+		this.registerTableFunction("setGroupStartOpen", this.setGroupStartOpen.bind(this));
+		this.registerTableFunction("setGroupHeader", this.setGroupHeader.bind(this));
 		this.registerTableFunction("getGroups", this.userGetGroups.bind(this));
-		this.registerTableFunction(
-			"getGroupedData",
-			this.userGetGroupedData.bind(this)
-		);
-
+		this.registerTableFunction("getGroupedData", this.userGetGroupedData.bind(this));
+		
 		//register component functions
-		this.registerComponentFunction(
-			"row",
-			"getGroup",
-			this.rowGetGroup.bind(this)
-		);
+		this.registerComponentFunction("row", "getGroup", this.rowGetGroup.bind(this));
 	}
-
+	
 	//initialize group configuration
-	initialize() {
-		if (this.table.options.groupBy) {
-			if (this.table.options.groupUpdateOnCellEdit) {
+	initialize(){
+		if(this.table.options.groupBy){
+			if(this.table.options.groupUpdateOnCellEdit){
 				this.subscribe("cell-value-updated", this.cellUpdated.bind(this));
-				this.subscribe(
-					"row-data-changed",
-					this.reassignRowToGroup.bind(this),
-					0
-				);
+				this.subscribe("row-data-changed", this.reassignRowToGroup.bind(this), 0);
 			}
-
+			
 			this.subscribe("table-built", this.configureGroupSetup.bind(this));
-
+			
 			this.subscribe("row-deleting", this.rowDeleting.bind(this));
 			this.subscribe("row-deleted", this.rowsUpdated.bind(this));
 			this.subscribe("scroll-horizontal", this.scrollHeaders.bind(this));
@@ -13080,685 +11763,611 @@ class GroupRows extends Module {
 			this.subscribe("rows-added", this.rowsUpdated.bind(this));
 			this.subscribe("row-moving", this.rowMoving.bind(this));
 			this.subscribe("row-adding-index", this.rowAddingIndex.bind(this));
-
+			
 			this.subscribe("rows-sample", this.rowSample.bind(this));
-
+			
 			this.subscribe("render-virtual-fill", this.virtualRenderFill.bind(this));
-
+			
 			this.registerDisplayHandler(this.displayHandler, 20);
-
+			
 			this.initialized = true;
 		}
 	}
-
-	configureGroupSetup() {
-		if (this.table.options.groupBy) {
+	
+	configureGroupSetup(){
+		if(this.table.options.groupBy){
 			var groupBy = this.table.options.groupBy,
-				startOpen = this.table.options.groupStartOpen,
-				groupHeader = this.table.options.groupHeader;
-
+			startOpen = this.table.options.groupStartOpen,
+			groupHeader = this.table.options.groupHeader;
+			
 			this.allowedValues = this.table.options.groupValues;
-
-			if (
-				Array.isArray(groupBy) &&
-				Array.isArray(groupHeader) &&
-				groupBy.length > groupHeader.length
-			) {
-				console.warn(
-					"Error creating group headers, groupHeader array is shorter than groupBy array"
-				);
+			
+			if(Array.isArray(groupBy) && Array.isArray(groupHeader) && groupBy.length > groupHeader.length){
+				console.warn("Error creating group headers, groupHeader array is shorter than groupBy array");
 			}
-
-			this.headerGenerator = [
-				function () {
-					return "";
-				},
-			];
-			this.startOpen = [
-				function () {
-					return false;
-				},
-			]; //starting state of group
-
+			
+			this.headerGenerator = [function(){return "";}];
+			this.startOpen = [function(){return false;}]; //starting state of group
+			
 			this.langBind("groups|item", (langValue, lang) => {
-				this.headerGenerator[0] = (value, count, data) => {
-					//header layout function
-					return (
-						(typeof value === "undefined" ? "" : value) +
-						"<span>(" +
-						count +
-						" " +
-						(count === 1 ? langValue : lang.groups.items) +
-						")</span>"
-					);
+				this.headerGenerator[0] = (value, count, data) => { //header layout function
+					return (typeof value === "undefined" ? "" : value) + "<span>(" + count + " " + ((count === 1) ? langValue : lang.groups.items) + ")</span>";
 				};
 			});
-
+			
 			this.groupIDLookups = [];
-
-			if (Array.isArray(groupBy)) {
-				if (
-					this.table.modExists("columnCalcs") &&
-					this.table.options.columnCalcs != "table" &&
-					this.table.options.columnCalcs != "both"
-				) {
+			
+			if(Array.isArray(groupBy)){
+				if(this.table.modExists("columnCalcs") && this.table.options.columnCalcs != "table" && this.table.options.columnCalcs != "both"){
 					this.table.modules.columnCalcs.removeCalcs();
 				}
-			} else {
-				if (
-					this.table.modExists("columnCalcs") &&
-					this.table.options.columnCalcs != "group"
-				) {
+			}else {
+				if(this.table.modExists("columnCalcs") && this.table.options.columnCalcs != "group"){
+					
 					var cols = this.table.columnManager.getRealColumns();
-
+					
 					cols.forEach((col) => {
-						if (col.definition.topCalc) {
+						if(col.definition.topCalc){
 							this.table.modules.columnCalcs.initializeTopRow();
 						}
-
-						if (col.definition.bottomCalc) {
+						
+						if(col.definition.bottomCalc){
 							this.table.modules.columnCalcs.initializeBottomRow();
 						}
 					});
 				}
 			}
-
-			if (!Array.isArray(groupBy)) {
+			
+			if(!Array.isArray(groupBy)){
 				groupBy = [groupBy];
 			}
-
+			
 			groupBy.forEach((group, i) => {
 				var lookupFunc, column;
-
-				if (typeof group == "function") {
+				
+				if(typeof group == "function"){
 					lookupFunc = group;
-				} else {
+				}else {
 					column = this.table.columnManager.getColumnByField(group);
-
-					if (column) {
-						lookupFunc = function (data) {
+					
+					if(column){
+						lookupFunc = function(data){
 							return column.getFieldValue(data);
 						};
-					} else {
-						lookupFunc = function (data) {
+					}else {
+						lookupFunc = function(data){
 							return data[group];
 						};
 					}
 				}
-
+				
 				this.groupIDLookups.push({
 					field: typeof group === "function" ? false : group,
-					func: lookupFunc,
-					values: this.allowedValues ? this.allowedValues[i] : false,
+					func:lookupFunc,
+					values:this.allowedValues ? this.allowedValues[i] : false,
 				});
 			});
-
-			if (startOpen) {
-				if (!Array.isArray(startOpen)) {
+			
+			if(startOpen){
+				if(!Array.isArray(startOpen)){
 					startOpen = [startOpen];
 				}
-
-				startOpen.forEach((level) => {});
-
+				
+				startOpen.forEach((level) => {
+				});
+				
 				this.startOpen = startOpen;
 			}
-
-			if (groupHeader) {
-				this.headerGenerator = Array.isArray(groupHeader)
-					? groupHeader
-					: [groupHeader];
+			
+			if(groupHeader){
+				this.headerGenerator = Array.isArray(groupHeader) ? groupHeader : [groupHeader];
 			}
-		} else {
+		}else {
 			this.groupList = [];
 			this.groups = {};
 		}
 	}
-
-	rowSample(rows, prevValue) {
-		var group = this.getGroups(false)[0];
-
-		prevValue.push(group.getRows(false)[0]);
-
+	
+	rowSample(rows, prevValue){
+		if(this.table.options.groupBy){
+			var group = this.getGroups(false)[0];
+			
+			prevValue.push(group.getRows(false)[0]);
+		}
+		
 		return prevValue;
 	}
-
-	virtualRenderFill() {
+	
+	virtualRenderFill(){
 		var el = this.table.rowManager.tableElement;
 		var rows = this.table.rowManager.getVisibleRows();
-
-		rows = rows.filter((row) => {
-			return row.type !== "group";
-		});
-
-		el.style.minWidth = !rows.length
-			? this.table.columnManager.getWidth() + "px"
-			: "";
-
-		// if(this.table.options.groupBy){
-		// 	if(this.layoutMode() != "fitDataFill" && rowsCount == this.table.modules.groupRows.countGroups()){
-		// 		el.style.minWidth = this.table.columnManager.getWidth() + "px";
-		// 	}
-		// }
-	}
-
-	rowAddingIndex(row, index, top) {
-		this.assignRowToGroup(row);
-
-		var groupRows = row.modules.group.rows;
-
-		if (groupRows.length > 1) {
-			if (!index || (index && groupRows.indexOf(index) == -1)) {
-				if (top) {
-					if (groupRows[0] !== row) {
-						index = groupRows[0];
-						this.table.rowManager.moveRowInArray(
-							row.modules.group.rows,
-							row,
-							index,
-							!top
-						);
-					}
-				} else {
-					if (groupRows[groupRows.length - 1] !== row) {
-						index = groupRows[groupRows.length - 1];
-						this.table.rowManager.moveRowInArray(
-							row.modules.group.rows,
-							row,
-							index,
-							!top
-						);
-					}
-				}
-			} else {
-				this.table.rowManager.moveRowInArray(
-					row.modules.group.rows,
-					row,
-					index,
-					!top
-				);
-			}
+		
+		if(this.table.options.groupBy){
+			rows = rows.filter((row) => {
+				return row.type !== "group";
+			});
+			
+			el.style.minWidth = !rows.length ? this.table.columnManager.getWidth() + "px" : "";
+		}else {
+			return rows;
 		}
-
-		return index;
 	}
-
-	trackChanges() {
+	
+	rowAddingIndex(row, index, top){
+		if(this.table.options.groupBy){
+			this.assignRowToGroup(row);
+			
+			var groupRows = row.modules.group.rows;
+			
+			if(groupRows.length > 1){
+				if(!index || (index && groupRows.indexOf(index) == -1)){
+					if(top){
+						if(groupRows[0] !== row){
+							index = groupRows[0];
+							this.table.rowManager.moveRowInArray(row.modules.group.rows, row, index, !top);
+						}
+					}else {
+						if(groupRows[groupRows.length -1] !== row){
+							index = groupRows[groupRows.length -1];
+							this.table.rowManager.moveRowInArray(row.modules.group.rows, row, index, !top);
+						}
+					}
+				}else {
+					this.table.rowManager.moveRowInArray(row.modules.group.rows, row, index, !top);
+				}
+			}
+			
+			return index;
+		}
+	}
+	
+	trackChanges(){
 		this.dispatch("group-changed");
 	}
-
+	
 	///////////////////////////////////
 	///////// Table Functions /////////
 	///////////////////////////////////
-
-	setGroupBy(groups) {
+	
+	setGroupBy(groups){
 		this.table.options.groupBy = groups;
-
-		if (!this.initialized) {
+		
+		if(!this.initialized){
 			this.initialize();
 		}
-
+		
 		this.configureGroupSetup();
-
+		
 		this.refreshData();
-
+		
 		this.trackChanges();
 	}
-
-	setGroupValues(groupValues) {
+	
+	setGroupValues(groupValues){
 		this.table.options.groupValues = groupValues;
 		this.configureGroupSetup();
 		this.refreshData();
-
+		
 		this.trackChanges();
 	}
-
-	setGroupStartOpen(values) {
+	
+	setGroupStartOpen(values){
 		this.table.options.groupStartOpen = values;
 		this.configureGroupSetup();
-
-		if (this.table.options.groupBy) {
+		
+		if(this.table.options.groupBy){
 			this.refreshData();
-
+			
 			this.trackChanges();
-		} else {
-			console.warn(
-				"Grouping Update - cant refresh view, no groups have been set"
-			);
+		}else {
+			console.warn("Grouping Update - cant refresh view, no groups have been set");
 		}
 	}
-
-	setGroupHeader(values) {
+	
+	setGroupHeader(values){
 		this.table.options.groupHeader = values;
 		this.configureGroupSetup();
-
-		if (this.table.options.groupBy) {
+		
+		if(this.table.options.groupBy){
 			this.refreshData();
-
+			
 			this.trackChanges();
-		} else {
-			console.warn(
-				"Grouping Update - cant refresh view, no groups have been set"
-			);
+		}else {
+			console.warn("Grouping Update - cant refresh view, no groups have been set");
 		}
 	}
-
-	userGetGroups(values) {
+	
+	userGetGroups(values){
 		return this.getGroups(true);
 	}
-
+	
 	// get grouped table data in the same format as getData()
-	userGetGroupedData() {
+	userGetGroupedData(){
 		return this.table.options.groupBy ? this.getGroupedData() : this.getData();
 	}
-
+	
+	
 	///////////////////////////////////////
 	///////// Component Functions /////////
 	///////////////////////////////////////
-
-	rowGetGroup(row) {
+	
+	rowGetGroup(row){
 		return row.modules.group ? row.modules.group.getComponent() : false;
 	}
-
+	
 	///////////////////////////////////
 	///////// Internal Logic //////////
 	///////////////////////////////////
-
-	rowMoving(from, to, after) {
-		if (!after && to instanceof Group) {
-			to = this.table.rowManager.prevDisplayRow(from) || to;
-		}
-
-		var toGroup = to instanceof Group ? to : to.modules.group;
-		var fromGroup = from instanceof Group ? from : from.modules.group;
-
-		if (toGroup === fromGroup) {
-			this.table.rowManager.moveRowInArray(toGroup.rows, from, to, after);
-		} else {
-			if (fromGroup) {
-				fromGroup.removeRow(from);
+	
+	rowMoving(from, to, after){
+		if(this.table.options.groupBy){
+			if(!after && to instanceof Group){
+				to = this.table.rowManager.prevDisplayRow(from) || to;
 			}
-
-			toGroup.insertRow(from, to, after);
+			
+			var toGroup = to instanceof Group ? to : to.modules.group;
+			var fromGroup = from instanceof Group ? from : from.modules.group;
+			
+			if(toGroup === fromGroup){
+				this.table.rowManager.moveRowInArray(toGroup.rows, from, to, after);
+			}else {
+				if(fromGroup){
+					fromGroup.removeRow(from);
+				}
+				
+				toGroup.insertRow(from, to, after);
+			}
 		}
 	}
-
-	rowDeleting(row) {
+	
+	
+	rowDeleting(row){
 		//remove from group
-		if (row.modules.group) {
+		if(this.table.options.groupBy && row.modules.group){
 			row.modules.group.removeRow(row);
 		}
 	}
-
-	rowsUpdated(row) {
-		this.updateGroupRows(true);
+	
+	rowsUpdated(row){
+		if(this.table.options.groupBy){
+			this.updateGroupRows(true);
+		}	
 	}
-
-	cellUpdated(cell) {
-		this.reassignRowToGroup(cell.row);
+	
+	cellUpdated(cell){
+		if(this.table.options.groupBy){
+			this.reassignRowToGroup(cell.row);
+		}
 	}
-
-	setDisplayIndex(index) {
-		this.displayIndex = index;
-	}
-
-	getDisplayIndex() {
-		return this.displayIndex;
-	}
-
+	
 	//return appropriate rows with group headers
-	getRows(rows) {
-		if (this.table.options.groupBy && this.groupIDLookups.length) {
+	getRows(rows){
+		if(this.table.options.groupBy && this.groupIDLookups.length){
+			
 			this.dispatchExternal("dataGrouping");
-
+			
 			this.generateGroups(rows);
-
-			if (this.subscribedExternal("dataGrouped")) {
+			
+			if(this.subscribedExternal("dataGrouped")){
 				this.dispatchExternal("dataGrouped", this.getGroups(true));
 			}
-
+			
 			return this.updateGroupRows();
-		} else {
+			
+		}else {
 			return rows.slice(0);
 		}
 	}
-
-	getGroups(component) {
+	
+	getGroups(component){
 		var groupComponents = [];
-
-		this.groupList.forEach(function (group) {
+		
+		this.groupList.forEach(function(group){
 			groupComponents.push(component ? group.getComponent() : group);
 		});
-
+		
 		return groupComponents;
 	}
-
-	getChildGroups(group) {
+	
+	getChildGroups(group){
 		var groupComponents = [];
-
-		if (!group) {
+		
+		if(!group){
 			group = this;
 		}
-
+		
 		group.groupList.forEach((child) => {
-			if (child.groupList.length) {
+			if(child.groupList.length){
 				groupComponents = groupComponents.concat(this.getChildGroups(child));
-			} else {
+			}else {
 				groupComponents.push(child);
 			}
 		});
-
+		
 		return groupComponents;
 	}
-
-	wipe() {
-		this.groupList.forEach(function (group) {
-			group.wipe();
-		});
+	
+	wipe(){
+		if(this.table.options.groupBy){
+			this.groupList.forEach(function(group){
+				group.wipe();
+			});
+		}
 	}
-
+	
 	pullGroupListData(groupList) {
 		var groupListData = [];
-
+		
 		groupList.forEach((group) => {
 			var groupHeader = {};
 			groupHeader.level = 0;
 			groupHeader.rowCount = 0;
 			groupHeader.headerContent = "";
 			var childData = [];
-
+			
 			if (group.hasSubGroups) {
 				childData = this.pullGroupListData(group.groupList);
-
+				
 				groupHeader.level = group.level;
 				groupHeader.rowCount = childData.length - group.groupList.length; // data length minus number of sub-headers
-				groupHeader.headerContent = group.generator(
-					group.key,
-					groupHeader.rowCount,
-					group.rows,
-					group
-				);
-
+				groupHeader.headerContent = group.generator(group.key, groupHeader.rowCount, group.rows, group);
+				
 				groupListData.push(groupHeader);
 				groupListData = groupListData.concat(childData);
-			} else {
+			}
+			
+			else {
 				groupHeader.level = group.level;
-				groupHeader.headerContent = group.generator(
-					group.key,
-					group.rows.length,
-					group.rows,
-					group
-				);
+				groupHeader.headerContent = group.generator(group.key, group.rows.length, group.rows, group);
 				groupHeader.rowCount = group.getRows().length;
-
+				
 				groupListData.push(groupHeader);
-
+				
 				group.getRows().forEach((row) => {
 					groupListData.push(row.getData("data"));
 				});
 			}
 		});
-
+		
 		return groupListData;
 	}
-
-	getGroupedData() {
+	
+	getGroupedData(){
+		
 		return this.pullGroupListData(this.groupList);
 	}
-
-	getRowGroup(row) {
+	
+	getRowGroup(row){
 		var match = false;
-
-		if (this.options("dataTree")) {
+		
+		if(this.options("dataTree")){
 			row = this.table.modules.dataTree.getTreeParentRoot(row);
 		}
-
+		
 		this.groupList.forEach((group) => {
 			var result = group.getRowGroup(row);
-
-			if (result) {
+			
+			if(result){
 				match = result;
 			}
 		});
-
+		
 		return match;
 	}
-
-	countGroups() {
+	
+	countGroups(){
 		return this.groupList.length;
 	}
-
-	generateGroups(rows) {
+	
+	generateGroups(rows){
 		var oldGroups = this.groups;
-
+		
 		this.groups = {};
 		this.groupList = [];
-
-		if (this.allowedValues && this.allowedValues[0]) {
+		
+		if(this.allowedValues && this.allowedValues[0]){
 			this.allowedValues[0].forEach((value) => {
 				this.createGroup(value, 0, oldGroups);
 			});
-
+			
 			rows.forEach((row) => {
 				this.assignRowToExistingGroup(row, oldGroups);
 			});
-		} else {
+		}else {
 			rows.forEach((row) => {
 				this.assignRowToGroup(row, oldGroups);
 			});
 		}
 	}
-
-	createGroup(groupID, level, oldGroups) {
+	
+	createGroup(groupID, level, oldGroups){
 		var groupKey = level + "_" + groupID,
-			group;
-
+		group;
+		
 		oldGroups = oldGroups || [];
-
-		group = new Group(
-			this,
-			false,
-			level,
-			groupID,
-			this.groupIDLookups[0].field,
-			this.headerGenerator[0],
-			oldGroups[groupKey]
-		);
-
+		
+		group = new Group(this, false, level, groupID, this.groupIDLookups[0].field, this.headerGenerator[0], oldGroups[groupKey]);
+		
 		this.groups[groupKey] = group;
 		this.groupList.push(group);
 	}
-
-	assignRowToExistingGroup(row, oldGroups) {
+	
+	assignRowToExistingGroup(row, oldGroups){
 		var groupID = this.groupIDLookups[0].func(row.getData()),
-			groupKey = "0_" + groupID;
-
-		if (this.groups[groupKey]) {
+		groupKey = "0_" + groupID;
+		
+		if(this.groups[groupKey]){
 			this.groups[groupKey].addRow(row);
 		}
 	}
-
-	assignRowToGroup(row, oldGroups) {
+	
+	assignRowToGroup(row, oldGroups){
 		var groupID = this.groupIDLookups[0].func(row.getData()),
-			newGroupNeeded = !this.groups["0_" + groupID];
-
-		if (newGroupNeeded) {
+		newGroupNeeded = !this.groups["0_" + groupID];
+		
+		if(newGroupNeeded){
 			this.createGroup(groupID, 0, oldGroups);
 		}
-
+		
 		this.groups["0_" + groupID].addRow(row);
-
+		
 		return !newGroupNeeded;
 	}
-
-	reassignRowToGroup(row) {
-		if (row.type === "row") {
+	
+	reassignRowToGroup(row){
+		if(row.type === "row"){
 			var oldRowGroup = row.modules.group,
-				oldGroupPath = oldRowGroup.getPath(),
-				newGroupPath = this.getExpectedPath(row),
-				samePath;
-
+			oldGroupPath = oldRowGroup.getPath(),
+			newGroupPath = this.getExpectedPath(row),
+			samePath;
+			
 			// figure out if new group path is the same as old group path
-			samePath =
-				oldGroupPath.length == newGroupPath.length &&
-				oldGroupPath.every((element, index) => {
-					return element === newGroupPath[index];
-				});
-
+			samePath = (oldGroupPath.length == newGroupPath.length) && oldGroupPath.every((element, index) => {
+				return element === newGroupPath[index];
+			});
+			
 			// refresh if they new path and old path aren't the same (aka the row's groupings have changed)
-			if (!samePath) {
+			if(!samePath) {
 				oldRowGroup.removeRow(row);
 				this.assignRowToGroup(row, this.groups);
 				this.refreshData(true);
 			}
 		}
 	}
-
+	
 	getExpectedPath(row) {
-		var groupPath = [],
-			rowData = row.getData();
-
+		var groupPath = [], rowData = row.getData();
+		
 		this.groupIDLookups.forEach((groupId) => {
 			groupPath.push(groupId.func(rowData));
 		});
-
+		
 		return groupPath;
 	}
-
-	updateGroupRows(force) {
+	
+	updateGroupRows(force){
 		var output = [];
-
+		
 		this.groupList.forEach((group) => {
 			output = output.concat(group.getHeadersAndRows());
 		});
-
-		if (force) {
+		
+		if(force){
 			this.refreshData(true, this.displayHandler);
 		}
-
+		
 		return output;
 	}
-
-	scrollHeaders(left) {
-		if (this.table.options.renderHorizontal === "virtual") {
-			left -= this.table.columnManager.renderer.vDomPadLeft;
+	
+	scrollHeaders(left){
+		if(this.table.options.groupBy){
+			if(this.table.options.renderHorizontal === "virtual"){
+				left -= this.table.columnManager.renderer.vDomPadLeft;
+			}
+			
+			left = left + "px";
+			
+			this.groupList.forEach((group) => {
+				group.scrollHeader(left);
+			});
 		}
-
-		left = left + "px";
-
-		this.groupList.forEach((group) => {
-			group.scrollHeader(left);
-		});
 	}
-
-	removeGroup(group) {
+	
+	removeGroup(group){
 		var groupKey = group.level + "_" + group.key,
-			index;
-
-		if (this.groups[groupKey]) {
+		index;
+		
+		if(this.groups[groupKey]){
 			delete this.groups[groupKey];
-
+			
 			index = this.groupList.indexOf(group);
-
-			if (index > -1) {
+			
+			if(index > -1){
 				this.groupList.splice(index, 1);
 			}
 		}
 	}
-
-	checkBasicModeGroupHeaderWidth() {
+	
+	checkBasicModeGroupHeaderWidth(){
 		var element = this.table.rowManager.tableElement,
-			onlyGroupHeaders = true;
-
-		this.table.rowManager.getDisplayRows().forEach((row, index) => {
+		onlyGroupHeaders = true;
+		
+		this.table.rowManager.getDisplayRows().forEach((row, index) =>{
 			this.table.rowManager.styleRow(row, index);
 			element.appendChild(row.getElement());
 			row.initialize(true);
-
-			if (row.type !== "group") {
+			
+			if(row.type !== "group"){
 				onlyGroupHeaders = false;
 			}
 		});
-
-		if (onlyGroupHeaders) {
+		
+		if(onlyGroupHeaders){
 			element.style.minWidth = this.table.columnManager.getWidth() + "px";
-		} else {
+		}else {
 			element.style.minWidth = "";
 		}
 	}
+	
 }
 
 GroupRows.moduleName = "groupRows";
 
 var defaultUndoers = {
-	cellEdit: function (action) {
+	cellEdit: function(action){
 		action.component.setValueProcessData(action.data.oldValue);
 		action.component.cellRendered();
 	},
 
-	rowAdd: function (action) {
+	rowAdd: function(action){
 		action.component.deleteActual();
 	},
 
-	rowDelete: function (action) {
-		var newRow = this.table.rowManager.addRowActual(
-			action.data.data,
-			action.data.pos,
-			action.data.index
-		);
+	rowDelete: function(action){
+		var newRow = this.table.rowManager.addRowActual(action.data.data, action.data.pos, action.data.index);
 
-		if (this.table.options.groupBy && this.table.modExists("groupRows")) {
+		if(this.table.options.groupBy && this.table.modExists("groupRows")){
 			this.table.modules.groupRows.updateGroupRows(true);
 		}
 
 		this._rebindRow(action.component, newRow);
 	},
 
-	rowMove: function (action) {
-		this.table.rowManager.moveRowActual(
-			action.component,
-			this.table.rowManager.rows[action.data.posFrom],
-			!action.data.after
-		);
+	rowMove: function(action){
+		this.table.rowManager.moveRowActual(action.component, this.table.rowManager.rows[action.data.posFrom], !action.data.after);
 		this.table.rowManager.redraw();
 	},
 };
 
 var defaultRedoers = {
-	cellEdit: function (action) {
+	cellEdit: function(action){
 		action.component.setValueProcessData(action.data.newValue);
 		action.component.cellRendered();
 	},
 
-	rowAdd: function (action) {
-		var newRow = this.table.rowManager.addRowActual(
-			action.data.data,
-			action.data.pos,
-			action.data.index
-		);
+	rowAdd: function(action){
+		var newRow = this.table.rowManager.addRowActual(action.data.data, action.data.pos, action.data.index);
 
-		if (this.table.options.groupBy && this.table.modExists("groupRows")) {
+		if(this.table.options.groupBy && this.table.modExists("groupRows")){
 			this.table.modules.groupRows.updateGroupRows(true);
 		}
 
 		this._rebindRow(action.component, newRow);
 	},
 
-	rowDelete: function (action) {
+	rowDelete:function(action){
 		action.component.deleteActual();
 	},
 
-	rowMove: function (action) {
-		this.table.rowManager.moveRowActual(
-			action.component,
-			this.table.rowManager.rows[action.data.posTo],
-			action.data.after
-		);
+	rowMove: function(action){
+		this.table.rowManager.moveRowActual(action.component, this.table.rowManager.rows[action.data.posTo], action.data.after);
 		this.table.rowManager.redraw();
 	},
 };
 
-class History extends Module {
-	constructor(table) {
+class History extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.history = [];
@@ -13767,8 +12376,8 @@ class History extends Module {
 		this.registerTableOption("history", false); //enable edit history
 	}
 
-	initialize() {
-		if (this.table.options.history) {
+	initialize(){
+		if(this.table.options.history){
 			this.subscribe("cell-value-updated", this.cellUpdated.bind(this));
 			this.subscribe("cell-delete", this.clearComponentHistory.bind(this));
 			this.subscribe("row-delete", this.rowDeleted.bind(this));
@@ -13779,95 +12388,78 @@ class History extends Module {
 
 		this.registerTableFunction("undo", this.undo.bind(this));
 		this.registerTableFunction("redo", this.redo.bind(this));
-		this.registerTableFunction(
-			"getHistoryUndoSize",
-			this.getHistoryUndoSize.bind(this)
-		);
-		this.registerTableFunction(
-			"getHistoryRedoSize",
-			this.getHistoryRedoSize.bind(this)
-		);
+		this.registerTableFunction("getHistoryUndoSize", this.getHistoryUndoSize.bind(this));
+		this.registerTableFunction("getHistoryRedoSize", this.getHistoryRedoSize.bind(this));
 		this.registerTableFunction("clearHistory", this.clear.bind(this));
 	}
 
-	rowMoved(from, to, after) {
-		this.action("rowMove", from, {
-			posFrom: from.getPosition(),
-			posTo: to.getPosition(),
-			to: to,
-			after: after,
-		});
+	rowMoved(from, to, after){
+		this.action("rowMove", from, {posFrom:from.getPosition(), posTo:to.getPosition(), to:to, after:after});
 	}
 
-	rowAdded(row, data, pos, index) {
-		this.action("rowAdd", row, { data: data, pos: pos, index: index });
+	rowAdded(row, data, pos, index){
+		this.action("rowAdd", row, {data:data, pos:pos, index:index});
 	}
 
-	rowDeleted(row) {
+	rowDeleted(row){
 		var index, rows;
 
-		if (this.table.options.groupBy) {
+		if(this.table.options.groupBy){
+
 			rows = row.getComponent().getGroup()._getSelf().rows;
 			index = rows.indexOf(row);
 
-			if (index) {
-				index = rows[index - 1];
+			if(index){
+				index = rows[index-1];
 			}
-		} else {
+		}else {
 			index = row.table.rowManager.getRowIndex(row);
 
-			if (index) {
-				index = row.table.rowManager.rows[index - 1];
+			if(index){
+				index = row.table.rowManager.rows[index-1];
 			}
 		}
 
-		this.action("rowDelete", row, {
-			data: row.getData(),
-			pos: !index,
-			index: index,
-		});
+		this.action("rowDelete", row, {data:row.getData(), pos:!index, index:index});
 	}
 
-	cellUpdated(cell) {
-		this.action("cellEdit", cell, {
-			oldValue: cell.oldValue,
-			newValue: cell.value,
-		});
+	cellUpdated(cell){
+		this.action("cellEdit", cell, {oldValue:cell.oldValue, newValue:cell.value});
 	}
 
-	clear() {
+	clear(){
 		this.history = [];
 		this.index = -1;
 	}
 
-	action(type, component, data) {
+	action(type, component, data){
 		this.history = this.history.slice(0, this.index + 1);
 
 		this.history.push({
-			type: type,
-			component: component,
-			data: data,
+			type:type,
+			component:component,
+			data:data,
 		});
 
-		this.index++;
+		this.index ++;
 	}
 
-	getHistoryUndoSize() {
+	getHistoryUndoSize(){
 		return this.index + 1;
 	}
 
-	getHistoryRedoSize() {
+	getHistoryRedoSize(){
 		return this.history.length - (this.index + 1);
 	}
 
-	clearComponentHistory(component) {
-		var index = this.history.findIndex(function (item) {
+	clearComponentHistory(component){
+		var index = this.history.findIndex(function(item){
 			return item.component === component;
 		});
 
-		if (index > -1) {
+		if(index > -1){
 			this.history.splice(index, 1);
-			if (index <= this.index) {
+			if(index <= this.index){
 				this.index--;
 			}
 
@@ -13875,64 +12467,56 @@ class History extends Module {
 		}
 	}
 
-	undo() {
-		if (this.index > -1) {
+	undo(){
+		if(this.index > -1){
 			let action = this.history[this.index];
 
 			History.undoers[action.type].call(this, action);
 
 			this.index--;
 
-			this.dispatchExternal(
-				"historyUndo",
-				action.type,
-				action.component.getComponent(),
-				action.data
-			);
+			this.dispatchExternal("historyUndo", action.type, action.component.getComponent(), action.data);
 
 			return true;
-		} else {
+		}else {
 			console.warn("History Undo Error - No more history to undo");
 			return false;
 		}
 	}
 
-	redo() {
-		if (this.history.length - 1 > this.index) {
+	redo(){
+		if(this.history.length-1 > this.index){
+
 			this.index++;
 
 			let action = this.history[this.index];
 
 			History.redoers[action.type].call(this, action);
 
-			this.dispatchExternal(
-				"historyRedo",
-				action.type,
-				action.component.getComponent(),
-				action.data
-			);
+			this.dispatchExternal("historyRedo", action.type, action.component.getComponent(), action.data);
 
 			return true;
-		} else {
+		}else {
 			console.warn("History Redo Error - No more history to redo");
 			return false;
 		}
 	}
 
 	//rebind rows to new element after deletion
-	_rebindRow(oldRow, newRow) {
-		this.history.forEach(function (action) {
-			if (action.component instanceof Row) {
-				if (action.component === oldRow) {
+	_rebindRow(oldRow, newRow){
+		this.history.forEach(function(action){
+			if(action.component instanceof Row){
+				if(action.component === oldRow){
 					action.component = newRow;
 				}
-			} else if (action.component instanceof Cell) {
-				if (action.component.row === oldRow) {
+			}else if(action.component instanceof Cell){
+				if(action.component.row === oldRow){
 					var field = action.component.column.getField();
 
-					if (field) {
+					if(field){
 						action.component = newRow.getCell(field);
 					}
+
 				}
 			}
 		});
@@ -13945,39 +12529,35 @@ History.moduleName = "history";
 History.undoers = defaultUndoers;
 History.redoers = defaultRedoers;
 
-class HtmlTableImport extends Module {
-	constructor(table) {
+class HtmlTableImport extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.fieldIndex = [];
 		this.hasIndex = false;
 	}
 
-	initialize() {
+	initialize(){
 		this.tableElementCheck();
 	}
 
-	tableElementCheck() {
-		if (
-			this.table.originalElement &&
-			this.table.originalElement.tagName === "TABLE"
-		) {
-			if (this.table.originalElement.childNodes.length) {
+	tableElementCheck(){
+		if(this.table.originalElement && this.table.originalElement.tagName === "TABLE"){
+			if(this.table.originalElement.childNodes.length){
 				this.parseTable();
-			} else {
-				console.warn(
-					"Unable to parse data from empty table tag, Tabulator should be initialized on a div tag unless importing data from a table element."
-				);
+			}else {
+				console.warn("Unable to parse data from empty table tag, Tabulator should be initialized on a div tag unless importing data from a table element.");
 			}
 		}
 	}
 
-	parseTable() {
+	parseTable(){
 		var element = this.table.originalElement,
-			options = this.table.options,
-			headers = element.getElementsByTagName("th"),
-			rows = element.getElementsByTagName("tbody")[0],
-			data = [];
+		options = this.table.options,
+		headers = element.getElementsByTagName("th"),
+		rows = element.getElementsByTagName("tbody")[0],
+		data = [];
 
 		this.hasIndex = false;
 
@@ -13988,26 +12568,26 @@ class HtmlTableImport extends Module {
 		//check for Tabulator inline options
 		this._extractOptions(element, options);
 
-		if (headers.length) {
+		if(headers.length){
 			this._extractHeaders(headers, rows);
-		} else {
+		}else {
 			this._generateBlankHeaders(headers, rows);
 		}
 
 		//iterate through table rows and build data set
-		for (var index = 0; index < rows.length; index++) {
+		for(var index = 0; index < rows.length; index++){
 			var row = rows[index],
-				cells = row.getElementsByTagName("td"),
-				item = {};
+			cells = row.getElementsByTagName("td"),
+			item = {};
 
 			//create index if the don't exist in table
-			if (!this.hasIndex) {
+			if(!this.hasIndex){
 				item[options.index] = index;
 			}
 
-			for (var i = 0; i < cells.length; i++) {
+			for(var i = 0; i < cells.length; i++){
 				var cell = cells[i];
-				if (typeof this.fieldIndex[i] !== "undefined") {
+				if(typeof this.fieldIndex[i] !== "undefined"){
 					item[this.fieldIndex[i]] = cell.innerHTML;
 				}
 			}
@@ -14022,30 +12602,23 @@ class HtmlTableImport extends Module {
 	}
 
 	//extract tabulator attribute options
-	_extractOptions(element, options, defaultOptions) {
+	_extractOptions(element, options, defaultOptions){
 		var attributes = element.attributes;
-		var optionsArr = defaultOptions
-			? Object.keys(defaultOptions)
-			: Object.keys(options);
+		var optionsArr = defaultOptions ? Object.keys(defaultOptions) : Object.keys(options);
 		var optionsList = {};
 
 		optionsArr.forEach((item) => {
 			optionsList[item.toLowerCase()] = item;
 		});
 
-		for (var index in attributes) {
+		for(var index in attributes){
 			var attrib = attributes[index];
 			var name;
 
-			if (
-				attrib &&
-				typeof attrib == "object" &&
-				attrib.name &&
-				attrib.name.indexOf("tabulator-") === 0
-			) {
+			if(attrib && typeof attrib == "object" && attrib.name && attrib.name.indexOf("tabulator-") === 0){
 				name = attrib.name.replace("tabulator-", "");
 
-				if (typeof optionsList[name] !== "undefined") {
+				if(typeof optionsList[name] !== "undefined"){
 					options[optionsList[name]] = this._attribValue(attrib.value);
 				}
 			}
@@ -14053,12 +12626,12 @@ class HtmlTableImport extends Module {
 	}
 
 	//get value of attribute
-	_attribValue(value) {
-		if (value === "true") {
+	_attribValue(value){
+		if(value === "true"){
 			return true;
 		}
 
-		if (value === "false") {
+		if(value === "false"){
 			return false;
 		}
 
@@ -14066,7 +12639,7 @@ class HtmlTableImport extends Module {
 	}
 
 	//find column if it has already been defined
-	_findCol(title) {
+	_findCol(title){
 		var match = this.table.options.columns.find((column) => {
 			return column.title === title;
 		});
@@ -14075,59 +12648,56 @@ class HtmlTableImport extends Module {
 	}
 
 	//extract column from headers
-	_extractHeaders(headers, rows) {
-		for (var index = 0; index < headers.length; index++) {
+	_extractHeaders(headers, rows){
+		for(var index = 0; index < headers.length; index++){
 			var header = headers[index],
-				exists = false,
-				col = this._findCol(header.textContent),
-				width;
+			exists = false,
+			col = this._findCol(header.textContent),
+			width;
 
-			if (col) {
+			if(col){
 				exists = true;
-			} else {
-				col = { title: header.textContent.trim() };
+			}else {
+				col = {title:header.textContent.trim()};
 			}
 
-			if (!col.field) {
+			if(!col.field) {
 				col.field = header.textContent.trim().toLowerCase().replace(" ", "_");
 			}
 
 			width = header.getAttribute("width");
 
-			if (width && !col.width) {
+			if(width && !col.width)	{
 				col.width = width;
 			}
 
 			//check for Tabulator inline options
-			this._extractOptions(
-				header,
-				col,
-				this.table.columnManager.optionsList.registeredDefaults
-			);
+			this._extractOptions(header, col, this.table.columnManager.optionsList.registeredDefaults);
 
 			this.fieldIndex[index] = col.field;
 
-			if (col.field == this.table.options.index) {
+			if(col.field == this.table.options.index){
 				this.hasIndex = true;
 			}
 
-			if (!exists) {
+			if(!exists){
 				this.table.options.columns.push(col);
 			}
+
 		}
 	}
 
 	//generate blank headers
-	_generateBlankHeaders(headers, rows) {
-		for (var index = 0; index < headers.length; index++) {
+	_generateBlankHeaders(headers, rows){
+		for(var index = 0; index < headers.length; index++){
 			var header = headers[index],
-				col = { title: "", field: "col" + index };
+			col = {title:"", field:"col" + index};
 
 			this.fieldIndex[index] = col.field;
 
 			var width = header.getAttribute("width");
 
-			if (width) {
+			if(width){
 				col.width = width;
 			}
 
@@ -14138,59 +12708,59 @@ class HtmlTableImport extends Module {
 
 HtmlTableImport.moduleName = "htmlTableImport";
 
-function csvImporter(input) {
+function csvImporter(input){
 	var data = [],
-		row = 0,
-		col = 0,
-		inQuote = false;
-
+	row = 0, 
+	col = 0,
+	inQuote = false;
+    
 	//Iterate over each character
 	for (let index = 0; index < input.length; index++) {
-		let char = input[index],
-			nextChar = input[index + 1];
-
+		let char = input[index], 
+		nextChar = input[index+1];      
+        
 		//Initialize empty row
-		if (!data[row]) {
+		if(!data[row]){
 			data[row] = [];
 		}
 
 		//Initialize empty column
-		if (!data[row][col]) {
+		if(!data[row][col]){
 			data[row][col] = "";
 		}
-
+        
 		//Handle quotation mark inside string
-		if (char == '"' && inQuote && nextChar == '"') {
-			data[row][col] += char;
+		if (char == '"' && inQuote && nextChar == '"') { 
+			data[row][col] += char; 
 			index++;
-			continue;
+			continue; 
 		}
-
+        
 		//Begin / End Quote
-		if (char == '"') {
+		if (char == '"') { 
 			inQuote = !inQuote;
 			continue;
 		}
-
+        
 		//Next column (if not in quote)
-		if (char == "," && !inQuote) {
+		if (char == ',' && !inQuote) { 
 			col++;
-			continue;
+			continue; 
 		}
-
-		//New row if new line and not in quote (CRLF)
-		if (char == "\r" && nextChar == "\n" && !inQuote) {
+        
+		//New row if new line and not in quote (CRLF) 
+		if (char == '\r' && nextChar == '\n' && !inQuote) { 
+			col = 0; 
+			row++; 
+			index++; 
+			continue; 
+		}
+        
+		//New row if new line and not in quote (CR or LF) 
+		if ((char == '\r' || char == '\n') && !inQuote) { 
 			col = 0;
 			row++;
-			index++;
-			continue;
-		}
-
-		//New row if new line and not in quote (CR or LF)
-		if ((char == "\r" || char == "\n") && !inQuote) {
-			col = 0;
-			row++;
-			continue;
+			continue; 
 		}
 
 		//Normal Character, append to column
@@ -14200,51 +12770,48 @@ function csvImporter(input) {
 	return data;
 }
 
-function json$1(input) {
+function json$1(input){
 	try {
 		return JSON.parse(input);
-	} catch (e) {
+	} catch(e) {
 		console.warn("JSON Import Error - File contents is invalid JSON", e);
 		return Promise.reject();
 	}
 }
 
-function arrayImporter(input) {
+function arrayImporter(input){
 	return input;
 }
 
 var defaultImporters = {
-	csv: csvImporter,
-	json: json$1,
-	array: arrayImporter,
+	csv:csvImporter,
+	json:json$1,
+	array:arrayImporter,
 };
 
-class Import extends Module {
-	constructor(table) {
+class Import extends Module{
+    
+	constructor(table){
 		super(table);
-
+        
 		this.registerTableOption("importFormat");
 		this.registerTableOption("importReader", "text");
 	}
-
-	initialize() {
+    
+	initialize(){
 		this.registerTableFunction("import", this.importFromFile.bind(this));
 
-		if (this.table.options.importFormat) {
+		if(this.table.options.importFormat){
 			this.subscribe("data-loading", this.loadDataCheck.bind(this), 10);
 			this.subscribe("data-load", this.loadData.bind(this), 10);
 		}
 	}
 
-	loadDataCheck(data) {
-		return (
-			this.table.options.importFormat &&
-			(typeof data === "string" ||
-				(Array.isArray(data) && data.length && Array.isArray(data)))
-		);
+	loadDataCheck(data){
+		return this.table.options.importFormat && (typeof data === "string" || (Array.isArray(data) && data.length && Array.isArray(data)));
 	}
 
-	loadData(data, params, config, silent, previousData) {
+	loadData(data, params, config, silent, previousData){
 		return this.importData(this.lookupImporter(), data)
 			.then(this.structureData.bind(this))
 			.catch((err) => {
@@ -14253,30 +12820,30 @@ class Import extends Module {
 			});
 	}
 
-	lookupImporter(importFormat) {
+	lookupImporter(importFormat){
 		var importer;
-
-		if (!importFormat) {
+        
+		if(!importFormat){
 			importFormat = this.table.options.importFormat;
 		}
-
-		if (typeof importFormat === "string") {
+        
+		if(typeof importFormat === "string"){
 			importer = Import.importers[importFormat];
-		} else {
+		}else {
 			importer = importFormat;
 		}
 
-		if (!importer) {
+		if(!importer){
 			console.error("Import Error - Importer not found:", importFormat);
 		}
-
+        
 		return importer;
 	}
-
-	importFromFile(importFormat, extension) {
+    
+	importFromFile(importFormat, extension){
 		var importer = this.lookupImporter(importFormat);
-
-		if (importer) {
+        
+		if(importer){
 			return this.pickFile(extension)
 				.then(this.importData.bind(this, importer))
 				.then(this.structureData.bind(this))
@@ -14287,18 +12854,18 @@ class Import extends Module {
 				});
 		}
 	}
-
-	pickFile(extensions) {
+    
+	pickFile(extensions){
 		return new Promise((resolve, reject) => {
 			var input = document.createElement("input");
 			input.type = "file";
 			input.accept = extensions;
-
+            
 			input.addEventListener("change", (e) => {
 				var file = input.files[0],
-					reader = new FileReader();
-
-				switch (this.table.options.importReader) {
+				reader = new FileReader();
+                
+				switch(this.table.options.importReader){
 					case "buffer":
 						reader.readAsArrayBuffer(file);
 						break;
@@ -14315,52 +12882,48 @@ class Import extends Module {
 					default:
 						reader.readAsText(file);
 				}
-
+                  
 				reader.onload = (e) => {
 					resolve(reader.result);
 				};
-
+                
 				reader.onerror = (e) => {
 					console.warn("File Load Error - Unable to read file");
 					reject();
 				};
 			});
-
+            
 			input.click();
 		});
 	}
-
-	importData(importer, fileContents) {
+    
+	importData(importer, fileContents){
 		var data = importer.call(this.table, fileContents);
-
-		if (data instanceof Promise) {
+        
+		if(data instanceof Promise){
 			return data;
-		} else {
+		}else {
 			return data ? Promise.resolve(data) : Promise.reject();
 		}
 	}
 
-	structureData(parsedData) {
+	structureData(parsedData){
 		var data = [];
-
-		if (
-			Array.isArray(parsedData) &&
-			parsedData.length &&
-			Array.isArray(parsedData[0])
-		) {
-			if (this.table.options.autoColumns) {
+        
+		if(Array.isArray(parsedData) && parsedData.length && Array.isArray(parsedData[0])){
+			if(this.table.options.autoColumns){
 				data = this.structureArrayToObject(parsedData);
-			} else {
+			}else {
 				data = this.structureArrayToColumns(parsedData);
 			}
 
 			return data;
-		} else {
+		}else {
 			return parsedData;
 		}
 	}
 
-	structureArrayToObject(parsedData) {
+	structureArrayToObject(parsedData){
 		var columns = parsedData.shift();
 
 		var data = parsedData.map((values) => {
@@ -14376,17 +12939,17 @@ class Import extends Module {
 		return data;
 	}
 
-	structureArrayToColumns(parsedData) {
+	structureArrayToColumns(parsedData){
 		var data = [],
-			columns = this.table.getColumns();
+		columns = this.table.getColumns();
 
 		//remove first row if it is the column names
-		if (columns[0] && parsedData[0][0]) {
-			if (columns[0].getDefinition().title === parsedData[0][0]) {
+		if(columns[0] && parsedData[0][0]){
+			if(columns[0].getDefinition().title === parsedData[0][0]){
 				parsedData.shift();
 			}
 		}
-
+        
 		//convert row arrays to objects
 		parsedData.forEach((rowData) => {
 			var row = {};
@@ -14394,7 +12957,7 @@ class Import extends Module {
 			rowData.forEach((value, index) => {
 				var column = columns[index];
 
-				if (column) {
+				if(column){
 					row[column.getField()] = value;
 				}
 			});
@@ -14404,8 +12967,8 @@ class Import extends Module {
 
 		return data;
 	}
-
-	setData(data) {
+    
+	setData(data){
 		return this.table.setData(data);
 	}
 }
@@ -14415,62 +12978,63 @@ Import.moduleName = "import";
 //load defaults
 Import.importers = defaultImporters;
 
-class Interaction extends Module {
-	constructor(table) {
+class Interaction extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.eventMap = {
 			//row events
-			rowClick: "row-click",
-			rowDblClick: "row-dblclick",
-			rowContext: "row-contextmenu",
-			rowMouseEnter: "row-mouseenter",
-			rowMouseLeave: "row-mouseleave",
-			rowMouseOver: "row-mouseover",
-			rowMouseOut: "row-mouseout",
-			rowMouseMove: "row-mousemove",
-			rowTap: "row",
-			rowDblTap: "row",
-			rowTapHold: "row",
+			rowClick:"row-click",
+			rowDblClick:"row-dblclick",
+			rowContext:"row-contextmenu",
+			rowMouseEnter:"row-mouseenter",
+			rowMouseLeave:"row-mouseleave",
+			rowMouseOver:"row-mouseover",
+			rowMouseOut:"row-mouseout",
+			rowMouseMove:"row-mousemove",
+			rowTap:"row",
+			rowDblTap:"row",
+			rowTapHold:"row",
 
 			//cell events
-			cellClick: "cell-click",
-			cellDblClick: "cell-dblclick",
-			cellContext: "cell-contextmenu",
-			cellMouseEnter: "cell-mouseenter",
-			cellMouseLeave: "cell-mouseleave",
-			cellMouseOver: "cell-mouseover",
-			cellMouseOut: "cell-mouseout",
-			cellMouseMove: "cell-mousemove",
-			cellTap: "cell",
-			cellDblTap: "cell",
-			cellTapHold: "cell",
+			cellClick:"cell-click",
+			cellDblClick:"cell-dblclick",
+			cellContext:"cell-contextmenu",
+			cellMouseEnter:"cell-mouseenter",
+			cellMouseLeave:"cell-mouseleave",
+			cellMouseOver:"cell-mouseover",
+			cellMouseOut:"cell-mouseout",
+			cellMouseMove:"cell-mousemove",
+			cellTap:"cell",
+			cellDblTap:"cell",
+			cellTapHold:"cell",
 
 			//column header events
-			headerClick: "column-click",
-			headerDblClick: "column-dblclick",
-			headerContext: "column-contextmenu",
-			headerMouseEnter: "column-mouseenter",
-			headerMouseLeave: "column-mouseleave",
-			headerMouseOver: "column-mouseover",
-			headerMouseOut: "column-mouseout",
-			headerMouseMove: "column-mousemove",
-			headerTap: "column",
-			headerDblTap: "column",
-			headerTapHold: "column",
+			headerClick:"column-click",
+			headerDblClick:"column-dblclick",
+			headerContext:"column-contextmenu",
+			headerMouseEnter:"column-mouseenter",
+			headerMouseLeave:"column-mouseleave",
+			headerMouseOver:"column-mouseover",
+			headerMouseOut:"column-mouseout",
+			headerMouseMove:"column-mousemove",
+			headerTap:"column",
+			headerDblTap:"column",
+			headerTapHold:"column",
 
 			//group header
-			groupClick: "group-click",
-			groupDblClick: "group-dblclick",
-			groupContext: "group-contextmenu",
-			groupMouseEnter: "group-mouseenter",
-			groupMouseLeave: "group-mouseleave",
-			groupMouseOver: "group-mouseover",
-			groupMouseOut: "group-mouseout",
-			groupMouseMove: "group-mousemove",
-			groupTap: "group",
-			groupDblTap: "group",
-			groupTapHold: "group",
+			groupClick:"group-click",
+			groupDblClick:"group-dblclick",
+			groupContext:"group-contextmenu",
+			groupMouseEnter:"group-mouseenter",
+			groupMouseLeave:"group-mouseleave",
+			groupMouseOver:"group-mouseover",
+			groupMouseOut:"group-mouseout",
+			groupMouseMove:"group-mousemove",
+			groupTap:"group",
+			groupDblTap:"group",
+			groupTapHold:"group",
 		};
 
 		this.subscribers = {};
@@ -14480,26 +13044,26 @@ class Interaction extends Module {
 		this.columnSubscribers = {};
 
 		this.touchWatchers = {
-			row: {
-				tap: null,
-				tapDbl: null,
-				tapHold: null,
+			row:{
+				tap:null,
+				tapDbl:null,
+				tapHold:null,
 			},
-			cell: {
-				tap: null,
-				tapDbl: null,
-				tapHold: null,
+			cell:{
+				tap:null,
+				tapDbl:null,
+				tapHold:null,
 			},
-			column: {
-				tap: null,
-				tapDbl: null,
-				tapHold: null,
+			column:{
+				tap:null,
+				tapDbl:null,
+				tapHold:null,
 			},
-			group: {
-				tap: null,
-				tapDbl: null,
-				tapHold: null,
-			},
+			group:{
+				tap:null,
+				tapDbl:null,
+				tapHold:null,
+			}
 		};
 
 		this.registerColumnOption("headerClick");
@@ -14525,29 +13089,29 @@ class Interaction extends Module {
 		this.registerColumnOption("cellTap");
 		this.registerColumnOption("cellDblTap");
 		this.registerColumnOption("cellTapHold");
+
 	}
 
-	initialize() {
+	initialize(){
 		this.initializeExternalEvents();
 
 		this.subscribe("column-init", this.initializeColumn.bind(this));
 		this.subscribe("cell-dblclick", this.cellContentsSelectionFixer.bind(this));
 	}
 
-	cellContentsSelectionFixer(e, cell) {
+	cellContentsSelectionFixer(e, cell){
 		var range;
 
-		if (this.table.modExists("edit")) {
-			if (this.table.modules.edit.currentCell === this) {
+		if(this.table.modExists("edit")){
+			if (this.table.modules.edit.currentCell === cell){
 				return; //prevent instant selection of editor content
 			}
 		}
 
 		e.preventDefault();
 
-		try {
-			if (document.selection) {
-				// IE
+		try{
+			if (document.selection) { // IE
 				range = document.body.createTextRange();
 				range.moveToElementText(cell.getElement());
 				range.select();
@@ -14557,96 +13121,70 @@ class Interaction extends Module {
 				window.getSelection().removeAllRanges();
 				window.getSelection().addRange(range);
 			}
-		} catch (e) {}
+		}catch(e){}
 	}
 
-	initializeExternalEvents() {
-		for (let key in this.eventMap) {
-			this.subscriptionChangeExternal(
-				key,
-				this.subscriptionChanged.bind(this, key)
-			);
+	initializeExternalEvents(){
+		for(let key in this.eventMap){
+			this.subscriptionChangeExternal(key, this.subscriptionChanged.bind(this, key));
 		}
 	}
 
-	subscriptionChanged(key, added) {
-		if (added) {
-			if (!this.subscribers[key]) {
-				if (this.eventMap[key].includes("-")) {
+	subscriptionChanged(key, added){
+		if(added){
+			if(!this.subscribers[key]){
+				if(this.eventMap[key].includes("-")){
 					this.subscribers[key] = this.handle.bind(this, key);
 					this.subscribe(this.eventMap[key], this.subscribers[key]);
-				} else {
+				}else {
 					this.subscribeTouchEvents(key);
 				}
 			}
-		} else {
-			if (this.eventMap[key].includes("-")) {
-				if (
-					this.subscribers[key] &&
-					!this.columnSubscribers[key] &&
-					!this.subscribedExternal(key)
-				) {
+		}else {
+			if(this.eventMap[key].includes("-")){
+				if(this.subscribers[key] && !this.columnSubscribers[key]  && !this.subscribedExternal(key)){
 					this.unsubscribe(this.eventMap[key], this.subscribers[key]);
 					delete this.subscribers[key];
 				}
-			} else {
+			}else {
 				this.unsubscribeTouchEvents(key);
 			}
 		}
 	}
 
-	subscribeTouchEvents(key) {
+
+	subscribeTouchEvents(key){
 		var type = this.eventMap[key];
 
-		if (!this.touchSubscribers[type + "-touchstart"]) {
-			this.touchSubscribers[type + "-touchstart"] = this.handleTouch.bind(
-				this,
-				type,
-				"start"
-			);
-			this.touchSubscribers[type + "-touchend"] = this.handleTouch.bind(
-				this,
-				type,
-				"end"
-			);
+		if(!this.touchSubscribers[type + "-touchstart"]){
+			this.touchSubscribers[type + "-touchstart"] = this.handleTouch.bind(this, type, "start");
+			this.touchSubscribers[type + "-touchend"] = this.handleTouch.bind(this, type, "end");
 
-			this.subscribe(
-				type + "-touchstart",
-				this.touchSubscribers[type + "-touchstart"]
-			);
-			this.subscribe(
-				type + "-touchend",
-				this.touchSubscribers[type + "-touchend"]
-			);
+			this.subscribe(type + "-touchstart", this.touchSubscribers[type + "-touchstart"]);
+			this.subscribe(type + "-touchend", this.touchSubscribers[type + "-touchend"]);
 		}
 
 		this.subscribers[key] = true;
 	}
 
-	unsubscribeTouchEvents(key) {
+	unsubscribeTouchEvents(key){
 		var noTouch = true,
-			type = this.eventMap[key];
+		type = this.eventMap[key];
 
-		if (this.subscribers[key] && !this.subscribedExternal(key)) {
+		if(this.subscribers[key] && !this.subscribedExternal(key)){
 			delete this.subscribers[key];
 
-			for (let i in this.eventMap) {
-				if (this.eventMap[i] === type) {
-					if (this.subscribers[i]) {
+			for(let i in this.eventMap){
+				if(this.eventMap[i] === type){
+					if(this.subscribers[i]){
 						noTouch = false;
 					}
 				}
 			}
 
-			if (noTouch) {
-				this.unsubscribe(
-					type + "-touchstart",
-					this.touchSubscribers[type + "-touchstart"]
-				);
-				this.unsubscribe(
-					type + "-touchend",
-					this.touchSubscribers[type + "-touchend"]
-				);
+			if(noTouch){
+				this.unsubscribe(type + "-touchstart", this.touchSubscribers[type + "-touchstart"]);
+				this.unsubscribe(type + "-touchend", this.touchSubscribers[type + "-touchend"]);
 
 				delete this.touchSubscribers[type + "-touchstart"];
 				delete this.touchSubscribers[type + "-touchend"];
@@ -14654,14 +13192,14 @@ class Interaction extends Module {
 		}
 	}
 
-	initializeColumn(column) {
+	initializeColumn(column){
 		var def = column.definition;
 
-		for (let key in this.eventMap) {
-			if (def[key]) {
+		for(let key in this.eventMap){
+			if(def[key]){
 				this.subscriptionChanged(key, true);
 
-				if (!this.columnSubscribers[key]) {
+				if(!this.columnSubscribers[key]){
 					this.columnSubscribers[key] = [];
 				}
 
@@ -14670,18 +13208,18 @@ class Interaction extends Module {
 		}
 	}
 
-	handle(action, e, component) {
+	handle(action, e, component){
 		this.dispatchEvent(action, e, component);
 	}
 
-	handleTouch(type, action, e, component) {
+	handleTouch(type, action, e, component){
 		var watchers = this.touchWatchers[type];
 
-		if (type === "column") {
+		if(type === "column"){
 			type = "header";
 		}
 
-		switch (action) {
+		switch(action){
 			case "start":
 				watchers.tap = true;
 
@@ -14695,22 +13233,23 @@ class Interaction extends Module {
 					clearTimeout(watchers.tapDbl);
 					watchers.tapDbl = null;
 
-					this.dispatchEvent(type + "TapHold", e, component);
+					this.dispatchEvent(type + "TapHold", e,  component);
 				}, 1000);
 				break;
 
 			case "end":
-				if (watchers.tap) {
+				if(watchers.tap){
+
 					watchers.tap = null;
-					this.dispatchEvent(type + "Tap", e, component);
+					this.dispatchEvent(type + "Tap", e,  component);
 				}
 
-				if (watchers.tapDbl) {
+				if(watchers.tapDbl){
 					clearTimeout(watchers.tapDbl);
 					watchers.tapDbl = null;
 
-					this.dispatchEvent(type + "DblTap", e, component);
-				} else {
+					this.dispatchEvent(type + "DblTap", e,  component);
+				}else {
 					watchers.tapDbl = setTimeout(() => {
 						clearTimeout(watchers.tapDbl);
 						watchers.tapDbl = null;
@@ -14723,18 +13262,19 @@ class Interaction extends Module {
 		}
 	}
 
-	dispatchEvent(action, e, component) {
+	dispatchEvent(action, e, component){
 		var componentObj = component.getComponent(),
-			callback;
+		callback;
 
-		if (this.columnSubscribers[action]) {
-			if (component instanceof Cell) {
+		if(this.columnSubscribers[action]){
+
+			if(component instanceof Cell){
 				callback = component.column.definition[action];
-			} else if (component instanceof Column) {
+			}else if(component instanceof Column){
 				callback = component.definition[action];
 			}
 
-			if (callback) {
+			if(callback){
 				callback(e, componentObj);
 			}
 		}
@@ -14746,150 +13286,142 @@ class Interaction extends Module {
 Interaction.moduleName = "interaction";
 
 var defaultBindings = {
-	navPrev: "shift + 9",
-	navNext: 9,
-	navUp: 38,
-	navDown: 40,
-	scrollPageUp: 33,
-	scrollPageDown: 34,
-	scrollToStart: 36,
-	scrollToEnd: 35,
-	undo: ["ctrl + 90", "meta + 90"],
-	redo: ["ctrl + 89", "meta + 89"],
-	copyToClipboard: ["ctrl + 67", "meta + 89"],
+	navPrev:"shift + 9",
+	navNext:9,
+	navUp:38,
+	navDown:40,
+	scrollPageUp:33,
+	scrollPageDown:34,
+	scrollToStart:36,
+	scrollToEnd:35,
+	undo:["ctrl + 90", "meta + 90"],
+	redo:["ctrl + 89", "meta + 89"],
+	copyToClipboard:["ctrl + 67", "meta + 89"],
 };
 
 var defaultActions = {
-	keyBlock: function (e) {
+	keyBlock:function(e){
 		e.stopPropagation();
 		e.preventDefault();
 	},
-	scrollPageUp: function (e) {
+	scrollPageUp:function(e){
 		var rowManager = this.table.rowManager,
-			newPos = rowManager.scrollTop - rowManager.element.clientHeight;
+		newPos = rowManager.scrollTop - rowManager.element.clientHeight;
 
 		e.preventDefault();
 
-		if (rowManager.displayRowsCount) {
-			if (newPos >= 0) {
+		if(rowManager.displayRowsCount){
+			if(newPos >= 0){
 				rowManager.element.scrollTop = newPos;
-			} else {
+			}else {
 				rowManager.scrollToRow(rowManager.getDisplayRows()[0]);
 			}
 		}
 
 		this.table.element.focus();
 	},
-	scrollPageDown: function (e) {
+	scrollPageDown:function(e){
 		var rowManager = this.table.rowManager,
-			newPos = rowManager.scrollTop + rowManager.element.clientHeight,
-			scrollMax = rowManager.element.scrollHeight;
+		newPos = rowManager.scrollTop + rowManager.element.clientHeight,
+		scrollMax = rowManager.element.scrollHeight;
 
 		e.preventDefault();
 
-		if (rowManager.displayRowsCount) {
-			if (newPos <= scrollMax) {
+		if(rowManager.displayRowsCount){
+			if(newPos <= scrollMax){
 				rowManager.element.scrollTop = newPos;
-			} else {
-				rowManager.scrollToRow(
-					rowManager.getDisplayRows()[rowManager.displayRowsCount - 1]
-				);
+			}else {
+				rowManager.scrollToRow(rowManager.getDisplayRows()[rowManager.displayRowsCount - 1]);
 			}
 		}
 
 		this.table.element.focus();
+
 	},
-	scrollToStart: function (e) {
+	scrollToStart:function(e){
 		var rowManager = this.table.rowManager;
 
 		e.preventDefault();
 
-		if (rowManager.displayRowsCount) {
+		if(rowManager.displayRowsCount){
 			rowManager.scrollToRow(rowManager.getDisplayRows()[0]);
 		}
 
 		this.table.element.focus();
 	},
-	scrollToEnd: function (e) {
+	scrollToEnd:function(e){
 		var rowManager = this.table.rowManager;
 
 		e.preventDefault();
 
-		if (rowManager.displayRowsCount) {
-			rowManager.scrollToRow(
-				rowManager.getDisplayRows()[rowManager.displayRowsCount - 1]
-			);
+		if(rowManager.displayRowsCount){
+			rowManager.scrollToRow(rowManager.getDisplayRows()[rowManager.displayRowsCount - 1]);
 		}
 
 		this.table.element.focus();
 	},
-	navPrev: function (e) {
+	navPrev:function(e){
 		this.dispatch("keybinding-nav-prev", e);
 	},
 
-	navNext: function (e) {
+	navNext:function(e){
 		this.dispatch("keybinding-nav-next", e);
 	},
 
-	navLeft: function (e) {
+	navLeft:function(e){
 		this.dispatch("keybinding-nav-left", e);
 	},
 
-	navRight: function (e) {
+	navRight:function(e){
 		this.dispatch("keybinding-nav-right", e);
 	},
 
-	navUp: function (e) {
+	navUp:function(e){
 		this.dispatch("keybinding-nav-up", e);
 	},
 
-	navDown: function (e) {
+	navDown:function(e){
 		this.dispatch("keybinding-nav-down", e);
 	},
 
-	undo: function (e) {
+	undo:function(e){
 		var cell = false;
-		if (
-			this.table.options.history &&
-			this.table.modExists("history") &&
-			this.table.modExists("edit")
-		) {
+		if(this.table.options.history && this.table.modExists("history") && this.table.modExists("edit")){
+
 			cell = this.table.modules.edit.currentCell;
 
-			if (!cell) {
+			if(!cell){
 				e.preventDefault();
 				this.table.modules.history.undo();
 			}
 		}
 	},
 
-	redo: function (e) {
+	redo:function(e){
 		var cell = false;
-		if (
-			this.table.options.history &&
-			this.table.modExists("history") &&
-			this.table.modExists("edit")
-		) {
+		if(this.table.options.history && this.table.modExists("history") && this.table.modExists("edit")){
+
 			cell = this.table.modules.edit.currentCell;
 
-			if (!cell) {
+			if(!cell){
 				e.preventDefault();
 				this.table.modules.history.redo();
 			}
 		}
 	},
 
-	copyToClipboard: function (e) {
-		if (!this.table.modules.edit.currentCell) {
-			if (this.table.modExists("clipboard", true)) {
+	copyToClipboard:function(e){
+		if(!this.table.modules.edit.currentCell){
+			if(this.table.modExists("clipboard", true)){
 				this.table.modules.clipboard.copy(false, true);
 			}
 		}
 	},
 };
 
-class Keybindings extends Module {
-	constructor(table) {
+class Keybindings extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.watchKeys = null;
@@ -14901,14 +13433,14 @@ class Keybindings extends Module {
 		this.registerTableOption("tabEndNewRow", false); //create new row when tab to end of table
 	}
 
-	initialize() {
+	initialize(){
 		var bindings = this.table.options.keybindings,
-			mergedBindings = {};
+		mergedBindings = {};
 
 		this.watchKeys = {};
 		this.pressedKeys = [];
 
-		if (bindings !== false) {
+		if(bindings !== false){
 			Object.assign(mergedBindings, Keybindings.bindings);
 			Object.assign(mergedBindings, bindings);
 
@@ -14919,29 +13451,29 @@ class Keybindings extends Module {
 		this.subscribe("table-destroy", this.clearBindings.bind(this));
 	}
 
-	mapBindings(bindings) {
-		for (let key in bindings) {
-			if (Keybindings.actions[key]) {
-				if (bindings[key]) {
-					if (typeof bindings[key] !== "object") {
+	mapBindings(bindings){
+		for(let key in bindings){
+			if(Keybindings.actions[key]){
+				if(bindings[key]){
+					if(typeof bindings[key] !== "object"){
 						bindings[key] = [bindings[key]];
 					}
 
 					bindings[key].forEach((binding) => {
-						var bindingList = Array.isArray(binding) ? binding : [binding];
-
+						var bindingList = Array.isArray(binding) ?  binding : [binding];
+						
 						bindingList.forEach((item) => {
 							this.mapBinding(key, item);
-						});
+						});						
 					});
 				}
-			} else {
+			}else {
 				console.warn("Key Binding Error - no such action:", key);
 			}
 		}
 	}
 
-	mapBinding(action, symbolsList) {
+	mapBinding(action, symbolsList){
 		var binding = {
 			action: Keybindings.actions[action],
 			keys: [],
@@ -14950,15 +13482,10 @@ class Keybindings extends Module {
 			meta: false,
 		};
 
-		var symbols = symbolsList
-			.toString()
-			.toLowerCase()
-			.split(" ")
-			.join("")
-			.split("+");
+		var symbols = symbolsList.toString().toLowerCase().split(" ").join("").split("+");
 
 		symbols.forEach((symbol) => {
-			switch (symbol) {
+			switch(symbol){
 				case "ctrl":
 					binding.ctrl = true;
 					break;
@@ -14972,12 +13499,10 @@ class Keybindings extends Module {
 					break;
 
 				default:
-					symbol = isNaN(symbol)
-						? symbol.toUpperCase().charCodeAt(0)
-						: parseInt(symbol);
+					symbol = isNaN(symbol) ? symbol.toUpperCase().charCodeAt(0) : parseInt(symbol);
 					binding.keys.push(symbol);
 
-					if (!this.watchKeys[symbol]) {
+					if(!this.watchKeys[symbol]){
 						this.watchKeys[symbol] = [];
 					}
 
@@ -14986,30 +13511,32 @@ class Keybindings extends Module {
 		});
 	}
 
-	bindEvents() {
+	bindEvents(){
 		var self = this;
 
-		this.keyupBinding = function (e) {
+		this.keyupBinding = function(e){
 			var code = e.keyCode;
 			var bindings = self.watchKeys[code];
 
-			if (bindings) {
+			if(bindings){
+
 				self.pressedKeys.push(code);
 
-				bindings.forEach(function (binding) {
+				bindings.forEach(function(binding){
 					self.checkBinding(e, binding);
 				});
 			}
 		};
 
-		this.keydownBinding = function (e) {
+		this.keydownBinding = function(e){
 			var code = e.keyCode;
 			var bindings = self.watchKeys[code];
 
-			if (bindings) {
+			if(bindings){
+
 				var index = self.pressedKeys.indexOf(code);
 
-				if (index > -1) {
+				if(index > -1){
 					self.pressedKeys.splice(index, 1);
 				}
 			}
@@ -15020,33 +13547,29 @@ class Keybindings extends Module {
 		this.table.element.addEventListener("keyup", this.keydownBinding);
 	}
 
-	clearBindings() {
-		if (this.keyupBinding) {
+	clearBindings(){
+		if(this.keyupBinding){
 			this.table.element.removeEventListener("keydown", this.keyupBinding);
 		}
 
-		if (this.keydownBinding) {
+		if(this.keydownBinding){
 			this.table.element.removeEventListener("keyup", this.keydownBinding);
 		}
 	}
 
-	checkBinding(e, binding) {
+	checkBinding(e, binding){
 		var match = true;
 
-		if (
-			e.ctrlKey == binding.ctrl &&
-			e.shiftKey == binding.shift &&
-			e.metaKey == binding.meta
-		) {
+		if(e.ctrlKey == binding.ctrl && e.shiftKey == binding.shift && e.metaKey == binding.meta){
 			binding.keys.forEach((key) => {
 				var index = this.pressedKeys.indexOf(key);
 
-				if (index == -1) {
+				if(index == -1){
 					match = false;
 				}
 			});
 
-			if (match) {
+			if(match){
 				binding.action.call(this, e);
 			}
 
@@ -15063,309 +13586,268 @@ Keybindings.moduleName = "keybindings";
 Keybindings.bindings = defaultBindings;
 Keybindings.actions = defaultActions;
 
-class Menu extends Module {
-	constructor(table) {
+class Menu extends Module{
+	
+	constructor(table){
 		super(table);
-
+		
 		this.menuContainer = null;
 		this.nestedMenuBlock = false;
-
+		
 		this.currentComponent = null;
 		this.rootPopup = null;
-
+		
 		this.columnSubscribers = {};
-
+		
 		this.registerTableOption("menuContainer", undefined); //deprecated
 
 		this.registerTableOption("rowContextMenu", false);
 		this.registerTableOption("rowClickMenu", false);
 		this.registerTableOption("groupContextMenu", false);
 		this.registerTableOption("groupClickMenu", false);
-
+		
 		this.registerColumnOption("headerContextMenu");
 		this.registerColumnOption("headerClickMenu");
 		this.registerColumnOption("headerMenu");
 		this.registerColumnOption("headerMenuIcon");
 		this.registerColumnOption("contextMenu");
 		this.registerColumnOption("clickMenu");
+		
 	}
-
-	initialize() {
+	
+	initialize(){
 		this.deprecatedOptionsCheck();
 		this.initializeRowWatchers();
 		this.initializeGroupWatchers();
-
+		
 		this.subscribe("column-init", this.initializeColumn.bind(this));
 	}
 
-	deprecatedOptionsCheck() {
-		if (!this.deprecationCheck("menuContainer", "popupContainer")) {
+	deprecatedOptionsCheck(){
+		if(!this.deprecationCheck("menuContainer", "popupContainer")){
 			this.table.options.popupContainer = this.table.options.menuContainer;
 		}
-	}
-
-	initializeRowWatchers() {
-		if (this.table.options.rowContextMenu) {
-			this.subscribe(
-				"row-contextmenu",
-				this.loadMenuEvent.bind(this, this.table.options.rowContextMenu)
-			);
-			this.table.on(
-				"rowTapHold",
-				this.loadMenuEvent.bind(this, this.table.options.rowContextMenu)
-			);
+	}	
+	
+	initializeRowWatchers(){
+		if(this.table.options.rowContextMenu){
+			this.subscribe("row-contextmenu", this.loadMenuEvent.bind(this, this.table.options.rowContextMenu));
+			this.table.on("rowTapHold", this.loadMenuEvent.bind(this, this.table.options.rowContextMenu));
 		}
-
-		if (this.table.options.rowClickMenu) {
-			this.subscribe(
-				"row-click",
-				this.loadMenuEvent.bind(this, this.table.options.rowClickMenu)
-			);
+		
+		if(this.table.options.rowClickMenu){
+			this.subscribe("row-click", this.loadMenuEvent.bind(this, this.table.options.rowClickMenu));
 		}
 	}
-
-	initializeGroupWatchers() {
-		if (this.table.options.groupContextMenu) {
-			this.subscribe(
-				"group-contextmenu",
-				this.loadMenuEvent.bind(this, this.table.options.groupContextMenu)
-			);
-			this.table.on(
-				"groupTapHold",
-				this.loadMenuEvent.bind(this, this.table.options.groupContextMenu)
-			);
+	
+	initializeGroupWatchers(){
+		if(this.table.options.groupContextMenu){
+			this.subscribe("group-contextmenu", this.loadMenuEvent.bind(this, this.table.options.groupContextMenu));
+			this.table.on("groupTapHold", this.loadMenuEvent.bind(this, this.table.options.groupContextMenu));
 		}
-
-		if (this.table.options.groupClickMenu) {
-			this.subscribe(
-				"group-click",
-				this.loadMenuEvent.bind(this, this.table.options.groupClickMenu)
-			);
+		
+		if(this.table.options.groupClickMenu){
+			this.subscribe("group-click", this.loadMenuEvent.bind(this, this.table.options.groupClickMenu));
 		}
 	}
-
-	initializeColumn(column) {
-		var def = column.definition;
-
+	
+	initializeColumn(column){
+		var	def = column.definition;
+		
 		//handle column events
-		if (def.headerContextMenu && !this.columnSubscribers.headerContextMenu) {
-			this.columnSubscribers.headerContextMenu =
-				this.loadMenuTableColumnEvent.bind(this, "headerContextMenu");
-			this.subscribe(
-				"column-contextmenu",
-				this.columnSubscribers.headerContextMenu
-			);
-			this.table.on(
-				"headerTapHold",
-				this.loadMenuTableColumnEvent.bind(this, "headerContextMenu")
-			);
+		if(def.headerContextMenu && !this.columnSubscribers.headerContextMenu){
+			this.columnSubscribers.headerContextMenu = this.loadMenuTableColumnEvent.bind(this, "headerContextMenu");
+			this.subscribe("column-contextmenu", this.columnSubscribers.headerContextMenu);
+			this.table.on("headerTapHold", this.loadMenuTableColumnEvent.bind(this, "headerContextMenu"));
 		}
-
-		if (def.headerClickMenu && !this.columnSubscribers.headerClickMenu) {
-			this.columnSubscribers.headerClickMenu =
-				this.loadMenuTableColumnEvent.bind(this, "headerClickMenu");
+		
+		if(def.headerClickMenu && !this.columnSubscribers.headerClickMenu){
+			this.columnSubscribers.headerClickMenu = this.loadMenuTableColumnEvent.bind(this, "headerClickMenu");
 			this.subscribe("column-click", this.columnSubscribers.headerClickMenu);
 		}
-
-		if (def.headerMenu) {
+		
+		if(def.headerMenu){
 			this.initializeColumnHeaderMenu(column);
 		}
-
+		
 		//handle cell events
-		if (def.contextMenu && !this.columnSubscribers.contextMenu) {
-			this.columnSubscribers.contextMenu = this.loadMenuTableCellEvent.bind(
-				this,
-				"contextMenu"
-			);
+		if(def.contextMenu && !this.columnSubscribers.contextMenu){
+			this.columnSubscribers.contextMenu = this.loadMenuTableCellEvent.bind(this, "contextMenu");
 			this.subscribe("cell-contextmenu", this.columnSubscribers.contextMenu);
-			this.table.on(
-				"cellTapHold",
-				this.loadMenuTableCellEvent.bind(this, "contextMenu")
-			);
+			this.table.on("cellTapHold", this.loadMenuTableCellEvent.bind(this, "contextMenu"));
 		}
-
-		if (def.clickMenu && !this.columnSubscribers.clickMenu) {
-			this.columnSubscribers.clickMenu = this.loadMenuTableCellEvent.bind(
-				this,
-				"clickMenu"
-			);
+		
+		if(def.clickMenu && !this.columnSubscribers.clickMenu){
+			this.columnSubscribers.clickMenu = this.loadMenuTableCellEvent.bind(this, "clickMenu");
 			this.subscribe("cell-click", this.columnSubscribers.clickMenu);
 		}
 	}
-
-	initializeColumnHeaderMenu(column) {
+	
+	initializeColumnHeaderMenu(column){
 		var icon = column.definition.headerMenuIcon,
-			headerMenuEl;
-
+		headerMenuEl;
+		
 		headerMenuEl = document.createElement("span");
 		headerMenuEl.classList.add("tabulator-header-popup-button");
 
-		if (icon) {
-			if (typeof icon === "function") {
+		if(icon){
+			if(typeof icon === "function"){
 				icon = icon(column.getComponent());
 			}
 
-			if (icon instanceof HTMLElement) {
+			if(icon instanceof HTMLElement){
 				headerMenuEl.appendChild(icon);
-			} else {
+			}else {
 				headerMenuEl.innerHTML = icon;
 			}
-		} else {
+		}else {
 			headerMenuEl.innerHTML = "&vellip;";
 		}
-
+		
 		headerMenuEl.addEventListener("click", (e) => {
 			e.stopPropagation();
 			e.preventDefault();
-
+			
 			this.loadMenuEvent(column.definition.headerMenu, e, column);
 		});
-
-		column.titleElement.insertBefore(
-			headerMenuEl,
-			column.titleElement.firstChild
-		);
+		
+		column.titleElement.insertBefore(headerMenuEl, column.titleElement.firstChild);
 	}
-
-	loadMenuTableCellEvent(option, e, cell) {
-		if (cell._cell) {
+	
+	loadMenuTableCellEvent(option, e, cell){
+		if(cell._cell){
 			cell = cell._cell;
 		}
-
-		if (cell.column.definition[option]) {
+		
+		if(cell.column.definition[option]){
 			this.loadMenuEvent(cell.column.definition[option], e, cell);
 		}
 	}
-
-	loadMenuTableColumnEvent(option, e, column) {
-		if (column._column) {
+	
+	loadMenuTableColumnEvent(option, e, column){
+		if(column._column){
 			column = column._column;
 		}
-
-		if (column.definition[option]) {
+		
+		if(column.definition[option]){
 			this.loadMenuEvent(column.definition[option], e, column);
 		}
 	}
-
-	loadMenuEvent(menu, e, component) {
-		if (component._group) {
+	
+	loadMenuEvent(menu, e, component){
+		if(component._group){
 			component = component._group;
-		} else if (component._row) {
+		}else if(component._row){
 			component = component._row;
 		}
-
-		menu =
-			typeof menu == "function"
-				? menu.call(this.table, e, component.getComponent())
-				: menu;
-
+		
+		menu = typeof menu == "function" ? menu.call(this.table, e, component.getComponent()) : menu;
+		
 		this.loadMenu(e, component, menu);
 	}
-
-	loadMenu(e, component, menu, parentEl, parentPopup) {
-		var touch = !(e instanceof MouseEvent),
-			menuEl = document.createElement("div"),
-			popup;
-
+	
+	loadMenu(e, component, menu, parentEl, parentPopup){
+		var touch = !(e instanceof MouseEvent),		
+		menuEl = document.createElement("div"),
+		popup;
+		
 		menuEl.classList.add("tabulator-menu");
-
-		if (!touch) {
+		
+		if(!touch){
 			e.preventDefault();
 		}
-
+		
 		//abort if no menu set
-		if (!menu || !menu.length) {
+		if(!menu || !menu.length){
 			return;
 		}
-
-		if (!parentEl) {
-			if (this.nestedMenuBlock) {
+		
+		if(!parentEl){
+			if(this.nestedMenuBlock){
 				//abort if child menu already open
-				if (this.rootPopup) {
+				if(this.rootPopup){
 					return;
 				}
-			} else {
+			}else {
 				this.nestedMenuBlock = setTimeout(() => {
 					this.nestedMenuBlock = false;
 				}, 100);
 			}
-
-			if (this.rootPopup) {
-				this.rootPopup.hide();
+			
+			if(this.rootPopup){
+				this.rootPopup.hide();	
 			}
-
+			
 			this.rootPopup = popup = this.popup(menuEl);
-		} else {
+			
+		}else {
 			popup = parentPopup.child(menuEl);
 		}
-
+		
 		menu.forEach((item) => {
 			var itemEl = document.createElement("div"),
-				label = item.label,
-				disabled = item.disabled;
-
-			if (item.separator) {
+			label = item.label,
+			disabled = item.disabled;
+			
+			if(item.separator){
 				itemEl.classList.add("tabulator-menu-separator");
-			} else {
+			}else {
 				itemEl.classList.add("tabulator-menu-item");
-
-				if (typeof label == "function") {
+				
+				if(typeof label == "function"){
 					label = label.call(this.table, component.getComponent());
 				}
-
-				if (label instanceof Node) {
+				
+				if(label instanceof Node){
 					itemEl.appendChild(label);
-				} else {
+				}else {
 					itemEl.innerHTML = label;
 				}
-
-				if (typeof disabled == "function") {
+				
+				if(typeof disabled == "function"){
 					disabled = disabled.call(this.table, component.getComponent());
 				}
-
-				if (disabled) {
+				
+				if(disabled){
 					itemEl.classList.add("tabulator-menu-item-disabled");
 					itemEl.addEventListener("click", (e) => {
 						e.stopPropagation();
 					});
-				} else {
-					if (item.menu && item.menu.length) {
+				}else {
+					if(item.menu && item.menu.length){
 						itemEl.addEventListener("click", (e) => {
 							e.stopPropagation();
 							this.loadMenu(e, component, item.menu, itemEl, popup);
 						});
-					} else {
-						if (item.action) {
+					}else {
+						if(item.action){
 							itemEl.addEventListener("click", (e) => {
 								item.action(e, component.getComponent());
 							});
 						}
 					}
 				}
-
-				if (item.menu && item.menu.length) {
+				
+				if(item.menu && item.menu.length){
 					itemEl.classList.add("tabulator-menu-item-submenu");
 				}
 			}
-
+			
 			menuEl.appendChild(itemEl);
 		});
-
+		
 		menuEl.addEventListener("click", (e) => {
 			this.rootPopup.hide();
 		});
-
+		
 		popup.show(parentEl || e);
-
-		if (popup === this.rootPopup) {
+		
+		if(popup === this.rootPopup){
 			this.rootPopup.hideOnBlur(() => {
 				this.rootPopup = null;
-
-				if (this.currentComponent) {
-					this.dispatchExternal(
-						"menuClosed",
-						this.currentComponent.getComponent()
-					);
+				
+				if(this.currentComponent){
+					this.dispatchExternal("menuClosed", this.currentComponent.getComponent());
 					this.currentComponent = null;
 				}
 			});
@@ -15379,10 +13861,11 @@ class Menu extends Module {
 
 Menu.moduleName = "menu";
 
-class MoveColumns extends Module {
-	constructor(table) {
+class MoveColumns extends Module{
+	
+	constructor(table){
 		super(table);
-
+		
 		this.placeholderElement = this.createPlaceholderElement();
 		this.hoverElement = false; //floating column header element
 		this.checkTimeout = false; //click check timeout holder
@@ -15395,328 +13878,274 @@ class MoveColumns extends Module {
 		this.autoScrollStep = 5; //auto scroll distance in pixels
 		this.autoScrollTimeout = false; //auto scroll timeout
 		this.touchMove = false;
-
+		
 		this.moveHover = this.moveHover.bind(this);
 		this.endMove = this.endMove.bind(this);
-
+		
 		this.registerTableOption("movableColumns", false); //enable movable columns
 	}
-
-	createPlaceholderElement() {
+	
+	createPlaceholderElement(){
 		var el = document.createElement("div");
-
+		
 		el.classList.add("tabulator-col");
 		el.classList.add("tabulator-col-placeholder");
-
+		
 		return el;
 	}
-
-	initialize() {
-		if (this.table.options.movableColumns) {
+	
+	initialize(){
+		if(this.table.options.movableColumns){
 			this.subscribe("column-init", this.initializeColumn.bind(this));
 		}
 	}
-
-	initializeColumn(column) {
+	
+	initializeColumn(column){
 		var self = this,
-			config = {},
-			colEl;
-
-		if (!column.modules.frozen && !column.isGroup) {
+		config = {},
+		colEl;
+		
+		if(!column.modules.frozen && !column.isGroup){
 			colEl = column.getElement();
-
-			config.mousemove = function (e) {
-				if (column.parent === self.moving.parent) {
-					if (
-						(self.touchMove ? e.touches[0].pageX : e.pageX) -
-							Helpers.elOffset(colEl).left +
-							self.table.columnManager.element.scrollLeft >
-						column.getWidth() / 2
-					) {
-						if (self.toCol !== column || !self.toColAfter) {
-							colEl.parentNode.insertBefore(
-								self.placeholderElement,
-								colEl.nextSibling
-							);
+			
+			config.mousemove = function(e){
+				if(column.parent === self.moving.parent){
+					if((((self.touchMove ? e.touches[0].pageX : e.pageX) - Helpers.elOffset(colEl).left) + self.table.columnManager.element.scrollLeft) > (column.getWidth() / 2)){
+						if(self.toCol !== column || !self.toColAfter){
+							colEl.parentNode.insertBefore(self.placeholderElement, colEl.nextSibling);
 							self.moveColumn(column, true);
 						}
-					} else {
-						if (self.toCol !== column || self.toColAfter) {
+					}else {
+						if(self.toCol !== column || self.toColAfter){
 							colEl.parentNode.insertBefore(self.placeholderElement, colEl);
 							self.moveColumn(column, false);
 						}
 					}
 				}
 			}.bind(self);
-
-			colEl.addEventListener("mousedown", function (e) {
+			
+			colEl.addEventListener("mousedown", function(e){
 				self.touchMove = false;
-				if (e.which === 1) {
-					self.checkTimeout = setTimeout(function () {
+				if(e.which === 1){
+					self.checkTimeout = setTimeout(function(){
 						self.startMove(e, column);
 					}, self.checkPeriod);
 				}
 			});
-
-			colEl.addEventListener("mouseup", function (e) {
-				if (e.which === 1) {
-					if (self.checkTimeout) {
+			
+			colEl.addEventListener("mouseup", function(e){
+				if(e.which === 1){
+					if(self.checkTimeout){
 						clearTimeout(self.checkTimeout);
 					}
 				}
 			});
-
+			
 			self.bindTouchEvents(column);
 		}
-
+		
 		column.modules.moveColumn = config;
 	}
-
-	bindTouchEvents(column) {
+	
+	bindTouchEvents(column){
 		var colEl = column.getElement(),
-			startXMove = false, //shifting center position of the cell
-			nextCol,
-			prevCol,
-			nextColWidth,
-			prevColWidth,
-			nextColWidthLast,
-			prevColWidthLast;
-
-		colEl.addEventListener(
-			"touchstart",
-			(e) => {
-				this.checkTimeout = setTimeout(() => {
-					this.touchMove = true;
-					nextCol = column.nextColumn();
-					nextColWidth = nextCol ? nextCol.getWidth() / 2 : 0;
-					prevCol = column.prevColumn();
-					prevColWidth = prevCol ? prevCol.getWidth() / 2 : 0;
-					nextColWidthLast = 0;
-					prevColWidthLast = 0;
-					startXMove = false;
-
-					this.startMove(e, column);
-				}, this.checkPeriod);
-			},
-			{ passive: true }
-		);
-
-		colEl.addEventListener(
-			"touchmove",
-			(e) => {
-				var diff, moveToCol;
-
-				if (this.moving) {
-					this.moveHover(e);
-
-					if (!startXMove) {
-						startXMove = e.touches[0].pageX;
-					}
-
-					diff = e.touches[0].pageX - startXMove;
-
-					if (diff > 0) {
-						if (nextCol && diff - nextColWidthLast > nextColWidth) {
-							moveToCol = nextCol;
-
-							if (moveToCol !== column) {
-								startXMove = e.touches[0].pageX;
-								moveToCol
-									.getElement()
-									.parentNode.insertBefore(
-										this.placeholderElement,
-										moveToCol.getElement().nextSibling
-									);
-								this.moveColumn(moveToCol, true);
-							}
-						}
-					} else {
-						if (prevCol && -diff - prevColWidthLast > prevColWidth) {
-							moveToCol = prevCol;
-
-							if (moveToCol !== column) {
-								startXMove = e.touches[0].pageX;
-								moveToCol
-									.getElement()
-									.parentNode.insertBefore(
-										this.placeholderElement,
-										moveToCol.getElement()
-									);
-								this.moveColumn(moveToCol, false);
-							}
+		startXMove = false, //shifting center position of the cell
+		nextCol, prevCol, nextColWidth, prevColWidth, nextColWidthLast, prevColWidthLast;
+		
+		colEl.addEventListener("touchstart", (e) => {
+			this.checkTimeout = setTimeout(() => {
+				this.touchMove = true;
+				nextCol = column.nextColumn();
+				nextColWidth = nextCol ? nextCol.getWidth()/2 : 0;
+				prevCol = column.prevColumn();
+				prevColWidth = prevCol ? prevCol.getWidth()/2 : 0;
+				nextColWidthLast = 0;
+				prevColWidthLast = 0;
+				startXMove = false;
+				
+				this.startMove(e, column);
+			}, this.checkPeriod);
+		}, {passive: true});
+		
+		colEl.addEventListener("touchmove", (e) => {
+			var diff, moveToCol;
+			
+			if(this.moving){
+				this.moveHover(e);
+				
+				if(!startXMove){
+					startXMove = e.touches[0].pageX;
+				}
+				
+				diff = e.touches[0].pageX - startXMove;
+				
+				if(diff > 0){
+					if(nextCol && diff - nextColWidthLast > nextColWidth){
+						moveToCol = nextCol;
+						
+						if(moveToCol !== column){
+							startXMove = e.touches[0].pageX;
+							moveToCol.getElement().parentNode.insertBefore(this.placeholderElement, moveToCol.getElement().nextSibling);
+							this.moveColumn(moveToCol, true);
 						}
 					}
-
-					if (moveToCol) {
-						nextCol = moveToCol.nextColumn();
-						nextColWidthLast = nextColWidth;
-						nextColWidth = nextCol ? nextCol.getWidth() / 2 : 0;
-						prevCol = moveToCol.prevColumn();
-						prevColWidthLast = prevColWidth;
-						prevColWidth = prevCol ? prevCol.getWidth() / 2 : 0;
+				}else {
+					if(prevCol && -diff - prevColWidthLast >  prevColWidth){
+						moveToCol = prevCol;
+						
+						if(moveToCol !== column){
+							startXMove = e.touches[0].pageX;
+							moveToCol.getElement().parentNode.insertBefore(this.placeholderElement, moveToCol.getElement());
+							this.moveColumn(moveToCol, false);
+						}
 					}
 				}
-			},
-			{ passive: true }
-		);
-
+				
+				if(moveToCol){
+					nextCol = moveToCol.nextColumn();
+					nextColWidthLast = nextColWidth;
+					nextColWidth = nextCol ? nextCol.getWidth() / 2 : 0;
+					prevCol = moveToCol.prevColumn();
+					prevColWidthLast = prevColWidth;
+					prevColWidth = prevCol ? prevCol.getWidth() / 2 : 0;
+				}
+			}
+		}, {passive: true});
+		
 		colEl.addEventListener("touchend", (e) => {
-			if (this.checkTimeout) {
+			if(this.checkTimeout){
 				clearTimeout(this.checkTimeout);
 			}
-			if (this.moving) {
+			if(this.moving){
 				this.endMove(e);
 			}
 		});
 	}
-
-	startMove(e, column) {
+	
+	startMove(e, column){
 		var element = column.getElement(),
-			headerElement = this.table.columnManager.getElement(),
-			headersElement = this.table.columnManager.getHeadersElement();
-
+		headerElement = this.table.columnManager.getElement(),
+		headersElement = this.table.columnManager.getHeadersElement();
+		
 		this.moving = column;
-		this.startX =
-			(this.touchMove ? e.touches[0].pageX : e.pageX) -
-			Helpers.elOffset(element).left;
-
+		this.startX = (this.touchMove ? e.touches[0].pageX : e.pageX) - Helpers.elOffset(element).left;
+		
 		this.table.element.classList.add("tabulator-block-select");
-
+		
 		//create placeholder
 		this.placeholderElement.style.width = column.getWidth() + "px";
 		this.placeholderElement.style.height = column.getHeight() + "px";
-
+		
 		element.parentNode.insertBefore(this.placeholderElement, element);
 		element.parentNode.removeChild(element);
-
+		
 		//create hover element
 		this.hoverElement = element.cloneNode(true);
 		this.hoverElement.classList.add("tabulator-moving");
-
+		
 		this.table.columnManager.getElement().appendChild(this.hoverElement);
-
+		
 		this.hoverElement.style.left = "0";
-		this.hoverElement.style.bottom =
-			headerElement.clientHeight - headersElement.offsetHeight + "px";
-
-		if (!this.touchMove) {
+		this.hoverElement.style.bottom = (headerElement.clientHeight - headersElement.offsetHeight) + "px";
+		
+		if(!this.touchMove){
 			this._bindMouseMove();
-
+			
 			document.body.addEventListener("mousemove", this.moveHover);
 			document.body.addEventListener("mouseup", this.endMove);
 		}
-
+		
 		this.moveHover(e);
 	}
-
-	_bindMouseMove() {
-		this.table.columnManager.columnsByIndex.forEach(function (column) {
-			if (column.modules.moveColumn.mousemove) {
-				column
-					.getElement()
-					.addEventListener("mousemove", column.modules.moveColumn.mousemove);
+	
+	_bindMouseMove(){
+		this.table.columnManager.columnsByIndex.forEach(function(column){
+			if(column.modules.moveColumn.mousemove){
+				column.getElement().addEventListener("mousemove", column.modules.moveColumn.mousemove);
 			}
 		});
 	}
-
-	_unbindMouseMove() {
-		this.table.columnManager.columnsByIndex.forEach(function (column) {
-			if (column.modules.moveColumn.mousemove) {
-				column
-					.getElement()
-					.removeEventListener(
-						"mousemove",
-						column.modules.moveColumn.mousemove
-					);
+	
+	_unbindMouseMove(){
+		this.table.columnManager.columnsByIndex.forEach(function(column){
+			if(column.modules.moveColumn.mousemove){
+				column.getElement().removeEventListener("mousemove", column.modules.moveColumn.mousemove);
 			}
 		});
 	}
-
-	moveColumn(column, after) {
+	
+	moveColumn(column, after){
 		var movingCells = this.moving.getCells();
-
+		
 		this.toCol = column;
 		this.toColAfter = after;
-
-		if (after) {
-			column.getCells().forEach(function (cell, i) {
+		
+		if(after){
+			column.getCells().forEach(function(cell, i){
 				var cellEl = cell.getElement(true);
-
-				if (cellEl.parentNode && movingCells[i]) {
-					cellEl.parentNode.insertBefore(
-						movingCells[i].getElement(),
-						cellEl.nextSibling
-					);
+				
+				if(cellEl.parentNode && movingCells[i]){
+					cellEl.parentNode.insertBefore(movingCells[i].getElement(), cellEl.nextSibling);
 				}
 			});
-		} else {
-			column.getCells().forEach(function (cell, i) {
+		}else {
+			column.getCells().forEach(function(cell, i){
 				var cellEl = cell.getElement(true);
-
-				if (cellEl.parentNode && movingCells[i]) {
+				
+				if(cellEl.parentNode && movingCells[i]){
 					cellEl.parentNode.insertBefore(movingCells[i].getElement(), cellEl);
 				}
 			});
 		}
 	}
-
-	endMove(e) {
-		if (e.which === 1 || this.touchMove) {
+	
+	endMove(e){
+		if(e.which === 1 || this.touchMove){
 			this._unbindMouseMove();
-
-			this.placeholderElement.parentNode.insertBefore(
-				this.moving.getElement(),
-				this.placeholderElement.nextSibling
-			);
+			
+			this.placeholderElement.parentNode.insertBefore(this.moving.getElement(), this.placeholderElement.nextSibling);
 			this.placeholderElement.parentNode.removeChild(this.placeholderElement);
 			this.hoverElement.parentNode.removeChild(this.hoverElement);
-
+			
 			this.table.element.classList.remove("tabulator-block-select");
-
-			if (this.toCol) {
-				this.table.columnManager.moveColumnActual(
-					this.moving,
-					this.toCol,
-					this.toColAfter
-				);
+			
+			if(this.toCol){
+				this.table.columnManager.moveColumnActual(this.moving, this.toCol, this.toColAfter);
 			}
-
+			
 			this.moving = false;
 			this.toCol = false;
 			this.toColAfter = false;
-
-			if (!this.touchMove) {
+			
+			if(!this.touchMove){
 				document.body.removeEventListener("mousemove", this.moveHover);
 				document.body.removeEventListener("mouseup", this.endMove);
 			}
 		}
 	}
-
-	moveHover(e) {
+	
+	moveHover(e){
 		var columnHolder = this.table.columnManager.getElement(),
-			scrollLeft = columnHolder.scrollLeft,
-			xPos =
-				(this.touchMove ? e.touches[0].pageX : e.pageX) -
-				Helpers.elOffset(columnHolder).left +
-				scrollLeft,
-			scrollPos;
-
-		this.hoverElement.style.left = xPos - this.startX + "px";
-
-		if (xPos - scrollLeft < this.autoScrollMargin) {
-			if (!this.autoScrollTimeout) {
+		scrollLeft = columnHolder.scrollLeft,
+		xPos = ((this.touchMove ? e.touches[0].pageX : e.pageX) - Helpers.elOffset(columnHolder).left) + scrollLeft,
+		scrollPos;
+		
+		this.hoverElement.style.left = (xPos - this.startX) + "px";
+		
+		if(xPos - scrollLeft < this.autoScrollMargin){
+			if(!this.autoScrollTimeout){
 				this.autoScrollTimeout = setTimeout(() => {
-					scrollPos = Math.max(0, scrollLeft - 5);
+					scrollPos = Math.max(0,scrollLeft-5);
 					this.table.rowManager.getElement().scrollLeft = scrollPos;
 					this.autoScrollTimeout = false;
 				}, 1);
 			}
 		}
-
-		if (scrollLeft + columnHolder.clientWidth - xPos < this.autoScrollMargin) {
-			if (!this.autoScrollTimeout) {
+		
+		if(scrollLeft + columnHolder.clientWidth - xPos < this.autoScrollMargin){
+			if(!this.autoScrollTimeout){
 				this.autoScrollTimeout = setTimeout(() => {
-					scrollPos = Math.min(columnHolder.clientWidth, scrollLeft + 5);
+					scrollPos = Math.min(columnHolder.clientWidth, scrollLeft+5);
 					this.table.rowManager.getElement().scrollLeft = scrollPos;
 					this.autoScrollTimeout = false;
 				}, 1);
@@ -15727,8 +14156,9 @@ class MoveColumns extends Module {
 
 MoveColumns.moduleName = "moveColumn";
 
-class MoveRows extends Module {
-	constructor(table) {
+class MoveRows extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.placeholderElement = this.createPlaceholderElement();
@@ -15766,7 +14196,7 @@ class MoveRows extends Module {
 		this.registerColumnOption("rowHandle");
 	}
 
-	createPlaceholderElement() {
+	createPlaceholderElement(){
 		var el = document.createElement("div");
 
 		el.classList.add("tabulator-row");
@@ -15775,15 +14205,12 @@ class MoveRows extends Module {
 		return el;
 	}
 
-	initialize() {
-		if (this.table.options.movableRows) {
-			this.connectionSelectorsTables =
-				this.table.options.movableRowsConnectedTables;
-			this.connectionSelectorsElements =
-				this.table.options.movableRowsConnectedElements;
+	initialize(){
+		if(this.table.options.movableRows){
+			this.connectionSelectorsTables = this.table.options.movableRowsConnectedTables;
+			this.connectionSelectorsElements = this.table.options.movableRowsConnectedElements;
 
-			this.connection =
-				this.connectionSelectorsTables || this.connectionSelectorsElements;
+			this.connection = this.connectionSelectorsTables || this.connectionSelectorsElements;
 
 			this.subscribe("cell-init", this.initializeCell.bind(this));
 			this.subscribe("column-init", this.initializeColumn.bind(this));
@@ -15791,37 +14218,29 @@ class MoveRows extends Module {
 		}
 	}
 
-	initializeGroupHeader(group) {
+	initializeGroupHeader(group){
 		var self = this,
-			config = {};
+		config = {};
 
 		//inter table drag drop
-		config.mouseup = function (e) {
+		config.mouseup = function(e){
 			self.tableRowDrop(e, group);
 		}.bind(self);
 
 		//same table drag drop
-		config.mousemove = function (e) {
+		config.mousemove = function(e){
 			var rowEl;
 
-			if (
-				e.pageY -
-					Helpers.elOffset(group.element).top +
-					self.table.rowManager.element.scrollTop >
-				group.getHeight() / 2
-			) {
-				if (self.toRow !== group || !self.toRowAfter) {
+			if(((e.pageY - Helpers.elOffset(group.element).top) + self.table.rowManager.element.scrollTop) > (group.getHeight() / 2)){
+				if(self.toRow !== group || !self.toRowAfter){
 					rowEl = group.getElement();
-					rowEl.parentNode.insertBefore(
-						self.placeholderElement,
-						rowEl.nextSibling
-					);
+					rowEl.parentNode.insertBefore(self.placeholderElement, rowEl.nextSibling);
 					self.moveRow(group, true);
 				}
-			} else {
-				if (self.toRow !== group || self.toRowAfter) {
+			}else {
+				if(self.toRow !== group || self.toRowAfter){
 					rowEl = group.getElement();
-					if (rowEl.previousSibling) {
+					if(rowEl.previousSibling){
 						rowEl.parentNode.insertBefore(self.placeholderElement, rowEl);
 						self.moveRow(group, false);
 					}
@@ -15832,55 +14251,49 @@ class MoveRows extends Module {
 		group.modules.moveRow = config;
 	}
 
-	initializeRow(row) {
+	initializeRow(row){
 		var self = this,
-			config = {},
-			rowEl;
+		config = {},
+		rowEl;
 
 		//inter table drag drop
-		config.mouseup = function (e) {
+		config.mouseup = function(e){
 			self.tableRowDrop(e, row);
 		}.bind(self);
 
 		//same table drag drop
-		config.mousemove = function (e) {
+		config.mousemove = function(e){
 			var rowEl = row.getElement();
 
-			if (
-				e.pageY -
-					Helpers.elOffset(rowEl).top +
-					self.table.rowManager.element.scrollTop >
-				row.getHeight() / 2
-			) {
-				if (self.toRow !== row || !self.toRowAfter) {
-					rowEl.parentNode.insertBefore(
-						self.placeholderElement,
-						rowEl.nextSibling
-					);
+			if(((e.pageY - Helpers.elOffset(rowEl).top) + self.table.rowManager.element.scrollTop) > (row.getHeight() / 2)){
+				if(self.toRow !== row || !self.toRowAfter){
+					rowEl.parentNode.insertBefore(self.placeholderElement, rowEl.nextSibling);
 					self.moveRow(row, true);
 				}
-			} else {
-				if (self.toRow !== row || self.toRowAfter) {
+			}else {
+				if(self.toRow !== row || self.toRowAfter){
 					rowEl.parentNode.insertBefore(self.placeholderElement, rowEl);
 					self.moveRow(row, false);
 				}
 			}
 		}.bind(self);
 
-		if (!this.hasHandle) {
+
+		if(!this.hasHandle){
+
 			rowEl = row.getElement();
 
-			rowEl.addEventListener("mousedown", function (e) {
-				if (e.which === 1) {
-					self.checkTimeout = setTimeout(function () {
+			rowEl.addEventListener("mousedown", function(e){
+				if(e.which === 1){
+					self.checkTimeout = setTimeout(function(){
 						self.startMove(e, row);
 					}, self.checkPeriod);
 				}
 			});
 
-			rowEl.addEventListener("mouseup", function (e) {
-				if (e.which === 1) {
-					if (self.checkTimeout) {
+			rowEl.addEventListener("mouseup", function(e){
+				if(e.which === 1){
+					if(self.checkTimeout){
 						clearTimeout(self.checkTimeout);
 					}
 				}
@@ -15892,34 +14305,28 @@ class MoveRows extends Module {
 		row.modules.moveRow = config;
 	}
 
-	initializeColumn(column) {
-		if (
-			column.definition.rowHandle &&
-			this.table.options.movableRows !== false
-		) {
+	initializeColumn(column){
+		if(column.definition.rowHandle && this.table.options.movableRows !== false){
 			this.hasHandle = true;
 		}
 	}
 
-	initializeCell(cell) {
-		if (
-			cell.column.definition.rowHandle &&
-			this.table.options.movableRows !== false
-		) {
+	initializeCell(cell){
+		if(cell.column.definition.rowHandle && this.table.options.movableRows !== false){
 			var self = this,
-				cellEl = cell.getElement(true);
+			cellEl = cell.getElement(true);
 
-			cellEl.addEventListener("mousedown", function (e) {
-				if (e.which === 1) {
-					self.checkTimeout = setTimeout(function () {
+			cellEl.addEventListener("mousedown", function(e){
+				if(e.which === 1){
+					self.checkTimeout = setTimeout(function(){
 						self.startMove(e, cell.row);
 					}, self.checkPeriod);
 				}
 			});
 
-			cellEl.addEventListener("mouseup", function (e) {
-				if (e.which === 1) {
-					if (self.checkTimeout) {
+			cellEl.addEventListener("mouseup", function(e){
+				if(e.which === 1){
+					if(self.checkTimeout){
 						clearTimeout(self.checkTimeout);
 					}
 				}
@@ -15929,81 +14336,63 @@ class MoveRows extends Module {
 		}
 	}
 
-	bindTouchEvents(row, element) {
+	bindTouchEvents(row, element){
 		var startYMove = false, //shifting center position of the cell
-			nextRow,
-			prevRow,
-			nextRowHeight,
-			prevRowHeight,
-			nextRowHeightLast,
-			prevRowHeightLast;
+		nextRow, prevRow, nextRowHeight, prevRowHeight, nextRowHeightLast, prevRowHeightLast;
 
-		element.addEventListener(
-			"touchstart",
-			(e) => {
-				this.checkTimeout = setTimeout(() => {
-					this.touchMove = true;
-					nextRow = row.nextRow();
-					nextRowHeight = nextRow ? nextRow.getHeight() / 2 : 0;
-					prevRow = row.prevRow();
-					prevRowHeight = prevRow ? prevRow.getHeight() / 2 : 0;
-					nextRowHeightLast = 0;
-					prevRowHeightLast = 0;
-					startYMove = false;
+		element.addEventListener("touchstart", (e) => {
+			this.checkTimeout = setTimeout(() => {
+				this.touchMove = true;
+				nextRow = row.nextRow();
+				nextRowHeight = nextRow ? nextRow.getHeight()/2 : 0;
+				prevRow = row.prevRow();
+				prevRowHeight = prevRow ? prevRow.getHeight()/2 : 0;
+				nextRowHeightLast = 0;
+				prevRowHeightLast = 0;
+				startYMove = false;
 
-					this.startMove(e, row);
-				}, this.checkPeriod);
-			},
-			{ passive: true }
-		);
+				this.startMove(e, row);
+			}, this.checkPeriod);
+		}, {passive: true});
 		this.moving, this.toRow, this.toRowAfter;
 		element.addEventListener("touchmove", (e) => {
+
 			var diff, moveToRow;
 
-			if (this.moving) {
+			if(this.moving){
 				e.preventDefault();
 
 				this.moveHover(e);
 
-				if (!startYMove) {
+				if(!startYMove){
 					startYMove = e.touches[0].pageY;
 				}
 
 				diff = e.touches[0].pageY - startYMove;
 
-				if (diff > 0) {
-					if (nextRow && diff - nextRowHeightLast > nextRowHeight) {
+				if(diff > 0){
+					if(nextRow && diff - nextRowHeightLast > nextRowHeight){
 						moveToRow = nextRow;
 
-						if (moveToRow !== row) {
+						if(moveToRow !== row){
 							startYMove = e.touches[0].pageY;
-							moveToRow
-								.getElement()
-								.parentNode.insertBefore(
-									this.placeholderElement,
-									moveToRow.getElement().nextSibling
-								);
+							moveToRow.getElement().parentNode.insertBefore(this.placeholderElement, moveToRow.getElement().nextSibling);
 							this.moveRow(moveToRow, true);
 						}
 					}
-				} else {
-					if (prevRow && -diff - prevRowHeightLast > prevRowHeight) {
+				}else {
+					if(prevRow && -diff - prevRowHeightLast >  prevRowHeight){
 						moveToRow = prevRow;
 
-						if (moveToRow !== row) {
+						if(moveToRow !== row){
 							startYMove = e.touches[0].pageY;
-							moveToRow
-								.getElement()
-								.parentNode.insertBefore(
-									this.placeholderElement,
-									moveToRow.getElement()
-								);
+							moveToRow.getElement().parentNode.insertBefore(this.placeholderElement, moveToRow.getElement());
 							this.moveRow(moveToRow, false);
 						}
 					}
 				}
 
-				if (moveToRow) {
+				if(moveToRow){
 					nextRow = moveToRow.nextRow();
 					nextRowHeightLast = nextRowHeight;
 					nextRowHeight = nextRow ? nextRow.getHeight() / 2 : 0;
@@ -16015,45 +14404,33 @@ class MoveRows extends Module {
 		});
 
 		element.addEventListener("touchend", (e) => {
-			if (this.checkTimeout) {
+			if(this.checkTimeout){
 				clearTimeout(this.checkTimeout);
 			}
-			if (this.moving) {
+			if(this.moving){
 				this.endMove(e);
 				this.touchMove = false;
 			}
 		});
 	}
 
-	_bindMouseMove() {
+	_bindMouseMove(){
 		this.table.rowManager.getDisplayRows().forEach((row) => {
-			if (
-				(row.type === "row" || row.type === "group") &&
-				row.modules.moveRow &&
-				row.modules.moveRow.mousemove
-			) {
-				row
-					.getElement()
-					.addEventListener("mousemove", row.modules.moveRow.mousemove);
+			if((row.type === "row" || row.type === "group") && row.modules.moveRow && row.modules.moveRow.mousemove){
+				row.getElement().addEventListener("mousemove", row.modules.moveRow.mousemove);
 			}
 		});
 	}
 
-	_unbindMouseMove() {
+	_unbindMouseMove(){
 		this.table.rowManager.getDisplayRows().forEach((row) => {
-			if (
-				(row.type === "row" || row.type === "group") &&
-				row.modules.moveRow &&
-				row.modules.moveRow.mousemove
-			) {
-				row
-					.getElement()
-					.removeEventListener("mousemove", row.modules.moveRow.mousemove);
+			if((row.type === "row" || row.type === "group") && row.modules.moveRow && row.modules.moveRow.mousemove){
+				row.getElement().removeEventListener("mousemove", row.modules.moveRow.mousemove);
 			}
 		});
 	}
 
-	startMove(e, row) {
+	startMove(e, row){
 		var element = row.getElement();
 
 		this.setStartPosition(e, row);
@@ -16066,10 +14443,10 @@ class MoveRows extends Module {
 		this.placeholderElement.style.width = row.getWidth() + "px";
 		this.placeholderElement.style.height = row.getHeight() + "px";
 
-		if (!this.connection) {
+		if(!this.connection){
 			element.parentNode.insertBefore(this.placeholderElement, element);
 			element.parentNode.removeChild(element);
-		} else {
+		}else {
 			this.table.element.classList.add("tabulator-movingrow-sending");
 			this.connectToTables(row);
 		}
@@ -16078,7 +14455,7 @@ class MoveRows extends Module {
 		this.hoverElement = element.cloneNode(true);
 		this.hoverElement.classList.add("tabulator-moving");
 
-		if (this.connection) {
+		if(this.connection){
 			document.body.appendChild(this.hoverElement);
 			this.hoverElement.style.left = "0";
 			this.hoverElement.style.top = "0";
@@ -16086,7 +14463,7 @@ class MoveRows extends Module {
 			this.hoverElement.style.whiteSpace = "nowrap";
 			this.hoverElement.style.overflow = "hidden";
 			this.hoverElement.style.pointerEvents = "none";
-		} else {
+		}else {
 			this.table.rowManager.getTableElement().appendChild(this.hoverElement);
 
 			this.hoverElement.style.left = "0";
@@ -16103,32 +14480,28 @@ class MoveRows extends Module {
 		this.moveHover(e);
 	}
 
-	setStartPosition(e, row) {
+	setStartPosition(e, row){
 		var pageX = this.touchMove ? e.touches[0].pageX : e.pageX,
-			pageY = this.touchMove ? e.touches[0].pageY : e.pageY,
-			element,
-			position;
+		pageY = this.touchMove ? e.touches[0].pageY : e.pageY,
+		element, position;
 
 		element = row.getElement();
-		if (this.connection) {
+		if(this.connection){
 			position = element.getBoundingClientRect();
 
 			this.startX = position.left - pageX + window.pageXOffset;
 			this.startY = position.top - pageY + window.pageYOffset;
-		} else {
-			this.startY = pageY - element.getBoundingClientRect().top;
+		}else {
+			this.startY = (pageY - element.getBoundingClientRect().top);
 		}
 	}
 
-	endMove(e) {
-		if (!e || e.which === 1 || this.touchMove) {
+	endMove(e){
+		if(!e || e.which === 1 || this.touchMove){
 			this._unbindMouseMove();
 
-			if (!this.connection) {
-				this.placeholderElement.parentNode.insertBefore(
-					this.moving.getElement(),
-					this.placeholderElement.nextSibling
-				);
+			if(!this.connection){
+				this.placeholderElement.parentNode.insertBefore(this.moving.getElement(), this.placeholderElement.nextSibling);
 				this.placeholderElement.parentNode.removeChild(this.placeholderElement);
 			}
 
@@ -16136,9 +14509,9 @@ class MoveRows extends Module {
 
 			this.table.element.classList.remove("tabulator-block-select");
 
-			if (this.toRow) {
+			if(this.toRow){
 				this.table.rowManager.moveRow(this.moving, this.toRow, this.toRowAfter);
-			} else {
+			}else {
 				this.dispatchExternal("rowMoveCancelled", this.moving.getComponent());
 			}
 
@@ -16149,85 +14522,69 @@ class MoveRows extends Module {
 			document.body.removeEventListener("mousemove", this.moveHover);
 			document.body.removeEventListener("mouseup", this.endMove);
 
-			if (this.connection) {
+			if(this.connection){
 				this.table.element.classList.remove("tabulator-movingrow-sending");
 				this.disconnectFromTables();
 			}
 		}
 	}
 
-	moveRow(row, after) {
+	moveRow(row, after){
 		this.toRow = row;
 		this.toRowAfter = after;
 	}
 
-	moveHover(e) {
-		if (this.connection) {
+	moveHover(e){
+		if(this.connection){
 			this.moveHoverConnections.call(this, e);
-		} else {
+		}else {
 			this.moveHoverTable.call(this, e);
 		}
 	}
 
-	moveHoverTable(e) {
+	moveHoverTable(e){
 		var rowHolder = this.table.rowManager.getElement(),
-			scrollTop = rowHolder.scrollTop,
-			yPos =
-				(this.touchMove ? e.touches[0].pageY : e.pageY) -
-				rowHolder.getBoundingClientRect().top +
-				scrollTop;
-
-		this.hoverElement.style.top =
-			Math.min(
-				yPos - this.startY,
-				this.table.rowManager.element.scrollHeight -
-					this.hoverElement.offsetHeight
-			) + "px";
+		scrollTop = rowHolder.scrollTop,
+		yPos = ((this.touchMove ? e.touches[0].pageY : e.pageY) - rowHolder.getBoundingClientRect().top) + scrollTop;
+		
+		this.hoverElement.style.top = Math.min(yPos - this.startY, this.table.rowManager.element.scrollHeight - this.hoverElement.offsetHeight) + "px";
 	}
 
-	moveHoverConnections(e) {
-		this.hoverElement.style.left =
-			this.startX + (this.touchMove ? e.touches[0].pageX : e.pageX) + "px";
-		this.hoverElement.style.top =
-			this.startY + (this.touchMove ? e.touches[0].pageY : e.pageY) + "px";
+	moveHoverConnections(e){
+		this.hoverElement.style.left = (this.startX + (this.touchMove ? e.touches[0].pageX : e.pageX)) + "px";
+		this.hoverElement.style.top = (this.startY + (this.touchMove ? e.touches[0].pageY : e.pageY)) + "px";
 	}
 
-	elementRowDrop(e, element, row) {
-		this.dispatchExternal(
-			"movableRowsElementDrop",
-			e,
-			element,
-			row ? row.getComponent() : false
-		);
+	elementRowDrop(e, element, row){
+		this.dispatchExternal("movableRowsElementDrop", e, element, row ? row.getComponent() : false);
 	}
 
 	//establish connection with other tables
-	connectToTables(row) {
+	connectToTables(row){
 		var connectionTables;
 
-		if (this.connectionSelectorsTables) {
+		if(this.connectionSelectorsTables){
 			connectionTables = this.commsConnections(this.connectionSelectorsTables);
 
 			this.dispatchExternal("movableRowsSendingStart", connectionTables);
 
 			this.commsSend(this.connectionSelectorsTables, "moveRow", "connect", {
-				row: row,
+				row:row,
 			});
 		}
 
-		if (this.connectionSelectorsElements) {
+		if(this.connectionSelectorsElements){
+
 			this.connectionElements = [];
 
-			if (!Array.isArray(this.connectionSelectorsElements)) {
+			if(!Array.isArray(this.connectionSelectorsElements)){
 				this.connectionSelectorsElements = [this.connectionSelectorsElements];
 			}
 
 			this.connectionSelectorsElements.forEach((query) => {
-				if (typeof query === "string") {
-					this.connectionElements = this.connectionElements.concat(
-						Array.prototype.slice.call(document.querySelectorAll(query))
-					);
-				} else {
+				if(typeof query === "string"){
+					this.connectionElements = this.connectionElements.concat(Array.prototype.slice.call(document.querySelectorAll(query)));
+				}else {
 					this.connectionElements.push(query);
 				}
 			});
@@ -16246,10 +14603,10 @@ class MoveRows extends Module {
 	}
 
 	//disconnect from other tables
-	disconnectFromTables() {
+	disconnectFromTables(){
 		var connectionTables;
 
-		if (this.connectionSelectorsTables) {
+		if(this.connectionSelectorsTables){
 			connectionTables = this.commsConnections(this.connectionSelectorsTables);
 
 			this.dispatchExternal("movableRowsSendingStop", connectionTables);
@@ -16265,22 +14622,16 @@ class MoveRows extends Module {
 	}
 
 	//accept incomming connection
-	connect(table, row) {
-		if (!this.connectedTable) {
+	connect(table, row){
+		if(!this.connectedTable){
 			this.connectedTable = table;
 			this.connectedRow = row;
 
 			this.table.element.classList.add("tabulator-movingrow-receiving");
 
 			this.table.rowManager.getDisplayRows().forEach((row) => {
-				if (
-					row.type === "row" &&
-					row.modules.moveRow &&
-					row.modules.moveRow.mouseup
-				) {
-					row
-						.getElement()
-						.addEventListener("mouseup", row.modules.moveRow.mouseup);
+				if(row.type === "row" && row.modules.moveRow && row.modules.moveRow.mouseup){
+					row.getElement().addEventListener("mouseup", row.modules.moveRow.mouseup);
 				}
 			});
 
@@ -16291,50 +14642,40 @@ class MoveRows extends Module {
 			this.dispatchExternal("movableRowsReceivingStart", row, table);
 
 			return true;
-		} else {
-			console.warn(
-				"Move Row Error - Table cannot accept connection, already connected to table:",
-				this.connectedTable
-			);
+		}else {
+			console.warn("Move Row Error - Table cannot accept connection, already connected to table:", this.connectedTable);
 			return false;
 		}
 	}
 
 	//close incoming connection
-	disconnect(table) {
-		if (table === this.connectedTable) {
+	disconnect(table){
+		if(table === this.connectedTable){
 			this.connectedTable = false;
 			this.connectedRow = false;
 
 			this.table.element.classList.remove("tabulator-movingrow-receiving");
 
-			this.table.rowManager.getDisplayRows().forEach((row) => {
-				if (
-					row.type === "row" &&
-					row.modules.moveRow &&
-					row.modules.moveRow.mouseup
-				) {
-					row
-						.getElement()
-						.removeEventListener("mouseup", row.modules.moveRow.mouseup);
+			this.table.rowManager.getDisplayRows().forEach((row) =>{
+				if(row.type === "row" && row.modules.moveRow && row.modules.moveRow.mouseup){
+					row.getElement().removeEventListener("mouseup", row.modules.moveRow.mouseup);
 				}
 			});
 
 			this.table.element.removeEventListener("mouseup", this.tableRowDropEvent);
 
 			this.dispatchExternal("movableRowsReceivingStop", table);
-		} else {
-			console.warn(
-				"Move Row Error - trying to disconnect from non connected table"
-			);
+		}else {
+			console.warn("Move Row Error - trying to disconnect from non connected table");
 		}
 	}
 
-	dropComplete(table, row, success) {
+	dropComplete(table, row, success){
 		var sender = false;
 
-		if (success) {
-			switch (typeof this.table.options.movableRowsSender) {
+		if(success){
+
+			switch(typeof this.table.options.movableRowsSender){
 				case "string":
 					sender = this.senders[this.table.options.movableRowsSender];
 					break;
@@ -16344,47 +14685,29 @@ class MoveRows extends Module {
 					break;
 			}
 
-			if (sender) {
-				sender.call(
-					this,
-					this.moving ? this.moving.getComponent() : undefined,
-					row ? row.getComponent() : undefined,
-					table
-				);
-			} else {
-				if (this.table.options.movableRowsSender) {
-					console.warn(
-						"Mover Row Error - no matching sender found:",
-						this.table.options.movableRowsSender
-					);
+			if(sender){
+				sender.call(this, this.moving ? this.moving.getComponent() : undefined, row ? row.getComponent() : undefined, table);
+			}else {
+				if(this.table.options.movableRowsSender){
+					console.warn("Mover Row Error - no matching sender found:", this.table.options.movableRowsSender);
 				}
 			}
 
-			this.dispatchExternal(
-				"movableRowsSent",
-				this.moving.getComponent(),
-				row ? row.getComponent() : undefined,
-				table
-			);
-		} else {
-			this.dispatchExternal(
-				"movableRowsSentFailed",
-				this.moving.getComponent(),
-				row ? row.getComponent() : undefined,
-				table
-			);
+			this.dispatchExternal("movableRowsSent", this.moving.getComponent(), row ? row.getComponent() : undefined, table);
+		}else {
+			this.dispatchExternal("movableRowsSentFailed", this.moving.getComponent(), row ? row.getComponent() : undefined, table);
 		}
 
 		this.endMove();
 	}
 
-	tableRowDrop(e, row) {
+	tableRowDrop(e, row){
 		var receiver = false,
-			success = false;
+		success = false;
 
 		e.stopImmediatePropagation();
 
-		switch (typeof this.table.options.movableRowsReceiver) {
+		switch(typeof this.table.options.movableRowsReceiver){
 			case "string":
 				receiver = this.receivers[this.table.options.movableRowsReceiver];
 				break;
@@ -16394,44 +14717,26 @@ class MoveRows extends Module {
 				break;
 		}
 
-		if (receiver) {
-			success = receiver.call(
-				this,
-				this.connectedRow.getComponent(),
-				row ? row.getComponent() : undefined,
-				this.connectedTable
-			);
-		} else {
-			console.warn(
-				"Mover Row Error - no matching receiver found:",
-				this.table.options.movableRowsReceiver
-			);
+		if(receiver){
+			success = receiver.call(this, this.connectedRow.getComponent(), row ? row.getComponent() : undefined, this.connectedTable);
+		}else {
+			console.warn("Mover Row Error - no matching receiver found:", this.table.options.movableRowsReceiver);
 		}
 
-		if (success) {
-			this.dispatchExternal(
-				"movableRowsReceived",
-				this.connectedRow.getComponent(),
-				row ? row.getComponent() : undefined,
-				this.connectedTable
-			);
-		} else {
-			this.dispatchExternal(
-				"movableRowsReceivedFailed",
-				this.connectedRow.getComponent(),
-				row ? row.getComponent() : undefined,
-				this.connectedTable
-			);
+		if(success){
+			this.dispatchExternal("movableRowsReceived", this.connectedRow.getComponent(), row ? row.getComponent() : undefined, this.connectedTable);
+		}else {
+			this.dispatchExternal("movableRowsReceivedFailed", this.connectedRow.getComponent(), row ? row.getComponent() : undefined, this.connectedTable);
 		}
 
 		this.commsSend(this.connectedTable, "moveRow", "dropcomplete", {
-			row: row,
-			success: success,
+			row:row,
+			success:success,
 		});
 	}
 
-	commsReceived(table, action, data) {
-		switch (action) {
+	commsReceived(table, action, data){
+		switch(action){
 			case "connect":
 				return this.connect(table, data.row);
 
@@ -16445,18 +14750,18 @@ class MoveRows extends Module {
 }
 
 MoveRows.prototype.receivers = {
-	insert: function (fromRow, toRow, fromTable) {
+	insert:function(fromRow, toRow, fromTable){
 		this.table.addRow(fromRow.getData(), undefined, toRow);
 		return true;
 	},
 
-	add: function (fromRow, toRow, fromTable) {
+	add:function(fromRow, toRow, fromTable){
 		this.table.addRow(fromRow.getData());
 		return true;
 	},
 
-	update: function (fromRow, toRow, fromTable) {
-		if (toRow) {
+	update:function(fromRow, toRow, fromTable){
+		if(toRow){
 			toRow.update(fromRow.getData());
 			return true;
 		}
@@ -16464,8 +14769,8 @@ MoveRows.prototype.receivers = {
 		return false;
 	},
 
-	replace: function (fromRow, toRow, fromTable) {
-		if (toRow) {
+	replace:function(fromRow, toRow, fromTable){
+		if(toRow){
 			this.table.addRow(fromRow.getData(), undefined, toRow);
 			toRow.delete();
 			return true;
@@ -16476,17 +14781,18 @@ MoveRows.prototype.receivers = {
 };
 
 MoveRows.prototype.senders = {
-	delete: function (fromRow, toRow, toTable) {
+	delete:function(fromRow, toRow, toTable){
 		fromRow.delete();
-	},
+	}
 };
 
 MoveRows.moduleName = "moveRow";
 
 var defaultMutators = {};
 
-class Mutator extends Module {
-	constructor(table) {
+class Mutator extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.allowedTypes = ["", "data", "edit", "clipboard"]; //list of mutation types
@@ -16503,7 +14809,7 @@ class Mutator extends Module {
 		this.registerColumnOption("mutateLink");
 	}
 
-	initialize() {
+	initialize(){
 		this.subscribe("cell-value-changing", this.transformCell.bind(this));
 		this.subscribe("cell-value-changed", this.mutateLink.bind(this));
 		this.subscribe("column-layout", this.initializeColumn.bind(this));
@@ -16511,51 +14817,48 @@ class Mutator extends Module {
 		this.subscribe("row-data-changing", this.rowDataChanged.bind(this));
 	}
 
-	rowDataChanged(row, tempData, updatedData) {
+	rowDataChanged(row, tempData, updatedData){
 		return this.transformRow(tempData, "data", updatedData);
 	}
 
 	//initialize column mutator
-	initializeColumn(column) {
+	initializeColumn(column){
 		var match = false,
-			config = {};
+		config = {};
 
 		this.allowedTypes.forEach((type) => {
 			var key = "mutator" + (type.charAt(0).toUpperCase() + type.slice(1)),
-				mutator;
+			mutator;
 
-			if (column.definition[key]) {
+			if(column.definition[key]){
 				mutator = this.lookupMutator(column.definition[key]);
 
-				if (mutator) {
+				if(mutator){
 					match = true;
 
 					config[key] = {
-						mutator: mutator,
+						mutator:mutator,
 						params: column.definition[key + "Params"] || {},
 					};
 				}
 			}
 		});
 
-		if (match) {
+		if(match){
 			column.modules.mutate = config;
 		}
 	}
 
-	lookupMutator(value) {
+	lookupMutator(value){
 		var mutator = false;
 
 		//set column mutator
-		switch (typeof value) {
+		switch(typeof value){
 			case "string":
-				if (Mutator.mutators[value]) {
+				if(Mutator.mutators[value]){
 					mutator = Mutator.mutators[value];
-				} else {
-					console.warn(
-						"Mutator Error - No such mutator found, ignoring: ",
-						value
-					);
+				}else {
+					console.warn("Mutator Error - No such mutator found, ignoring: ", value);
 				}
 				break;
 
@@ -16568,35 +14871,25 @@ class Mutator extends Module {
 	}
 
 	//apply mutator to row
-	transformRow(data, type, updatedData) {
+	transformRow(data, type, updatedData){
 		var key = "mutator" + (type.charAt(0).toUpperCase() + type.slice(1)),
-			value;
+		value;
 
-		if (this.enabled) {
+		if(this.enabled){
+
 			this.table.columnManager.traverse((column) => {
 				var mutator, params, component;
 
-				if (column.modules.mutate) {
-					mutator =
-						column.modules.mutate[key] ||
-						column.modules.mutate.mutator ||
-						false;
+				if(column.modules.mutate){
+					mutator = column.modules.mutate[key] || column.modules.mutate.mutator || false;
 
-					if (mutator) {
-						value = column.getFieldValue(
-							typeof updatedData !== "undefined" ? updatedData : data
-						);
+					if(mutator){
+						value = column.getFieldValue(typeof updatedData !== "undefined" ? updatedData : data);
 
-						if (type == "data" || typeof value !== "undefined") {
+						if(type == "data" || typeof value !== "undefined"){
 							component = column.getComponent();
-							params =
-								typeof mutator.params === "function"
-									? mutator.params(value, data, type, component)
-									: mutator.params;
-							column.setFieldValue(
-								data,
-								mutator.mutator(value, data, type, params, component)
-							);
+							params = typeof mutator.params === "function" ? mutator.params(value, data, type, component) : mutator.params;
+							column.setFieldValue(data, mutator.mutator(value, data, type, params, component));
 						}
 					}
 				}
@@ -16607,53 +14900,44 @@ class Mutator extends Module {
 	}
 
 	//apply mutator to new cell value
-	transformCell(cell, value) {
-		if (cell.column.modules.mutate) {
-			var mutator =
-					cell.column.modules.mutate.mutatorEdit ||
-					cell.column.modules.mutate.mutator ||
-					false,
-				tempData = {};
+	transformCell(cell, value){
+		if(cell.column.modules.mutate){
+			var mutator = cell.column.modules.mutate.mutatorEdit || cell.column.modules.mutate.mutator || false,
+			tempData = {};
 
-			if (mutator) {
+			if(mutator){
 				tempData = Object.assign(tempData, cell.row.getData());
 				cell.column.setFieldValue(tempData, value);
-				return mutator.mutator(
-					value,
-					tempData,
-					"edit",
-					mutator.params,
-					cell.getComponent()
-				);
+				return mutator.mutator(value, tempData, "edit", mutator.params, cell.getComponent());
 			}
 		}
 
 		return value;
 	}
 
-	mutateLink(cell) {
+	mutateLink(cell){
 		var links = cell.column.definition.mutateLink;
 
-		if (links) {
-			if (!Array.isArray(links)) {
+		if(links){
+			if(!Array.isArray(links)){
 				links = [links];
 			}
 
 			links.forEach((link) => {
 				var linkCell = cell.row.getCell(link);
 
-				if (linkCell) {
+				if(linkCell){
 					linkCell.setValue(linkCell.getValue(), true, true);
 				}
 			});
 		}
 	}
 
-	enable() {
+	enable(){
 		this.enabled = true;
 	}
 
-	disable() {
+	disable(){
 		this.enabled = false;
 	}
 }
@@ -16663,20 +14947,17 @@ Mutator.moduleName = "mutator";
 //load defaults
 Mutator.mutators = defaultMutators;
 
-function rows(pageSize, currentRow, currentPage, totalRows, totalPages) {
+function rows(pageSize, currentRow, currentPage, totalRows, totalPages){
 	var el = document.createElement("span"),
-		showingEl = document.createElement("span"),
-		valueEl = document.createElement("span"),
-		ofEl = document.createElement("span"),
-		totalEl = document.createElement("span"),
-		rowsEl = document.createElement("span");
+	showingEl = document.createElement("span"),
+	valueEl = document.createElement("span"),
+	ofEl = document.createElement("span"),
+	totalEl = document.createElement("span"),
+	rowsEl = document.createElement("span");
 
-	this.table.modules.localize.langBind(
-		"pagination|counter|showing",
-		(value) => {
-			showingEl.innerHTML = value;
-		}
-	);
+	this.table.modules.localize.langBind("pagination|counter|showing", (value) => {
+		showingEl.innerHTML = value;
+	});
 
 	this.table.modules.localize.langBind("pagination|counter|of", (value) => {
 		ofEl.innerHTML = value;
@@ -16686,715 +14967,653 @@ function rows(pageSize, currentRow, currentPage, totalRows, totalPages) {
 		rowsEl.innerHTML = value;
 	});
 
-	if (totalRows) {
-		valueEl.innerHTML =
-			" " +
-			currentRow +
-			"-" +
-			Math.min(currentRow + pageSize - 1, totalRows) +
-			" ";
-
+	if(totalRows){
+		valueEl.innerHTML = " " + currentRow + "-" + Math.min((currentRow + pageSize - 1), totalRows) + " ";
+		
 		totalEl.innerHTML = " " + totalRows + " ";
-
+		
 		el.appendChild(showingEl);
 		el.appendChild(valueEl);
 		el.appendChild(ofEl);
 		el.appendChild(totalEl);
 		el.appendChild(rowsEl);
-	} else {
+	}else {
 		valueEl.innerHTML = " 0 ";
 
 		el.appendChild(showingEl);
 		el.appendChild(valueEl);
 		el.appendChild(rowsEl);
 	}
-
+	
 	return el;
 }
 
-function pages(pageSize, currentRow, currentPage, totalRows, totalPages) {
+function pages(pageSize, currentRow, currentPage, totalRows, totalPages){
+
 	var el = document.createElement("span"),
-		showingEl = document.createElement("span"),
-		valueEl = document.createElement("span"),
-		ofEl = document.createElement("span"),
-		totalEl = document.createElement("span"),
-		rowsEl = document.createElement("span");
-
-	this.table.modules.localize.langBind(
-		"pagination|counter|showing",
-		(value) => {
-			showingEl.innerHTML = value;
-		}
-	);
-
+	showingEl = document.createElement("span"),
+	valueEl = document.createElement("span"),
+	ofEl = document.createElement("span"),
+	totalEl = document.createElement("span"),
+	rowsEl = document.createElement("span");
+	
+	this.table.modules.localize.langBind("pagination|counter|showing", (value) => {
+		showingEl.innerHTML = value;
+	});
+	
 	valueEl.innerHTML = " " + currentPage + " ";
-
+	
 	this.table.modules.localize.langBind("pagination|counter|of", (value) => {
 		ofEl.innerHTML = value;
 	});
-
+	
 	totalEl.innerHTML = " " + totalPages + " ";
-
+	
 	this.table.modules.localize.langBind("pagination|counter|pages", (value) => {
 		rowsEl.innerHTML = value;
 	});
-
+	
 	el.appendChild(showingEl);
 	el.appendChild(valueEl);
 	el.appendChild(ofEl);
 	el.appendChild(totalEl);
 	el.appendChild(rowsEl);
-
+	
 	return el;
 }
 
 var defaultPageCounters = {
-	rows: rows,
-	pages: pages,
+	rows:rows,
+	pages:pages,
 };
 
-class Page extends Module {
-	constructor(table) {
+class Page extends Module{
+	
+	constructor(table){
 		super(table);
-
+		
 		this.mode = "local";
 		this.progressiveLoad = false;
-
+		
 		this.element = null;
 		this.pageCounterElement = null;
 		this.pageCounter = null;
-
+		
 		this.size = 0;
 		this.page = 1;
 		this.count = 5;
 		this.max = 1;
 
 		this.remoteRowCountEstimate = null;
-
-		this.displayIndex = 0; //index in display pipeline
-
+		
 		this.initialLoad = true;
 		this.dataChanging = false; //flag to check if data is being changed by this module
-
+		
 		this.pageSizes = [];
-
+		
 		this.registerTableOption("pagination", false); //set pagination type
 		this.registerTableOption("paginationMode", "local"); //local or remote pagination
 		this.registerTableOption("paginationSize", false); //set number of rows to a page
 		this.registerTableOption("paginationInitialPage", 1); //initial page to show on load
-		this.registerTableOption("paginationCounter", false); // set pagination counter
-		this.registerTableOption("paginationCounterElement", false); // set pagination counter
-		this.registerTableOption("paginationButtonCount", 5); // set count of page button
+		this.registerTableOption("paginationCounter", false);  // set pagination counter
+		this.registerTableOption("paginationCounterElement", false);  // set pagination counter
+		this.registerTableOption("paginationButtonCount", 5);  // set count of page button
 		this.registerTableOption("paginationSizeSelector", false); //add pagination size selector element
 		this.registerTableOption("paginationElement", false); //element to hold pagination numbers
 		// this.registerTableOption("paginationDataSent", {}); //pagination data sent to the server
 		// this.registerTableOption("paginationDataReceived", {}); //pagination data received from the server
 		this.registerTableOption("paginationAddRow", "page"); //add rows on table or page
-
+		
 		this.registerTableOption("progressiveLoad", false); //progressive loading
 		this.registerTableOption("progressiveLoadDelay", 0); //delay between requests
 		this.registerTableOption("progressiveLoadScrollMargin", 0); //margin before scroll begins
-
+		
 		this.registerTableFunction("setMaxPage", this.setMaxPage.bind(this));
 		this.registerTableFunction("setPage", this.setPage.bind(this));
-		this.registerTableFunction(
-			"setPageToRow",
-			this.userSetPageToRow.bind(this)
-		);
+		this.registerTableFunction("setPageToRow", this.userSetPageToRow.bind(this));
 		this.registerTableFunction("setPageSize", this.userSetPageSize.bind(this));
 		this.registerTableFunction("getPageSize", this.getPageSize.bind(this));
 		this.registerTableFunction("previousPage", this.previousPage.bind(this));
 		this.registerTableFunction("nextPage", this.nextPage.bind(this));
 		this.registerTableFunction("getPage", this.getPage.bind(this));
 		this.registerTableFunction("getPageMax", this.getPageMax.bind(this));
-
+		
 		//register component functions
-		this.registerComponentFunction(
-			"row",
-			"pageTo",
-			this.setPageToRow.bind(this)
-		);
+		this.registerComponentFunction("row", "pageTo", this.setPageToRow.bind(this));
 	}
-
-	initialize() {
-		if (this.table.options.pagination) {
+	
+	initialize(){
+		if(this.table.options.pagination){
 			this.subscribe("row-deleted", this.rowsUpdated.bind(this));
 			this.subscribe("row-added", this.rowsUpdated.bind(this));
 			this.subscribe("data-processed", this.initialLoadComplete.bind(this));
 			this.subscribe("table-built", this.calculatePageSizes.bind(this));
 			this.subscribe("footer-redraw", this.footerRedraw.bind(this));
 
-			if (this.table.options.paginationAddRow == "page") {
-				this.subscribe(
-					"row-adding-position",
-					this.rowAddingPosition.bind(this)
-				);
+			if(this.table.options.paginationAddRow == "page"){
+				this.subscribe("row-adding-position", this.rowAddingPosition.bind(this));
 			}
-
-			if (this.table.options.paginationMode === "remote") {
+			
+			if(this.table.options.paginationMode === "remote"){
 				this.subscribe("data-params", this.remotePageParams.bind(this));
 				this.subscribe("data-loaded", this._parseRemoteData.bind(this));
 			}
-
-			if (this.table.options.progressiveLoad) {
-				console.error(
-					"Progressive Load Error - Pagination and progressive load cannot be used at the same time"
-				);
+			
+			if(this.table.options.progressiveLoad){
+				console.error("Progressive Load Error - Pagination and progressive load cannot be used at the same time");
 			}
-
+			
 			this.registerDisplayHandler(this.restOnRenderBefore.bind(this), 40);
 			this.registerDisplayHandler(this.getRows.bind(this), 50);
-
+			
 			this.createElements();
 			this.initializePageCounter();
 			this.initializePaginator();
-		} else if (this.table.options.progressiveLoad) {
+		}else if(this.table.options.progressiveLoad){
 			this.subscribe("data-params", this.remotePageParams.bind(this));
 			this.subscribe("data-loaded", this._parseRemoteData.bind(this));
 			this.subscribe("table-built", this.calculatePageSizes.bind(this));
 			this.subscribe("data-processed", this.initialLoadComplete.bind(this));
-
+			
 			this.initializeProgressive(this.table.options.progressiveLoad);
-
-			if (this.table.options.progressiveLoad === "scroll") {
+			
+			if(this.table.options.progressiveLoad === "scroll"){
 				this.subscribe("scroll-vertical", this.scrollVertical.bind(this));
 			}
 		}
 	}
-
-	rowAddingPosition(row, top) {
+	
+	rowAddingPosition(row, top){
 		var rowManager = this.table.rowManager,
-			displayRows = rowManager.getDisplayRows(),
-			index;
-
-		if (top) {
-			if (displayRows.length) {
+		displayRows = rowManager.getDisplayRows(),
+		index;
+		
+		if(top){
+			if(displayRows.length){
 				index = displayRows[0];
-			} else {
-				if (rowManager.activeRows.length) {
-					index = rowManager.activeRows[rowManager.activeRows.length - 1];
+			}else {
+				if(rowManager.activeRows.length){
+					index = rowManager.activeRows[rowManager.activeRows.length-1];
 					top = false;
 				}
 			}
-		} else {
-			if (displayRows.length) {
+		}else {
+			if(displayRows.length){
 				index = displayRows[displayRows.length - 1];
 				top = displayRows.length < this.size ? false : true;
 			}
 		}
-
-		return { index, top };
+		
+		return {index, top};
 	}
-
-	calculatePageSizes() {
+	
+	calculatePageSizes(){
 		var testElRow, testElCell;
-
-		if (this.table.options.paginationSize) {
+		
+		if(this.table.options.paginationSize){
 			this.size = this.table.options.paginationSize;
-		} else {
+		}else {
 			testElRow = document.createElement("div");
 			testElRow.classList.add("tabulator-row");
 			testElRow.style.visibility = "hidden";
-
+			
 			testElCell = document.createElement("div");
 			testElCell.classList.add("tabulator-cell");
 			testElCell.innerHTML = "Page Row Test";
-
+			
 			testElRow.appendChild(testElCell);
-
+			
 			this.table.rowManager.getTableElement().appendChild(testElRow);
-
-			this.size = Math.floor(
-				this.table.rowManager.getElement().clientHeight / testElRow.offsetHeight
-			);
-
+			
+			this.size = Math.floor(this.table.rowManager.getElement().clientHeight / testElRow.offsetHeight);
+			
 			this.table.rowManager.getTableElement().removeChild(testElRow);
 		}
 
 		this.dispatchExternal("pageSizeChanged", this.size);
-
+		
 		this.generatePageSizeSelectList();
 	}
-
-	initialLoadComplete() {
+	
+	initialLoadComplete(){
 		this.initialLoad = false;
 	}
-
-	remotePageParams(data, config, silent, params) {
-		if (!this.initialLoad) {
-			if (
-				(this.progressiveLoad && !silent) ||
-				(!this.progressiveLoad && !this.dataChanging)
-			) {
+	
+	remotePageParams(data, config, silent, params){
+		if(!this.initialLoad){
+			if((this.progressiveLoad && !silent) || (!this.progressiveLoad && !this.dataChanging)){
 				this.reset(true);
 			}
 		}
-
+		
 		//configure request params
 		params.page = this.page;
-
+		
 		//set page size if defined
-		if (this.size) {
+		if(this.size){
 			params.size = this.size;
 		}
-
+		
 		return params;
 	}
-
+	
 	///////////////////////////////////
 	///////// Table Functions /////////
 	///////////////////////////////////
-
-	userSetPageToRow(row) {
-		if (this.table.options.pagination) {
+	
+	userSetPageToRow(row){
+		if(this.table.options.pagination){
 			row = this.rowManager.findRow(row);
-
-			if (row) {
+			
+			if(row){
 				return this.setPageToRow(row);
 			}
 		}
-
+		
 		return Promise.reject();
 	}
-
-	userSetPageSize(size) {
-		if (this.table.options.pagination) {
+	
+	userSetPageSize(size){
+		if(this.table.options.pagination){
 			this.setPageSize(size);
 			return this.setPage(1);
-		} else {
+		}else {
 			return false;
 		}
 	}
 	///////////////////////////////////
 	///////// Internal Logic //////////
 	///////////////////////////////////
-
-	scrollVertical(top, dir) {
+	
+	scrollVertical(top, dir){
 		var element, diff, margin;
-		if (!dir && !this.table.dataLoader.loading) {
+		if(!dir && !this.table.dataLoader.loading){
 			element = this.table.rowManager.getElement();
 			diff = element.scrollHeight - element.clientHeight - top;
-			margin =
-				this.table.options.progressiveLoadScrollMargin ||
-				element.clientHeight * 2;
-
-			if (diff < margin) {
-				this.nextPage().catch(() => {}); //consume the exception thrown when on the last page
+			margin = this.table.options.progressiveLoadScrollMargin || (element.clientHeight * 2);
+			
+			if(diff < margin){
+				this.nextPage()
+					.catch(() => {}); //consume the exception thrown when on the last page
 			}
 		}
 	}
-
-	restOnRenderBefore(rows, renderInPosition) {
-		if (!renderInPosition) {
-			if (this.mode === "local") {
+	
+	restOnRenderBefore(rows, renderInPosition){
+		if(!renderInPosition){
+			if(this.mode === "local"){
 				this.reset();
 			}
 		}
-
+		
 		return rows;
 	}
-
-	rowsUpdated() {
+	
+	rowsUpdated(){
 		this.refreshData(true, "all");
 	}
-
-	createElements() {
+	
+	createElements(){
 		var button;
-
+		
 		this.element = document.createElement("span");
 		this.element.classList.add("tabulator-paginator");
-
+		
 		this.pagesElement = document.createElement("span");
 		this.pagesElement.classList.add("tabulator-pages");
-
+		
 		button = document.createElement("button");
 		button.classList.add("tabulator-page");
 		button.setAttribute("type", "button");
 		button.setAttribute("role", "button");
 		button.setAttribute("aria-label", "");
 		button.setAttribute("title", "");
-
+		
 		this.firstBut = button.cloneNode(true);
 		this.firstBut.setAttribute("data-page", "first");
-
+		
 		this.prevBut = button.cloneNode(true);
 		this.prevBut.setAttribute("data-page", "prev");
-
+		
 		this.nextBut = button.cloneNode(true);
 		this.nextBut.setAttribute("data-page", "next");
-
+		
 		this.lastBut = button.cloneNode(true);
 		this.lastBut.setAttribute("data-page", "last");
-
-		if (this.table.options.paginationSizeSelector) {
+		
+		if(this.table.options.paginationSizeSelector){
 			this.pageSizeSelect = document.createElement("select");
 			this.pageSizeSelect.classList.add("tabulator-page-size");
 		}
 	}
-
-	generatePageSizeSelectList() {
+	
+	generatePageSizeSelectList(){
 		var pageSizes = [];
-
-		if (this.pageSizeSelect) {
-			if (Array.isArray(this.table.options.paginationSizeSelector)) {
+		
+		if(this.pageSizeSelect){
+			
+			if(Array.isArray(this.table.options.paginationSizeSelector)){
 				pageSizes = this.table.options.paginationSizeSelector;
 				this.pageSizes = pageSizes;
-
-				if (this.pageSizes.indexOf(this.size) == -1) {
+				
+				if(this.pageSizes.indexOf(this.size) == -1){
 					pageSizes.unshift(this.size);
 				}
-			} else {
-				if (this.pageSizes.indexOf(this.size) == -1) {
+			}else {
+				
+				if(this.pageSizes.indexOf(this.size) == -1){
 					pageSizes = [];
-
-					for (let i = 1; i < 5; i++) {
+					
+					for (let i = 1; i < 5; i++){
 						pageSizes.push(this.size * i);
 					}
-
+					
 					this.pageSizes = pageSizes;
-				} else {
+				}else {
 					pageSizes = this.pageSizes;
 				}
 			}
-
-			while (this.pageSizeSelect.firstChild)
-				this.pageSizeSelect.removeChild(this.pageSizeSelect.firstChild);
-
+			
+			while(this.pageSizeSelect.firstChild) this.pageSizeSelect.removeChild(this.pageSizeSelect.firstChild);
+			
 			pageSizes.forEach((item) => {
 				var itemEl = document.createElement("option");
 				itemEl.value = item;
-
-				if (item === true) {
-					this.langBind("pagination|all", function (value) {
+				
+				if(item === true){
+					this.langBind("pagination|all", function(value){
 						itemEl.innerHTML = value;
 					});
-				} else {
+				}else {
 					itemEl.innerHTML = item;
 				}
-
+				
+				
+				
 				this.pageSizeSelect.appendChild(itemEl);
 			});
-
+			
 			this.pageSizeSelect.value = this.size;
 		}
 	}
-
-	initializePageCounter() {
+	
+	initializePageCounter(){
 		var counter = this.table.options.paginationCounter,
-			pageCounter = null;
-
-		if (counter) {
-			if (typeof counter === "function") {
+		pageCounter = null;
+		
+		if(counter){
+			if(typeof counter === "function"){
 				pageCounter = counter;
-			} else {
+			}else {
 				pageCounter = Page.pageCounters[counter];
 			}
-
-			if (pageCounter) {
+			
+			if(pageCounter){
 				this.pageCounter = pageCounter;
-
+				
 				this.pageCounterElement = document.createElement("span");
 				this.pageCounterElement.classList.add("tabulator-page-counter");
-			} else {
-				console.warn(
-					"Pagination Error - No such page counter found: ",
-					counter
-				);
+			}else {
+				console.warn("Pagination Error - No such page counter found: ", counter);
 			}
 		}
 	}
-
+	
 	//setup pagination
-	initializePaginator(hidden) {
+	initializePaginator(hidden){
 		var pageSelectLabel, paginationCounterHolder;
-
-		if (!hidden) {
+		
+		if(!hidden){
 			//build pagination element
-
+			
 			//bind localizations
 			this.langBind("pagination|first", (value) => {
 				this.firstBut.innerHTML = value;
 			});
-
+			
 			this.langBind("pagination|first_title", (value) => {
 				this.firstBut.setAttribute("aria-label", value);
 				this.firstBut.setAttribute("title", value);
 			});
-
+			
 			this.langBind("pagination|prev", (value) => {
 				this.prevBut.innerHTML = value;
 			});
-
+			
 			this.langBind("pagination|prev_title", (value) => {
 				this.prevBut.setAttribute("aria-label", value);
 				this.prevBut.setAttribute("title", value);
 			});
-
+			
 			this.langBind("pagination|next", (value) => {
 				this.nextBut.innerHTML = value;
 			});
-
+			
 			this.langBind("pagination|next_title", (value) => {
 				this.nextBut.setAttribute("aria-label", value);
 				this.nextBut.setAttribute("title", value);
 			});
-
+			
 			this.langBind("pagination|last", (value) => {
 				this.lastBut.innerHTML = value;
 			});
-
+			
 			this.langBind("pagination|last_title", (value) => {
 				this.lastBut.setAttribute("aria-label", value);
 				this.lastBut.setAttribute("title", value);
 			});
-
+			
 			//click bindings
 			this.firstBut.addEventListener("click", () => {
 				this.setPage(1);
 			});
-
+			
 			this.prevBut.addEventListener("click", () => {
 				this.previousPage();
 			});
-
+			
 			this.nextBut.addEventListener("click", () => {
 				this.nextPage();
 			});
-
+			
 			this.lastBut.addEventListener("click", () => {
 				this.setPage(this.max);
 			});
-
-			if (this.table.options.paginationElement) {
+			
+			if(this.table.options.paginationElement){
 				this.element = this.table.options.paginationElement;
 			}
-
-			if (this.pageSizeSelect) {
+			
+			if(this.pageSizeSelect){
 				pageSelectLabel = document.createElement("label");
-
+				
 				this.langBind("pagination|page_size", (value) => {
 					this.pageSizeSelect.setAttribute("aria-label", value);
 					this.pageSizeSelect.setAttribute("title", value);
 					pageSelectLabel.innerHTML = value;
 				});
-
+				
 				this.element.appendChild(pageSelectLabel);
 				this.element.appendChild(this.pageSizeSelect);
-
+				
 				this.pageSizeSelect.addEventListener("change", (e) => {
-					this.setPageSize(
-						this.pageSizeSelect.value == "true"
-							? true
-							: this.pageSizeSelect.value
-					);
+					this.setPageSize(this.pageSizeSelect.value == "true" ? true : this.pageSizeSelect.value);
 					this.setPage(1);
 				});
 			}
-
+			
 			//append to DOM
 			this.element.appendChild(this.firstBut);
 			this.element.appendChild(this.prevBut);
 			this.element.appendChild(this.pagesElement);
 			this.element.appendChild(this.nextBut);
 			this.element.appendChild(this.lastBut);
+			
+			if(!this.table.options.paginationElement){
+				if(this.table.options.paginationCounter){
 
-			if (!this.table.options.paginationElement) {
-				if (this.table.options.paginationCounter) {
-					if (this.table.options.paginationCounterElement) {
-						if (
-							this.table.options.paginationCounterElement instanceof HTMLElement
-						) {
-							this.table.options.paginationCounterElement.appendChild(
-								this.pageCounterElement
-							);
-						} else if (
-							typeof this.table.options.paginationCounterElement === "string"
-						) {
-							paginationCounterHolder = document.querySelector(
-								this.table.options.paginationCounterElement
-							);
-
-							if (paginationCounterHolder) {
+					if(this.table.options.paginationCounterElement){
+						if(this.table.options.paginationCounterElement instanceof HTMLElement){
+							this.table.options.paginationCounterElement.appendChild(this.pageCounterElement);
+						}else if(typeof this.table.options.paginationCounterElement === "string"){
+							paginationCounterHolder = document.querySelector(this.table.options.paginationCounterElement);
+							
+							if(paginationCounterHolder){
 								paginationCounterHolder.appendChild(this.pageCounterElement);
-							} else {
-								console.warn(
-									"Pagination Error - Unable to find element matching paginationCounterElement selector:",
-									this.table.options.paginationCounterElement
-								);
+							}else {
+								console.warn("Pagination Error - Unable to find element matching paginationCounterElement selector:", this.table.options.paginationCounterElement);
 							}
 						}
-					} else {
+					}else {
 						this.footerAppend(this.pageCounterElement);
 					}
+					
 				}
-
+				
 				this.footerAppend(this.element);
 			}
-
+			
 			this.page = this.table.options.paginationInitialPage;
 			this.count = this.table.options.paginationButtonCount;
 		}
-
+		
 		//set default values
 		this.mode = this.table.options.paginationMode;
 	}
-
-	initializeProgressive(mode) {
+	
+	initializeProgressive(mode){
 		this.initializePaginator(true);
 		this.mode = "progressive_" + mode;
 		this.progressiveLoad = true;
 	}
-
-	trackChanges() {
+	
+	trackChanges(){
 		this.dispatch("page-changed");
 	}
-
-	setDisplayIndex(index) {
-		this.displayIndex = index;
-	}
-
-	getDisplayIndex() {
-		return this.displayIndex;
-	}
-
+	
 	//calculate maximum page from number of rows
-	setMaxRows(rowCount) {
-		if (!rowCount) {
+	setMaxRows(rowCount){
+		if(!rowCount){
 			this.max = 1;
-		} else {
-			this.max = this.size === true ? 1 : Math.ceil(rowCount / this.size);
+		}else {
+			this.max = this.size === true ?  1 : Math.ceil(rowCount/this.size);
 		}
-
-		if (this.page > this.max) {
+		
+		if(this.page > this.max){
 			this.page = this.max;
 		}
 	}
-
+	
 	//reset to first page without triggering action
-	reset(force) {
-		if (!this.initialLoad) {
-			if (this.mode == "local" || force) {
+	reset(force){
+		if(!this.initialLoad){
+			if(this.mode == "local" || force){
 				this.page = 1;
 			}
 		}
 	}
-
+	
 	//set the maximum page
-	setMaxPage(max) {
+	setMaxPage(max){
+		
 		max = parseInt(max);
-
+		
 		this.max = max || 1;
-
-		if (this.page > this.max) {
+		
+		if(this.page > this.max){
 			this.page = this.max;
 			this.trigger();
 		}
 	}
-
+	
 	//set current page number
-	setPage(page) {
-		switch (page) {
+	setPage(page){
+		switch(page){
 			case "first":
 				return this.setPage(1);
-
+	
 			case "prev":
 				return this.previousPage();
-
+			
 			case "next":
 				return this.nextPage();
-
+			
 			case "last":
 				return this.setPage(this.max);
 		}
-
+		
 		page = parseInt(page);
-
-		if ((page > 0 && page <= this.max) || this.mode !== "local") {
+		
+		if((page > 0 && page <= this.max) || this.mode !== "local"){
 			this.page = page;
-
+			
 			this.trackChanges();
-
+			
 			return this.trigger();
-		} else {
-			console.warn(
-				"Pagination Error - Requested page is out of range of 1 - " +
-					this.max +
-					":",
-				page
-			);
+		}else {
+			console.warn("Pagination Error - Requested page is out of range of 1 - " + this.max + ":", page);
 			return Promise.reject();
 		}
 	}
-
-	setPageToRow(row) {
-		var rows = this.table.rowManager.getDisplayRows(this.displayIndex - 1);
+	
+	setPageToRow(row){
+		var rows = this.displayRows(-1);
 		var index = rows.indexOf(row);
-
-		if (index > -1) {
+	
+		if(index > -1){
 			var page = this.size === true ? 1 : Math.ceil((index + 1) / this.size);
-
+			
 			return this.setPage(page);
-		} else {
+		}else {
 			console.warn("Pagination Error - Requested row is not visible");
 			return Promise.reject();
 		}
 	}
-
-	setPageSize(size) {
-		if (size !== true) {
+	
+	setPageSize(size){
+		if(size !== true){
 			size = parseInt(size);
 		}
 
-		if (size > 0) {
+		if(size > 0){
 			this.size = size;
 			this.dispatchExternal("pageSizeChanged", size);
 		}
-
-		if (this.pageSizeSelect) {
+		
+		if(this.pageSizeSelect){
 			// this.pageSizeSelect.value = size;
 			this.generatePageSizeSelectList();
 		}
-
+		
 		this.trackChanges();
 	}
-
-	_setPageCounter(totalRows, size, currentRow) {
+	
+	_setPageCounter(totalRows, size, currentRow){
 		var content;
+		
+		if(this.pageCounter){
 
-		if (this.pageCounter) {
-			if (this.mode === "remote") {
+			if(this.mode === "remote"){
 				size = this.size;
-				currentRow = (this.page - 1) * this.size + 1;
+				currentRow = ((this.page - 1) * this.size) + 1;
 				totalRows = this.remoteRowCountEstimate;
 			}
 
-			content = this.pageCounter.call(
-				this,
-				size,
-				currentRow,
-				this.page,
-				totalRows,
-				this.max
-			);
-
-			switch (typeof content) {
+			content = this.pageCounter.call(this, size, currentRow, this.page, totalRows, this.max);
+			
+			switch(typeof content){
 				case "object":
-					if (content instanceof Node) {
+					if(content instanceof Node){
+					
 						//clear previous cell contents
-						while (this.pageCounterElement.firstChild)
-							this.pageCounterElement.removeChild(
-								this.pageCounterElement.firstChild
-							);
-
+						while(this.pageCounterElement.firstChild) this.pageCounterElement.removeChild(this.pageCounterElement.firstChild);
+					
 						this.pageCounterElement.appendChild(content);
-					} else {
+					}else {
 						this.pageCounterElement.innerHTML = "";
-
-						if (content != null) {
-							console.warn(
-								"Page Counter Error - Page Counter has returned a type of object, the only valid page counter object return is an instance of Node, the page counter returned:",
-								content
-							);
+					
+						if(content != null){
+							console.warn("Page Counter Error - Page Counter has returned a type of object, the only valid page counter object return is an instance of Node, the page counter returned:", content);
 						}
 					}
 					break;
@@ -17406,275 +15625,237 @@ class Page extends Module {
 			}
 		}
 	}
-
+	
 	//setup the pagination buttons
-	_setPageButtons() {
-		let leftSize = Math.floor((this.count - 1) / 2);
-		let rightSize = Math.ceil((this.count - 1) / 2);
-		let min =
-			this.max - this.page + leftSize + 1 < this.count
-				? this.max - this.count + 1
-				: Math.max(this.page - leftSize, 1);
-		let max =
-			this.page <= rightSize
-				? Math.min(this.count, this.max)
-				: Math.min(this.page + rightSize, this.max);
-
-		while (this.pagesElement.firstChild)
-			this.pagesElement.removeChild(this.pagesElement.firstChild);
-
-		if (this.page == 1) {
+	_setPageButtons(){
+		let leftSize = Math.floor((this.count-1) / 2);
+		let rightSize = Math.ceil((this.count-1) / 2);
+		let min = this.max - this.page + leftSize + 1 < this.count ? this.max-this.count+1: Math.max(this.page-leftSize,1);
+		let max = this.page <= rightSize? Math.min(this.count, this.max) :Math.min(this.page+rightSize, this.max);
+		
+		while(this.pagesElement.firstChild) this.pagesElement.removeChild(this.pagesElement.firstChild);
+		
+		if(this.page == 1){
 			this.firstBut.disabled = true;
 			this.prevBut.disabled = true;
-		} else {
+		}else {
 			this.firstBut.disabled = false;
 			this.prevBut.disabled = false;
 		}
-
-		if (this.page == this.max) {
+		
+		if(this.page == this.max){
 			this.lastBut.disabled = true;
 			this.nextBut.disabled = true;
-		} else {
+		}else {
 			this.lastBut.disabled = false;
 			this.nextBut.disabled = false;
 		}
-
-		for (let i = min; i <= max; i++) {
-			if (i > 0 && i <= this.max) {
+		
+		for(let i = min; i <= max; i++){
+			if(i>0 && i <= this.max){
 				this.pagesElement.appendChild(this._generatePageButton(i));
 			}
 		}
-
+		
 		this.footerRedraw();
 	}
-
-	_generatePageButton(page) {
+	
+	_generatePageButton(page){
 		var button = document.createElement("button");
-
+		
 		button.classList.add("tabulator-page");
-		if (page == this.page) {
+		if(page == this.page){
 			button.classList.add("active");
 		}
-
+		
 		button.setAttribute("type", "button");
 		button.setAttribute("role", "button");
-
+		
 		this.langBind("pagination|page_title", (value) => {
 			button.setAttribute("aria-label", value + " " + page);
 			button.setAttribute("title", value + " " + page);
 		});
-
+		
 		button.setAttribute("data-page", page);
 		button.textContent = page;
-
+		
 		button.addEventListener("click", (e) => {
 			this.setPage(page);
 		});
-
+		
 		return button;
 	}
-
+	
 	//previous page
-	previousPage() {
-		if (this.page > 1) {
+	previousPage(){
+		if(this.page > 1){
 			this.page--;
-
+			
 			this.trackChanges();
-
+			
 			return this.trigger();
-		} else {
-			console.warn(
-				"Pagination Error - Previous page would be less than page 1:",
-				0
-			);
+			
+		}else {
+			console.warn("Pagination Error - Previous page would be less than page 1:", 0);
 			return Promise.reject();
 		}
 	}
-
+	
 	//next page
-	nextPage() {
-		if (this.page < this.max) {
+	nextPage(){
+		if(this.page < this.max){
 			this.page++;
-
+			
 			this.trackChanges();
-
+			
 			return this.trigger();
-		} else {
-			if (!this.progressiveLoad) {
-				console.warn(
-					"Pagination Error - Next page would be greater than maximum page of " +
-						this.max +
-						":",
-					this.max + 1
-				);
+			
+		}else {
+			if(!this.progressiveLoad){
+				console.warn("Pagination Error - Next page would be greater than maximum page of " + this.max + ":", this.max + 1);
 			}
 			return Promise.reject();
 		}
 	}
-
+	
 	//return current page number
-	getPage() {
+	getPage(){
 		return this.page;
 	}
-
+	
 	//return max page number
-	getPageMax() {
+	getPageMax(){
 		return this.max;
 	}
-
-	getPageSize(size) {
+	
+	getPageSize(size){
 		return this.size;
 	}
-
-	getMode() {
+	
+	getMode(){
 		return this.mode;
 	}
-
+	
 	//return appropriate rows for current page
-	getRows(data) {
+	getRows(data){
 		var actualRowPageSize = 0,
-			output,
-			start,
-			end,
-			actualStartRow;
+		output, start, end, actualStartRow;
 
 		var actualRows = data.filter((row) => {
 			return row.type === "row";
 		});
-
-		if (this.mode == "local") {
+		
+		if(this.mode == "local"){
 			output = [];
-
+			
 			this.setMaxRows(data.length);
-
-			if (this.size === true) {
+			
+			if(this.size === true){
 				start = 0;
 				end = data.length;
-			} else {
+			}else {
 				start = this.size * (this.page - 1);
 				end = start + parseInt(this.size);
 			}
-
+			
 			this._setPageButtons();
-
-			for (let i = start; i < end; i++) {
+			
+			for(let i = start; i < end; i++){
 				let row = data[i];
 
-				if (row) {
+				if(row){
 					output.push(row);
 
-					if (row.type === "row") {
-						if (!actualStartRow) {
+					if(row.type === "row"){
+						if(!actualStartRow){
 							actualStartRow = row;
-						}
+						}	
 
 						actualRowPageSize++;
 					}
 				}
 			}
-
-			this._setPageCounter(
-				actualRows.length,
-				actualRowPageSize,
-				actualStartRow ? actualRows.indexOf(actualStartRow) + 1 : 0
-			);
-
+			
+			this._setPageCounter(actualRows.length, actualRowPageSize, actualStartRow ? (actualRows.indexOf(actualStartRow) + 1) : 0);
+			
 			return output;
-		} else {
+		}else {
 			this._setPageButtons();
 			this._setPageCounter(actualRows.length);
-
+			
 			return data.slice(0);
 		}
 	}
-
-	trigger() {
+	
+	trigger(){
 		var left;
-
-		switch (this.mode) {
+		
+		switch(this.mode){
 			case "local":
 				left = this.table.rowManager.scrollLeft;
-
+			
 				this.refreshData();
 				this.table.rowManager.scrollHorizontal(left);
-
+			
 				this.dispatchExternal("pageLoaded", this.getPage());
-
+			
 				return Promise.resolve();
-
+			
 			case "remote":
 				this.dataChanging = true;
-				return this.reloadData(null).finally(() => {
-					this.dataChanging = false;
-				});
-
+				return this.reloadData(null)
+					.finally(() => {
+						this.dataChanging = false;
+					});
+			
 			case "progressive_load":
 			case "progressive_scroll":
 				return this.reloadData(null, true);
-
+			
 			default:
 				console.warn("Pagination Error - no such pagination mode:", this.mode);
 				return Promise.reject();
 		}
 	}
-
-	_parseRemoteData(data) {
+	
+	_parseRemoteData(data){
 		var margin;
-
-		if (typeof data.last_page === "undefined") {
-			console.warn(
-				"Remote Pagination Error - Server response missing '" +
-					(this.options("dataReceiveParams").last_page || "last_page") +
-					"' property"
-			);
+		
+		if(typeof data.last_page === "undefined"){
+			console.warn("Remote Pagination Error - Server response missing '" + (this.options("dataReceiveParams").last_page || "last_page") + "' property");
 		}
-
-		if (data.data) {
+		
+		if(data.data){
 			this.max = parseInt(data.last_page) || 1;
 
-			this.remoteRowCountEstimate =
-				typeof data.last_row !== "undefined"
-					? data.last_row
-					: data.last_page * this.size -
-					  (this.page == data.last_page ? this.size - data.data.length : 0);
-
-			if (this.progressiveLoad) {
-				switch (this.mode) {
+			this.remoteRowCountEstimate = typeof data.last_row !== "undefined" ? data.last_row : (data.last_page * this.size - (this.page == data.last_page ? (this.size - data.data.length) : 0));
+			
+			if(this.progressiveLoad){
+				switch(this.mode){
 					case "progressive_load":
-						if (this.page == 1) {
+					
+						if(this.page == 1){
 							this.table.rowManager.setData(data.data, false, this.page == 1);
-						} else {
+						}else {
 							this.table.rowManager.addRows(data.data);
 						}
-
-						if (this.page < this.max) {
+					
+						if(this.page < this.max){
 							setTimeout(() => {
 								this.nextPage();
 							}, this.table.options.progressiveLoadDelay);
 						}
 						break;
-
+					
 					case "progressive_scroll":
-						data =
-							this.page === 1
-								? data.data
-								: this.table.rowManager.getData().concat(data.data);
-
-						this.table.rowManager.setData(
-							data,
-							this.page !== 1,
-							this.page == 1
-						);
-
-						margin =
-							this.table.options.progressiveLoadScrollMargin ||
-							this.table.rowManager.element.clientHeight * 2;
-
-						if (
-							this.table.rowManager.element.scrollHeight <=
-							this.table.rowManager.element.clientHeight + margin
-						) {
-							if (this.page < this.max) {
+						data = this.page === 1 ? data.data : this.table.rowManager.getData().concat(data.data);
+					
+						this.table.rowManager.setData(data, this.page !== 1, this.page == 1);
+					
+						margin = this.table.options.progressiveLoadScrollMargin || (this.table.rowManager.element.clientHeight * 2);
+					
+						if(this.table.rowManager.element.scrollHeight <= (this.table.rowManager.element.clientHeight + margin)){
+							if(this.page < this.max){
 								setTimeout(() => {
 									this.nextPage();
 								});
@@ -17682,36 +15863,33 @@ class Page extends Module {
 						}
 						break;
 				}
-
+				
 				return false;
-			} else {
+			}else {
 				// left = this.table.rowManager.scrollLeft;
-				this.dispatchExternal("pageLoaded", this.getPage());
+				this.dispatchExternal("pageLoaded",  this.getPage());
 				// this.table.rowManager.scrollHorizontal(left);
 				// this.table.columnManager.scrollHorizontal(left);
 			}
-		} else {
-			console.warn(
-				"Remote Pagination Error - Server response missing '" +
-					(this.options("dataReceiveParams").data || "data") +
-					"' property"
-			);
+			
+		}else {
+			console.warn("Remote Pagination Error - Server response missing '" + (this.options("dataReceiveParams").data || "data") + "' property");
 		}
-
+		
 		return data.data;
 	}
-
+	
 	//handle the footer element being redrawn
-	footerRedraw() {
+	footerRedraw(){
 		var footer = this.table.footerManager.containerElement;
 
-		if (Math.ceil(footer.clientWidth) - footer.scrollWidth < 0) {
-			this.pagesElement.style.display = "none";
-		} else {
-			this.pagesElement.style.display = "";
-
-			if (Math.ceil(footer.clientWidth) - footer.scrollWidth < 0) {
-				this.pagesElement.style.display = "none";
+		if((Math.ceil(footer.clientWidth) - footer.scrollWidth) < 0){
+			this.pagesElement.style.display = 'none';
+		}else {
+			this.pagesElement.style.display = '';
+			
+			if((Math.ceil(footer.clientWidth) - footer.scrollWidth) < 0){
+				this.pagesElement.style.display = 'none';
 			}
 		}
 	}
@@ -17724,25 +15902,24 @@ Page.pageCounters = defaultPageCounters;
 
 // read persistance information from storage
 var defaultReaders = {
-	local: function (id, type) {
+	local:function(id, type){
 		var data = localStorage.getItem(id + "-" + type);
 
 		return data ? JSON.parse(data) : false;
 	},
-	cookie: function (id, type) {
+	cookie:function(id, type){
 		var cookie = document.cookie,
-			key = id + "-" + type,
-			cookiePos = cookie.indexOf(key + "="),
-			end,
-			data;
+		key = id + "-" + type,
+		cookiePos = cookie.indexOf(key + "="),
+		end, data;
 
 		//if cookie exists, decode and load column data into tabulator
-		if (cookiePos > -1) {
+		if(cookiePos > -1){
 			cookie = cookie.slice(cookiePos);
 
 			end = cookie.indexOf(";");
 
-			if (end > -1) {
+			if(end > -1){
 				cookie = cookie.slice(0, end);
 			}
 
@@ -17750,32 +15927,26 @@ var defaultReaders = {
 		}
 
 		return data ? JSON.parse(data) : false;
-	},
+	}
 };
 
 //write persistence information to storage
 var defaultWriters = {
-	local: function (id, type, data) {
+	local:function(id, type, data){
 		localStorage.setItem(id + "-" + type, JSON.stringify(data));
 	},
-	cookie: function (id, type, data) {
+	cookie:function(id, type, data){
 		var expireDate = new Date();
 
 		expireDate.setDate(expireDate.getDate() + 10000);
 
-		document.cookie =
-			id +
-			"-" +
-			type +
-			"=" +
-			JSON.stringify(data) +
-			"; expires=" +
-			expireDate.toUTCString();
-	},
+		document.cookie = id + "-" + type + "=" + JSON.stringify(data) + "; expires=" + expireDate.toUTCString();
+	}
 };
 
-class Persistence extends Module {
-	constructor(table) {
+class Persistence extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.mode = "";
@@ -17795,154 +15966,108 @@ class Persistence extends Module {
 
 	// Test for whether localStorage is available for use.
 	localStorageTest() {
-		var testKey = "_tabulator_test";
+		var  testKey =  "_tabulator_test";
 
 		try {
-			window.localStorage.setItem(testKey, testKey);
-			window.localStorage.removeItem(testKey);
+			window.localStorage.setItem( testKey, testKey);
+			window.localStorage.removeItem( testKey );
 			return true;
-		} catch (e) {
+		} catch(e) {
 			return false;
 		}
 	}
 
 	//setup parameters
-	initialize() {
-		if (this.table.options.persistence) {
+	initialize(){
+		if(this.table.options.persistence){
 			//determine persistent layout storage type
 			var mode = this.table.options.persistenceMode,
-				id = this.table.options.persistenceID,
-				retrievedData;
+			id = this.table.options.persistenceID,
+			retrievedData;
 
-			this.mode =
-				mode !== true ? mode : this.localStorageTest() ? "local" : "cookie";
+			this.mode = mode !== true ?  mode : (this.localStorageTest() ? "local" : "cookie");
 
-			if (this.table.options.persistenceReaderFunc) {
-				if (typeof this.table.options.persistenceReaderFunc === "function") {
+			if(this.table.options.persistenceReaderFunc){
+				if(typeof this.table.options.persistenceReaderFunc === "function"){
 					this.readFunc = this.table.options.persistenceReaderFunc;
-				} else {
-					if (Persistence.readers[this.table.options.persistenceReaderFunc]) {
-						this.readFunc =
-							Persistence.readers[this.table.options.persistenceReaderFunc];
-					} else {
-						console.warn(
-							"Persistence Read Error - invalid reader set",
-							this.table.options.persistenceReaderFunc
-						);
+				}else {
+					if(Persistence.readers[this.table.options.persistenceReaderFunc]){
+						this.readFunc = Persistence.readers[this.table.options.persistenceReaderFunc];
+					}else {
+						console.warn("Persistence Read Error - invalid reader set", this.table.options.persistenceReaderFunc);
 					}
 				}
-			} else {
-				if (Persistence.readers[this.mode]) {
+			}else {
+				if(Persistence.readers[this.mode]){
 					this.readFunc = Persistence.readers[this.mode];
-				} else {
-					console.warn(
-						"Persistence Read Error - invalid reader set",
-						this.mode
-					);
+				}else {
+					console.warn("Persistence Read Error - invalid reader set", this.mode);
 				}
 			}
 
-			if (this.table.options.persistenceWriterFunc) {
-				if (typeof this.table.options.persistenceWriterFunc === "function") {
+			if(this.table.options.persistenceWriterFunc){
+				if(typeof this.table.options.persistenceWriterFunc === "function"){
 					this.writeFunc = this.table.options.persistenceWriterFunc;
-				} else {
-					if (Persistence.writers[this.table.options.persistenceWriterFunc]) {
-						this.writeFunc =
-							Persistence.writers[this.table.options.persistenceWriterFunc];
-					} else {
-						console.warn(
-							"Persistence Write Error - invalid reader set",
-							this.table.options.persistenceWriterFunc
-						);
+				}else {
+					if(Persistence.writers[this.table.options.persistenceWriterFunc]){
+						this.writeFunc = Persistence.writers[this.table.options.persistenceWriterFunc];
+					}else {
+						console.warn("Persistence Write Error - invalid reader set", this.table.options.persistenceWriterFunc);
 					}
 				}
-			} else {
-				if (Persistence.writers[this.mode]) {
+			}else {
+				if(Persistence.writers[this.mode]){
 					this.writeFunc = Persistence.writers[this.mode];
-				} else {
-					console.warn(
-						"Persistence Write Error - invalid writer set",
-						this.mode
-					);
+				}else {
+					console.warn("Persistence Write Error - invalid writer set", this.mode);
 				}
 			}
 
 			//set storage tag
-			this.id =
-				"tabulator-" + (id || this.table.element.getAttribute("id") || "");
+			this.id = "tabulator-" + (id || (this.table.element.getAttribute("id") || ""));
 
 			this.config = {
-				sort:
-					this.table.options.persistence === true ||
-					this.table.options.persistence.sort,
-				filter:
-					this.table.options.persistence === true ||
-					this.table.options.persistence.filter,
-				group:
-					this.table.options.persistence === true ||
-					this.table.options.persistence.group,
-				page:
-					this.table.options.persistence === true ||
-					this.table.options.persistence.page,
-				columns:
-					this.table.options.persistence === true
-						? ["title", "width", "visible"]
-						: this.table.options.persistence.columns,
+				sort:this.table.options.persistence === true || this.table.options.persistence.sort,
+				filter:this.table.options.persistence === true || this.table.options.persistence.filter,
+				group:this.table.options.persistence === true || this.table.options.persistence.group,
+				page:this.table.options.persistence === true || this.table.options.persistence.page,
+				columns:this.table.options.persistence === true ? ["title", "width", "visible"] : this.table.options.persistence.columns,
 			};
 
 			//load pagination data if needed
-			if (this.config.page) {
+			if(this.config.page){
 				retrievedData = this.retrieveData("page");
 
-				if (retrievedData) {
-					if (
-						typeof retrievedData.paginationSize !== "undefined" &&
-						(this.config.page === true || this.config.page.size)
-					) {
+				if(retrievedData){
+					if(typeof retrievedData.paginationSize !== "undefined" && (this.config.page === true || this.config.page.size)){
 						this.table.options.paginationSize = retrievedData.paginationSize;
 					}
 
-					if (
-						typeof retrievedData.paginationInitialPage !== "undefined" &&
-						(this.config.page === true || this.config.page.page)
-					) {
-						this.table.options.paginationInitialPage =
-							retrievedData.paginationInitialPage;
+					if(typeof retrievedData.paginationInitialPage !== "undefined" && (this.config.page === true || this.config.page.page)){
+						this.table.options.paginationInitialPage = retrievedData.paginationInitialPage;
 					}
 				}
 			}
 
 			//load group data if needed
-			if (this.config.group) {
+			if(this.config.group){
 				retrievedData = this.retrieveData("group");
 
-				if (retrievedData) {
-					if (
-						typeof retrievedData.groupBy !== "undefined" &&
-						(this.config.group === true || this.config.group.groupBy)
-					) {
+				if(retrievedData){
+					if(typeof retrievedData.groupBy !== "undefined" && (this.config.group === true || this.config.group.groupBy)){
 						this.table.options.groupBy = retrievedData.groupBy;
 					}
-					if (
-						typeof retrievedData.groupStartOpen !== "undefined" &&
-						(this.config.group === true || this.config.group.groupStartOpen)
-					) {
+					if(typeof retrievedData.groupStartOpen !== "undefined" && (this.config.group === true || this.config.group.groupStartOpen)){
 						this.table.options.groupStartOpen = retrievedData.groupStartOpen;
 					}
-					if (
-						typeof retrievedData.groupHeader !== "undefined" &&
-						(this.config.group === true || this.config.group.groupHeader)
-					) {
+					if(typeof retrievedData.groupHeader !== "undefined" && (this.config.group === true || this.config.group.groupHeader)){
 						this.table.options.groupHeader = retrievedData.groupHeader;
 					}
 				}
 			}
 
-			if (this.config.columns) {
-				this.table.options.columns = this.load(
-					"columns",
-					this.table.options.columns
-				);
+			if(this.config.columns){
+				this.table.options.columns = this.load("columns", this.table.options.columns);
 				this.subscribe("column-init", this.initializeColumn.bind(this));
 				this.subscribe("column-show", this.save.bind(this, "columns"));
 				this.subscribe("column-hide", this.save.bind(this, "columns"));
@@ -17961,44 +16086,38 @@ class Persistence extends Module {
 			this.subscribe("layout-refreshed", this.eventSave.bind(this, "columns"));
 		}
 
-		this.registerTableFunction(
-			"getColumnLayout",
-			this.getColumnLayout.bind(this)
-		);
-		this.registerTableFunction(
-			"setColumnLayout",
-			this.setColumnLayout.bind(this)
-		);
+		this.registerTableFunction("getColumnLayout", this.getColumnLayout.bind(this));
+		this.registerTableFunction("setColumnLayout", this.setColumnLayout.bind(this));
 	}
 
-	eventSave(type) {
-		if (this.config[type]) {
+	eventSave(type){
+		if(this.config[type]){
 			this.save(type);
 		}
 	}
 
-	tableBuilt() {
+	tableBuilt(){
 		var sorters, filters;
 
-		if (this.config.sort) {
+		if(this.config.sort){
 			sorters = this.load("sort");
 
-			if (!sorters === false) {
+			if(!sorters === false){
 				this.table.options.initialSort = sorters;
 			}
 		}
 
-		if (this.config.filter) {
+		if(this.config.filter){
 			filters = this.load("filter");
 
-			if (!filters === false) {
+			if(!filters === false){
 				this.table.options.initialFilter = filters;
 			}
 		}
 	}
 
-	tableRedraw(force) {
-		if (force && this.config.columns) {
+	tableRedraw(force){
+		if(force && this.config.columns){
 			this.save("columns");
 		}
 	}
@@ -18007,14 +16126,12 @@ class Persistence extends Module {
 	///////// Table Functions /////////
 	///////////////////////////////////
 
-	getColumnLayout() {
+	getColumnLayout(){
 		return this.parseColumns(this.table.columnManager.getColumns());
 	}
 
-	setColumnLayout(layout) {
-		this.table.columnManager.setColumns(
-			this.mergeDefinition(this.table.options.columns, layout)
-		);
+	setColumnLayout(layout){
+		this.table.columnManager.setColumns(this.mergeDefinition(this.table.options.columns, layout));
 		return true;
 	}
 
@@ -18022,39 +16139,39 @@ class Persistence extends Module {
 	///////// Internal Logic //////////
 	///////////////////////////////////
 
-	initializeColumn(column) {
+	initializeColumn(column){
 		var def, keys;
 
-		if (this.config.columns) {
+		if(this.config.columns){
 			this.defWatcherBlock = true;
 
 			def = column.getDefinition();
 
-			keys =
-				this.config.columns === true ? Object.keys(def) : this.config.columns;
+			keys = this.config.columns === true ? Object.keys(def) : this.config.columns;
 
-			keys.forEach((key) => {
+			keys.forEach((key)=>{
 				var props = Object.getOwnPropertyDescriptor(def, key);
 				var value = def[key];
-				if (props) {
+
+				if(props){
 					Object.defineProperty(def, key, {
-						set: function (newValue) {
+						set: (newValue) => {
 							value = newValue;
 
-							if (!this.defWatcherBlock) {
+							if(!this.defWatcherBlock){
 								this.save("columns");
 							}
 
-							if (props.set) {
+							if(props.set){
 								props.set(newValue);
 							}
 						},
-						get: function () {
-							if (props.get) {
+						get:() => {
+							if(props.get){
 								props.get();
 							}
 							return value;
-						},
+						}
 					});
 				}
 			});
@@ -18064,10 +16181,10 @@ class Persistence extends Module {
 	}
 
 	//load saved definitions
-	load(type, current) {
+	load(type, current){
 		var data = this.retrieveData(type);
 
-		if (current) {
+		if(current){
 			data = data ? this.mergeDefinition(current, data) : current;
 		}
 
@@ -18075,35 +16192,35 @@ class Persistence extends Module {
 	}
 
 	//retrieve data from memory
-	retrieveData(type) {
+	retrieveData(type){
 		return this.readFunc ? this.readFunc(this.id, type) : false;
 	}
 
 	//merge old and new column definitions
-	mergeDefinition(oldCols, newCols) {
+	mergeDefinition(oldCols, newCols){
 		var output = [];
 
 		newCols = newCols || [];
 
 		newCols.forEach((column, to) => {
 			var from = this._findColumn(oldCols, column),
-				keys;
+			keys;
 
-			if (from) {
-				if (this.config.columns === true || this.config.columns == undefined) {
-					keys = Object.keys(from);
+			if(from){
+				if(this.config.columns === true || this.config.columns == undefined){
+					keys =  Object.keys(from);
 					keys.push("width");
-				} else {
+				}else {
 					keys = this.config.columns;
 				}
 
-				keys.forEach((key) => {
-					if (key !== "columns" && typeof column[key] !== "undefined") {
+				keys.forEach((key)=>{
+					if(key !== "columns" && typeof column[key] !== "undefined"){
 						from[key] = column[key];
 					}
 				});
 
-				if (from.columns) {
+				if(from.columns){
 					from.columns = this.mergeDefinition(from.columns, column.columns);
 				}
 
@@ -18115,9 +16232,9 @@ class Persistence extends Module {
 			var from = this._findColumn(newCols, column);
 
 			if (!from) {
-				if (output.length > i) {
+				if(output.length>i){
 					output.splice(i, 0, column);
-				} else {
+				}else {
 					output.push(column);
 				}
 			}
@@ -18127,16 +16244,13 @@ class Persistence extends Module {
 	}
 
 	//find matching columns
-	_findColumn(columns, subject) {
-		var type = subject.columns ? "group" : subject.field ? "field" : "object";
+	_findColumn(columns, subject){
+		var type = subject.columns ? "group" : (subject.field ? "field" : "object");
 
-		return columns.find(function (col) {
-			switch (type) {
+		return columns.find(function(col){
+			switch(type){
 				case "group":
-					return (
-						col.title === subject.title &&
-						col.columns.length === subject.columns.length
-					);
+					return col.title === subject.title && col.columns.length === subject.columns.length;
 
 				case "field":
 					return col.field === subject.field;
@@ -18148,10 +16262,10 @@ class Persistence extends Module {
 	}
 
 	//save data
-	save(type) {
+	save(type){
 		var data = {};
 
-		switch (type) {
+		switch(type){
 			case "columns":
 				data = this.parseColumns(this.table.columnManager.getColumns());
 				break;
@@ -18173,14 +16287,15 @@ class Persistence extends Module {
 				break;
 		}
 
-		if (this.writeFunc) {
+		if(this.writeFunc){
 			this.writeFunc(this.id, type, data);
 		}
+
 	}
 
 	//ensure sorters contain no function data
-	validateSorters(data) {
-		data.forEach(function (item) {
+	validateSorters(data){
+		data.forEach(function(item){
 			item.column = item.field;
 			delete item.field;
 		});
@@ -18188,19 +16303,19 @@ class Persistence extends Module {
 		return data;
 	}
 
-	getGroupConfig() {
+	getGroupConfig(){
 		var data = {};
 
-		if (this.config.group) {
-			if (this.config.group === true || this.config.group.groupBy) {
+		if(this.config.group){
+			if(this.config.group === true || this.config.group.groupBy){
 				data.groupBy = this.table.options.groupBy;
 			}
 
-			if (this.config.group === true || this.config.group.groupStartOpen) {
+			if(this.config.group === true || this.config.group.groupStartOpen){
 				data.groupStartOpen = this.table.options.groupStartOpen;
 			}
 
-			if (this.config.group === true || this.config.group.groupHeader) {
+			if(this.config.group === true || this.config.group.groupHeader){
 				data.groupHeader = this.table.options.groupHeader;
 			}
 		}
@@ -18208,15 +16323,15 @@ class Persistence extends Module {
 		return data;
 	}
 
-	getPageConfig() {
+	getPageConfig(){
 		var data = {};
 
-		if (this.config.page) {
-			if (this.config.page === true || this.config.page.size) {
+		if(this.config.page){
+			if(this.config.page === true || this.config.page.size){
 				data.paginationSize = this.table.modules.page.getPageSize();
 			}
 
-			if (this.config.page === true || this.config.page.page) {
+			if(this.config.page === true || this.config.page.page){
 				data.paginationInitialPage = this.table.modules.page.getPage();
 			}
 		}
@@ -18224,37 +16339,33 @@ class Persistence extends Module {
 		return data;
 	}
 
+
 	//parse columns for data to store
-	parseColumns(columns) {
+	parseColumns(columns){
 		var definitions = [],
-			excludedKeys = [
-				"headerContextMenu",
-				"headerMenu",
-				"contextMenu",
-				"clickMenu",
-			];
+		excludedKeys = ["headerContextMenu", "headerMenu", "contextMenu", "clickMenu"];
 
 		columns.forEach((column) => {
 			var defStore = {},
-				colDef = column.getDefinition(),
-				keys;
+			colDef = column.getDefinition(),
+			keys;
 
-			if (column.isGroup) {
+			if(column.isGroup){
 				defStore.title = colDef.title;
 				defStore.columns = this.parseColumns(column.getColumns());
-			} else {
+			}else {
 				defStore.field = column.getField();
 
-				if (this.config.columns === true || this.config.columns == undefined) {
-					keys = Object.keys(colDef);
+				if(this.config.columns === true || this.config.columns == undefined){
+					keys =  Object.keys(colDef);
 					keys.push("width");
 					keys.push("visible");
-				} else {
+				}else {
 					keys = this.config.columns;
 				}
 
-				keys.forEach((key) => {
-					switch (key) {
+				keys.forEach((key)=>{
+					switch(key){
 						case "width":
 							defStore.width = column.getWidth();
 							break;
@@ -18263,10 +16374,7 @@ class Persistence extends Module {
 							break;
 
 						default:
-							if (
-								typeof colDef[key] !== "function" &&
-								excludedKeys.indexOf(key) === -1
-							) {
+							if(typeof colDef[key] !== "function" && excludedKeys.indexOf(key) === -1){
 								defStore[key] = colDef[key];
 							}
 					}
@@ -18288,227 +16396,189 @@ Persistence.moduleInitOrder = -10;
 Persistence.readers = defaultReaders;
 Persistence.writers = defaultWriters;
 
-class Popup$1 extends Module {
-	constructor(table) {
+class Popup$1 extends Module{
+	
+	constructor(table){
 		super(table);
-
+		
 		this.columnSubscribers = {};
-
+		
 		this.registerTableOption("rowContextPopup", false);
 		this.registerTableOption("rowClickPopup", false);
 		this.registerTableOption("groupContextPopup", false);
 		this.registerTableOption("groupClickPopup", false);
-
+		
 		this.registerColumnOption("headerContextPopup");
 		this.registerColumnOption("headerClickPopup");
 		this.registerColumnOption("headerPopup");
 		this.registerColumnOption("headerPopupIcon");
 		this.registerColumnOption("contextPopup");
 		this.registerColumnOption("clickPopup");
+		
 	}
-
-	initialize() {
+	
+	initialize(){
 		this.initializeRowWatchers();
 		this.initializeGroupWatchers();
-
+		
 		this.subscribe("column-init", this.initializeColumn.bind(this));
 	}
-
-	initializeRowWatchers() {
-		if (this.table.options.rowContextPopup) {
-			this.subscribe(
-				"row-contextmenu",
-				this.loadPopupEvent.bind(this, this.table.options.rowContextPopup)
-			);
-			this.table.on(
-				"rowTapHold",
-				this.loadPopupEvent.bind(this, this.table.options.rowContextPopup)
-			);
+	
+	initializeRowWatchers(){
+		if(this.table.options.rowContextPopup){
+			this.subscribe("row-contextmenu", this.loadPopupEvent.bind(this, this.table.options.rowContextPopup));
+			this.table.on("rowTapHold", this.loadPopupEvent.bind(this, this.table.options.rowContextPopup));
 		}
-
-		if (this.table.options.rowClickPopup) {
-			this.subscribe(
-				"row-click",
-				this.loadPopupEvent.bind(this, this.table.options.rowClickPopup)
-			);
+		
+		if(this.table.options.rowClickPopup){
+			this.subscribe("row-click", this.loadPopupEvent.bind(this, this.table.options.rowClickPopup));
 		}
 	}
-
-	initializeGroupWatchers() {
-		if (this.table.options.groupContextPopup) {
-			this.subscribe(
-				"group-contextmenu",
-				this.loadPopupEvent.bind(this, this.table.options.groupContextPopup)
-			);
-			this.table.on(
-				"groupTapHold",
-				this.loadPopupEvent.bind(this, this.table.options.groupContextPopup)
-			);
+	
+	initializeGroupWatchers(){
+		if(this.table.options.groupContextPopup){
+			this.subscribe("group-contextmenu", this.loadPopupEvent.bind(this, this.table.options.groupContextPopup));
+			this.table.on("groupTapHold", this.loadPopupEvent.bind(this, this.table.options.groupContextPopup));
 		}
-
-		if (this.table.options.groupClickPopup) {
-			this.subscribe(
-				"group-click",
-				this.loadPopupEvent.bind(this, this.table.options.groupClickPopup)
-			);
+		
+		if(this.table.options.groupClickPopup){
+			this.subscribe("group-click", this.loadPopupEvent.bind(this, this.table.options.groupClickPopup));
 		}
 	}
-
-	initializeColumn(column) {
+	
+	initializeColumn(column){
 		var def = column.definition;
-
+		
 		//handle column events
-		if (def.headerContextPopup && !this.columnSubscribers.headerContextPopup) {
-			this.columnSubscribers.headerContextPopup =
-				this.loadPopupTableColumnEvent.bind(this, "headerContextPopup");
-			this.subscribe(
-				"column-contextmenu",
-				this.columnSubscribers.headerContextPopup
-			);
-			this.table.on(
-				"headerTapHold",
-				this.loadPopupTableColumnEvent.bind(this, "headerContextPopup")
-			);
+		if(def.headerContextPopup && !this.columnSubscribers.headerContextPopup){
+			this.columnSubscribers.headerContextPopup = this.loadPopupTableColumnEvent.bind(this, "headerContextPopup");
+			this.subscribe("column-contextmenu", this.columnSubscribers.headerContextPopup);
+			this.table.on("headerTapHold", this.loadPopupTableColumnEvent.bind(this, "headerContextPopup"));
 		}
-
-		if (def.headerClickPopup && !this.columnSubscribers.headerClickPopup) {
-			this.columnSubscribers.headerClickPopup =
-				this.loadPopupTableColumnEvent.bind(this, "headerClickPopup");
+		
+		if(def.headerClickPopup && !this.columnSubscribers.headerClickPopup){
+			this.columnSubscribers.headerClickPopup = this.loadPopupTableColumnEvent.bind(this, "headerClickPopup");
 			this.subscribe("column-click", this.columnSubscribers.headerClickPopup);
 		}
-
-		if (def.headerPopup) {
+		
+		if(def.headerPopup){
 			this.initializeColumnHeaderPopup(column);
 		}
-
+		
 		//handle cell events
-		if (def.contextPopup && !this.columnSubscribers.contextPopup) {
-			this.columnSubscribers.contextPopup = this.loadPopupTableCellEvent.bind(
-				this,
-				"contextPopup"
-			);
+		if(def.contextPopup && !this.columnSubscribers.contextPopup){
+			this.columnSubscribers.contextPopup = this.loadPopupTableCellEvent.bind(this, "contextPopup");
 			this.subscribe("cell-contextmenu", this.columnSubscribers.contextPopup);
-			this.table.on(
-				"cellTapHold",
-				this.loadPopupTableCellEvent.bind(this, "contextPopup")
-			);
+			this.table.on("cellTapHold", this.loadPopupTableCellEvent.bind(this, "contextPopup"));
 		}
-
-		if (def.clickPopup && !this.columnSubscribers.clickPopup) {
-			this.columnSubscribers.clickPopup = this.loadPopupTableCellEvent.bind(
-				this,
-				"clickPopup"
-			);
+		
+		if(def.clickPopup && !this.columnSubscribers.clickPopup){
+			this.columnSubscribers.clickPopup = this.loadPopupTableCellEvent.bind(this, "clickPopup");
 			this.subscribe("cell-click", this.columnSubscribers.clickPopup);
 		}
 	}
-
-	initializeColumnHeaderPopup(column) {
+	
+	initializeColumnHeaderPopup(column){
 		var icon = column.definition.headerPopupIcon,
-			headerPopupEl;
-
+		headerPopupEl;
+		
 		headerPopupEl = document.createElement("span");
 		headerPopupEl.classList.add("tabulator-header-popup-button");
 
-		if (icon) {
-			if (typeof icon === "function") {
+		if(icon){
+			if(typeof icon === "function"){
 				icon = icon(column.getComponent());
 			}
 
-			if (icon instanceof HTMLElement) {
+			if(icon instanceof HTMLElement){
 				headerPopupEl.appendChild(icon);
-			} else {
+			}else {
 				headerPopupEl.innerHTML = icon;
 			}
-		} else {
+		}else {
 			headerPopupEl.innerHTML = "&vellip;";
 		}
-
+		
 		headerPopupEl.addEventListener("click", (e) => {
 			e.stopPropagation();
 			e.preventDefault();
-
+			
 			this.loadPopupEvent(column.definition.headerPopup, e, column);
 		});
-
-		column.titleElement.insertBefore(
-			headerPopupEl,
-			column.titleElement.firstChild
-		);
+		
+		column.titleElement.insertBefore(headerPopupEl, column.titleElement.firstChild);
 	}
-
-	loadPopupTableCellEvent(option, e, cell) {
-		if (cell._cell) {
+	
+	loadPopupTableCellEvent(option, e, cell){
+		if(cell._cell){
 			cell = cell._cell;
 		}
-
-		if (cell.column.definition[option]) {
+		
+		if(cell.column.definition[option]){
 			this.loadPopupEvent(cell.column.definition[option], e, cell);
 		}
 	}
-
-	loadPopupTableColumnEvent(option, e, column) {
-		if (column._column) {
+	
+	loadPopupTableColumnEvent(option, e, column){
+		if(column._column){
 			column = column._column;
 		}
-
-		if (column.definition[option]) {
+		
+		if(column.definition[option]){
 			this.loadPopupEvent(column.definition[option], e, column);
 		}
 	}
-
-	loadPopupEvent(contents, e, component) {
+	
+	loadPopupEvent(contents, e, component){
 		var renderedCallback;
 
-		function onRendered(callback) {
+		function onRendered(callback){
 			renderedCallback = callback;
 		}
-
-		if (component._group) {
+		
+		if(component._group){
 			component = component._group;
-		} else if (component._row) {
+		}else if(component._row){
 			component = component._row;
 		}
-
-		contents =
-			typeof contents == "function"
-				? contents.call(this.table, e, component.getComponent(), onRendered)
-				: contents;
-
+		
+		contents = typeof contents == "function" ? contents.call(this.table, e, component.getComponent(),  onRendered) : contents;
+		
 		this.loadPopup(e, component, contents, renderedCallback);
 	}
-
-	loadPopup(e, component, contents, renderedCallback) {
+	
+	loadPopup(e, component, contents, renderedCallback){
 		var touch = !(e instanceof MouseEvent),
-			contentsEl,
-			popup;
-
-		if (contents instanceof HTMLElement) {
+		contentsEl, popup;
+		
+		if(contents instanceof HTMLElement){
 			contentsEl = contents;
-		} else {
+		}else {
 			contentsEl = document.createElement("div");
 			contentsEl.innerHTML = contents;
 		}
-
+		
 		contentsEl.classList.add("tabulator-popup");
 
-		contentsEl.addEventListener("click", (e) => {
+		contentsEl.addEventListener("click", (e) =>{
 			e.stopPropagation();
 		});
 
-		if (!touch) {
+		if(!touch){
 			e.preventDefault();
 		}
-
+		
 		popup = this.popup(contentsEl);
 
-		if (typeof renderedCallback === "function") {
+		if(typeof renderedCallback === "function"){
 			popup.renderCallback(renderedCallback);
 		}
-
+		
 		popup.show(e).hideOnBlur(() => {
 			this.dispatchExternal("popupClosed", component.getComponent());
 		});
+
+
 
 		this.dispatchExternal("popupOpened", component.getComponent());
 	}
@@ -18516,8 +16586,9 @@ class Popup$1 extends Module {
 
 Popup$1.moduleName = "popup";
 
-class Print extends Module {
-	constructor(table) {
+class Print extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.element = false;
@@ -18535,8 +16606,8 @@ class Print extends Module {
 		this.registerColumnOption("titlePrint");
 	}
 
-	initialize() {
-		if (this.table.options.printAsHtml) {
+	initialize(){
+		if(this.table.options.printAsHtml){
 			window.addEventListener("beforeprint", this.replaceTable.bind(this));
 			window.addEventListener("afterprint", this.cleanup.bind(this));
 		}
@@ -18552,68 +16623,49 @@ class Print extends Module {
 	///////// Internal Logic //////////
 	///////////////////////////////////
 
-	replaceTable() {
-		if (!this.manualBlock) {
+	replaceTable(){
+		if(!this.manualBlock){
 			this.element = document.createElement("div");
 			this.element.classList.add("tabulator-print-table");
 
-			this.element.appendChild(
-				this.table.modules.export.generateTable(
-					this.table.options.printConfig,
-					this.table.options.printStyled,
-					this.table.options.printRowRange,
-					"print"
-				)
-			);
+			this.element.appendChild(this.table.modules.export.generateTable(this.table.options.printConfig, this.table.options.printStyled, this.table.options.printRowRange, "print"));
 
 			this.table.element.style.display = "none";
 
-			this.table.element.parentNode.insertBefore(
-				this.element,
-				this.table.element
-			);
+			this.table.element.parentNode.insertBefore(this.element, this.table.element);
 		}
 	}
 
-	cleanup() {
+	cleanup(){
 		document.body.classList.remove("tabulator-print-fullscreen-hide");
 
-		if (this.element && this.element.parentNode) {
+		if(this.element && this.element.parentNode){
 			this.element.parentNode.removeChild(this.element);
 			this.table.element.style.display = "";
 		}
 	}
 
-	printFullscreen(visible, style, config) {
+	printFullscreen(visible, style, config){
 		var scrollX = window.scrollX,
-			scrollY = window.scrollY,
-			headerEl = document.createElement("div"),
-			footerEl = document.createElement("div"),
-			tableEl = this.table.modules.export.generateTable(
-				typeof config != "undefined" ? config : this.table.options.printConfig,
-				typeof style != "undefined" ? style : this.table.options.printStyled,
-				visible || this.table.options.printRowRange,
-				"print"
-			),
-			headerContent,
-			footerContent;
+		scrollY = window.scrollY,
+		headerEl = document.createElement("div"),
+		footerEl = document.createElement("div"),
+		tableEl = this.table.modules.export.generateTable(typeof config != "undefined" ? config : this.table.options.printConfig, typeof style != "undefined" ? style : this.table.options.printStyled, visible || this.table.options.printRowRange, "print"),
+		headerContent, footerContent;
 
 		this.manualBlock = true;
 
 		this.element = document.createElement("div");
 		this.element.classList.add("tabulator-print-fullscreen");
 
-		if (this.table.options.printHeader) {
+		if(this.table.options.printHeader){
 			headerEl.classList.add("tabulator-print-header");
 
-			headerContent =
-				typeof this.table.options.printHeader == "function"
-					? this.table.options.printHeader.call(this.table)
-					: this.table.options.printHeader;
+			headerContent = typeof this.table.options.printHeader == "function" ? this.table.options.printHeader.call(this.table) : this.table.options.printHeader;
 
-			if (typeof headerContent == "string") {
+			if(typeof headerContent == "string"){
 				headerEl.innerHTML = headerContent;
-			} else {
+			}else {
 				headerEl.appendChild(headerContent);
 			}
 
@@ -18622,17 +16674,15 @@ class Print extends Module {
 
 		this.element.appendChild(tableEl);
 
-		if (this.table.options.printFooter) {
+		if(this.table.options.printFooter){
 			footerEl.classList.add("tabulator-print-footer");
 
-			footerContent =
-				typeof this.table.options.printFooter == "function"
-					? this.table.options.printFooter.call(this.table)
-					: this.table.options.printFooter;
+			footerContent = typeof this.table.options.printFooter == "function" ? this.table.options.printFooter.call(this.table) : this.table.options.printFooter;
 
-			if (typeof footerContent == "string") {
+
+			if(typeof footerContent == "string"){
 				footerEl.innerHTML = footerContent;
-			} else {
+			}else {
 				footerEl.appendChild(footerContent);
 			}
 
@@ -18642,7 +16692,7 @@ class Print extends Module {
 		document.body.classList.add("tabulator-print-fullscreen-hide");
 		document.body.appendChild(this.element);
 
-		if (this.table.options.printFormatter) {
+		if(this.table.options.printFormatter){
 			this.table.options.printFormatter(this.element, tableEl);
 		}
 
@@ -18658,28 +16708,23 @@ class Print extends Module {
 
 Print.moduleName = "print";
 
-class ReactiveData extends Module {
-	constructor(table) {
+class ReactiveData extends Module{
+	
+	constructor(table){
 		super(table);
-
+		
 		this.data = false;
 		this.blocked = false; //block reactivity while performing update
 		this.origFuncs = {}; // hold original data array functions to allow replacement after data is done with
 		this.currentVersion = 0;
-
+		
 		this.registerTableOption("reactiveData", false); //enable data reactivity
 	}
-
-	initialize() {
-		if (this.table.options.reactiveData) {
-			this.subscribe(
-				"cell-value-save-before",
-				this.block.bind(this, "cellsave")
-			);
-			this.subscribe(
-				"cell-value-save-after",
-				this.unblock.bind(this, "cellsave")
-			);
+	
+	initialize(){
+		if(this.table.options.reactiveData){
+			this.subscribe("cell-value-save-before", this.block.bind(this, "cellsave"));
+			this.subscribe("cell-value-save-after", this.unblock.bind(this, "cellsave"));
 			this.subscribe("row-data-save-before", this.block.bind(this, "rowsave"));
 			this.subscribe("row-data-save-after", this.unblock.bind(this, "rowsave"));
 			this.subscribe("row-data-init-after", this.watchRow.bind(this));
@@ -18687,87 +16732,88 @@ class ReactiveData extends Module {
 			this.subscribe("table-destroy", this.unwatchData.bind(this));
 		}
 	}
-
-	watchData(data) {
+	
+	watchData(data){
 		var self = this,
-			version;
-
-		this.currentVersion++;
-
+		version;
+		
+		this.currentVersion ++;
+		
 		version = this.currentVersion;
-
+		
 		this.unwatchData();
-
+		
 		this.data = data;
-
+		
 		//override array push function
 		this.origFuncs.push = data.push;
-
+		
 		Object.defineProperty(this.data, "push", {
 			enumerable: false,
 			configurable: true,
-			value: function () {
+			value: function(){
 				var args = Array.from(arguments),
-					result;
+				result;
 
-				if (!self.blocked && version === self.currentVersion) {
+				if(!self.blocked && version === self.currentVersion){	
 					self.block("data-push");
 
 					args.forEach((arg) => {
 						self.table.rowManager.addRowActual(arg, false);
 					});
-
+					
 					result = self.origFuncs.push.apply(data, arguments);
-
+					
 					self.unblock("data-push");
 				}
-
+				
 				return result;
-			},
+			}
 		});
-
+		
 		//override array unshift function
 		this.origFuncs.unshift = data.unshift;
-
+		
 		Object.defineProperty(this.data, "unshift", {
 			enumerable: false,
 			configurable: true,
-			value: function () {
+			value: function(){
 				var args = Array.from(arguments),
-					result;
-
-				if (!self.blocked && version === self.currentVersion) {
+				result;
+				
+				if(!self.blocked && version === self.currentVersion){
 					self.block("data-unshift");
-
+					
 					args.forEach((arg) => {
 						self.table.rowManager.addRowActual(arg, true);
 					});
-
+					
 					result = self.origFuncs.unshift.apply(data, arguments);
-
+					
 					self.unblock("data-unshift");
 				}
-
+				
 				return result;
-			},
+			}
 		});
-
+		
+		
 		//override array shift function
 		this.origFuncs.shift = data.shift;
-
+		
 		Object.defineProperty(this.data, "shift", {
 			enumerable: false,
 			configurable: true,
-			value: function () {
+			value: function(){
 				var row, result;
-
-				if (!self.blocked && version === self.currentVersion) {
+				
+				if(!self.blocked && version === self.currentVersion){
 					self.block("data-shift");
-
-					if (self.data.length) {
+					
+					if(self.data.length){
 						row = self.table.rowManager.getRowFromDataObject(self.data[0]);
-
-						if (row) {
+						
+						if(row){
 							row.deleteActual();
 						}
 					}
@@ -18776,297 +16822,287 @@ class ReactiveData extends Module {
 
 					self.unblock("data-shift");
 				}
-
+				
 				return result;
-			},
+			}
 		});
-
+		
 		//override array pop function
 		this.origFuncs.pop = data.pop;
-
+		
 		Object.defineProperty(this.data, "pop", {
 			enumerable: false,
 			configurable: true,
-			value: function () {
+			value: function(){
 				var row, result;
-
-				if (!self.blocked && version === self.currentVersion) {
+			
+				if(!self.blocked && version === self.currentVersion){
 					self.block("data-pop");
-
-					if (self.data.length) {
-						row = self.table.rowManager.getRowFromDataObject(
-							self.data[self.data.length - 1]
-						);
-
-						if (row) {
+					
+					if(self.data.length){
+						row = self.table.rowManager.getRowFromDataObject(self.data[self.data.length - 1]);
+						
+						if(row){
 							row.deleteActual();
 						}
 					}
 
 					result = self.origFuncs.pop.call(data);
-
+					
 					self.unblock("data-pop");
 				}
 
 				return result;
-			},
+			}
 		});
-
+		
+		
 		//override array splice function
 		this.origFuncs.splice = data.splice;
-
+		
 		Object.defineProperty(this.data, "splice", {
 			enumerable: false,
 			configurable: true,
-			value: function () {
+			value: function(){
 				var args = Array.from(arguments),
-					start = args[0] < 0 ? data.length + args[0] : args[0],
-					end = args[1],
-					newRows = args[2] ? args.slice(2) : false,
-					startRow,
-					result;
-
-				if (!self.blocked && version === self.currentVersion) {
+				start = args[0] < 0 ? data.length + args[0] : args[0],
+				end = args[1],
+				newRows = args[2] ? args.slice(2) : false,
+				startRow, result;
+				
+				if(!self.blocked && version === self.currentVersion){
 					self.block("data-splice");
 					//add new rows
-					if (newRows) {
-						startRow = data[start]
-							? self.table.rowManager.getRowFromDataObject(data[start])
-							: false;
-
-						if (startRow) {
+					if(newRows){
+						startRow = data[start] ? self.table.rowManager.getRowFromDataObject(data[start]) : false;
+						
+						if(startRow){
 							newRows.forEach((rowData) => {
-								self.table.rowManager.addRowActual(
-									rowData,
-									true,
-									startRow,
-									true
-								);
+								self.table.rowManager.addRowActual(rowData, true, startRow, true);
 							});
-						} else {
+						}else {
 							newRows = newRows.slice().reverse();
-
+							
 							newRows.forEach((rowData) => {
 								self.table.rowManager.addRowActual(rowData, true, false, true);
 							});
 						}
 					}
-
+					
 					//delete removed rows
-					if (end !== 0) {
-						var oldRows = data.slice(
-							start,
-							typeof args[1] === "undefined" ? args[1] : start + end
-						);
-
+					if(end !== 0){
+						var oldRows = data.slice(start, typeof args[1] === "undefined" ? args[1] : start + end);
+						
 						oldRows.forEach((rowData, i) => {
 							var row = self.table.rowManager.getRowFromDataObject(rowData);
-
-							if (row) {
+							
+							if(row){
 								row.deleteActual(i !== oldRows.length - 1);
 							}
 						});
 					}
-
-					if (newRows || end !== 0) {
+					
+					if(newRows || end !== 0){
 						self.table.rowManager.reRenderInPosition();
 					}
 
 					result = self.origFuncs.splice.apply(data, arguments);
-
+					
 					self.unblock("data-splice");
 				}
-
-				return result;
-			},
+				
+				return result ;
+			}
 		});
 	}
-
-	unwatchData() {
-		if (this.data !== false) {
-			for (var key in this.origFuncs) {
+	
+	unwatchData(){
+		if(this.data !== false){
+			for(var key in this.origFuncs){
 				Object.defineProperty(this.data, key, {
 					enumerable: true,
-					configurable: true,
-					writable: true,
+					configurable:true,
+					writable:true,
 					value: this.origFuncs.key,
 				});
 			}
 		}
 	}
-
-	watchRow(row) {
+	
+	watchRow(row){
 		var data = row.getData();
-
-		for (var key in data) {
+		
+		for(var key in data){
 			this.watchKey(row, data, key);
 		}
-
-		if (this.table.options.dataTree) {
+		
+		if(this.table.options.dataTree){
 			this.watchTreeChildren(row);
 		}
 	}
-
-	watchTreeChildren(row) {
+	
+	watchTreeChildren (row){
 		var self = this,
-			childField = row.getData()[this.table.options.dataTreeChildField],
-			origFuncs = {};
-
-		if (childField) {
+		childField = row.getData()[this.table.options.dataTreeChildField],
+		origFuncs = {};
+		
+		if(childField){
+			
 			origFuncs.push = childField.push;
-
+			
 			Object.defineProperty(childField, "push", {
 				enumerable: false,
 				configurable: true,
 				value: () => {
-					if (!self.blocked) {
+					if(!self.blocked){
 						self.block("tree-push");
-
+						
 						var result = origFuncs.push.apply(childField, arguments);
 						this.rebuildTree(row);
-
+						
 						self.unblock("tree-push");
 					}
-
+					
 					return result;
-				},
+				}
 			});
-
+			
 			origFuncs.unshift = childField.unshift;
-
+			
 			Object.defineProperty(childField, "unshift", {
 				enumerable: false,
 				configurable: true,
 				value: () => {
-					if (!self.blocked) {
+					if(!self.blocked){
 						self.block("tree-unshift");
-
-						var result = origFuncs.unshift.apply(childField, arguments);
+						
+						var result =  origFuncs.unshift.apply(childField, arguments);
 						this.rebuildTree(row);
-
+						
 						self.unblock("tree-unshift");
 					}
-
+					
 					return result;
-				},
+				}
 			});
-
+			
 			origFuncs.shift = childField.shift;
-
+			
 			Object.defineProperty(childField, "shift", {
 				enumerable: false,
 				configurable: true,
 				value: () => {
-					if (!self.blocked) {
+					if(!self.blocked){
 						self.block("tree-shift");
-
-						var result = origFuncs.shift.call(childField);
+						
+						var result =  origFuncs.shift.call(childField);
 						this.rebuildTree(row);
-
+						
 						self.unblock("tree-shift");
 					}
-
+					
 					return result;
-				},
+				}
 			});
-
+			
 			origFuncs.pop = childField.pop;
-
+			
 			Object.defineProperty(childField, "pop", {
 				enumerable: false,
 				configurable: true,
 				value: () => {
-					if (!self.blocked) {
+					if(!self.blocked){
 						self.block("tree-pop");
-
-						var result = origFuncs.pop.call(childField);
+						
+						var result =  origFuncs.pop.call(childField);
 						this.rebuildTree(row);
-
+						
 						self.unblock("tree-pop");
 					}
-
+					
 					return result;
-				},
+				}
 			});
-
+			
 			origFuncs.splice = childField.splice;
-
+			
 			Object.defineProperty(childField, "splice", {
 				enumerable: false,
 				configurable: true,
 				value: () => {
-					if (!self.blocked) {
+					if(!self.blocked){
 						self.block("tree-splice");
-
-						var result = origFuncs.splice.apply(childField, arguments);
+						
+						var result =  origFuncs.splice.apply(childField, arguments);
 						this.rebuildTree(row);
-
+						
 						self.unblock("tree-splice");
 					}
-
+					
 					return result;
-				},
+				}
 			});
 		}
 	}
-
-	rebuildTree(row) {
+	
+	rebuildTree(row){
 		this.table.modules.dataTree.initializeRow(row);
 		this.table.modules.dataTree.layoutRow(row);
 		this.table.rowManager.refreshActiveData("tree", false, true);
 	}
-
-	watchKey(row, data, key) {
+	
+	watchKey(row, data, key){
 		var self = this,
-			props = Object.getOwnPropertyDescriptor(data, key),
-			value = data[key],
-			version = this.currentVersion;
-
+		props = Object.getOwnPropertyDescriptor(data, key),
+		value = data[key],
+		version = this.currentVersion;
+		
 		Object.defineProperty(data, key, {
 			set: (newValue) => {
 				value = newValue;
-				if (!self.blocked && version === self.currentVersion) {
+				if(!self.blocked && version === self.currentVersion){
 					self.block("key");
-
+					
 					var update = {};
 					update[key] = newValue;
 					row.updateData(update);
-
+					
 					self.unblock("key");
 				}
-
-				if (props.set) {
+				
+				if(props.set){
 					props.set(newValue);
 				}
 			},
-			get: () => {
-				if (props.get) {
+			get:() => {
+				
+				if(props.get){
 					props.get();
 				}
-
+				
 				return value;
-			},
+			}
 		});
 	}
-
-	unwatchRow(row) {
+	
+	unwatchRow(row){
 		var data = row.getData();
-
-		for (var key in data) {
+		
+		for(var key in data){
 			Object.defineProperty(data, key, {
-				value: data[key],
+				value:data[key],
 			});
 		}
 	}
-
-	block(key) {
-		if (!this.blocked) {
+	
+	block(key){
+		if(!this.blocked){
 			this.blocked = key;
 		}
 	}
-
-	unblock(key) {
-		if (this.blocked === key) {
+	
+	unblock(key){
+		if(this.blocked === key){
 			this.blocked = false;
 		}
 	}
@@ -19074,10 +17110,11 @@ class ReactiveData extends Module {
 
 ReactiveData.moduleName = "reactiveData";
 
-class ResizeColumns extends Module {
-	constructor(table) {
+class ResizeColumns extends Module{
+	
+	constructor(table){
 		super(table);
-
+		
 		this.startColumn = false;
 		this.startX = false;
 		this.startWidth = false;
@@ -19085,312 +17122,285 @@ class ResizeColumns extends Module {
 		this.handle = null;
 		this.initialNextColumn = null;
 		this.nextColumn = null;
-
+		
 		this.initialized = false;
 		this.registerColumnOption("resizable", true);
 		this.registerTableOption("resizableColumnFit", false);
 	}
-
-	initialize() {
+	
+	initialize(){
 		this.subscribe("column-rendered", this.layoutColumnHeader.bind(this));
 	}
-
-	initializeEventWatchers() {
-		if (!this.initialized) {
+	
+	initializeEventWatchers(){
+		if(!this.initialized){
+			
 			this.subscribe("cell-rendered", this.layoutCellHandles.bind(this));
 			this.subscribe("cell-delete", this.deInitializeComponent.bind(this));
-
+			
 			this.subscribe("cell-height", this.resizeHandle.bind(this));
 			this.subscribe("column-moved", this.columnLayoutUpdated.bind(this));
-
+			
 			this.subscribe("column-hide", this.deInitializeColumn.bind(this));
 			this.subscribe("column-show", this.columnLayoutUpdated.bind(this));
 			this.subscribe("column-width", this.columnWidthUpdated.bind(this));
-
+			
 			this.subscribe("column-delete", this.deInitializeComponent.bind(this));
 			this.subscribe("column-height", this.resizeHandle.bind(this));
-
+			
 			this.initialized = true;
 		}
 	}
-
-	layoutCellHandles(cell) {
-		if (cell.row.type === "row") {
+	
+	
+	layoutCellHandles(cell){
+		if(cell.row.type === "row"){
 			this.deInitializeComponent(cell);
 			this.initializeColumn("cell", cell, cell.column, cell.element);
 		}
 	}
-
-	layoutColumnHeader(column) {
-		if (column.definition.resizable) {
+	
+	layoutColumnHeader(column){
+		if(column.definition.resizable){
 			this.initializeEventWatchers();
 			this.deInitializeComponent(column);
 			this.initializeColumn("header", column, column, column.element);
 		}
 	}
-
-	columnLayoutUpdated(column) {
+	
+	columnLayoutUpdated(column){
 		var prev = column.prevColumn();
-
+		
 		this.reinitializeColumn(column);
-
-		if (prev) {
+		
+		if(prev){
 			this.reinitializeColumn(prev);
 		}
 	}
-
-	columnWidthUpdated(column) {
-		if (column.modules.frozen) {
-			if (this.table.modules.frozenColumns.leftColumns.includes(column)) {
+	
+	columnWidthUpdated(column){
+		if(column.modules.frozen){
+			if(this.table.modules.frozenColumns.leftColumns.includes(column)){
 				this.table.modules.frozenColumns.leftColumns.forEach((col) => {
 					this.reinitializeColumn(col);
 				});
-			} else if (
-				this.table.modules.frozenColumns.rightColumns.includes(column)
-			) {
+			}else if(this.table.modules.frozenColumns.rightColumns.includes(column)){
 				this.table.modules.frozenColumns.rightColumns.forEach((col) => {
 					this.reinitializeColumn(col);
 				});
 			}
 		}
 	}
-
-	reinitializeColumn(column) {
-		var frozenOffset = column.modules.frozen
-			? column.modules.frozen.marginValue + column.getWidth() + "px"
-			: false;
-
+	
+	reinitializeColumn(column){
+		var frozenOffset = column.modules.frozen ? (column.modules.frozen.marginValue + column.getWidth() + "px") : false;
+		
+		
 		column.cells.forEach((cell) => {
-			if (cell.modules.resize && cell.modules.resize.handleEl) {
-				if (frozenOffset) {
+			if(cell.modules.resize && cell.modules.resize.handleEl){
+				if(frozenOffset){
 					cell.modules.resize.handleEl.style.left = frozenOffset;
 				}
-
+				
 				cell.element.after(cell.modules.resize.handleEl);
 			}
 		});
-
-		if (column.modules.resize && column.modules.resize.handleEl) {
-			if (frozenOffset) {
+		
+		if(column.modules.resize && column.modules.resize.handleEl){
+			if(frozenOffset){
 				column.modules.resize.handleEl.style.left = frozenOffset;
 			}
-
+			
 			column.element.after(column.modules.resize.handleEl);
 		}
 	}
-
-	initializeColumn(type, component, column, element) {
+	
+	initializeColumn(type, component, column, element){
 		var self = this,
-			variableHeight = false,
-			mode = column.definition.resizable,
-			config = {},
-			nearestColumn = column.getLastColumn();
-
+		variableHeight = false,
+		mode = column.definition.resizable,
+		config = {},
+		nearestColumn = column.getLastColumn();
+		
 		//set column resize mode
-		if (type === "header") {
-			variableHeight =
-				column.definition.formatter == "textarea" ||
-				column.definition.variableHeight;
-			config = { variableHeight: variableHeight };
+		if(type === "header"){
+			variableHeight = column.definition.formatter == "textarea" || column.definition.variableHeight;
+			config = {variableHeight:variableHeight};
 		}
-
-		if (
-			(mode === true || mode == type) &&
-			this._checkResizability(nearestColumn)
-		) {
-			var handle = document.createElement("span");
+		
+		if((mode === true || mode == type) && this._checkResizability(nearestColumn)){
+			
+			var handle = document.createElement('span');
 			handle.className = "tabulator-col-resize-handle";
-
-			handle.addEventListener("click", function (e) {
+			
+			handle.addEventListener("click", function(e){
 				e.stopPropagation();
 			});
-
-			var handleDown = function (e) {
+			
+			var handleDown = function(e){
 				self.startColumn = column;
 				self.initialNextColumn = self.nextColumn = nearestColumn.nextColumn();
 				self._mouseDown(e, nearestColumn, handle);
 			};
-
+			
 			handle.addEventListener("mousedown", handleDown);
-			handle.addEventListener("touchstart", handleDown, { passive: true });
-
+			handle.addEventListener("touchstart", handleDown, {passive: true});
+			
 			//resize column on  double click
 			handle.addEventListener("dblclick", (e) => {
 				var oldWidth = nearestColumn.getWidth();
-
+				
 				e.stopPropagation();
 				nearestColumn.reinitializeWidth(true);
-
-				if (oldWidth !== nearestColumn.getWidth()) {
+				
+				if(oldWidth !== nearestColumn.getWidth()){
 					self.dispatch("column-resized", nearestColumn);
-					self.table.externalEvents.dispatch(
-						"columnResized",
-						nearestColumn.getComponent()
-					);
+					self.table.externalEvents.dispatch("columnResized", nearestColumn.getComponent());
 				}
 			});
-
-			if (column.modules.frozen) {
+			
+			if(column.modules.frozen){
 				handle.style.position = "absolute";
-				handle.style.left =
-					column.modules.frozen.marginValue + column.getWidth() + "px";
+				handle.style.left = column.modules.frozen.marginValue + column.getWidth() + "px";
 			}
-
+			
 			config.handleEl = handle;
-
-			if (element.parentNode && column.visible) {
-				element.after(handle);
+			
+			if(element.parentNode && column.visible){
+				element.after(handle);			
 			}
 		}
-
+		
 		component.modules.resize = config;
 	}
-
-	deInitializeColumn(column) {
+	
+	deInitializeColumn(column){
 		this.deInitializeComponent(column);
-
+		
 		column.cells.forEach((cell) => {
 			this.deInitializeComponent(cell);
 		});
 	}
-
-	deInitializeComponent(component) {
+	
+	deInitializeComponent(component){
 		var handleEl;
-
-		if (component.modules.resize) {
+		
+		if(component.modules.resize){
 			handleEl = component.modules.resize.handleEl;
-
-			if (handleEl && handleEl.parentElement) {
+			
+			if(handleEl && handleEl.parentElement){
 				handleEl.parentElement.removeChild(handleEl);
 			}
 		}
 	}
-
-	resizeHandle(component, height) {
-		if (component.modules.resize && component.modules.resize.handleEl) {
+	
+	resizeHandle(component, height){
+		if(component.modules.resize && component.modules.resize.handleEl){
 			component.modules.resize.handleEl.style.height = height;
 		}
 	}
-
-	_checkResizability(column) {
+	
+	_checkResizability(column){
 		return column.definition.resizable;
 	}
-
-	_mouseDown(e, column, handle) {
+	
+	_mouseDown(e, column, handle){
 		var self = this;
-
+		
 		self.table.element.classList.add("tabulator-block-select");
-
-		function mouseMove(e) {
-			var x =
-					typeof e.screenX === "undefined" ? e.touches[0].screenX : e.screenX,
-				startDiff = x - self.startX,
-				moveDiff = x - self.latestX,
-				blockedBefore,
-				blockedAfter;
-
+		
+		function mouseMove(e){
+			var x = typeof e.screenX === "undefined" ? e.touches[0].screenX : e.screenX,
+			startDiff = x - self.startX,
+			moveDiff = x - self.latestX,
+			blockedBefore, blockedAfter;
+			
 			self.latestX = x;
-
-			if (self.table.rtl) {
+			
+			if(self.table.rtl){
 				startDiff = -startDiff;
 				moveDiff = -moveDiff;
 			}
-
-			blockedBefore =
-				column.width == column.minWidth || column.width == column.maxWidth;
-
+			
+			blockedBefore = column.width == column.minWidth || column.width == column.maxWidth;
+			
 			column.setWidth(self.startWidth + startDiff);
-
-			blockedAfter =
-				column.width == column.minWidth || column.width == column.maxWidth;
-
-			if (moveDiff < 0) {
+			
+			blockedAfter = column.width == column.minWidth || column.width == column.maxWidth;
+			
+			if(moveDiff < 0){
 				self.nextColumn = self.initialNextColumn;
 			}
-
-			if (
-				self.table.options.resizableColumnFit &&
-				self.nextColumn &&
-				!(blockedBefore && blockedAfter)
-			) {
+			
+			if(self.table.options.resizableColumnFit && self.nextColumn && !(blockedBefore && blockedAfter)){
 				let colWidth = self.nextColumn.getWidth();
-
-				if (moveDiff > 0) {
-					if (colWidth <= self.nextColumn.minWidth) {
+				
+				if(moveDiff > 0){
+					if(colWidth <= self.nextColumn.minWidth){
 						self.nextColumn = self.nextColumn.nextColumn();
 					}
 				}
-
-				if (self.nextColumn) {
+				
+				if(self.nextColumn){
 					self.nextColumn.setWidth(self.nextColumn.getWidth() - moveDiff);
 				}
 			}
-
+			
 			self.table.columnManager.rerenderColumns(true);
-
-			if (
-				!self.table.browserSlow &&
-				column.modules.resize &&
-				column.modules.resize.variableHeight
-			) {
+			
+			if(!self.table.browserSlow && column.modules.resize && column.modules.resize.variableHeight){
 				column.checkCellHeights();
 			}
 		}
-
-		function mouseUp(e) {
+		
+		function mouseUp(e){
+			
 			//block editor from taking action while resizing is taking place
-			if (self.startColumn.modules.edit) {
+			if(self.startColumn.modules.edit){
 				self.startColumn.modules.edit.blocked = false;
 			}
-
-			if (
-				self.table.browserSlow &&
-				column.modules.resize &&
-				column.modules.resize.variableHeight
-			) {
+			
+			if(self.table.browserSlow && column.modules.resize && column.modules.resize.variableHeight){
 				column.checkCellHeights();
 			}
-
+			
 			document.body.removeEventListener("mouseup", mouseUp);
 			document.body.removeEventListener("mousemove", mouseMove);
-
+			
 			handle.removeEventListener("touchmove", mouseMove);
 			handle.removeEventListener("touchend", mouseUp);
-
+			
 			self.table.element.classList.remove("tabulator-block-select");
-
-			if (self.startWidth !== column.getWidth()) {
+			
+			if(self.startWidth !== column.getWidth()){
 				self.dispatch("column-resized", column);
-				self.table.externalEvents.dispatch(
-					"columnResized",
-					column.getComponent()
-				);
+				self.table.externalEvents.dispatch("columnResized", column.getComponent());
 			}
 		}
-
+		
 		e.stopPropagation(); //prevent resize from interfering with movable columns
-
+		
 		//block editor from taking action while resizing is taking place
-		if (self.startColumn.modules.edit) {
+		if(self.startColumn.modules.edit){
 			self.startColumn.modules.edit.blocked = true;
 		}
-
-		self.startX =
-			typeof e.screenX === "undefined" ? e.touches[0].screenX : e.screenX;
+		
+		self.startX = typeof e.screenX === "undefined" ? e.touches[0].screenX : e.screenX;
 		self.latestX = self.startX;
 		self.startWidth = column.getWidth();
-
+		
 		document.body.addEventListener("mousemove", mouseMove);
 		document.body.addEventListener("mouseup", mouseUp);
-		handle.addEventListener("touchmove", mouseMove, { passive: true });
+		handle.addEventListener("touchmove", mouseMove, {passive: true});
 		handle.addEventListener("touchend", mouseUp);
 	}
 }
 
 ResizeColumns.moduleName = "resizeColumns";
 
-class ResizeRows extends Module {
-	constructor(table) {
+class ResizeRows extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.startColumn = false;
@@ -19402,72 +17412,65 @@ class ResizeRows extends Module {
 		this.registerTableOption("resizableRows", false); //resizable rows
 	}
 
-	initialize() {
-		if (this.table.options.resizableRows) {
+	initialize(){
+		if(this.table.options.resizableRows){
 			this.subscribe("row-layout-after", this.initializeRow.bind(this));
 		}
 	}
 
-	initializeRow(row) {
+	initializeRow(row){
 		var self = this,
-			rowEl = row.getElement();
+		rowEl = row.getElement();
 
-		var handle = document.createElement("div");
+		var handle = document.createElement('div');
 		handle.className = "tabulator-row-resize-handle";
 
-		var prevHandle = document.createElement("div");
+		var prevHandle = document.createElement('div');
 		prevHandle.className = "tabulator-row-resize-handle prev";
 
-		handle.addEventListener("click", function (e) {
+		handle.addEventListener("click", function(e){
 			e.stopPropagation();
 		});
 
-		var handleDown = function (e) {
+		var handleDown = function(e){
 			self.startRow = row;
 			self._mouseDown(e, row, handle);
 		};
 
 		handle.addEventListener("mousedown", handleDown);
-		handle.addEventListener("touchstart", handleDown, { passive: true });
+		handle.addEventListener("touchstart", handleDown, {passive: true});
 
-		prevHandle.addEventListener("click", function (e) {
+		prevHandle.addEventListener("click", function(e){
 			e.stopPropagation();
 		});
 
-		var prevHandleDown = function (e) {
+		var prevHandleDown =  function(e){
 			var prevRow = self.table.rowManager.prevDisplayRow(row);
 
-			if (prevRow) {
+			if(prevRow){
 				self.startRow = prevRow;
 				self._mouseDown(e, prevRow, prevHandle);
 			}
 		};
 
-		prevHandle.addEventListener("mousedown", prevHandleDown);
-		prevHandle.addEventListener("touchstart", prevHandleDown, {
-			passive: true,
-		});
+		prevHandle.addEventListener("mousedown",prevHandleDown);
+		prevHandle.addEventListener("touchstart",prevHandleDown, {passive: true});
 
 		rowEl.appendChild(handle);
 		rowEl.appendChild(prevHandle);
 	}
 
-	_mouseDown(e, row, handle) {
+	_mouseDown(e, row, handle){
 		var self = this;
 
 		self.table.element.classList.add("tabulator-block-select");
 
-		function mouseMove(e) {
-			row.setHeight(
-				self.startHeight +
-					((typeof e.screenY === "undefined"
-						? e.touches[0].screenY
-						: e.screenY) -
-						self.startY)
-			);
+		function mouseMove(e){
+			row.setHeight(self.startHeight + ((typeof e.screenY === "undefined" ? e.touches[0].screenY : e.screenY) - self.startY));
 		}
 
-		function mouseUp(e) {
+		function mouseUp(e){
+
 			// //block editor from taking action while resizing is taking place
 			// if(self.startColumn.modules.edit){
 			// 	self.startColumn.modules.edit.blocked = false;
@@ -19491,188 +17494,170 @@ class ResizeRows extends Module {
 		// 	self.startColumn.modules.edit.blocked = true;
 		// }
 
-		self.startY =
-			typeof e.screenY === "undefined" ? e.touches[0].screenY : e.screenY;
+		self.startY = typeof e.screenY === "undefined" ? e.touches[0].screenY : e.screenY;
 		self.startHeight = row.getHeight();
 
 		document.body.addEventListener("mousemove", mouseMove);
 		document.body.addEventListener("mouseup", mouseUp);
 
-		handle.addEventListener("touchmove", mouseMove, { passive: true });
+		handle.addEventListener("touchmove", mouseMove, {passive: true});
 		handle.addEventListener("touchend", mouseUp);
 	}
 }
 
 ResizeRows.moduleName = "resizeRows";
 
-class ResizeTable extends Module {
-	constructor(table) {
+class ResizeTable extends Module{
+	
+	constructor(table){
 		super(table);
-
+		
 		this.binding = false;
 		this.visibilityObserver = false;
 		this.resizeObserver = false;
 		this.containerObserver = false;
-
+		
 		this.tableHeight = 0;
 		this.tableWidth = 0;
 		this.containerHeight = 0;
 		this.containerWidth = 0;
-
+		
 		this.autoResize = false;
-
+		
 		this.visible = false;
-
+		
 		this.initialized = false;
 		this.initialRedraw = false;
-
+		
 		this.registerTableOption("autoResize", true); //auto resize table
 	}
-
-	initialize() {
-		if (this.table.options.autoResize) {
+	
+	initialize(){
+		if(this.table.options.autoResize){
 			var table = this.table,
-				tableStyle;
-
+			tableStyle;
+			
 			this.tableHeight = table.element.clientHeight;
 			this.tableWidth = table.element.clientWidth;
-
-			if (table.element.parentNode) {
+			
+			if(table.element.parentNode){
 				this.containerHeight = table.element.parentNode.clientHeight;
 				this.containerWidth = table.element.parentNode.clientWidth;
 			}
-
-			if (
-				typeof IntersectionObserver !== "undefined" &&
-				typeof ResizeObserver !== "undefined" &&
-				table.rowManager.getRenderMode() === "virtual"
-			) {
+			
+			if(typeof IntersectionObserver !== "undefined" && typeof ResizeObserver !== "undefined" && table.rowManager.getRenderMode() === "virtual"){
+				
 				this.initializeVisibilityObserver();
-
+				
 				this.autoResize = true;
-
+				
 				this.resizeObserver = new ResizeObserver((entry) => {
-					if (
-						!table.browserMobile ||
-						(table.browserMobile && !table.modules.edit.currentCell)
-					) {
+					if(!table.browserMobile || (table.browserMobile &&!table.modules.edit.currentCell)){
+						
 						var nodeHeight = Math.floor(entry[0].contentRect.height);
 						var nodeWidth = Math.floor(entry[0].contentRect.width);
-
-						if (
-							this.tableHeight != nodeHeight ||
-							this.tableWidth != nodeWidth
-						) {
+						
+						if(this.tableHeight != nodeHeight || this.tableWidth != nodeWidth){
 							this.tableHeight = nodeHeight;
 							this.tableWidth = nodeWidth;
-
-							if (table.element.parentNode) {
+							
+							if(table.element.parentNode){
 								this.containerHeight = table.element.parentNode.clientHeight;
 								this.containerWidth = table.element.parentNode.clientWidth;
 							}
-
+						
 							this.redrawTable();
 						}
 					}
 				});
-
+				
 				this.resizeObserver.observe(table.element);
-
+				
 				tableStyle = window.getComputedStyle(table.element);
-
-				if (
-					this.table.element.parentNode &&
-					!this.table.rowManager.fixedHeight &&
-					(tableStyle.getPropertyValue("max-height") ||
-						tableStyle.getPropertyValue("min-height"))
-				) {
+				
+				if(this.table.element.parentNode && !this.table.rowManager.fixedHeight && (tableStyle.getPropertyValue("max-height") || tableStyle.getPropertyValue("min-height"))){
+					
 					this.containerObserver = new ResizeObserver((entry) => {
-						if (
-							!table.browserMobile ||
-							(table.browserMobile && !table.modules.edit.currentCell)
-						) {
+						if(!table.browserMobile || (table.browserMobile &&!table.modules.edit.currentCell)){
+							
 							var nodeHeight = Math.floor(entry[0].contentRect.height);
 							var nodeWidth = Math.floor(entry[0].contentRect.width);
-
-							if (
-								this.containerHeight != nodeHeight ||
-								this.containerWidth != nodeWidth
-							) {
+							
+							if(this.containerHeight != nodeHeight || this.containerWidth != nodeWidth){
 								this.containerHeight = nodeHeight;
 								this.containerWidth = nodeWidth;
 								this.tableHeight = table.element.clientHeight;
 								this.tableWidth = table.element.clientWidth;
 							}
-
+							
 							this.redrawTable();
 						}
 					});
-
+					
 					this.containerObserver.observe(this.table.element.parentNode);
 				}
-
+				
 				this.subscribe("table-resize", this.tableResized.bind(this));
-			} else {
-				this.binding = function () {
-					if (
-						!table.browserMobile ||
-						(table.browserMobile && !table.modules.edit.currentCell)
-					) {
+				
+			}else {
+				this.binding = function(){
+					if(!table.browserMobile || (table.browserMobile && !table.modules.edit.currentCell)){
 						table.columnManager.rerenderColumns(true);
 						table.redraw();
 					}
 				};
-
+				
 				window.addEventListener("resize", this.binding);
 			}
-
+			
 			this.subscribe("table-destroy", this.clearBindings.bind(this));
 		}
 	}
-
-	initializeVisibilityObserver() {
+	
+	initializeVisibilityObserver(){
 		this.visibilityObserver = new IntersectionObserver((entries) => {
 			this.visible = entries[0].isIntersecting;
 
-			if (!this.initialized) {
+			if(!this.initialized){
 				this.initialized = true;
 				this.initialRedraw = !this.visible;
 			}
 
-			if (this.visible) {
+			if(this.visible){
 				this.redrawTable(this.initialRedraw);
 				this.initialRedraw = false;
 			}
+			
 		});
-
+		
 		this.visibilityObserver.observe(this.table.element);
 	}
-
-	redrawTable(force) {
-		if (this.initialized && this.visible) {
+	
+	redrawTable(force){
+		if(this.initialized && this.visible){
 			this.table.columnManager.rerenderColumns(true);
 			this.table.redraw(force);
 		}
 	}
-
-	tableResized() {
+	
+	tableResized(){
 		this.table.rowManager.redraw();
 	}
-
-	clearBindings() {
-		if (this.binding) {
+	
+	clearBindings(){
+		if(this.binding){
 			window.removeEventListener("resize", this.binding);
 		}
-
-		if (this.resizeObserver) {
+		
+		if(this.resizeObserver){
 			this.resizeObserver.unobserve(this.table.element);
 		}
-
-		if (this.visibilityObserver) {
+		
+		if(this.visibilityObserver){
 			this.visibilityObserver.unobserve(this.table.element);
 		}
-
-		if (this.containerObserver) {
+		
+		if(this.containerObserver){
 			this.containerObserver.unobserve(this.table.element.parentNode);
 		}
 	}
@@ -19680,8 +17665,9 @@ class ResizeTable extends Module {
 
 ResizeTable.moduleName = "resizeTable";
 
-class ResponsiveLayout extends Module {
-	constructor(table) {
+class ResponsiveLayout extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.columns = [];
@@ -19701,8 +17687,8 @@ class ResponsiveLayout extends Module {
 	}
 
 	//generate responsive columns list
-	initialize() {
-		if (this.table.options.responsiveLayout) {
+	initialize(){
+		if(this.table.options.responsiveLayout){
 			this.subscribe("column-layout", this.initializeColumn.bind(this));
 			this.subscribe("column-show", this.updateColumnVisibility.bind(this));
 			this.subscribe("column-hide", this.updateColumnVisibility.bind(this));
@@ -19712,48 +17698,39 @@ class ResponsiveLayout extends Module {
 			this.subscribe("column-delete", this.initializeResponsivity.bind(this));
 
 			this.subscribe("table-redrawing", this.tableRedraw.bind(this));
-
-			if (this.table.options.responsiveLayout === "collapse") {
-				this.subscribe(
-					"row-data-changed",
-					this.generateCollapsedRowContent.bind(this)
-				);
+			
+			if(this.table.options.responsiveLayout === "collapse"){
+				this.subscribe("row-data-changed", this.generateCollapsedRowContent.bind(this));
 				this.subscribe("row-init", this.initializeRow.bind(this));
 				this.subscribe("row-layout", this.layoutRow.bind(this));
 			}
 		}
 	}
 
-	tableRedraw(force) {
-		if (["fitColumns", "fitDataStretch"].indexOf(this.layoutMode()) === -1) {
-			if (!force) {
+	tableRedraw(force){
+		if(["fitColumns", "fitDataStretch"].indexOf(this.layoutMode()) === -1){
+			if(!force){
 				this.update();
 			}
 		}
 	}
 
-	initializeResponsivity() {
+	initializeResponsivity(){
 		var columns = [];
 
 		this.mode = this.table.options.responsiveLayout;
-		this.collapseFormatter =
-			this.table.options.responsiveLayoutCollapseFormatter ||
-			this.formatCollapsedData;
-		this.collapseStartOpen =
-			this.table.options.responsiveLayoutCollapseStartOpen;
+		this.collapseFormatter = this.table.options.responsiveLayoutCollapseFormatter || this.formatCollapsedData;
+		this.collapseStartOpen = this.table.options.responsiveLayoutCollapseStartOpen;
 		this.hiddenColumns = [];
 
 		//determine level of responsivity for each column
 		this.table.columnManager.columnsByIndex.forEach((column, i) => {
-			if (column.modules.responsive) {
-				if (
-					column.modules.responsive.order &&
-					column.modules.responsive.visible
-				) {
+			if(column.modules.responsive){
+				if(column.modules.responsive.order && column.modules.responsive.visible){
 					column.modules.responsive.index = i;
 					columns.push(column);
 
-					if (!column.visible && this.mode === "collapse") {
+					if(!column.visible && this.mode === "collapse"){
 						this.hiddenColumns.push(column);
 					}
 				}
@@ -19764,243 +17741,230 @@ class ResponsiveLayout extends Module {
 		columns = columns.reverse();
 		columns = columns.sort((a, b) => {
 			var diff = b.modules.responsive.order - a.modules.responsive.order;
-			return diff || b.modules.responsive.index - a.modules.responsive.index;
+			return diff || (b.modules.responsive.index - a.modules.responsive.index);
 		});
 
 		this.columns = columns;
 
-		if (this.mode === "collapse") {
+		if(this.mode === "collapse"){
 			this.generateCollapsedContent();
 		}
 
 		//assign collapse column
-		for (let col of this.table.columnManager.columnsByIndex) {
-			if (col.definition.formatter == "responsiveCollapse") {
+		for (let col of this.table.columnManager.columnsByIndex){
+			if(col.definition.formatter == "responsiveCollapse"){
 				this.collapseHandleColumn = col;
 				break;
 			}
 		}
 
-		if (this.collapseHandleColumn) {
-			if (this.hiddenColumns.length) {
+		if(this.collapseHandleColumn){
+			if(this.hiddenColumns.length){
 				this.collapseHandleColumn.show();
-			} else {
+			}else {
 				this.collapseHandleColumn.hide();
 			}
 		}
 	}
 
 	//define layout information
-	initializeColumn(column) {
+	initializeColumn(column){
 		var def = column.getDefinition();
 
-		column.modules.responsive = {
-			order: typeof def.responsive === "undefined" ? 1 : def.responsive,
-			visible: def.visible === false ? false : true,
-		};
+		column.modules.responsive = {order: typeof def.responsive === "undefined" ? 1 : def.responsive, visible:def.visible === false ? false : true};
 	}
 
-	initializeRow(row) {
+	initializeRow(row){
 		var el;
 
-		if (row.type !== "calc") {
+		if(row.type !== "calc"){
 			el = document.createElement("div");
 			el.classList.add("tabulator-responsive-collapse");
 
 			row.modules.responsiveLayout = {
-				element: el,
-				open: this.collapseStartOpen,
+				element:el,
+				open:this.collapseStartOpen,
 			};
 
-			if (!this.collapseStartOpen) {
-				el.style.display = "none";
+			if(!this.collapseStartOpen){
+				el.style.display = 'none';
 			}
 		}
 	}
 
-	layoutRow(row) {
+	layoutRow(row){
 		var rowEl = row.getElement();
 
-		if (row.modules.responsiveLayout) {
+		if(row.modules.responsiveLayout){
 			rowEl.appendChild(row.modules.responsiveLayout.element);
 			this.generateCollapsedRowContent(row);
 		}
 	}
 
 	//update column visibility
-	updateColumnVisibility(column, responsiveToggle) {
-		if (!responsiveToggle && column.modules.responsive) {
+	updateColumnVisibility(column, responsiveToggle){
+		if(!responsiveToggle && column.modules.responsive){
 			column.modules.responsive.visible = column.visible;
 			this.initializeResponsivity();
 		}
 	}
 
-	hideColumn(column) {
+	hideColumn(column){
 		var colCount = this.hiddenColumns.length;
 
 		column.hide(false, true);
 
-		if (this.mode === "collapse") {
+		if(this.mode === "collapse"){
 			this.hiddenColumns.unshift(column);
 			this.generateCollapsedContent();
 
-			if (this.collapseHandleColumn && !colCount) {
+			if(this.collapseHandleColumn && !colCount){
 				this.collapseHandleColumn.show();
 			}
 		}
 	}
 
-	showColumn(column) {
+	showColumn(column){
 		var index;
 
 		column.show(false, true);
 		//set column width to prevent calculation loops on uninitialized columns
 		column.setWidth(column.getWidth());
 
-		if (this.mode === "collapse") {
+		if(this.mode === "collapse"){
 			index = this.hiddenColumns.indexOf(column);
 
-			if (index > -1) {
+			if(index > -1){
 				this.hiddenColumns.splice(index, 1);
 			}
 
 			this.generateCollapsedContent();
 
-			if (this.collapseHandleColumn && !this.hiddenColumns.length) {
+			if(this.collapseHandleColumn && !this.hiddenColumns.length){
 				this.collapseHandleColumn.hide();
 			}
 		}
 	}
 
 	//redraw columns to fit space
-	update() {
+	update(){
 		var self = this,
-			working = true;
+		working = true;
 
-		while (working) {
-			let width =
-				self.table.modules.layout.getMode() == "fitColumns"
-					? self.table.columnManager.getFlexBaseWidth()
-					: self.table.columnManager.getWidth();
+		while(working){
 
-			let diff =
-				(self.table.options.headerVisible
-					? self.table.columnManager.element.clientWidth
-					: self.table.element.clientWidth) - width;
+			let width = self.table.modules.layout.getMode() == "fitColumns" ? self.table.columnManager.getFlexBaseWidth() : self.table.columnManager.getWidth();
 
-			if (diff < 0) {
+			let diff = (self.table.options.headerVisible ? self.table.columnManager.element.clientWidth : self.table.element.clientWidth) - width;
+
+			if(diff < 0){
 				//table is too wide
 				let column = self.columns[self.index];
 
-				if (column) {
+				if(column){
 					self.hideColumn(column);
-					self.index++;
-				} else {
+					self.index ++;
+				}else {
 					working = false;
 				}
-			} else {
-				//table has spare space
-				let column = self.columns[self.index - 1];
 
-				if (column) {
-					if (diff > 0) {
-						if (diff >= column.getWidth()) {
+			}else {
+
+				//table has spare space
+				let column = self.columns[self.index -1];
+
+				if(column){
+					if(diff > 0){
+						if(diff >= column.getWidth()){
 							self.showColumn(column);
-							self.index--;
-						} else {
+							self.index --;
+						}else {
 							working = false;
 						}
-					} else {
+					}else {
 						working = false;
 					}
-				} else {
+				}else {
 					working = false;
 				}
 			}
 
-			if (!self.table.rowManager.activeRowsCount) {
+			if(!self.table.rowManager.activeRowsCount){
 				self.table.rowManager.renderEmptyScroll();
 			}
 		}
 	}
 
-	generateCollapsedContent() {
+	generateCollapsedContent(){
 		var self = this,
-			rows = this.table.rowManager.getDisplayRows();
+		rows = this.table.rowManager.getDisplayRows();
 
-		rows.forEach(function (row) {
+		rows.forEach(function(row){
 			self.generateCollapsedRowContent(row);
 		});
 	}
 
-	generateCollapsedRowContent(row) {
+	generateCollapsedRowContent(row){
 		var el, contents;
 
-		if (row.modules.responsiveLayout) {
+		if(row.modules.responsiveLayout){
 			el = row.modules.responsiveLayout.element;
 
-			while (el.firstChild) el.removeChild(el.firstChild);
+			while(el.firstChild) el.removeChild(el.firstChild);
 
 			contents = this.collapseFormatter(this.generateCollapsedRowData(row));
-			if (contents) {
+			if(contents){
 				el.appendChild(contents);
 			}
 		}
 	}
 
-	generateCollapsedRowData(row) {
+	generateCollapsedRowData(row){
 		var self = this,
-			data = row.getData(),
-			output = [],
-			mockCellComponent;
+		data = row.getData(),
+		output = [],
+		mockCellComponent;
 
-		this.hiddenColumns.forEach(function (column) {
+		this.hiddenColumns.forEach(function(column){
 			var value = column.getFieldValue(data);
 
-			if (column.definition.title && column.field) {
-				if (
-					column.modules.format &&
-					self.table.options.responsiveLayoutCollapseUseFormatters
-				) {
+			if(column.definition.title && column.field){
+				if(column.modules.format && self.table.options.responsiveLayoutCollapseUseFormatters){
+
 					mockCellComponent = {
-						value: false,
-						data: {},
-						getValue: function () {
+						value:false,
+						data:{},
+						getValue:function(){
 							return value;
 						},
-						getData: function () {
+						getData:function(){
 							return data;
 						},
-						getElement: function () {
+						getElement:function(){
 							return document.createElement("div");
 						},
-						getRow: function () {
+						getRow:function(){
 							return row.getComponent();
 						},
-						getColumn: function () {
+						getColumn:function(){
 							return column.getComponent();
 						},
 					};
 
-					function onRendered(callback) {
+					function onRendered(callback){
 						callback();
 					}
 
 					output.push({
 						field: column.field,
 						title: column.definition.title,
-						value: column.modules.format.formatter.call(
-							self.table.modules.format,
-							mockCellComponent,
-							column.modules.format.params,
-							onRendered
-						),
+						value: column.modules.format.formatter.call(self.table.modules.format, mockCellComponent, column.modules.format.params, onRendered)
 					});
-				} else {
+				}else {
 					output.push({
 						field: column.field,
 						title: column.definition.title,
-						value: value,
+						value: value
 					});
 				}
 			}
@@ -20009,10 +17973,10 @@ class ResponsiveLayout extends Module {
 		return output;
 	}
 
-	formatCollapsedData(data) {
+	formatCollapsedData(data){
 		var list = document.createElement("table");
 
-		data.forEach(function (item) {
+		data.forEach(function(item){
 			var row = document.createElement("tr");
 			var titleData = document.createElement("td");
 			var valueData = document.createElement("td");
@@ -20020,15 +17984,15 @@ class ResponsiveLayout extends Module {
 
 			var titleHighlight = document.createElement("strong");
 			titleData.appendChild(titleHighlight);
-			this.langBind("columns|" + item.field, function (text) {
+			this.langBind("columns|" + item.field, function(text){
 				titleHighlight.innerHTML = text || item.title;
 			});
 
-			if (item.value instanceof Node) {
+			if(item.value instanceof Node){
 				node_content = document.createElement("div");
 				node_content.appendChild(item.value);
 				valueData.appendChild(node_content);
-			} else {
+			}else {
 				valueData.innerHTML = item.value;
 			}
 
@@ -20043,435 +18007,398 @@ class ResponsiveLayout extends Module {
 
 ResponsiveLayout.moduleName = "responsiveLayout";
 
-class SelectRow extends Module {
-	constructor(table) {
+class SelectRow extends Module{
+	
+	constructor(table){
 		super(table);
-
+		
 		this.selecting = false; //flag selecting in progress
 		this.lastClickedRow = false; //last clicked row
 		this.selectPrev = []; //hold previously selected element for drag drop selection
 		this.selectedRows = []; //hold selected rows
 		this.headerCheckboxElement = null; // hold header select element
-
+		
 		this.registerTableOption("selectable", "highlight"); //highlight rows on hover
-		this.registerTableOption("selectableRangeMode", "drag"); //highlight rows on hover
+		this.registerTableOption("selectableRangeMode", "drag");  //highlight rows on hover
 		this.registerTableOption("selectableRollingSelection", true); //roll selection once maximum number of selectable rows is reached
 		this.registerTableOption("selectablePersistence", true); // maintain selection when table view is updated
-		this.registerTableOption("selectableCheck", function (data, row) {
-			return true;
-		}); //check whether row is selectable
-
+		this.registerTableOption("selectableCheck", function(data, row){return true;}); //check whether row is selectable
+		
 		this.registerTableFunction("selectRow", this.selectRows.bind(this));
 		this.registerTableFunction("deselectRow", this.deselectRows.bind(this));
 		this.registerTableFunction("toggleSelectRow", this.toggleRow.bind(this));
-		this.registerTableFunction(
-			"getSelectedRows",
-			this.getSelectedRows.bind(this)
-		);
-		this.registerTableFunction(
-			"getSelectedData",
-			this.getSelectedData.bind(this)
-		);
-
+		this.registerTableFunction("getSelectedRows", this.getSelectedRows.bind(this));
+		this.registerTableFunction("getSelectedData", this.getSelectedData.bind(this));
+		
 		//register component functions
 		this.registerComponentFunction("row", "select", this.selectRows.bind(this));
-		this.registerComponentFunction(
-			"row",
-			"deselect",
-			this.deselectRows.bind(this)
-		);
-		this.registerComponentFunction(
-			"row",
-			"toggleSelect",
-			this.toggleRow.bind(this)
-		);
-		this.registerComponentFunction(
-			"row",
-			"isSelected",
-			this.isRowSelected.bind(this)
-		);
+		this.registerComponentFunction("row", "deselect", this.deselectRows.bind(this));
+		this.registerComponentFunction("row", "toggleSelect", this.toggleRow.bind(this));
+		this.registerComponentFunction("row", "isSelected", this.isRowSelected.bind(this));
 	}
-
-	initialize() {
-		if (this.table.options.selectable !== false) {
+	
+	initialize(){
+		if(this.table.options.selectable !== false){
 			this.subscribe("row-init", this.initializeRow.bind(this));
 			this.subscribe("row-deleting", this.rowDeleted.bind(this));
 			this.subscribe("rows-wipe", this.clearSelectionData.bind(this));
 			this.subscribe("rows-retrieve", this.rowRetrieve.bind(this));
-
-			if (
-				this.table.options.selectable &&
-				!this.table.options.selectablePersistence
-			) {
+			
+			if(this.table.options.selectable && !this.table.options.selectablePersistence){
 				this.subscribe("data-refreshing", this.deselectRows.bind(this));
 			}
 		}
 	}
-
-	rowRetrieve(type, prevValue) {
+	
+	rowRetrieve(type, prevValue){
 		return type === "selected" ? this.selectedRows : prevValue;
 	}
-
-	rowDeleted(row) {
+	
+	rowDeleted(row){
 		this._deselectRow(row, true);
 	}
-
-	clearSelectionData(silent) {
+	
+	clearSelectionData(silent){
 		this.selecting = false;
 		this.lastClickedRow = false;
 		this.selectPrev = [];
 		this.selectedRows = [];
-
-		if (silent !== true) {
+		
+		if(silent !== true){
 			this._rowSelectionChanged();
 		}
 	}
-
-	initializeRow(row) {
+	
+	initializeRow(row){
 		var self = this,
-			element = row.getElement();
-
+		element = row.getElement();
+		
 		// trigger end of row selection
-		var endSelect = function () {
-			setTimeout(function () {
+		var endSelect = function(){
+			
+			setTimeout(function(){
 				self.selecting = false;
 			}, 50);
-
+			
 			document.body.removeEventListener("mouseup", endSelect);
 		};
-
-		row.modules.select = { selected: false };
-
+		
+		row.modules.select = {selected:false};
+		
 		//set row selection class
-		if (
-			self.table.options.selectableCheck.call(this.table, row.getComponent())
-		) {
+		if(self.table.options.selectableCheck.call(this.table, row.getComponent())){
 			element.classList.add("tabulator-selectable");
 			element.classList.remove("tabulator-unselectable");
-
-			if (
-				self.table.options.selectable &&
-				self.table.options.selectable != "highlight"
-			) {
-				if (self.table.options.selectableRangeMode === "click") {
-					element.addEventListener(
-						"click",
-						this.handleComplexRowClick.bind(this, row)
-					);
-				} else {
-					element.addEventListener("click", function (e) {
-						if (
-							!self.table.modExists("edit") ||
-							!self.table.modules.edit.getCurrentCell()
-						) {
+			
+			if(self.table.options.selectable && self.table.options.selectable != "highlight"){
+				if(self.table.options.selectableRangeMode === "click"){
+					element.addEventListener("click", this.handleComplexRowClick.bind(this, row));
+				}else {
+					element.addEventListener("click", function(e){
+						if(!self.table.modExists("edit") || !self.table.modules.edit.getCurrentCell()){
 							self.table._clearSelection();
 						}
-
-						if (!self.selecting) {
+						
+						if(!self.selecting){
 							self.toggleRow(row);
 						}
 					});
-
-					element.addEventListener("mousedown", function (e) {
-						if (e.shiftKey) {
+					
+					element.addEventListener("mousedown", function(e){
+						if(e.shiftKey){
 							self.table._clearSelection();
-
+							
 							self.selecting = true;
-
+							
 							self.selectPrev = [];
-
+							
 							document.body.addEventListener("mouseup", endSelect);
 							document.body.addEventListener("keyup", endSelect);
-
+							
 							self.toggleRow(row);
-
+							
 							return false;
 						}
 					});
-
-					element.addEventListener("mouseenter", function (e) {
-						if (self.selecting) {
+					
+					element.addEventListener("mouseenter", function(e){
+						if(self.selecting){
 							self.table._clearSelection();
 							self.toggleRow(row);
-
-							if (self.selectPrev[1] == row) {
+							
+							if(self.selectPrev[1] == row){
 								self.toggleRow(self.selectPrev[0]);
 							}
 						}
 					});
-
-					element.addEventListener("mouseout", function (e) {
-						if (self.selecting) {
+					
+					element.addEventListener("mouseout", function(e){
+						if(self.selecting){
 							self.table._clearSelection();
 							self.selectPrev.unshift(row);
 						}
 					});
 				}
 			}
-		} else {
+			
+		}else {
 			element.classList.add("tabulator-unselectable");
 			element.classList.remove("tabulator-selectable");
 		}
 	}
-
-	handleComplexRowClick(row, e) {
-		if (e.shiftKey) {
+	
+	handleComplexRowClick(row, e){
+		if(e.shiftKey){
 			this.table._clearSelection();
 			this.lastClickedRow = this.lastClickedRow || row;
-
-			var lastClickedRowIdx = this.table.rowManager.getDisplayRowIndex(
-				this.lastClickedRow
-			);
+			
+			var lastClickedRowIdx = this.table.rowManager.getDisplayRowIndex(this.lastClickedRow);
 			var rowIdx = this.table.rowManager.getDisplayRowIndex(row);
-
+			
 			var fromRowIdx = lastClickedRowIdx <= rowIdx ? lastClickedRowIdx : rowIdx;
 			var toRowIdx = lastClickedRowIdx >= rowIdx ? lastClickedRowIdx : rowIdx;
-
+			
 			var rows = this.table.rowManager.getDisplayRows().slice(0);
 			var toggledRows = rows.splice(fromRowIdx, toRowIdx - fromRowIdx + 1);
-
-			if (e.ctrlKey || e.metaKey) {
-				toggledRows.forEach((toggledRow) => {
-					if (toggledRow !== this.lastClickedRow) {
-						if (
-							this.table.options.selectable !== true &&
-							!this.isRowSelected(row)
-						) {
-							if (this.selectedRows.length < this.table.options.selectable) {
+			
+			if(e.ctrlKey || e.metaKey){
+				toggledRows.forEach((toggledRow)=>{
+					if(toggledRow !== this.lastClickedRow){
+						
+						if(this.table.options.selectable !== true && !this.isRowSelected(row)){
+							if(this.selectedRows.length < this.table.options.selectable){
 								this.toggleRow(toggledRow);
 							}
-						} else {
+						}else {
 							this.toggleRow(toggledRow);
 						}
 					}
 				});
 				this.lastClickedRow = row;
-			} else {
+			}else {
 				this.deselectRows(undefined, true);
-
-				if (this.table.options.selectable !== true) {
-					if (toggledRows.length > this.table.options.selectable) {
+				
+				if(this.table.options.selectable !== true){
+					if(toggledRows.length > this.table.options.selectable){
 						toggledRows = toggledRows.slice(0, this.table.options.selectable);
 					}
 				}
-
+				
 				this.selectRows(toggledRows);
 			}
 			this.table._clearSelection();
-		} else if (e.ctrlKey || e.metaKey) {
+		}
+		else if(e.ctrlKey || e.metaKey){
 			this.toggleRow(row);
 			this.lastClickedRow = row;
-		} else {
+		}else {
 			this.deselectRows(undefined, true);
 			this.selectRows(row);
 			this.lastClickedRow = row;
 		}
 	}
-
+	
 	//toggle row selection
-	toggleRow(row) {
-		if (
-			this.table.options.selectableCheck.call(this.table, row.getComponent())
-		) {
-			if (row.modules.select && row.modules.select.selected) {
+	toggleRow(row){
+		if(this.table.options.selectableCheck.call(this.table, row.getComponent())){
+			if(row.modules.select && row.modules.select.selected){
 				this._deselectRow(row);
-			} else {
+			}else {
 				this._selectRow(row);
 			}
 		}
 	}
-
+	
 	//select a number of rows
-	selectRows(rows) {
+	selectRows(rows){
 		var rowMatch;
-
-		switch (typeof rows) {
+		
+		switch(typeof rows){
 			case "undefined":
 				this.table.rowManager.rows.forEach((row) => {
 					this._selectRow(row, true, true);
 				});
-
+			
 				this._rowSelectionChanged();
 				break;
-
+			
 			case "string":
 				rowMatch = this.table.rowManager.findRow(rows);
-
-				if (rowMatch) {
+			
+				if(rowMatch){
 					this._selectRow(rowMatch, true, true);
-				} else {
-					this.table.rowManager.getRows(rows).forEach((row) => {
+					this._rowSelectionChanged();
+				}else {
+					rowMatch = this.table.rowManager.getRows(rows);
+					
+					rowMatch.forEach((row) => {
 						this._selectRow(row, true, true);
 					});
+
+					if(rowMatch.length){
+						this._rowSelectionChanged();
+					}
 				}
-
-				this._rowSelectionChanged();
 				break;
-
+			
 			default:
-				if (Array.isArray(rows)) {
+				if(Array.isArray(rows)){
 					rows.forEach((row) => {
 						this._selectRow(row, true, true);
 					});
-
+				
 					this._rowSelectionChanged();
-				} else {
+				}else {
 					this._selectRow(rows, false, true);
 				}
 				break;
 		}
 	}
-
+	
 	//select an individual row
-	_selectRow(rowInfo, silent, force) {
+	_selectRow(rowInfo, silent, force){
 		//handle max row count
-		if (
-			!isNaN(this.table.options.selectable) &&
-			this.table.options.selectable !== true &&
-			!force
-		) {
-			if (this.selectedRows.length >= this.table.options.selectable) {
-				if (this.table.options.selectableRollingSelection) {
+		if(!isNaN(this.table.options.selectable) && this.table.options.selectable !== true && !force){
+			if(this.selectedRows.length >= this.table.options.selectable){
+				if(this.table.options.selectableRollingSelection){
 					this._deselectRow(this.selectedRows[0]);
-				} else {
+				}else {
 					return false;
 				}
 			}
 		}
-
+		
 		var row = this.table.rowManager.findRow(rowInfo);
-
-		if (row) {
-			if (this.selectedRows.indexOf(row) == -1) {
+		
+		if(row){
+			if(this.selectedRows.indexOf(row) == -1){
 				row.getElement().classList.add("tabulator-selected");
-				if (!row.modules.select) {
+				if(!row.modules.select){
 					row.modules.select = {};
 				}
-
+				
 				row.modules.select.selected = true;
-				if (row.modules.select.checkboxEl) {
+				if(row.modules.select.checkboxEl){
 					row.modules.select.checkboxEl.checked = true;
 				}
-
+				
 				this.selectedRows.push(row);
-
-				if (this.table.options.dataTreeSelectPropagate) {
+				
+				if(this.table.options.dataTreeSelectPropagate){
 					this.childRowSelection(row, true);
 				}
-
+				
 				this.dispatchExternal("rowSelected", row.getComponent());
-
+				
 				this._rowSelectionChanged(silent);
 			}
-		} else {
-			if (!silent) {
-				console.warn(
-					"Selection Error - No such row found, ignoring selection:" + rowInfo
-				);
+		}else {
+			if(!silent){
+				console.warn("Selection Error - No such row found, ignoring selection:" + rowInfo);
 			}
 		}
 	}
-
-	isRowSelected(row) {
+	
+	isRowSelected(row){
 		return this.selectedRows.indexOf(row) !== -1;
 	}
-
+	
 	//deselect a number of rows
-	deselectRows(rows, silent) {
+	deselectRows(rows, silent){
 		var self = this,
-			rowCount;
-
-		if (typeof rows == "undefined") {
+		rowCount;
+		
+		if(typeof rows == "undefined"){
+			
 			rowCount = self.selectedRows.length;
-
-			for (let i = 0; i < rowCount; i++) {
+			
+			for(let i = 0; i < rowCount; i++){
 				self._deselectRow(self.selectedRows[0], true);
 			}
-
-			if (rowCount) {
+			
+			if(rowCount){
 				self._rowSelectionChanged(silent);
 			}
-		} else {
-			if (Array.isArray(rows)) {
-				rows.forEach(function (row) {
+			
+		}else {
+			if(Array.isArray(rows)){
+				rows.forEach(function(row){
 					self._deselectRow(row, true);
 				});
-
+				
 				self._rowSelectionChanged(silent);
-			} else {
+			}else {
 				self._deselectRow(rows, silent);
 			}
 		}
 	}
-
+	
 	//deselect an individual row
-	_deselectRow(rowInfo, silent) {
+	_deselectRow(rowInfo, silent){
 		var self = this,
-			row = self.table.rowManager.findRow(rowInfo),
-			index;
-
-		if (row) {
-			index = self.selectedRows.findIndex(function (selectedRow) {
+		row = self.table.rowManager.findRow(rowInfo),
+		index;
+		
+		if(row){
+			index = self.selectedRows.findIndex(function(selectedRow){
 				return selectedRow == row;
 			});
-
-			if (index > -1) {
+			
+			if(index > -1){
+				
 				row.getElement().classList.remove("tabulator-selected");
-				if (!row.modules.select) {
+				if(!row.modules.select){
 					row.modules.select = {};
 				}
-
+				
 				row.modules.select.selected = false;
-				if (row.modules.select.checkboxEl) {
+				if(row.modules.select.checkboxEl){
 					row.modules.select.checkboxEl.checked = false;
 				}
 				self.selectedRows.splice(index, 1);
-
-				if (this.table.options.dataTreeSelectPropagate) {
+				
+				if(this.table.options.dataTreeSelectPropagate){
 					this.childRowSelection(row, false);
 				}
-
+				
 				this.dispatchExternal("rowDeselected", row.getComponent());
-
+				
 				self._rowSelectionChanged(silent);
 			}
-		} else {
-			if (!silent) {
-				console.warn(
-					"Deselection Error - No such row found, ignoring selection:" + rowInfo
-				);
+		}else {
+			if(!silent){
+				console.warn("Deselection Error - No such row found, ignoring selection:" + rowInfo);
 			}
 		}
 	}
-
-	getSelectedData() {
+	
+	getSelectedData(){
 		var data = [];
-
-		this.selectedRows.forEach(function (row) {
+		
+		this.selectedRows.forEach(function(row){
 			data.push(row.getData());
 		});
-
+		
 		return data;
 	}
-
-	getSelectedRows() {
+	
+	getSelectedRows(){
+		
 		var rows = [];
-
-		this.selectedRows.forEach(function (row) {
+		
+		this.selectedRows.forEach(function(row){
 			rows.push(row.getComponent());
 		});
-
+		
 		return rows;
 	}
-
-	_rowSelectionChanged(silent) {
-		if (this.headerCheckboxElement) {
-			if (this.selectedRows.length === 0) {
+	
+	_rowSelectionChanged(silent){
+		if(this.headerCheckboxElement){
+			if(this.selectedRows.length === 0){
 				this.headerCheckboxElement.checked = false;
 				this.headerCheckboxElement.indeterminate = false;
-			} else if (
-				this.table.rowManager.rows.length === this.selectedRows.length
-			) {
+			} else if(this.table.rowManager.rows.length === this.selectedRows.length){
 				this.headerCheckboxElement.checked = true;
 				this.headerCheckboxElement.indeterminate = false;
 			} else {
@@ -20479,37 +18406,33 @@ class SelectRow extends Module {
 				this.headerCheckboxElement.checked = false;
 			}
 		}
-
-		if (!silent) {
-			this.dispatchExternal(
-				"rowSelectionChanged",
-				this.getSelectedData(),
-				this.getSelectedRows()
-			);
+		
+		if(!silent){
+			this.dispatchExternal("rowSelectionChanged", this.getSelectedData(), this.getSelectedRows());
 		}
 	}
-
-	registerRowSelectCheckbox(row, element) {
-		if (!row._row.modules.select) {
+	
+	registerRowSelectCheckbox (row, element) {
+		if(!row._row.modules.select){
 			row._row.modules.select = {};
 		}
-
+		
 		row._row.modules.select.checkboxEl = element;
 	}
-
-	registerHeaderSelectCheckbox(element) {
+	
+	registerHeaderSelectCheckbox (element) {
 		this.headerCheckboxElement = element;
 	}
-
-	childRowSelection(row, select) {
+	
+	childRowSelection(row, select){
 		var children = this.table.modules.dataTree.getChildren(row, true);
-
-		if (select) {
-			for (let child of children) {
+		
+		if(select){
+			for(let child of children){
 				this._selectRow(child, true);
 			}
-		} else {
-			for (let child of children) {
+		}else {
+			for(let child of children){
 				this._deselectRow(child, true);
 			}
 		}
@@ -20519,7 +18442,7 @@ class SelectRow extends Module {
 SelectRow.moduleName = "selectRow";
 
 //sort numbers
-function number$1(a, b, aRow, bRow, column, dir, params) {
+function number$1(a, b, aRow, bRow, column, dir, params){
 	var alignEmptyValues = params.alignEmptyValues;
 	var decimal = params.decimalSeparator;
 	var thousand = params.thousandSeparator;
@@ -20528,12 +18451,12 @@ function number$1(a, b, aRow, bRow, column, dir, params) {
 	a = String(a);
 	b = String(b);
 
-	if (thousand) {
+	if(thousand){
 		a = a.split(thousand).join("");
 		b = b.split(thousand).join("");
 	}
 
-	if (decimal) {
+	if(decimal){
 		a = a.split(decimal).join(".");
 		b = b.split(decimal).join(".");
 	}
@@ -20542,20 +18465,17 @@ function number$1(a, b, aRow, bRow, column, dir, params) {
 	b = parseFloat(b);
 
 	//handle non numeric values
-	if (isNaN(a)) {
-		emptyAlign = isNaN(b) ? 0 : -1;
-	} else if (isNaN(b)) {
-		emptyAlign = 1;
-	} else {
+	if(isNaN(a)){
+		emptyAlign =  isNaN(b) ? 0 : -1;
+	}else if(isNaN(b)){
+		emptyAlign =  1;
+	}else {
 		//compare valid values
 		return a - b;
 	}
 
 	//fix empty values in position
-	if (
-		(alignEmptyValues === "top" && dir === "desc") ||
-		(alignEmptyValues === "bottom" && dir === "asc")
-	) {
+	if((alignEmptyValues === "top" && dir === "desc") || (alignEmptyValues === "bottom" && dir === "asc")){
 		emptyAlign *= -1;
 	}
 
@@ -20563,21 +18483,21 @@ function number$1(a, b, aRow, bRow, column, dir, params) {
 }
 
 //sort strings
-function string(a, b, aRow, bRow, column, dir, params) {
+function string(a, b, aRow, bRow, column, dir, params){
 	var alignEmptyValues = params.alignEmptyValues;
 	var emptyAlign = 0;
 	var locale;
 
 	//handle empty values
-	if (!a) {
-		emptyAlign = !b ? 0 : -1;
-	} else if (!b) {
-		emptyAlign = 1;
-	} else {
+	if(!a){
+		emptyAlign =  !b ? 0 : -1;
+	}else if(!b){
+		emptyAlign =  1;
+	}else {
 		//compare valid values
-		switch (typeof params.locale) {
+		switch(typeof params.locale){
 			case "boolean":
-				if (params.locale) {
+				if(params.locale){
 					locale = this.langLocale();
 				}
 				break;
@@ -20586,16 +18506,11 @@ function string(a, b, aRow, bRow, column, dir, params) {
 				break;
 		}
 
-		return String(a)
-			.toLowerCase()
-			.localeCompare(String(b).toLowerCase(), locale);
+		return String(a).toLowerCase().localeCompare(String(b).toLowerCase(), locale);
 	}
 
 	//fix empty values in position
-	if (
-		(alignEmptyValues === "top" && dir === "desc") ||
-		(alignEmptyValues === "bottom" && dir === "asc")
-	) {
+	if((alignEmptyValues === "top" && dir === "desc") || (alignEmptyValues === "bottom" && dir === "asc")){
 		emptyAlign *= -1;
 	}
 
@@ -20603,55 +18518,53 @@ function string(a, b, aRow, bRow, column, dir, params) {
 }
 
 //sort datetime
-function datetime$2(a, b, aRow, bRow, column, dir, params) {
+function datetime$2(a, b, aRow, bRow, column, dir, params){
 	var DT = window.DateTime || luxon.DateTime;
 	var format = params.format || "dd/MM/yyyy HH:mm:ss",
-		alignEmptyValues = params.alignEmptyValues,
-		emptyAlign = 0;
+	alignEmptyValues = params.alignEmptyValues,
+	emptyAlign = 0;
 
-	if (typeof DT != "undefined") {
-		if (!DT.isDateTime(a)) {
-			if (format === "iso") {
+	if(typeof DT != "undefined"){
+		if(!DT.isDateTime(a)){
+			if(format === "iso"){
 				a = DT.fromISO(String(a));
-			} else {
+			}else {
 				a = DT.fromFormat(String(a), format);
 			}
 		}
 
-		if (!DT.isDateTime(b)) {
-			if (format === "iso") {
+		if(!DT.isDateTime(b)){
+			if(format === "iso"){
 				b = DT.fromISO(String(b));
-			} else {
+			}else {
 				b = DT.fromFormat(String(b), format);
 			}
 		}
 
-		if (!a.isValid) {
+		if(!a.isValid){
 			emptyAlign = !b.isValid ? 0 : -1;
-		} else if (!b.isValid) {
-			emptyAlign = 1;
-		} else {
+		}else if(!b.isValid){
+			emptyAlign =  1;
+		}else {
 			//compare valid values
 			return a - b;
 		}
 
 		//fix empty values in position
-		if (
-			(alignEmptyValues === "top" && dir === "desc") ||
-			(alignEmptyValues === "bottom" && dir === "asc")
-		) {
+		if((alignEmptyValues === "top" && dir === "desc") || (alignEmptyValues === "bottom" && dir === "asc")){
 			emptyAlign *= -1;
 		}
 
 		return emptyAlign;
-	} else {
+
+	}else {
 		console.error("Sort Error - 'datetime' sorter is dependant on luxon.js");
 	}
 }
 
 //sort date
-function date$1(a, b, aRow, bRow, column, dir, params) {
-	if (!params.format) {
+function date$1(a, b, aRow, bRow, column, dir, params){
+	if(!params.format){
 		params.format = "dd/MM/yyyy";
 	}
 
@@ -20659,8 +18572,8 @@ function date$1(a, b, aRow, bRow, column, dir, params) {
 }
 
 //sort times
-function time$1(a, b, aRow, bRow, column, dir, params) {
-	if (!params.format) {
+function time$1(a, b, aRow, bRow, column, dir, params){
+	if(!params.format){
 		params.format = "HH:mm";
 	}
 
@@ -20668,7 +18581,7 @@ function time$1(a, b, aRow, bRow, column, dir, params) {
 }
 
 //sort booleans
-function boolean(a, b, aRow, bRow, column, dir, params) {
+function boolean(a, b, aRow, bRow, column, dir, params){
 	var el1 = a === true || a === "true" || a === "True" || a === 1 ? 1 : 0;
 	var el2 = b === true || b === "true" || b === "True" || b === 1 ? 1 : 0;
 
@@ -20676,38 +18589,37 @@ function boolean(a, b, aRow, bRow, column, dir, params) {
 }
 
 //sort if element contains any data
-function array(a, b, aRow, bRow, column, dir, params) {
+function array(a, b, aRow, bRow, column, dir, params){
 	var type = params.type || "length",
-		alignEmptyValues = params.alignEmptyValues,
-		emptyAlign = 0;
+	alignEmptyValues = params.alignEmptyValues,
+	emptyAlign = 0;
 
-	function calc(value) {
+	function calc(value){
 		var result;
 
-		switch (type) {
+		switch(type){
 			case "length":
 				result = value.length;
 				break;
 
 			case "sum":
-				result = value.reduce(function (c, d) {
+				result = value.reduce(function(c, d){
 					return c + d;
 				});
 				break;
 
 			case "max":
-				result = Math.max.apply(null, value);
+				result = Math.max.apply(null, value) ;
 				break;
 
 			case "min":
-				result = Math.min.apply(null, value);
+				result = Math.min.apply(null, value) ;
 				break;
 
 			case "avg":
-				result =
-					value.reduce(function (c, d) {
-						return c + d;
-					}) / value.length;
+				result = value.reduce(function(c, d){
+					return c + d;
+				}) / value.length;
 				break;
 		}
 
@@ -20715,19 +18627,16 @@ function array(a, b, aRow, bRow, column, dir, params) {
 	}
 
 	//handle non array values
-	if (!Array.isArray(a)) {
+	if(!Array.isArray(a)){
 		emptyAlign = !Array.isArray(b) ? 0 : -1;
-	} else if (!Array.isArray(b)) {
+	}else if(!Array.isArray(b)){
 		emptyAlign = 1;
-	} else {
+	}else {
 		return calc(b) - calc(a);
 	}
 
 	//fix empty values in position
-	if (
-		(alignEmptyValues === "top" && dir === "desc") ||
-		(alignEmptyValues === "bottom" && dir === "asc")
-	) {
+	if((alignEmptyValues === "top" && dir === "desc") || (alignEmptyValues === "bottom" && dir === "asc")){
 		emptyAlign *= -1;
 	}
 
@@ -20735,7 +18644,7 @@ function array(a, b, aRow, bRow, column, dir, params) {
 }
 
 //sort if element contains any data
-function exists(a, b, aRow, bRow, column, dir, params) {
+function exists(a, b, aRow, bRow, column, dir, params){
 	var el1 = typeof a == "undefined" ? 0 : 1;
 	var el2 = typeof b == "undefined" ? 0 : 1;
 
@@ -20743,41 +18652,36 @@ function exists(a, b, aRow, bRow, column, dir, params) {
 }
 
 //sort alpha numeric strings
-function alphanum(as, bs, aRow, bRow, column, dir, params) {
-	var a,
-		b,
-		a1,
-		b1,
-		i = 0,
-		L,
-		rx = /(\d+)|(\D+)/g,
-		rd = /\d/;
+function alphanum(as, bs, aRow, bRow, column, dir, params){
+	var a, b, a1, b1, i= 0, L, rx = /(\d+)|(\D+)/g, rd = /\d/;
 	var alignEmptyValues = params.alignEmptyValues;
 	var emptyAlign = 0;
 
 	//handle empty values
-	if (!as && as !== 0) {
-		emptyAlign = !bs && bs !== 0 ? 0 : -1;
-	} else if (!bs && bs !== 0) {
-		emptyAlign = 1;
-	} else {
-		if (isFinite(as) && isFinite(bs)) return as - bs;
+	if(!as && as!== 0){
+		emptyAlign =  !bs && bs!== 0 ? 0 : -1;
+	}else if(!bs && bs!== 0){
+		emptyAlign =  1;
+	}else {
+
+		if(isFinite(as) && isFinite(bs)) return as - bs;
 		a = String(as).toLowerCase();
 		b = String(bs).toLowerCase();
-		if (a === b) return 0;
-		if (!(rd.test(a) && rd.test(b))) return a > b ? 1 : -1;
+		if(a === b) return 0;
+		if(!(rd.test(a) && rd.test(b))) return a > b ? 1 : -1;
 		a = a.match(rx);
 		b = b.match(rx);
 		L = a.length > b.length ? b.length : a.length;
-		while (i < L) {
-			a1 = a[i];
-			b1 = b[i++];
-			if (a1 !== b1) {
-				if (isFinite(a1) && isFinite(b1)) {
-					if (a1.charAt(0) === "0") a1 = "." + a1;
-					if (b1.charAt(0) === "0") b1 = "." + b1;
+		while(i < L){
+			a1= a[i];
+			b1= b[i++];
+			if(a1 !== b1){
+				if(isFinite(a1) && isFinite(b1)){
+					if(a1.charAt(0) === "0") a1 = "." + a1;
+					if(b1.charAt(0) === "0") b1 = "." + b1;
 					return a1 - b1;
-				} else return a1 > b1 ? 1 : -1;
+				}
+				else return a1 > b1 ? 1 : -1;
 			}
 		}
 
@@ -20785,10 +18689,7 @@ function alphanum(as, bs, aRow, bRow, column, dir, params) {
 	}
 
 	//fix empty values in position
-	if (
-		(alignEmptyValues === "top" && dir === "desc") ||
-		(alignEmptyValues === "bottom" && dir === "asc")
-	) {
+	if((alignEmptyValues === "top" && dir === "desc") || (alignEmptyValues === "bottom" && dir === "asc")){
 		emptyAlign *= -1;
 	}
 
@@ -20796,19 +18697,20 @@ function alphanum(as, bs, aRow, bRow, column, dir, params) {
 }
 
 var defaultSorters = {
-	number: number$1,
-	string: string,
-	date: date$1,
-	time: time$1,
-	datetime: datetime$2,
-	boolean: boolean,
-	array: array,
-	exists: exists,
-	alphanum: alphanum,
+	number:number$1,
+	string:string,
+	date:date$1,
+	time:time$1,
+	datetime:datetime$2,
+	boolean:boolean,
+	array:array,
+	exists:exists,
+	alphanum:alphanum
 };
 
-class Sort extends Module {
-	constructor(table) {
+class Sort extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.sortList = []; //holder current sort
@@ -20819,10 +18721,7 @@ class Sort extends Module {
 		this.registerTableOption("initialSort", false); //initial sorting criteria
 		this.registerTableOption("columnHeaderSortMulti", true); //multiple or single column sorting
 		this.registerTableOption("sortOrderReverse", false); //reverse internal sort ordering
-		this.registerTableOption(
-			"headerSortElement",
-			"<div class='tabulator-arrow'></div>"
-		); //header sort element
+		this.registerTableOption("headerSortElement", "<div class='tabulator-arrow'></div>"); //header sort element
 
 		this.registerColumnOption("sorter");
 		this.registerColumnOption("sorterParams");
@@ -20830,9 +18729,10 @@ class Sort extends Module {
 		this.registerColumnOption("headerSort", true);
 		this.registerColumnOption("headerSortStartingDir");
 		this.registerColumnOption("headerSortTristate");
+
 	}
 
-	initialize() {
+	initialize(){
 		this.subscribe("column-layout", this.initializeColumn.bind(this));
 		this.subscribe("table-built", this.tableBuilt.bind(this));
 		this.registerDataHandler(this.sort.bind(this), 20);
@@ -20841,18 +18741,18 @@ class Sort extends Module {
 		this.registerTableFunction("getSorters", this.getSort.bind(this));
 		this.registerTableFunction("clearSort", this.clearSort.bind(this));
 
-		if (this.table.options.sortMode === "remote") {
+		if(this.table.options.sortMode === "remote"){
 			this.subscribe("data-params", this.remoteSortParams.bind(this));
 		}
 	}
 
-	tableBuilt() {
-		if (this.table.options.initialSort) {
+	tableBuilt(){
+		if(this.table.options.initialSort){
 			this.setSort(this.table.options.initialSort);
 		}
 	}
 
-	remoteSortParams(data, config, silent, params) {
+	remoteSortParams(data, config, silent, params){
 		var sorters = this.getSort();
 
 		sorters.forEach((item) => {
@@ -20864,41 +18764,40 @@ class Sort extends Module {
 		return params;
 	}
 
+
 	///////////////////////////////////
 	///////// Table Functions /////////
 	///////////////////////////////////
 
-	userSetSort(sortList, dir) {
+	userSetSort(sortList, dir){
 		this.setSort(sortList, dir);
 		// this.table.rowManager.sorterRefresh();
 		this.refreshSort();
 	}
 
-	clearSort() {
+	clearSort(){
 		this.clear();
 		// this.table.rowManager.sorterRefresh();
 		this.refreshSort();
 	}
+
 
 	///////////////////////////////////
 	///////// Internal Logic //////////
 	///////////////////////////////////
 
 	//initialize column header for sorting
-	initializeColumn(column) {
+	initializeColumn(column){
 		var sorter = false,
-			colEl,
-			arrowEl;
+		colEl,
+		arrowEl;
 
-		switch (typeof column.definition.sorter) {
+		switch(typeof column.definition.sorter){
 			case "string":
-				if (Sort.sorters[column.definition.sorter]) {
+				if(Sort.sorters[column.definition.sorter]){
 					sorter = Sort.sorters[column.definition.sorter];
-				} else {
-					console.warn(
-						"Sort Error - No such sorter found: ",
-						column.definition.sorter
-					);
+				}else {
+					console.warn("Sort Error - No such sorter found: ", column.definition.sorter);
 				}
 				break;
 
@@ -20908,22 +18807,23 @@ class Sort extends Module {
 		}
 
 		column.modules.sort = {
-			sorter: sorter,
-			dir: "none",
-			params: column.definition.sorterParams || {},
-			startingDir: column.definition.headerSortStartingDir || "asc",
+			sorter:sorter, dir:"none",
+			params:column.definition.sorterParams || {},
+			startingDir:column.definition.headerSortStartingDir || "asc",
 			tristate: column.definition.headerSortTristate,
 		};
 
-		if (column.definition.headerSort !== false) {
+		if(column.definition.headerSort !== false){
+
 			colEl = column.getElement();
 
 			colEl.classList.add("tabulator-sortable");
 
+
 			arrowEl = document.createElement("div");
 			arrowEl.classList.add("tabulator-col-sorter");
 
-			switch (this.table.options.headerSortElement) {
+			switch(this.table.options.headerSortElement){
 				case "function":
 					//do nothing
 					break;
@@ -20931,7 +18831,7 @@ class Sort extends Module {
 				case "object":
 					arrowEl.appendChild(this.table.options.headerSortElement);
 					break;
-
+					
 				default:
 					arrowEl.innerHTML = this.table.options.headerSortElement;
 			}
@@ -20946,22 +18846,22 @@ class Sort extends Module {
 			//sort on click
 			colEl.addEventListener("click", (e) => {
 				var dir = "",
-					sorters = [],
-					match = false;
+				sorters=[],
+				match = false;
 
-				if (column.modules.sort) {
-					if (column.modules.sort.tristate) {
-						if (column.modules.sort.dir == "none") {
+				if(column.modules.sort){
+					if(column.modules.sort.tristate){
+						if(column.modules.sort.dir == "none"){
 							dir = column.modules.sort.startingDir;
-						} else {
-							if (column.modules.sort.dir == column.modules.sort.startingDir) {
+						}else {
+							if(column.modules.sort.dir == column.modules.sort.startingDir){
 								dir = column.modules.sort.dir == "asc" ? "desc" : "asc";
-							} else {
+							}else {
 								dir = "none";
 							}
 						}
-					} else {
-						switch (column.modules.sort.dir) {
+					}else {
+						switch(column.modules.sort.dir){
 							case "asc":
 								dir = "desc";
 								break;
@@ -20975,40 +18875,36 @@ class Sort extends Module {
 						}
 					}
 
-					if (
-						this.table.options.columnHeaderSortMulti &&
-						(e.shiftKey || e.ctrlKey)
-					) {
+					if (this.table.options.columnHeaderSortMulti && (e.shiftKey || e.ctrlKey)) {
 						sorters = this.getSort();
 
 						match = sorters.findIndex((sorter) => {
 							return sorter.field === column.getField();
 						});
 
-						if (match > -1) {
+						if(match > -1){
 							sorters[match].dir = dir;
 
-							if (match != sorters.length - 1) {
-								match = sorters.splice(match, 1)[0];
-								if (dir != "none") {
-									sorters.push(match);
-								}
+							match = sorters.splice(match, 1)[0];
+							if(dir != "none"){
+								sorters.push(match);
 							}
-						} else {
-							if (dir != "none") {
-								sorters.push({ column: column, dir: dir });
+						}else {
+							if(dir != "none"){
+								sorters.push({column:column, dir:dir});
 							}
 						}
 
 						//add to existing sort
 						this.setSort(sorters);
-					} else {
-						if (dir == "none") {
+					}else {
+						if(dir == "none"){
 							this.clear();
-						} else {
+						}else {
 							//sort by column only
 							this.setSort(column, dir);
 						}
+
 					}
 
 					// this.table.rowManager.sorterRefresh(!this.sortList.length);
@@ -21018,10 +18914,10 @@ class Sort extends Module {
 		}
 	}
 
-	refreshSort() {
-		if (this.table.options.sortMode === "remote") {
+	refreshSort(){
+		if(this.table.options.sortMode === "remote"){
 			this.reloadData(null, false, false);
-		} else {
+		}else {
 			this.refreshData(true);
 		}
 
@@ -21031,24 +18927,20 @@ class Sort extends Module {
 	}
 
 	//check if the sorters have changed since last use
-	hasChanged() {
+	hasChanged(){
 		var changed = this.changed;
 		this.changed = false;
 		return changed;
 	}
 
 	//return current sorters
-	getSort() {
+	getSort(){
 		var self = this,
-			sorters = [];
+		sorters = [];
 
-		self.sortList.forEach(function (item) {
-			if (item.column) {
-				sorters.push({
-					column: item.column.getComponent(),
-					field: item.column.getField(),
-					dir: item.dir,
-				});
+		self.sortList.forEach(function(item){
+			if(item.column){
+				sorters.push({column:item.column.getComponent(), field:item.column.getField(), dir:item.dir});
 			}
 		});
 
@@ -21056,29 +18948,27 @@ class Sort extends Module {
 	}
 
 	//change sort list and trigger sort
-	setSort(sortList, dir) {
+	setSort(sortList, dir){
 		var self = this,
-			newSortList = [];
+		newSortList = [];
 
-		if (!Array.isArray(sortList)) {
-			sortList = [{ column: sortList, dir: dir }];
+		if(!Array.isArray(sortList)){
+			sortList = [{column: sortList, dir:dir}];
 		}
 
-		sortList.forEach(function (item) {
+		sortList.forEach(function(item){
 			var column;
 
 			column = self.table.columnManager.findColumn(item.column);
 
-			if (column) {
+			if(column){
 				item.column = column;
 				newSortList.push(item);
 				self.changed = true;
-			} else {
-				console.warn(
-					"Sort Warning - Sort field does not exist and is being ignored: ",
-					item.column
-				);
+			}else {
+				console.warn("Sort Warning - Sort field does not exist and is being ignored: ", item.column);
 			}
+
 		});
 
 		self.sortList = newSortList;
@@ -21087,25 +18977,25 @@ class Sort extends Module {
 	}
 
 	//clear sorters
-	clear() {
+	clear(){
 		this.setSort([]);
 	}
 
 	//find appropriate sorter for column
-	findSorter(column) {
+	findSorter(column){
 		var row = this.table.rowManager.activeRows[0],
-			sorter = "string",
-			field,
-			value;
+		sorter = "string",
+		field, value;
 
-		if (row) {
+		if(row){
 			row = row.getData();
 			field = column.getField();
 
-			if (field) {
+			if(field){
+
 				value = column.getFieldValue(row);
 
-				switch (typeof value) {
+				switch(typeof value){
 					case "undefined":
 						sorter = "string";
 						break;
@@ -21115,10 +19005,10 @@ class Sort extends Module {
 						break;
 
 					default:
-						if (!isNaN(value) && value !== "") {
+						if(!isNaN(value) && value !== ""){
 							sorter = "number";
-						} else {
-							if (value.match(/((^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+$/i)) {
+						}else {
+							if(value.match(/((^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+$/i)){
 								sorter = "alphanum";
 							}
 						}
@@ -21131,38 +19021,35 @@ class Sort extends Module {
 	}
 
 	//work through sort list sorting data
-	sort(data) {
+	sort(data){
 		var self = this,
-			sortList = this.table.options.sortOrderReverse
-				? self.sortList.slice().reverse()
-				: self.sortList,
-			sortListActual = [],
-			rowComponents = [];
+		sortList = this.table.options.sortOrderReverse ? self.sortList.slice().reverse() : self.sortList,
+		sortListActual = [],
+		rowComponents = [];
 
-		if (this.subscribedExternal("dataSorting")) {
+		if(this.subscribedExternal("dataSorting")){
 			this.dispatchExternal("dataSorting", self.getSort());
 		}
 
 		self.clearColumnHeaders();
 
-		if (this.table.options.sortMode !== "remote") {
+		if(this.table.options.sortMode !== "remote"){
+
 			//build list of valid sorters and trigger column specific callbacks before sort begins
-			sortList.forEach(function (item, i) {
+			sortList.forEach(function(item, i){
 				var sortObj;
 
-				if (item.column) {
+				if(item.column){
 					sortObj = item.column.modules.sort;
 
-					if (sortObj) {
+					if(sortObj){
+
 						//if no sorter has been defined, take a guess
-						if (!sortObj.sorter) {
+						if(!sortObj.sorter){
 							sortObj.sorter = self.findSorter(item.column);
 						}
 
-						item.params =
-							typeof sortObj.params === "function"
-								? sortObj.params(item.column.getComponent(), item.dir)
-								: sortObj.params;
+						item.params = typeof sortObj.params === "function" ? sortObj.params(item.column.getComponent(), item.dir) : sortObj.params;
 
 						sortListActual.push(item);
 					}
@@ -21175,13 +19062,14 @@ class Sort extends Module {
 			if (sortListActual.length) {
 				self._sortItems(data, sortListActual);
 			}
-		} else {
-			sortList.forEach(function (item, i) {
+
+		}else {
+			sortList.forEach(function(item, i){
 				self.setColumnHeader(item.column, item.dir);
 			});
 		}
 
-		if (this.subscribedExternal("dataSorted")) {
+		if(this.subscribedExternal("dataSorted")){
 			data.forEach((row) => {
 				rowComponents.push(row.getComponent());
 			});
@@ -21193,9 +19081,9 @@ class Sort extends Module {
 	}
 
 	//clear sort arrows on columns
-	clearColumnHeaders() {
+	clearColumnHeaders(){
 		this.table.columnManager.getRealColumns().forEach((column) => {
-			if (column.modules.sort) {
+			if(column.modules.sort){
 				column.modules.sort.dir = "none";
 				column.getElement().setAttribute("aria-sort", "none");
 				this.setColumnHeaderSortIcon(column, "none");
@@ -21204,54 +19092,42 @@ class Sort extends Module {
 	}
 
 	//set the column header sort direction
-	setColumnHeader(column, dir) {
+	setColumnHeader(column, dir){
 		column.modules.sort.dir = dir;
-		column
-			.getElement()
-			.setAttribute("aria-sort", dir === "asc" ? "ascending" : "descending");
+		column.getElement().setAttribute("aria-sort", dir === "asc" ? "ascending" : "descending");
 		this.setColumnHeaderSortIcon(column, dir);
 	}
 
-	setColumnHeaderSortIcon(column, dir) {
+	setColumnHeaderSortIcon(column, dir){
 		var sortEl = column.modules.sort.element,
-			arrowEl;
+		arrowEl;
 
-		if (typeof this.table.options.headerSortElement === "function") {
-			while (sortEl.firstChild) sortEl.removeChild(sortEl.firstChild);
+		if(column.definition.headerSort && typeof this.table.options.headerSortElement === "function"){
+			while(sortEl.firstChild) sortEl.removeChild(sortEl.firstChild);
 
-			arrowEl = this.table.options.headerSortElement.call(
-				this.table,
-				column.getComponent(),
-				dir
-			);
-
-			if (typeof arrowEl === "object") {
+			arrowEl = this.table.options.headerSortElement.call(this.table, column.getComponent(), dir);
+			
+			if(typeof arrowEl === "object"){
 				sortEl.appendChild(arrowEl);
-			} else {
+			}else {
 				sortEl.innerHTML = arrowEl;
 			}
 		}
 	}
 
 	//sort each item in sort list
-	_sortItems(data, sortList) {
+	_sortItems(data, sortList){
 		var sorterCount = sortList.length - 1;
 
 		data.sort((a, b) => {
 			var result;
 
-			for (var i = sorterCount; i >= 0; i--) {
+			for(var i = sorterCount; i>= 0; i--){
 				let sortItem = sortList[i];
 
-				result = this._sortRow(
-					a,
-					b,
-					sortItem.column,
-					sortItem.dir,
-					sortItem.params
-				);
+				result = this._sortRow(a, b, sortItem.column, sortItem.dir, sortItem.params);
 
-				if (result !== 0) {
+				if(result !== 0){
 					break;
 				}
 			}
@@ -21261,7 +19137,7 @@ class Sort extends Module {
 	}
 
 	//process individual rows for a sort function on active data
-	_sortRow(a, b, column, dir, params) {
+	_sortRow(a, b, column, dir, params){
 		var el1Comp, el2Comp;
 
 		//switch elements depending on search direction
@@ -21277,16 +19153,7 @@ class Sort extends Module {
 		el1Comp = el1.getComponent();
 		el2Comp = el2.getComponent();
 
-		return column.modules.sort.sorter.call(
-			this,
-			a,
-			b,
-			el1Comp,
-			el2Comp,
-			column.getComponent(),
-			dir,
-			params
-		);
+		return column.modules.sort.sorter.call(this, a, b, el1Comp, el2Comp, column.getComponent(), dir, params);
 	}
 }
 
@@ -21295,142 +19162,125 @@ Sort.moduleName = "sort";
 //load defaults
 Sort.sorters = defaultSorters;
 
-class Tooltip extends Module {
-	constructor(table) {
+class Tooltip extends Module{
+	
+	constructor(table){
 		super(table);
-
-		(this.tooltipSubscriber = null),
-			(this.headerSubscriber = null),
-			(this.timeout = null);
+		
+		this.tooltipSubscriber = null,
+		this.headerSubscriber = null,
+		
+		this.timeout = null;
 		this.popupInstance = null;
-
-		this.registerTableOption("tooltipGenerationMode", undefined); //deprecated
-		this.registerTableOption("tooltipDelay", 300);
-
+		
+		this.registerTableOption("tooltipGenerationMode", undefined);  //deprecated
+		this.registerTableOption("tooltipDelay", 300); 
+		
 		this.registerColumnOption("tooltip");
 		this.registerColumnOption("headerTooltip");
 	}
-
-	initialize() {
+	
+	initialize(){
 		this.deprecatedOptionsCheck();
-
+		
 		this.subscribe("column-init", this.initializeColumn.bind(this));
 	}
-
-	deprecatedOptionsCheck() {
-		this.deprecationCheckMsg(
-			"tooltipGenerationMode",
-			"This option is no longer needed as tooltips are always generated on hover now"
-		);
-	}
-
-	initializeColumn(column) {
-		if (column.definition.headerTooltip && !this.headerSubscriber) {
+	
+	deprecatedOptionsCheck(){
+		this.deprecationCheckMsg("tooltipGenerationMode", "This option is no longer needed as tooltips are always generated on hover now");
+	}	
+	
+	initializeColumn(column){
+		if(column.definition.headerTooltip && !this.headerSubscriber){
 			this.headerSubscriber = true;
-
-			this.subscribe(
-				"column-mousemove",
-				this.mousemoveCheck.bind(this, "headerTooltip")
-			);
-			this.subscribe(
-				"column-mouseout",
-				this.mouseoutCheck.bind(this, "headerTooltip")
-			);
+			
+			this.subscribe("column-mousemove", this.mousemoveCheck.bind(this, "headerTooltip"));
+			this.subscribe("column-mouseout", this.mouseoutCheck.bind(this, "headerTooltip"));
 		}
-
-		if (column.definition.tooltip && !this.tooltipSubscriber) {
+		
+		if(column.definition.tooltip && !this.tooltipSubscriber){
 			this.tooltipSubscriber = true;
-
-			this.subscribe(
-				"cell-mousemove",
-				this.mousemoveCheck.bind(this, "tooltip")
-			);
+			
+			this.subscribe("cell-mousemove", this.mousemoveCheck.bind(this, "tooltip"));
 			this.subscribe("cell-mouseout", this.mouseoutCheck.bind(this, "tooltip"));
 		}
 	}
-
-	mousemoveCheck(action, e, component) {
-		var tooltip =
-			action === "tooltip"
-				? component.column.definition.tooltip
-				: component.definition.headerTooltip;
-
-		if (tooltip) {
+	
+	mousemoveCheck(action, e, component){
+		var tooltip = action === "tooltip" ? component.column.definition.tooltip : component.definition.headerTooltip;
+		
+		if(tooltip){
 			this.clearPopup();
-			this.timeout = setTimeout(
-				this.loadTooltip.bind(this, e, component, tooltip),
-				this.table.options.tooltipDelay
-			);
+			this.timeout = setTimeout(this.loadTooltip.bind(this, e, component, tooltip), this.table.options.tooltipDelay);
 		}
 	}
 
-	mouseoutCheck(action, e, component) {
-		if (!this.popupInstance) {
+	mouseoutCheck(action, e, component){
+		if(!this.popupInstance){
 			this.clearPopup();
 		}
 	}
-
-	clearPopup(action, e, component) {
+	
+	clearPopup(action, e, component){
 		clearTimeout(this.timeout);
 		this.timeout = null;
-
-		if (this.popupInstance) {
+		
+		if(this.popupInstance){
 			this.popupInstance.hide();
 		}
 	}
-
-	loadTooltip(e, component, tooltip) {
+	
+	loadTooltip(e, component, tooltip){
 		var contentsEl, renderedCallback, coords;
 
-		function onRendered(callback) {
+		function onRendered(callback){
 			renderedCallback = callback;
 		}
-
-		if (typeof tooltip === "function") {
+		
+		if(typeof tooltip === "function"){
 			tooltip = tooltip(e, component.getComponent(), onRendered);
 		}
-
-		if (tooltip instanceof HTMLElement) {
+		
+		if(tooltip instanceof HTMLElement){
 			contentsEl = tooltip;
-		} else {
+		}else {
 			contentsEl = document.createElement("div");
-
-			if (tooltip === true) {
-				if (component instanceof Cell) {
+			
+			if(tooltip === true){
+				if(component instanceof Cell){
 					tooltip = component.value;
-				} else {
-					if (component.definition.field) {
+				}else {
+					if(component.definition.field){
 						this.langBind("columns|" + component.definition.field, (value) => {
-							contentsEl.innerHTML = tooltip =
-								value || component.definition.title;
+							contentsEl.innerHTML = tooltip = value || component.definition.title;
 						});
-					} else {
+					}else {
 						tooltip = component.definition.title;
 					}
 				}
 			}
-
+			
 			contentsEl.innerHTML = tooltip;
 		}
-
-		if (tooltip || tooltip === 0 || tooltip === false) {
+		
+		if(tooltip || tooltip === 0 || tooltip === false){
 			contentsEl.classList.add("tabulator-tooltip");
 
-			contentsEl.addEventListener("mousemove", (e) => e.preventDefault());
-
+			contentsEl.addEventListener("mousemove", e => e.preventDefault());
+			
 			this.popupInstance = this.popup(contentsEl);
-
-			if (typeof renderedCallback === "function") {
+			
+			if(typeof renderedCallback === "function"){
 				this.popupInstance.renderCallback(renderedCallback);
 			}
 
 			coords = this.popupInstance.containerEventCoords(e);
-
+			
 			this.popupInstance.show(coords.x + 15, coords.y + 15).hideOnBlur(() => {
 				this.dispatchExternal("TooltipClosed", component.getComponent());
 				this.popupInstance = null;
 			});
-
+			
 			this.dispatchExternal("TooltipOpened", component.getComponent());
 		}
 	}
@@ -21440,8 +19290,8 @@ Tooltip.moduleName = "tooltip";
 
 var defaultValidators = {
 	//is integer
-	integer: function (cell, value, parameters) {
-		if (value === "" || value === null || typeof value === "undefined") {
+	integer: function(cell, value, parameters){
+		if(value === "" || value === null || typeof value === "undefined"){
 			return true;
 		}
 
@@ -21451,91 +19301,88 @@ var defaultValidators = {
 	},
 
 	//is float
-	float: function (cell, value, parameters) {
-		if (value === "" || value === null || typeof value === "undefined") {
+	float: function(cell, value, parameters){
+		if(value === "" || value === null || typeof value === "undefined"){
 			return true;
 		}
-
+		
 		value = Number(value);
 
 		return !isNaN(value) && isFinite(value) && value % 1 !== 0;
 	},
 
 	//must be a number
-	numeric: function (cell, value, parameters) {
-		if (value === "" || value === null || typeof value === "undefined") {
+	numeric: function(cell, value, parameters){
+		if(value === "" || value === null || typeof value === "undefined"){
 			return true;
 		}
 		return !isNaN(value);
 	},
 
 	//must be a string
-	string: function (cell, value, parameters) {
-		if (value === "" || value === null || typeof value === "undefined") {
+	string: function(cell, value, parameters){
+		if(value === "" || value === null || typeof value === "undefined"){
 			return true;
 		}
 		return isNaN(value);
 	},
 
 	//maximum value
-	max: function (cell, value, parameters) {
-		if (value === "" || value === null || typeof value === "undefined") {
+	max: function(cell, value, parameters){
+		if(value === "" || value === null || typeof value === "undefined"){
 			return true;
 		}
 		return parseFloat(value) <= parameters;
 	},
 
 	//minimum value
-	min: function (cell, value, parameters) {
-		if (value === "" || value === null || typeof value === "undefined") {
+	min: function(cell, value, parameters){
+		if(value === "" || value === null || typeof value === "undefined"){
 			return true;
 		}
 		return parseFloat(value) >= parameters;
 	},
 
 	//starts with  value
-	starts: function (cell, value, parameters) {
-		if (value === "" || value === null || typeof value === "undefined") {
+	starts: function(cell, value, parameters){
+		if(value === "" || value === null || typeof value === "undefined"){
 			return true;
 		}
-		return String(value)
-			.toLowerCase()
-			.startsWith(String(parameters).toLowerCase());
+		return String(value).toLowerCase().startsWith(String(parameters).toLowerCase());
 	},
 
 	//ends with  value
-	ends: function (cell, value, parameters) {
-		if (value === "" || value === null || typeof value === "undefined") {
+	ends: function(cell, value, parameters){
+		if(value === "" || value === null || typeof value === "undefined"){
 			return true;
 		}
-		return String(value)
-			.toLowerCase()
-			.endsWith(String(parameters).toLowerCase());
+		return String(value).toLowerCase().endsWith(String(parameters).toLowerCase());
 	},
 
+
 	//minimum string length
-	minLength: function (cell, value, parameters) {
-		if (value === "" || value === null || typeof value === "undefined") {
+	minLength: function(cell, value, parameters){
+		if(value === "" || value === null || typeof value === "undefined"){
 			return true;
 		}
 		return String(value).length >= parameters;
 	},
 
 	//maximum string length
-	maxLength: function (cell, value, parameters) {
-		if (value === "" || value === null || typeof value === "undefined") {
+	maxLength: function(cell, value, parameters){
+		if(value === "" || value === null || typeof value === "undefined"){
 			return true;
 		}
 		return String(value).length <= parameters;
 	},
 
 	//in provided value list
-	in: function (cell, value, parameters) {
-		if (value === "" || value === null || typeof value === "undefined") {
+	in: function(cell, value, parameters){
+		if(value === "" || value === null || typeof value === "undefined"){
 			return true;
 		}
 
-		if (typeof parameters == "string") {
+		if(typeof parameters == "string"){
 			parameters = parameters.split("|");
 		}
 
@@ -21543,8 +19390,8 @@ var defaultValidators = {
 	},
 
 	//must match provided regex
-	regex: function (cell, value, parameters) {
-		if (value === "" || value === null || typeof value === "undefined") {
+	regex: function(cell, value, parameters){
+		if(value === "" || value === null || typeof value === "undefined"){
 			return true;
 		}
 		var reg = new RegExp(parameters);
@@ -21553,8 +19400,8 @@ var defaultValidators = {
 	},
 
 	//value must be unique in this column
-	unique: function (cell, value, parameters) {
-		if (value === "" || value === null || typeof value === "undefined") {
+	unique: function(cell, value, parameters){
+		if(value === "" || value === null || typeof value === "undefined"){
 			return true;
 		}
 		var unique = true;
@@ -21562,11 +19409,11 @@ var defaultValidators = {
 		var cellData = cell.getData();
 		var column = cell.getColumn()._getSelf();
 
-		this.table.rowManager.rows.forEach(function (row) {
+		this.table.rowManager.rows.forEach(function(row){
 			var data = row.getData();
 
-			if (data !== cellData) {
-				if (value == column.getFieldValue(data)) {
+			if(data !== cellData){
+				if(value == column.getFieldValue(data)){
 					unique = false;
 				}
 			}
@@ -21576,330 +19423,300 @@ var defaultValidators = {
 	},
 
 	//must have a value
-	required: function (cell, value, parameters) {
+	required:function(cell, value, parameters){
 		return value !== "" && value !== null && typeof value !== "undefined";
 	},
 };
 
-class Validate extends Module {
-	constructor(table) {
+class Validate extends Module{
+	
+	constructor(table){
 		super(table);
-
+		
 		this.invalidCells = [];
-
+		
 		this.registerTableOption("validationMode", "blocking");
-
+		
 		this.registerColumnOption("validator");
-
-		this.registerTableFunction(
-			"getInvalidCells",
-			this.getInvalidCells.bind(this)
-		);
-		this.registerTableFunction(
-			"clearCellValidation",
-			this.userClearCellValidation.bind(this)
-		);
+		
+		this.registerTableFunction("getInvalidCells", this.getInvalidCells.bind(this));
+		this.registerTableFunction("clearCellValidation", this.userClearCellValidation.bind(this));
 		this.registerTableFunction("validate", this.userValidate.bind(this));
-
-		this.registerComponentFunction(
-			"cell",
-			"isValid",
-			this.cellIsValid.bind(this)
-		);
-		this.registerComponentFunction(
-			"cell",
-			"clearValidation",
-			this.clearValidation.bind(this)
-		);
-		this.registerComponentFunction(
-			"cell",
-			"validate",
-			this.cellValidate.bind(this)
-		);
-
-		this.registerComponentFunction(
-			"column",
-			"validate",
-			this.columnValidate.bind(this)
-		);
-		this.registerComponentFunction(
-			"row",
-			"validate",
-			this.rowValidate.bind(this)
-		);
+		
+		this.registerComponentFunction("cell", "isValid", this.cellIsValid.bind(this));
+		this.registerComponentFunction("cell", "clearValidation", this.clearValidation.bind(this));
+		this.registerComponentFunction("cell", "validate", this.cellValidate.bind(this));
+		
+		this.registerComponentFunction("column", "validate", this.columnValidate.bind(this));
+		this.registerComponentFunction("row", "validate", this.rowValidate.bind(this));
 	}
-
-	initialize() {
+	
+	
+	initialize(){
 		this.subscribe("cell-delete", this.clearValidation.bind(this));
 		this.subscribe("column-layout", this.initializeColumnCheck.bind(this));
-
+		
 		this.subscribe("edit-success", this.editValidate.bind(this));
 		this.subscribe("edit-editor-clear", this.editorClear.bind(this));
 		this.subscribe("edit-edited-clear", this.editedClear.bind(this));
 	}
-
+	
 	///////////////////////////////////
 	///////// Event Handling //////////
 	///////////////////////////////////
-
-	editValidate(cell, value, previousValue) {
-		var valid =
-			this.table.options.validationMode !== "manual"
-				? this.validate(cell.column.modules.validate, cell, value)
-				: true;
-
+	
+	editValidate(cell, value, previousValue){
+		var valid = this.table.options.validationMode !== "manual" ? this.validate(cell.column.modules.validate, cell, value) : true;
+		
 		// allow time for editor to make render changes then style cell
-		if (valid !== true) {
+		if(valid !== true){
 			setTimeout(() => {
 				cell.getElement().classList.add("tabulator-validation-fail");
-				this.dispatchExternal(
-					"validationFailed",
-					cell.getComponent(),
-					value,
-					valid
-				);
+				this.dispatchExternal("validationFailed", cell.getComponent(), value, valid);
 			});
 		}
-
+		
 		return valid;
 	}
-
-	editorClear(cell, cancelled) {
-		if (cancelled) {
-			if (cell.column.modules.validate) {
+	
+	editorClear(cell, cancelled){
+		if(cancelled){
+			if(cell.column.modules.validate){
 				this.cellValidate(cell);
 			}
 		}
 
 		cell.getElement().classList.remove("tabulator-validation-fail");
 	}
-
-	editedClear(cell) {
-		if (cell.modules.validate) {
+	
+	editedClear(cell){
+		if(cell.modules.validate){
 			cell.modules.validate.invalid = false;
 		}
 	}
-
+	
 	///////////////////////////////////
 	////////// Cell Functions /////////
 	///////////////////////////////////
-
-	cellIsValid(cell) {
-		return cell.modules.validate ? cell.modules.validate.invalid || true : true;
+	
+	cellIsValid(cell){
+		return cell.modules.validate ? (cell.modules.validate.invalid || true) : true;
 	}
-
-	cellValidate(cell) {
+	
+	cellValidate(cell){
 		return this.validate(cell.column.modules.validate, cell, cell.getValue());
 	}
-
+	
 	///////////////////////////////////
 	///////// Column Functions ////////
 	///////////////////////////////////
-
-	columnValidate(column) {
+	
+	columnValidate(column){
 		var invalid = [];
-
+		
 		column.cells.forEach((cell) => {
-			if (this.cellValidate(cell) !== true) {
+			if(this.cellValidate(cell) !== true){
 				invalid.push(cell.getComponent());
 			}
 		});
-
+		
 		return invalid.length ? invalid : true;
 	}
-
+	
 	///////////////////////////////////
 	////////// Row Functions //////////
 	///////////////////////////////////
-
-	rowValidate(row) {
+	
+	rowValidate(row){
 		var invalid = [];
-
+		
 		row.cells.forEach((cell) => {
-			if (this.cellValidate(cell) !== true) {
+			if(this.cellValidate(cell) !== true){
 				invalid.push(cell.getComponent());
 			}
 		});
-
+		
 		return invalid.length ? invalid : true;
 	}
-
+	
 	///////////////////////////////////
 	///////// Table Functions /////////
 	///////////////////////////////////
-
-	userClearCellValidation(cells) {
-		if (!cells) {
+	
+	
+	userClearCellValidation(cells){
+		if(!cells){
 			cells = this.getInvalidCells();
 		}
-
-		if (!Array.isArray(cells)) {
+		
+		if(!Array.isArray(cells)){
 			cells = [cells];
 		}
-
+		
 		cells.forEach((cell) => {
 			this.clearValidation(cell._getSelf());
 		});
 	}
-
-	userValidate(cells) {
+	
+	userValidate(cells){
 		var output = [];
-
+		
 		//clear row data
 		this.table.rowManager.rows.forEach((row) => {
 			row = row.getComponent();
-
+			
 			var valid = row.validate();
-
-			if (valid !== true) {
+			
+			if(valid !== true){
 				output = output.concat(valid);
 			}
 		});
-
+		
 		return output.length ? output : true;
 	}
-
+	
 	///////////////////////////////////
 	///////// Internal Logic //////////
 	///////////////////////////////////
-
-	initializeColumnCheck(column) {
-		if (typeof column.definition.validator !== "undefined") {
+	
+	initializeColumnCheck(column){
+		if(typeof column.definition.validator !== "undefined"){
 			this.initializeColumn(column);
 		}
 	}
-
+	
 	//validate
-	initializeColumn(column) {
+	initializeColumn(column){
 		var self = this,
-			config = [],
-			validator;
-
-		if (column.definition.validator) {
-			if (Array.isArray(column.definition.validator)) {
+		config = [],
+		validator;
+		
+		if(column.definition.validator){
+			
+			if(Array.isArray(column.definition.validator)){
 				column.definition.validator.forEach((item) => {
 					validator = self._extractValidator(item);
-
-					if (validator) {
+					
+					if(validator){
 						config.push(validator);
 					}
 				});
-			} else {
+				
+			}else {
 				validator = this._extractValidator(column.definition.validator);
-
-				if (validator) {
+				
+				if(validator){
 					config.push(validator);
 				}
 			}
-
+			
 			column.modules.validate = config.length ? config : false;
 		}
 	}
-
-	_extractValidator(value) {
+	
+	_extractValidator(value){
 		var type, params, pos;
-
-		switch (typeof value) {
+		
+		switch(typeof value){
 			case "string":
-				pos = value.indexOf(":");
-
-				if (pos > -1) {
-					type = value.substring(0, pos);
-					params = value.substring(pos + 1);
-				} else {
+				pos = value.indexOf(':');
+			
+				if(pos > -1){
+					type = value.substring(0,pos);
+					params = value.substring(pos+1);
+				}else {
 					type = value;
 				}
-
+			
 				return this._buildValidator(type, params);
-
+			
 			case "function":
 				return this._buildValidator(value);
-
+			
 			case "object":
 				return this._buildValidator(value.type, value.parameters);
 		}
 	}
-
-	_buildValidator(type, params) {
+	
+	_buildValidator(type, params){
+		
 		var func = typeof type == "function" ? type : Validate.validators[type];
-
-		if (!func) {
-			console.warn(
-				"Validator Setup Error - No matching validator found:",
-				type
-			);
+		
+		if(!func){
+			console.warn("Validator Setup Error - No matching validator found:", type);
 			return false;
-		} else {
+		}else {
 			return {
-				type: typeof type == "function" ? "function" : type,
-				func: func,
-				params: params,
+				type:typeof type == "function" ? "function" : type,
+				func:func,
+				params:params,
 			};
 		}
 	}
-
-	validate(validators, cell, value) {
+	
+	validate(validators, cell, value){
 		var self = this,
-			failedValidators = [],
-			invalidIndex = this.invalidCells.indexOf(cell);
-
-		if (validators) {
+		failedValidators = [],
+		invalidIndex = this.invalidCells.indexOf(cell);
+		
+		if(validators){
 			validators.forEach((item) => {
-				if (!item.func.call(self, cell.getComponent(), value, item.params)) {
+				if(!item.func.call(self, cell.getComponent(), value, item.params)){
 					failedValidators.push({
-						type: item.type,
-						parameters: item.params,
+						type:item.type,
+						parameters:item.params
 					});
 				}
 			});
 		}
-
-		if (!cell.modules.validate) {
+		
+		if(!cell.modules.validate){
 			cell.modules.validate = {};
 		}
-
-		if (!failedValidators.length) {
+		
+		if(!failedValidators.length){
 			cell.modules.validate.invalid = false;
 			cell.getElement().classList.remove("tabulator-validation-fail");
-
-			if (invalidIndex > -1) {
+			
+			if(invalidIndex > -1){
 				this.invalidCells.splice(invalidIndex, 1);
 			}
-		} else {
+		}else {
 			cell.modules.validate.invalid = failedValidators;
-
-			if (this.table.options.validationMode !== "manual") {
+			
+			if(this.table.options.validationMode !== "manual"){
 				cell.getElement().classList.add("tabulator-validation-fail");
 			}
-
-			if (invalidIndex == -1) {
+			
+			if(invalidIndex == -1){
 				this.invalidCells.push(cell);
 			}
 		}
-
+		
 		return failedValidators.length ? failedValidators : true;
 	}
-
-	getInvalidCells() {
+	
+	getInvalidCells(){
 		var output = [];
-
+		
 		this.invalidCells.forEach((cell) => {
 			output.push(cell.getComponent());
 		});
-
+		
 		return output;
 	}
-
-	clearValidation(cell) {
+	
+	clearValidation(cell){
 		var invalidIndex;
-
-		if (cell.modules.validate && cell.modules.validate.invalid) {
+		
+		if(cell.modules.validate && cell.modules.validate.invalid){
+			
 			cell.getElement().classList.remove("tabulator-validation-fail");
 			cell.modules.validate.invalid = false;
-
+			
 			invalidIndex = this.invalidCells.indexOf(cell);
-
-			if (invalidIndex > -1) {
+			
+			if(invalidIndex > -1){
 				this.invalidCells.splice(invalidIndex, 1);
 			}
 		}
@@ -21911,7 +19728,7 @@ Validate.moduleName = "validate";
 //load defaults
 Validate.validators = defaultValidators;
 
-var modules = /*#__PURE__*/ Object.freeze({
+var modules = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	AccessorModule: Accessor,
 	AjaxModule: Ajax,
@@ -21947,110 +19764,108 @@ var modules = /*#__PURE__*/ Object.freeze({
 	SelectRowModule: SelectRow,
 	SortModule: Sort,
 	TooltipModule: Tooltip,
-	ValidateModule: Validate,
+	ValidateModule: Validate
 });
 
 var defaultOptions = {
-	debugEventsExternal: false, //flag to console log events
-	debugEventsInternal: false, //flag to console log events
-	debugInvalidOptions: true, //allow toggling of invalid option warnings
-	debugInvalidComponentFuncs: true, //allow toggling of invalid component warnings
-	debugInitialization: true, //allow toggling of pre initialization function call warnings
-	debugDeprecation: true, //allow toggling of deprecation warnings
 
-	height: false, //height of tabulator
-	minHeight: false, //minimum height of tabulator
-	maxHeight: false, //maximum height of tabulator
+	debugEventsExternal:false, //flag to console log events
+	debugEventsInternal:false, //flag to console log events
+	debugInvalidOptions:true, //allow toggling of invalid option warnings
+	debugInvalidComponentFuncs:true, //allow toggling of invalid component warnings
+	debugInitialization:true, //allow toggling of pre initialization function call warnings
+	debugDeprecation:true, //allow toggling of deprecation warnings
 
-	columnHeaderVertAlign: "top", //vertical alignment of column headers
+	height:false, //height of tabulator
+	minHeight:false, //minimum height of tabulator
+	maxHeight:false, //maximum height of tabulator
 
-	popupContainer: false,
+	columnHeaderVertAlign:"top", //vertical alignment of column headers
 
-	columns: [], //store for colum header info
-	columnDefaults: {}, //store column default props
+	popupContainer:false,
 
-	data: false, //default starting data
+	columns:[],//store for colum header info
+	columnDefaults:{}, //store column default props
 
-	autoColumns: false, //build columns from data row structure
-	autoColumnsDefinitions: false,
+	data:false, //default starting data
 
-	nestedFieldSeparator: ".", //separator for nested data
+	autoColumns:false, //build columns from data row structure
+	autoColumnsDefinitions:false,
 
-	footerElement: false, //hold footer element
+	nestedFieldSeparator:".", //separator for nested data
 
-	index: "id", //filed for row index
+	footerElement:false, //hold footer element
 
-	textDirection: "auto",
+	index:"id", //filed for row index
 
-	addRowPos: "bottom", //position to insert blank rows, top|bottom
+	textDirection:"auto",
 
-	headerVisible: true, //hide header
+	addRowPos:"bottom", //position to insert blank rows, top|bottom
 
-	renderVertical: "virtual",
-	renderHorizontal: "basic",
-	renderVerticalBuffer: 0, // set virtual DOM buffer size
+	headerVisible:true, //hide header
 
-	scrollToRowPosition: "top",
-	scrollToRowIfVisible: true,
+	renderVertical:"virtual",
+	renderHorizontal:"basic",
+	renderVerticalBuffer:0, // set virtual DOM buffer size
 
-	scrollToColumnPosition: "left",
-	scrollToColumnIfVisible: true,
+	scrollToRowPosition:"top",
+	scrollToRowIfVisible:true,
 
-	rowFormatter: false,
-	rowFormatterPrint: null,
-	rowFormatterClipboard: null,
-	rowFormatterHtmlOutput: null,
+	scrollToColumnPosition:"left",
+	scrollToColumnIfVisible:true,
 
-	rowHeight: null,
+	rowFormatter:false,
+	rowFormatterPrint:null,
+	rowFormatterClipboard:null,
+	rowFormatterHtmlOutput:null,
 
-	placeholder: false,
+	rowHeight:null,
 
-	dataLoader: true,
-	dataLoaderLoading: false,
-	dataLoaderError: false,
-	dataLoaderErrorTimeout: 3000,
+	placeholder:false,
 
-	dataSendParams: {},
+	dataLoader:true,
+	dataLoaderLoading:false,
+	dataLoaderError:false,
+	dataLoaderErrorTimeout:3000,
 
-	dataReceiveParams: {},
+	dataSendParams:{},
+
+	dataReceiveParams:{},
 };
 
 class OptionsList {
-	constructor(table, msgType, defaults = {}) {
+	constructor(table, msgType, defaults = {}){
 		this.table = table;
 		this.msgType = msgType;
 		this.registeredDefaults = Object.assign({}, defaults);
 	}
 
-	register(option, value) {
+	register(option, value){
 		this.registeredDefaults[option] = value;
 	}
 
-	generate(defaultOptions, userOptions = {}) {
+	generate(defaultOptions, userOptions = {}){
 		var output = Object.assign({}, this.registeredDefaults);
 
 		Object.assign(output, defaultOptions);
 
-		if (
-			userOptions.debugInvalidOptions !== false ||
-			this.table.options.debugInvalidOptions
-		) {
-			for (let key in userOptions) {
-				if (!output.hasOwnProperty(key)) {
+		if(userOptions.debugInvalidOptions !== false || this.table.options.debugInvalidOptions){
+			for (let key in userOptions){
+				if(!output.hasOwnProperty(key)){
 					console.warn("Invalid " + this.msgType + " option:", key);
 				}
 			}
 		}
 
-		for (let key in output) {
-			if (key in userOptions) {
+		for (let key in output){
+			if(key in userOptions){
 				output[key] = userOptions[key];
-			} else {
-				if (Array.isArray(output[key])) {
+			}else {
+				if(Array.isArray(output[key])){
 					output[key] = Object.assign([], output[key]);
-				} else if (typeof output[key] === "object" && output[key] !== null) {
+				}else if(typeof output[key] === "object" && output[key] !== null){
 					output[key] = Object.assign({}, output[key]);
-				} else if (typeof output[key] === "undefined") {
+				}else if (typeof output[key] === "undefined"){
 					delete output[key];
 				}
 			}
@@ -22060,85 +19875,88 @@ class OptionsList {
 	}
 }
 
-class Renderer extends CoreFeature {
-	constructor(table) {
+class Renderer extends CoreFeature{
+	constructor(table){
 		super(table);
 
 		this.elementVertical = table.rowManager.element;
 		this.elementHorizontal = table.columnManager.element;
-		this.tableElement = table.rowManager.tableElement;
+		this.tableElement =  table.rowManager.tableElement;
 
 		this.verticalFillMode = "fit"; // used by row manager to determine how to size the render area ("fit" - fits container to the contents, "fill" - fills the container without resizing it)
 	}
+
 
 	///////////////////////////////////
 	/////// Internal Bindings /////////
 	///////////////////////////////////
 
-	initialize() {
+	initialize(){
 		//initialize core functionality
 	}
 
-	clearRows() {
+	clearRows(){
 		//clear down existing rows layout
 	}
 
-	clearColumns() {
+	clearColumns(){
 		//clear down existing columns layout
 	}
 
-	reinitializeColumnWidths(columns) {
+
+	reinitializeColumnWidths(columns){
 		//resize columns to fit data
 	}
 
-	renderRows() {
+
+	renderRows(){
 		//render rows from a clean slate
 	}
 
-	renderColumns() {
+	renderColumns(){
 		//render columns from a clean slate
 	}
 
-	rerenderRows(callback) {
+	rerenderRows(callback){
 		// rerender rows and keep position
-		if (callback) {
+		if(callback){
 			callback();
 		}
 	}
 
-	rerenderColumns(update, blockRedraw) {
+	rerenderColumns(update, blockRedraw){
 		//rerender columns
 	}
 
-	renderRowCells(row) {
+	renderRowCells(row){
 		//render the cells in a row
 	}
 
-	rerenderRowCells(row, force) {
+	rerenderRowCells(row, force){
 		//rerender the cells in a row
 	}
 
-	scrollColumns(left, dir) {
+	scrollColumns(left, dir){
 		//handle horizontal scrolling
 	}
 
-	scrollRows(top, dir) {
+	scrollRows(top, dir){
 		//handle vertical scrolling
 	}
 
-	resize() {
+	resize(){
 		//container has resized, carry out any needed recalculations (DO NOT RERENDER IN THIS FUNCTION)
 	}
 
-	scrollToRow(row) {
+	scrollToRow(row){
 		//scroll to a specific row
 	}
 
-	scrollToRowNearestTop(row) {
+	scrollToRowNearestTop(row){
 		//determine weather the row is nearest the top or bottom of the table, return true for top or false for bottom
 	}
 
-	visibleRows(includingBuffer) {
+	visibleRows(includingBuffer){
 		//return the visible rows
 		return [];
 	}
@@ -22147,17 +19965,17 @@ class Renderer extends CoreFeature {
 	//////// Helper Functions /////////
 	///////////////////////////////////
 
-	rows() {
+	rows(){
 		return this.table.rowManager.getDisplayRows();
 	}
 
-	styleRow(row, index) {
+	styleRow(row, index){
 		var rowEl = row.getElement();
 
-		if (index % 2) {
+		if(index % 2){
 			rowEl.classList.add("tabulator-row-even");
 			rowEl.classList.remove("tabulator-row-odd");
-		} else {
+		}else {
 			rowEl.classList.add("tabulator-row-odd");
 			rowEl.classList.remove("tabulator-row-even");
 		}
@@ -22168,57 +19986,53 @@ class Renderer extends CoreFeature {
 	/////// (DO NOT OVERRIDE) /////////
 	///////////////////////////////////
 
-	clear() {
+	clear(){
 		//clear down existing layout
 		this.clearRows();
 		this.clearColumns();
 	}
 
-	render() {
+	render(){
 		//render from a clean slate
 		this.renderRows();
 		this.renderColumns();
 	}
 
-	rerender(callback) {
+	rerender(callback){
 		// rerender and keep position
 		this.rerenderRows();
 		this.rerenderColumns();
 	}
 
-	scrollToRowPosition(row, position, ifVisible) {
+	scrollToRowPosition(row, position, ifVisible){
 		var rowIndex = this.rows().indexOf(row),
-			rowEl = row.getElement(),
-			offset = 0;
+		rowEl = row.getElement(),
+		offset = 0;
 
 		return new Promise((resolve, reject) => {
-			if (rowIndex > -1) {
-				if (typeof ifVisible === "undefined") {
+			if(rowIndex > -1){
+
+				if(typeof ifVisible === "undefined"){
 					ifVisible = this.table.options.scrollToRowIfVisible;
 				}
 
 				//check row visibility
-				if (!ifVisible) {
-					if (Helpers.elVisible(rowEl)) {
-						offset =
-							Helpers.elOffset(rowEl).top -
-							Helpers.elOffset(this.elementVertical).top;
-
-						if (
-							offset > 0 &&
-							offset < this.elementVertical.clientHeight - rowEl.offsetHeight
-						) {
+				if(!ifVisible){
+					if(Helpers.elVisible(rowEl)){
+						offset = Helpers.elOffset(rowEl).top - Helpers.elOffset(this.elementVertical).top;
+						
+						if(offset > 0 && offset < this.elementVertical.clientHeight - rowEl.offsetHeight){
 							resolve();
 							return false;
 						}
 					}
 				}
 
-				if (typeof position === "undefined") {
+				if(typeof position === "undefined"){
 					position = this.table.options.scrollToRowPosition;
 				}
 
-				if (position === "nearest") {
+				if(position === "nearest"){
 					position = this.scrollToRowNearestTop(row) ? "top" : "bottom";
 				}
 
@@ -22226,52 +20040,36 @@ class Renderer extends CoreFeature {
 				this.scrollToRow(row);
 
 				//align to correct position
-				switch (position) {
+				switch(position){
 					case "middle":
 					case "center":
-						if (
-							this.elementVertical.scrollHeight -
-								this.elementVertical.scrollTop ==
-							this.elementVertical.clientHeight
-						) {
-							this.elementVertical.scrollTop =
-								this.elementVertical.scrollTop +
-								(rowEl.offsetTop - this.elementVertical.scrollTop) -
-								(this.elementVertical.scrollHeight - rowEl.offsetTop) / 2;
-						} else {
-							this.elementVertical.scrollTop =
-								this.elementVertical.scrollTop -
-								this.elementVertical.clientHeight / 2;
+
+						if(this.elementVertical.scrollHeight - this.elementVertical.scrollTop == this.elementVertical.clientHeight){
+							this.elementVertical.scrollTop = this.elementVertical.scrollTop + (rowEl.offsetTop - this.elementVertical.scrollTop) - ((this.elementVertical.scrollHeight - rowEl.offsetTop) / 2);
+						}else {
+							this.elementVertical.scrollTop = this.elementVertical.scrollTop - (this.elementVertical.clientHeight / 2);
 						}
 
 						break;
 
 					case "bottom":
-						if (
-							this.elementVertical.scrollHeight -
-								this.elementVertical.scrollTop ==
-							this.elementVertical.clientHeight
-						) {
-							this.elementVertical.scrollTop =
-								this.elementVertical.scrollTop -
-								(this.elementVertical.scrollHeight - rowEl.offsetTop) +
-								rowEl.offsetHeight;
-						} else {
-							this.elementVertical.scrollTop =
-								this.elementVertical.scrollTop -
-								this.elementVertical.clientHeight +
-								rowEl.offsetHeight;
+
+						if(this.elementVertical.scrollHeight - this.elementVertical.scrollTop == this.elementVertical.clientHeight){
+							this.elementVertical.scrollTop = this.elementVertical.scrollTop - (this.elementVertical.scrollHeight - rowEl.offsetTop) + rowEl.offsetHeight;
+						}else {
+							this.elementVertical.scrollTop = this.elementVertical.scrollTop - this.elementVertical.clientHeight + rowEl.offsetHeight;
 						}
 
 						break;
 
 					case "top":
-						this.elementVertical.scrollTop = rowEl.offsetTop;
+						this.elementVertical.scrollTop = rowEl.offsetTop;					
 						break;
 				}
 
 				resolve();
-			} else {
+
+			}else {
 				console.warn("Scroll Error - Row not visible");
 				reject("Scroll Error - Row not visible");
 			}
@@ -22279,485 +20077,465 @@ class Renderer extends CoreFeature {
 	}
 }
 
-class BasicHorizontal extends Renderer {
-	constructor(table) {
+class BasicHorizontal extends Renderer{
+	constructor(table){
 		super(table);
 	}
 
-	renderRowCells(row) {
+	renderRowCells(row){
 		row.cells.forEach((cell) => {
 			row.element.appendChild(cell.getElement());
 			cell.cellRendered();
 		});
 	}
 
-	reinitializeColumnWidths(columns) {
-		columns.forEach(function (column) {
+	reinitializeColumnWidths(columns){
+		columns.forEach(function(column){
 			column.reinitializeWidth();
 		});
 	}
 }
 
-class VirtualDomHorizontal extends Renderer {
-	constructor(table) {
+class VirtualDomHorizontal extends Renderer{
+	constructor(table){
 		super(table);
-
+		
 		this.leftCol = 0;
 		this.rightCol = 0;
 		this.scrollLeft = 0;
-
+		
 		this.vDomScrollPosLeft = 0;
 		this.vDomScrollPosRight = 0;
-
+		
 		this.vDomPadLeft = 0;
 		this.vDomPadRight = 0;
-
+		
 		this.fitDataColAvg = 0;
-
+		
 		this.windowBuffer = 200; //pixel margin to make column visible before it is shown on screen
-
+		
 		this.visibleRows = null;
 
 		this.initialized = false;
 		this.isFitData = false;
-
+		
 		this.columns = [];
 	}
-
-	initialize() {
+	
+	initialize(){
 		this.compatibilityCheck();
 		this.layoutCheck();
 		this.vertScrollListen();
 	}
-
-	compatibilityCheck() {
+	
+	compatibilityCheck(){
 		var columns = this.options("columns"),
-			frozen = false,
-			ok = true;
-
-		if (this.options("layout") == "fitDataTable") {
-			console.warn(
-				"Horizontal Virtual DOM is not compatible with fitDataTable layout mode"
-			);
+		frozen = false,
+		ok = true;
+		
+		if(this.options("layout") == "fitDataTable"){
+			console.warn("Horizontal Virtual DOM is not compatible with fitDataTable layout mode");
 			ok = false;
 		}
-
-		if (this.options("responsiveLayout")) {
-			console.warn(
-				"Horizontal Virtual DOM is not compatible with responsive columns"
-			);
+		
+		if(this.options("responsiveLayout")){
+			console.warn("Horizontal Virtual DOM is not compatible with responsive columns");
 			ok = false;
 		}
-
-		if (this.options("rtl")) {
-			console.warn(
-				"Horizontal Virtual DOM is not currently compatible with RTL text direction"
-			);
+		
+		if(this.options("rtl")){
+			console.warn("Horizontal Virtual DOM is not currently compatible with RTL text direction");
 			ok = false;
 		}
-
-		if (columns) {
+		
+		if(columns){
 			frozen = columns.find((col) => {
 				return col.frozen;
 			});
-
-			if (frozen) {
-				console.warn(
-					"Horizontal Virtual DOM is not compatible with frozen columns"
-				);
+			
+			if(frozen){
+				console.warn("Horizontal Virtual DOM is not compatible with frozen columns");
 				ok = false;
 			}
 		}
-
+		
 		// if(!ok){
 		// 	options.virtualDomHoz = false;
 		// }
-
+		
 		return ok;
 	}
-
-	layoutCheck() {
-		this.isFitData = this.options("layout").startsWith("fitData");
+	
+	layoutCheck(){
+		this.isFitData = this.options("layout").startsWith('fitData');
 	}
 
-	vertScrollListen() {
+	vertScrollListen(){
 		this.subscribe("scroll-vertical", this.clearVisRowCache.bind(this));
 		this.subscribe("data-refreshed", this.clearVisRowCache.bind(this));
 	}
 
-	clearVisRowCache() {
+	clearVisRowCache(){
 		this.visibleRows = null;
 	}
-
+	
 	//////////////////////////////////////
 	///////// Public Functions ///////////
 	//////////////////////////////////////
-
-	renderColumns(row, force) {
+	
+	renderColumns(row, force){
 		this.dataChange();
 	}
 
-	scrollColumns(left, dir) {
-		if (this.scrollLeft != left) {
+	
+	scrollColumns(left, dir){
+		if(this.scrollLeft != left){
 			this.scrollLeft = left;
-
+			
 			this.scroll(left - (this.vDomScrollPosLeft + this.windowBuffer));
 		}
 	}
-
-	calcWindowBuffer() {
+	
+	calcWindowBuffer(){
 		var buffer = this.elementVertical.clientWidth;
-
+		
 		this.table.columnManager.columnsByIndex.forEach((column) => {
-			if (column.visible) {
+			if(column.visible){
 				var width = column.getWidth();
-
-				if (width > buffer) {
+				
+				if(width > buffer){
 					buffer = width;
 				}
 			}
 		});
-
+		
 		this.windowBuffer = buffer * 2;
 	}
-
-	rerenderColumns(update, blockRedraw) {
+	
+	rerenderColumns(update, blockRedraw){		
 		var old = {
-				cols: this.columns,
-				leftCol: this.leftCol,
-				rightCol: this.rightCol,
-			},
-			colPos = 0;
-
-		if (update && !this.initialized) {
+			cols:this.columns,
+			leftCol:this.leftCol,
+			rightCol:this.rightCol,
+		},
+		colPos = 0;
+		
+		
+		if(update && !this.initialized){
 			return;
 		}
-
+		
 		this.clear();
-
+		
 		this.calcWindowBuffer();
-
+		
 		this.scrollLeft = this.elementVertical.scrollLeft;
-
+		
 		this.vDomScrollPosLeft = this.scrollLeft - this.windowBuffer;
-		this.vDomScrollPosRight =
-			this.scrollLeft + this.elementVertical.clientWidth + this.windowBuffer;
-
+		this.vDomScrollPosRight = this.scrollLeft + this.elementVertical.clientWidth + this.windowBuffer;
+		
 		this.table.columnManager.columnsByIndex.forEach((column) => {
 			var config = {};
-
-			if (column.visible) {
+			
+			if(column.visible){
 				var width = column.getWidth();
-
+				
 				config.leftPos = colPos;
 				config.rightPos = colPos + width;
-
+				
 				config.width = width;
-
+				
 				if (this.isFitData) {
-					config.fitDataCheck = column.modules.vdomHoz
-						? column.modules.vdomHoz.fitDataCheck
-						: true;
+					config.fitDataCheck = column.modules.vdomHoz ? column.modules.vdomHoz.fitDataCheck : true;
 				}
-
-				if (
-					colPos + width > this.vDomScrollPosLeft &&
-					colPos < this.vDomScrollPosRight
-				) {
+				
+				if((colPos + width > this.vDomScrollPosLeft) && (colPos < this.vDomScrollPosRight)){
 					//column is visible
-
-					if (this.leftCol == -1) {
+					
+					if(this.leftCol == -1){
 						this.leftCol = this.columns.length;
 						this.vDomPadLeft = colPos;
 					}
-
+					
 					this.rightCol = this.columns.length;
-				} else {
+				}else {
 					// column is hidden
-					if (this.leftCol !== -1) {
+					if(this.leftCol !== -1){
 						this.vDomPadRight += width;
 					}
 				}
-
+				
 				this.columns.push(column);
-
+				
 				column.modules.vdomHoz = config;
-
+				
 				colPos += width;
 			}
 		});
-
+		
 		this.tableElement.style.paddingLeft = this.vDomPadLeft + "px";
 		this.tableElement.style.paddingRight = this.vDomPadRight + "px";
-
+		
 		this.initialized = true;
-
-		if (!blockRedraw) {
-			if (!update || this.reinitChanged(old)) {
+		
+		if(!blockRedraw){
+			if(!update || this.reinitChanged(old)){
 				this.reinitializeRows();
 			}
 		}
-
+		
 		this.elementVertical.scrollLeft = this.scrollLeft;
 	}
-
-	renderRowCells(row) {
-		if (this.initialized) {
+	
+	renderRowCells(row){
+		if(this.initialized){
 			this.initializeRow(row);
-		} else {
+		}else {
 			row.cells.forEach((cell) => {
 				row.element.appendChild(cell.getElement());
 				cell.cellRendered();
 			});
 		}
 	}
-
-	rerenderRowCells(row, force) {
+	
+	rerenderRowCells(row, force){
 		this.reinitializeRow(row, force);
 	}
-
-	reinitializeColumnWidths(columns) {
-		for (let i = this.leftCol; i <= this.rightCol; i++) {
+	
+	reinitializeColumnWidths(columns){
+		for(let i = this.leftCol; i <= this.rightCol; i++){
 			this.columns[i].reinitializeWidth();
 		}
 	}
-
+	
 	//////////////////////////////////////
 	//////// Internal Rendering //////////
 	//////////////////////////////////////
-
-	deinitialize() {
+	
+	deinitialize(){
 		this.initialized = false;
 	}
-
-	clear() {
+	
+	clear(){
 		this.columns = [];
-
+		
 		this.leftCol = -1;
 		this.rightCol = 0;
-
+		
 		this.vDomScrollPosLeft = 0;
 		this.vDomScrollPosRight = 0;
 		this.vDomPadLeft = 0;
 		this.vDomPadRight = 0;
 	}
-
-	dataChange() {
+	
+	dataChange(){
 		var change = false,
-			row,
-			rowEl;
-
-		if (this.isFitData) {
+		row, rowEl;
+		
+		if(this.isFitData){
 			this.table.columnManager.columnsByIndex.forEach((column) => {
-				if (!column.definition.width && column.visible) {
+				if(!column.definition.width && column.visible){
 					change = true;
 				}
 			});
-
-			if (change && this.table.rowManager.getDisplayRows().length) {
-				this.vDomScrollPosRight =
-					this.scrollLeft +
-					this.elementVertical.clientWidth +
-					this.windowBuffer;
-
+			
+			if(change && this.table.rowManager.getDisplayRows().length){
+				this.vDomScrollPosRight = this.scrollLeft + this.elementVertical.clientWidth + this.windowBuffer;
+				
 				row = this.chain("rows-sample", [1], [], () => {
 					return this.table.rowManager.getDisplayRows();
 				})[0];
-
-				if (row) {
+				
+				if(row){
 					rowEl = row.getElement();
-
+					
 					row.generateCells();
-
+					
 					this.tableElement.appendChild(rowEl);
-
-					for (let colEnd = 0; colEnd < row.cells.length; colEnd++) {
+					
+					for(let colEnd = 0; colEnd < row.cells.length; colEnd++){
 						let cell = row.cells[colEnd];
 						rowEl.appendChild(cell.getElement());
-
+						
 						cell.column.reinitializeWidth();
 					}
-
+					
 					rowEl.parentNode.removeChild(rowEl);
 
 					this.rerenderColumns(false, true);
 				}
 			}
-		} else {
-			if (this.options("layout") === "fitColumns") {
+		}else {
+			if(this.options("layout") === "fitColumns"){
 				this.layoutRefresh();
 				this.rerenderColumns(false, true);
 			}
 		}
 	}
-
-	reinitChanged(old) {
+	
+	reinitChanged(old){
 		var match = true;
-
-		if (
-			old.cols.length !== this.columns.length ||
-			old.leftCol !== this.leftCol ||
-			old.rightCol !== this.rightCol
-		) {
+		
+		if(old.cols.length !== this.columns.length || old.leftCol !== this.leftCol || old.rightCol !== this.rightCol){
 			return true;
 		}
-
+		
 		old.cols.forEach((col, i) => {
-			if (col !== this.columns[i]) {
+			if(col !== this.columns[i]){
 				match = false;
 			}
 		});
-
+		
 		return !match;
 	}
-
-	reinitializeRows() {
+	
+	reinitializeRows(){
 		var rows = this.getVisibleRows();
 		rows.forEach((row) => {
 			this.reinitializeRow(row, true);
 		});
 	}
-
-	getVisibleRows() {
-		if (!this.visibleRows) {
+	
+	getVisibleRows(){
+		if (!this.visibleRows){
 			this.visibleRows = this.table.rowManager.getVisibleRows();
 		}
 
-		return this.visibleRows;
+		return this.visibleRows;	
 	}
-
-	scroll(diff) {
+	
+	scroll(diff){
 		this.vDomScrollPosLeft += diff;
 		this.vDomScrollPosRight += diff;
 
-		if (Math.abs(diff) > this.windowBuffer / 2) {
+		if(Math.abs(diff) > (this.windowBuffer / 2)){
 			this.rerenderColumns();
-		} else {
-			if (diff > 0) {
+		}else {
+			if(diff > 0){
 				//scroll right
 				this.addColRight();
 				this.removeColLeft();
-			} else {
+			}else {
 				//scroll left
 				this.addColLeft();
 				this.removeColRight();
 			}
 		}
 	}
-
-	colPositionAdjust(start, end, diff) {
-		for (let i = start; i < end; i++) {
+	
+	colPositionAdjust (start, end, diff){
+		for(let i = start; i < end; i++){
 			let column = this.columns[i];
-
+			
 			column.modules.vdomHoz.leftPos += diff;
 			column.modules.vdomHoz.rightPos += diff;
 		}
 	}
-
-	addColRight() {
+	
+	addColRight(){
 		var changes = false,
-			working = true;
-
-		while (working) {
+		working = true;
+		
+		while(working){
+			
 			let column = this.columns[this.rightCol + 1];
-
-			if (column) {
-				if (column.modules.vdomHoz.leftPos <= this.vDomScrollPosRight) {
+			
+			if(column){
+				if(column.modules.vdomHoz.leftPos <= this.vDomScrollPosRight){
 					changes = true;
-
+					
 					this.getVisibleRows().forEach((row) => {
-						if (row.type !== "group") {
+						if(row.type !== "group"){
 							var cell = row.getCell(column);
 							row.getElement().appendChild(cell.getElement());
 							cell.cellRendered();
 						}
 					});
-
+					
 					this.fitDataColActualWidthCheck(column);
-
+					
 					this.rightCol++; // Don't move this below the >= check below
-
-					if (this.rightCol >= this.columns.length - 1) {
+					
+					if(this.rightCol >= (this.columns.length - 1)){
 						this.vDomPadRight = 0;
-					} else {
+					}else {
 						this.vDomPadRight -= column.getWidth();
-					}
-				} else {
+					}	
+				}else {
 					working = false;
 				}
-			} else {
+			}else {
 				working = false;
 			}
 		}
-
-		if (changes) {
+		
+		if(changes){
 			this.tableElement.style.paddingRight = this.vDomPadRight + "px";
 		}
 	}
-
-	addColLeft() {
+	
+	addColLeft(){
 		var changes = false,
-			working = true;
-
-		while (working) {
+		working = true;
+		
+		while(working){
 			let column = this.columns[this.leftCol - 1];
-
-			if (column) {
-				if (column.modules.vdomHoz.rightPos >= this.vDomScrollPosLeft) {
+			
+			if(column){
+				if(column.modules.vdomHoz.rightPos >= this.vDomScrollPosLeft){
 					changes = true;
-
+					
 					this.getVisibleRows().forEach((row) => {
-						if (row.type !== "group") {
+						if(row.type !== "group"){
 							var cell = row.getCell(column);
 							row.getElement().prepend(cell.getElement());
 							cell.cellRendered();
 						}
 					});
-
+					
 					this.leftCol--; // don't move this below the <= check below
-
-					if (this.leftCol <= 0) {
-						// replicating logic in addColRight
+					
+					if(this.leftCol <= 0){ // replicating logic in addColRight
 						this.vDomPadLeft = 0;
-					} else {
+					}else {
 						this.vDomPadLeft -= column.getWidth();
 					}
-
+					
 					let diff = this.fitDataColActualWidthCheck(column);
-
-					if (diff) {
-						this.scrollLeft = this.elementVertical.scrollLeft =
-							this.elementVertical.scrollLeft + diff;
+					
+					if(diff){
+						this.scrollLeft = this.elementVertical.scrollLeft = this.elementVertical.scrollLeft + diff;
 						this.vDomPadRight -= diff;
 					}
-				} else {
+					
+				}else {
 					working = false;
 				}
-			} else {
+			}else {
 				working = false;
 			}
 		}
-
-		if (changes) {
+		
+		if(changes){
 			this.tableElement.style.paddingLeft = this.vDomPadLeft + "px";
 		}
 	}
-
-	removeColRight() {
+	
+	removeColRight(){
 		var changes = false,
-			working = true;
-
-		while (working) {
+		working = true;
+		
+		while(working){
 			let column = this.columns[this.rightCol];
-
-			if (column) {
-				if (column.modules.vdomHoz.leftPos > this.vDomScrollPosRight) {
+			
+			if(column){
+				if(column.modules.vdomHoz.leftPos > this.vDomScrollPosRight){
 					changes = true;
-
+					
 					this.getVisibleRows().forEach((row) => {
-						if (row.type !== "group") {
+						if(row.type !== "group"){
 							var cell = row.getCell(column);
-
+							
 							try {
 								row.getElement().removeChild(cell.getElement());
 							} catch (ex) {
@@ -22765,37 +20543,37 @@ class VirtualDomHorizontal extends Renderer {
 							}
 						}
 					});
-
+					
 					this.vDomPadRight += column.getWidth();
-					this.rightCol--;
-				} else {
+					this.rightCol --;
+				}else {
 					working = false;
 				}
-			} else {
+			}else {
 				working = false;
 			}
 		}
-
-		if (changes) {
+		
+		if(changes){
 			this.tableElement.style.paddingRight = this.vDomPadRight + "px";
 		}
 	}
-
-	removeColLeft() {
+	
+	removeColLeft(){
 		var changes = false,
-			working = true;
-
-		while (working) {
+		working = true;
+		
+		while(working){
 			let column = this.columns[this.leftCol];
-
-			if (column) {
-				if (column.modules.vdomHoz.rightPos < this.vDomScrollPosLeft) {
+			
+			if(column){
+				if(column.modules.vdomHoz.rightPos < this.vDomScrollPosLeft){
 					changes = true;
-
-					this.getVisibleRows().forEach((row) => {
-						if (row.type !== "group") {
+					
+					this.getVisibleRows().forEach((row) => {					
+						if(row.type !== "group"){
 							var cell = row.getCell(column);
-
+							
 							try {
 								row.getElement().removeChild(cell.getElement());
 							} catch (ex) {
@@ -22803,78 +20581,69 @@ class VirtualDomHorizontal extends Renderer {
 							}
 						}
 					});
-
+					
 					this.vDomPadLeft += column.getWidth();
-					this.leftCol++;
-				} else {
+					this.leftCol ++;
+				}else {
 					working = false;
 				}
-			} else {
+			}else {
 				working = false;
 			}
 		}
-
-		if (changes) {
+		
+		if(changes){
 			this.tableElement.style.paddingLeft = this.vDomPadLeft + "px";
 		}
 	}
-
-	fitDataColActualWidthCheck(column) {
+	
+	fitDataColActualWidthCheck(column){
 		var newWidth, widthDiff;
-
-		if (column.modules.vdomHoz.fitDataCheck) {
+		
+		if(column.modules.vdomHoz.fitDataCheck){
 			column.reinitializeWidth();
-
+			
 			newWidth = column.getWidth();
 			widthDiff = newWidth - column.modules.vdomHoz.width;
-
-			if (widthDiff) {
+			
+			if(widthDiff){
 				column.modules.vdomHoz.rightPos += widthDiff;
 				column.modules.vdomHoz.width = newWidth;
-				this.colPositionAdjust(
-					this.columns.indexOf(column) + 1,
-					this.columns.length,
-					widthDiff
-				);
+				this.colPositionAdjust(this.columns.indexOf(column) + 1, this.columns.length, widthDiff);
 			}
-
+			
 			column.modules.vdomHoz.fitDataCheck = false;
 		}
-
+		
 		return widthDiff;
 	}
-
-	initializeRow(row) {
-		if (row.type !== "group") {
+	
+	initializeRow(row){
+		if(row.type !== "group"){
 			row.modules.vdomHoz = {
-				leftCol: this.leftCol,
-				rightCol: this.rightCol,
+				leftCol:this.leftCol,
+				rightCol:this.rightCol,
 			};
-
-			for (let i = this.leftCol; i <= this.rightCol; i++) {
+			
+			for(let i = this.leftCol; i <= this.rightCol; i++){
 				let column = this.columns[i];
-
-				if (column && column.visible) {
+				
+				if(column && column.visible){
 					let cell = row.getCell(column);
-
+					
 					row.getElement().appendChild(cell.getElement());
 					cell.cellRendered();
 				}
 			}
 		}
 	}
-
-	reinitializeRow(row, force) {
-		if (row.type !== "group") {
-			if (
-				force ||
-				!row.modules.vdomHoz ||
-				row.modules.vdomHoz.leftCol !== this.leftCol ||
-				row.modules.vdomHoz.rightCol !== this.rightCol
-			) {
+	
+	reinitializeRow(row, force){
+		if(row.type !== "group"){
+			if(force || !row.modules.vdomHoz || row.modules.vdomHoz.leftCol !== this.leftCol || row.modules.vdomHoz.rightCol !== this.rightCol){
 				var rowEl = row.getElement();
-				while (rowEl.firstChild) rowEl.removeChild(rowEl.firstChild);
-
+				while(rowEl.firstChild) rowEl.removeChild(rowEl.firstChild);
+				
 				this.initializeRow(row);
 			}
 		}
@@ -22882,331 +20651,321 @@ class VirtualDomHorizontal extends Renderer {
 }
 
 class ColumnManager extends CoreFeature {
-	constructor(table) {
+	
+	constructor (table){
 		super(table);
-
+		
 		this.blockHozScrollEvent = false;
 		this.headersElement = null;
-		this.element = null; //containing element
+		this.element = null ; //containing element
 		this.columns = []; // column definition object
 		this.columnsByIndex = []; //columns by index
 		this.columnsByField = {}; //columns by field
 		this.scrollLeft = 0;
-		this.optionsList = new OptionsList(
-			this.table,
-			"column definition",
-			defaultColumnOptions
-		);
-
+		this.optionsList = new OptionsList(this.table, "column definition", defaultColumnOptions);
+		
 		this.redrawBlock = false; //prevent redraws to allow multiple data manipulations before continuing
 		this.redrawBlockUpdate = null; //store latest redraw update only status
-
+		
 		this.renderer = null;
 	}
-
+	
 	////////////// Setup Functions /////////////////
-
-	initialize() {
+	
+	initialize(){
 		this.initializeRenderer();
-
+		
 		this.headersElement = this.createHeadersElement();
 		this.element = this.createHeaderElement();
-
+		
 		this.element.insertBefore(this.headersElement, this.element.firstChild);
-
+		
 		this.subscribe("scroll-horizontal", this.scrollHorizontal.bind(this));
 	}
-
-	initializeRenderer() {
+	
+	initializeRenderer(){
 		var renderClass;
-
+		
 		var renderers = {
-			virtual: VirtualDomHorizontal,
-			basic: BasicHorizontal,
+			"virtual": VirtualDomHorizontal,
+			"basic": BasicHorizontal,
 		};
-
-		if (typeof this.table.options.renderHorizontal === "string") {
+		
+		if(typeof this.table.options.renderHorizontal === "string"){
 			renderClass = renderers[this.table.options.renderHorizontal];
-		} else {
+		}else {
 			renderClass = this.table.options.renderHorizontal;
 		}
-
-		if (renderClass) {
-			this.renderer = new renderClass(
-				this.table,
-				this.element,
-				this.tableElement
-			);
+		
+		if(renderClass){
+			this.renderer = new renderClass(this.table, this.element, this.tableElement);
 			this.renderer.initialize();
-		} else {
-			console.error(
-				"Unable to find matching renderer:",
-				this.table.options.renderHorizontal
-			);
+		}else {
+			console.error("Unable to find matching renderer:", this.table.options.renderHorizontal);
 		}
 	}
-
-	createHeadersElement() {
+	
+	
+	createHeadersElement (){
 		var el = document.createElement("div");
-
+		
 		el.classList.add("tabulator-headers");
 		el.setAttribute("role", "row");
-
+		
 		return el;
 	}
-
-	createHeaderElement() {
+	
+	createHeaderElement (){
 		var el = document.createElement("div");
-
+		
 		el.classList.add("tabulator-header");
 		el.setAttribute("role", "rowgroup");
-
-		if (!this.table.options.headerVisible) {
+		
+		if(!this.table.options.headerVisible){
 			el.classList.add("tabulator-header-hidden");
 		}
-
+		
 		return el;
 	}
-
+	
 	//return containing element
-	getElement() {
+	getElement(){
 		return this.element;
 	}
-
+	
 	//return header containing element
-	getHeadersElement() {
+	getHeadersElement(){
 		return this.headersElement;
 	}
-
+	
 	//scroll horizontally to match table body
-	scrollHorizontal(left) {
+	scrollHorizontal(left){
 		var hozAdjust = 0,
-			scrollWidth = this.element.scrollWidth - this.table.element.clientWidth;
-
+		scrollWidth = this.element.scrollWidth - this.table.element.clientWidth;
+		
 		// this.tempScrollBlock();
 		this.element.scrollLeft = left;
-
+		
 		//adjust for vertical scrollbar moving table when present
-		if (left > scrollWidth) {
+		if(left > scrollWidth){
 			hozAdjust = left - scrollWidth;
-			this.element.style.marginLeft = -hozAdjust + "px";
-		} else {
+			this.element.style.marginLeft = (-(hozAdjust)) + "px";
+		}else {
 			this.element.style.marginLeft = 0;
 		}
-
+		
 		this.scrollLeft = left;
-
+		
 		this.renderer.scrollColumns(left);
 	}
-
+	
 	///////////// Column Setup Functions /////////////
-	generateColumnsFromRowData(data) {
+	generateColumnsFromRowData(data){
 		var cols = [],
-			definitions = this.table.options.autoColumnsDefinitions,
-			row,
-			sorter;
-
-		if (data && data.length) {
+		definitions = this.table.options.autoColumnsDefinitions,
+		row, sorter;
+		
+		if(data && data.length){
+			
 			row = data[0];
-
-			for (var key in row) {
+			
+			for(var key in row){
 				let col = {
-					field: key,
-					title: key,
+					field:key,
+					title:key,
 				};
-
+				
 				let value = row[key];
-
-				switch (typeof value) {
+				
+				switch(typeof value){
 					case "undefined":
 						sorter = "string";
 						break;
-
+					
 					case "boolean":
 						sorter = "boolean";
 						break;
-
+					
 					case "object":
-						if (Array.isArray(value)) {
+						if(Array.isArray(value)){
 							sorter = "array";
-						} else {
+						}else {
 							sorter = "string";
 						}
 						break;
-
+					
 					default:
-						if (!isNaN(value) && value !== "") {
+						if(!isNaN(value) && value !== ""){
 							sorter = "number";
-						} else {
-							if (value.match(/((^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+$/i)) {
+						}else {
+							if(value.match(/((^[0-9]+[a-z]+)|(^[a-z]+[0-9]+))+$/i)){
 								sorter = "alphanum";
-							} else {
+							}else {
 								sorter = "string";
 							}
 						}
 						break;
 				}
-
+				
 				col.sorter = sorter;
-
+				
 				cols.push(col);
 			}
-
-			if (definitions) {
-				switch (typeof definitions) {
+			
+			if(definitions){
+				
+				switch(typeof definitions){
 					case "function":
 						this.table.options.columns = definitions.call(this.table, cols);
 						break;
-
+					
 					case "object":
-						if (Array.isArray(definitions)) {
+						if(Array.isArray(definitions)){
 							cols.forEach((col) => {
 								var match = definitions.find((def) => {
 									return def.field === col.field;
 								});
-
-								if (match) {
+								
+								if(match){
 									Object.assign(col, match);
 								}
 							});
-						} else {
+							
+						}else {
 							cols.forEach((col) => {
-								if (definitions[col.field]) {
+								if(definitions[col.field]){
 									Object.assign(col, definitions[col.field]);
 								}
 							});
 						}
-
+						
 						this.table.options.columns = cols;
 						break;
 				}
-			} else {
+			}else {
 				this.table.options.columns = cols;
 			}
-
+			
 			this.setColumns(this.table.options.columns);
 		}
 	}
-
-	setColumns(cols, row) {
-		while (this.headersElement.firstChild)
-			this.headersElement.removeChild(this.headersElement.firstChild);
-
+	
+	setColumns(cols, row){
+		while(this.headersElement.firstChild) this.headersElement.removeChild(this.headersElement.firstChild);
+		
 		this.columns = [];
 		this.columnsByIndex = [];
 		this.columnsByField = {};
-
+		
 		this.dispatch("columns-loading");
-
+		
 		cols.forEach((def, i) => {
 			this._addColumn(def);
 		});
-
+		
 		this._reIndexColumns();
-
+		
 		this.dispatch("columns-loaded");
-
+		
 		this.rerenderColumns(false, true);
-
+		
 		this.redraw(true);
 	}
-
-	_addColumn(definition, before, nextToColumn) {
+	
+	_addColumn(definition, before, nextToColumn){
 		var column = new Column(definition, this),
-			colEl = column.getElement(),
-			index = nextToColumn ? this.findColumnIndex(nextToColumn) : nextToColumn;
-
-		if (nextToColumn && index > -1) {
+		colEl = column.getElement(),
+		index = nextToColumn ? this.findColumnIndex(nextToColumn) : nextToColumn;
+		
+		if(nextToColumn && index > -1){
 			var topColumn = nextToColumn.getTopColumn();
 			var parentIndex = this.columns.indexOf(topColumn);
 			var nextEl = topColumn.getElement();
-
-			if (before) {
+			
+			if(before){
 				this.columns.splice(parentIndex, 0, column);
 				nextEl.parentNode.insertBefore(colEl, nextEl);
-			} else {
+			}else {
 				this.columns.splice(parentIndex + 1, 0, column);
 				nextEl.parentNode.insertBefore(colEl, nextEl.nextSibling);
 			}
-		} else {
-			if (before) {
+		}else {
+			if(before){
 				this.columns.unshift(column);
-				this.headersElement.insertBefore(
-					column.getElement(),
-					this.headersElement.firstChild
-				);
-			} else {
+				this.headersElement.insertBefore(column.getElement(), this.headersElement.firstChild);
+			}else {
 				this.columns.push(column);
 				this.headersElement.appendChild(column.getElement());
 			}
 		}
-
+		
 		column.columnRendered();
-
+		
 		return column;
 	}
-
-	registerColumnField(col) {
-		if (col.definition.field) {
+	
+	registerColumnField(col){
+		if(col.definition.field){
 			this.columnsByField[col.definition.field] = col;
 		}
 	}
-
-	registerColumnPosition(col) {
+	
+	registerColumnPosition(col){
 		this.columnsByIndex.push(col);
 	}
-
-	_reIndexColumns() {
+	
+	_reIndexColumns(){
 		this.columnsByIndex = [];
-
-		this.columns.forEach(function (column) {
+		
+		this.columns.forEach(function(column){
 			column.reRegisterPosition();
 		});
 	}
-
+	
 	//ensure column headers take up the correct amount of space in column groups
-	verticalAlignHeaders() {
+	verticalAlignHeaders(){
 		var minHeight = 0;
+		
+		if(!this.redrawBlock){
 
-		if (!this.redrawBlock) {
+			this.headersElement.style.height="";
+			
 			this.columns.forEach((column) => {
 				column.clearVerticalAlign();
 			});
-
+			
 			this.columns.forEach((column) => {
 				var height = column.getHeight();
-
-				if (height > minHeight) {
+				
+				if(height > minHeight){
 					minHeight = height;
 				}
 			});
 
-			this.columns.forEach((column) => {
-				column.verticalAlign(
-					this.table.options.columnHeaderVertAlign,
-					minHeight
-				);
-			});
+			this.headersElement.style.height = minHeight + "px";
 
+			this.columns.forEach((column) => {
+				column.verticalAlign(this.table.options.columnHeaderVertAlign, minHeight);
+			});
+			
 			this.table.rowManager.adjustTableSize();
 		}
 	}
-
+	
 	//////////////// Column Details /////////////////
-	findColumn(subject) {
+	findColumn(subject){
 		var columns;
 
-		if (typeof subject == "object") {
-			if (subject instanceof Column) {
+		if(typeof subject == "object"){
+			
+			if(subject instanceof Column){
 				//subject is column element
 				return subject;
-			} else if (subject instanceof ColumnComponent) {
+			}else if(subject instanceof ColumnComponent){
 				//subject is public column component
 				return subject._getSelf() || false;
-			} else if (
-				typeof HTMLElement !== "undefined" &&
-				subject instanceof HTMLElement
-			) {
+			}else if(typeof HTMLElement !== "undefined" && subject instanceof HTMLElement){
+
 				columns = [];
 
 				this.columns.forEach((column) => {
@@ -23218,400 +20977,389 @@ class ColumnManager extends CoreFeature {
 				let match = columns.find((column) => {
 					return column.element === subject;
 				});
-
+				
 				return match || false;
 			}
-		} else {
+			
+		}else {
 			//subject should be treated as the field name of the column
 			return this.columnsByField[subject] || false;
 		}
-
+		
 		//catch all for any other type of input
 		return false;
 	}
-
-	getColumnByField(field) {
+	
+	getColumnByField(field){
 		return this.columnsByField[field];
 	}
-
-	getColumnsByFieldRoot(root) {
+	
+	getColumnsByFieldRoot(root){
 		var matches = [];
-
+		
 		Object.keys(this.columnsByField).forEach((field) => {
 			var fieldRoot = field.split(".")[0];
-			if (fieldRoot === root) {
+			if(fieldRoot === root){
 				matches.push(this.columnsByField[field]);
 			}
 		});
-
+		
 		return matches;
 	}
-
-	getColumnByIndex(index) {
+	
+	getColumnByIndex(index){
 		return this.columnsByIndex[index];
 	}
-
-	getFirstVisibleColumn() {
+	
+	getFirstVisibleColumn(){
 		var index = this.columnsByIndex.findIndex((col) => {
 			return col.visible;
 		});
-
+		
 		return index > -1 ? this.columnsByIndex[index] : false;
 	}
-
-	getColumns() {
+	
+	getColumns(){
 		return this.columns;
 	}
-
-	findColumnIndex(column) {
+	
+	findColumnIndex(column){
 		return this.columnsByIndex.findIndex((col) => {
 			return column === col;
 		});
 	}
-
+	
 	//return all columns that are not groups
-	getRealColumns() {
+	getRealColumns(){
 		return this.columnsByIndex;
 	}
-
+	
 	//traverse across columns and call action
-	traverse(callback) {
-		this.columnsByIndex.forEach((column, i) => {
+	traverse(callback){
+		this.columnsByIndex.forEach((column,i) =>{
 			callback(column, i);
 		});
 	}
-
+	
 	//get definitions of actual columns
-	getDefinitions(active) {
+	getDefinitions(active){
 		var output = [];
-
+		
 		this.columnsByIndex.forEach((column) => {
-			if (!active || (active && column.visible)) {
+			if(!active || (active && column.visible)){
 				output.push(column.getDefinition());
 			}
 		});
-
+		
 		return output;
 	}
-
+	
 	//get full nested definition tree
-	getDefinitionTree() {
+	getDefinitionTree(){
 		var output = [];
-
+		
 		this.columns.forEach((column) => {
 			output.push(column.getDefinition(true));
 		});
-
+		
 		return output;
 	}
-
-	getComponents(structured) {
+	
+	getComponents(structured){
 		var output = [],
-			columns = structured ? this.columns : this.columnsByIndex;
-
+		columns = structured ? this.columns : this.columnsByIndex;
+		
 		columns.forEach((column) => {
 			output.push(column.getComponent());
 		});
-
+		
 		return output;
 	}
-
-	getWidth() {
+	
+	getWidth(){
 		var width = 0;
-
+		
 		this.columnsByIndex.forEach((column) => {
-			if (column.visible) {
+			if(column.visible){
 				width += column.getWidth();
 			}
 		});
-
+		
 		return width;
 	}
-
-	moveColumn(from, to, after) {
-		this.moveColumnActual(from, to, after);
-
+	
+	moveColumn(from, to, after){
 		to.element.parentNode.insertBefore(from.element, to.element);
-
-		if (after) {
+		
+		if(after){
 			to.element.parentNode.insertBefore(to.element, from.element);
 		}
+		
+		this.moveColumnActual(from, to, after);
 
 		this.verticalAlignHeaders();
-
+		
 		this.table.rowManager.reinitialize();
 	}
-
-	moveColumnActual(from, to, after) {
-		if (from.parent.isGroup) {
+	
+	moveColumnActual(from, to, after){
+		if(from.parent.isGroup){
 			this._moveColumnInArray(from.parent.columns, from, to, after);
-		} else {
+		}else {
 			this._moveColumnInArray(this.columns, from, to, after);
 		}
-
+		
 		this._moveColumnInArray(this.columnsByIndex, from, to, after, true);
-
+		
 		this.rerenderColumns(true);
-
+		
 		this.dispatch("column-moved", from, to, after);
-
-		if (this.subscribedExternal("columnMoved")) {
-			this.dispatchExternal(
-				"columnMoved",
-				from.getComponent(),
-				this.table.columnManager.getComponents()
-			);
+		
+		if(this.subscribedExternal("columnMoved")){
+			this.dispatchExternal("columnMoved", from.getComponent(), this.table.columnManager.getComponents());
 		}
 	}
-
-	_moveColumnInArray(columns, from, to, after, updateRows) {
-		var fromIndex = columns.indexOf(from),
-			toIndex,
-			rows = [];
-
+	
+	_moveColumnInArray(columns, from, to, after, updateRows){
+		var	fromIndex = columns.indexOf(from),
+		toIndex, rows = [];
+		
 		if (fromIndex > -1) {
+			
 			columns.splice(fromIndex, 1);
-
+			
 			toIndex = columns.indexOf(to);
-
+			
 			if (toIndex > -1) {
-				if (after) {
-					toIndex = toIndex + 1;
+				
+				if(after){
+					toIndex = toIndex+1;
 				}
-			} else {
+				
+			}else {
 				toIndex = fromIndex;
 			}
-
+			
 			columns.splice(toIndex, 0, from);
-
-			if (updateRows) {
-				rows =
-					this.chain("column-moving-rows", [from, to, after], null, []) || [];
-
+			
+			if(updateRows){
+				
+				rows = this.chain("column-moving-rows", [from, to, after], null, []) || [];
+				
 				rows = rows.concat(this.table.rowManager.rows);
-
-				rows.forEach(function (row) {
-					if (row.cells.length) {
+				
+				rows.forEach(function(row){
+					if(row.cells.length){
 						var cell = row.cells.splice(fromIndex, 1)[0];
 						row.cells.splice(toIndex, 0, cell);
 					}
 				});
+				
 			}
 		}
 	}
-
-	scrollToColumn(column, position, ifVisible) {
+	
+	scrollToColumn(column, position, ifVisible){
 		var left = 0,
-			offset = 0,
-			adjust = 0,
-			colEl = column.getElement();
-
+		offset = 0,
+		adjust = 0,
+		colEl = column.getElement();
+		
 		return new Promise((resolve, reject) => {
-			if (typeof position === "undefined") {
+			
+			if(typeof position === "undefined"){
 				position = this.table.options.scrollToColumnPosition;
 			}
-
-			if (typeof ifVisible === "undefined") {
+			
+			if(typeof ifVisible === "undefined"){
 				ifVisible = this.table.options.scrollToColumnIfVisible;
 			}
-
-			if (column.visible) {
+			
+			if(column.visible){
+				
 				//align to correct position
-				switch (position) {
+				switch(position){
 					case "middle":
 					case "center":
 						adjust = -this.element.clientWidth / 2;
 						break;
-
+					
 					case "right":
 						adjust = colEl.clientWidth - this.headersElement.clientWidth;
 						break;
 				}
-
+				
 				//check column visibility
-				if (!ifVisible) {
+				if(!ifVisible){
+					
 					offset = colEl.offsetLeft;
-
-					if (
-						offset > 0 &&
-						offset + colEl.offsetWidth < this.element.clientWidth
-					) {
+					
+					if(offset > 0 && offset + colEl.offsetWidth < this.element.clientWidth){
 						return false;
 					}
 				}
-
+				
 				//calculate scroll position
 				left = colEl.offsetLeft + adjust;
-
-				left = Math.max(
-					Math.min(
-						left,
-						this.table.rowManager.element.scrollWidth -
-							this.table.rowManager.element.clientWidth
-					),
-					0
-				);
-
+				
+				left = Math.max(Math.min(left, this.table.rowManager.element.scrollWidth - this.table.rowManager.element.clientWidth),0);
+				
 				this.table.rowManager.scrollHorizontal(left);
 				this.scrollHorizontal(left);
-
+				
 				resolve();
-			} else {
+			}else {
 				console.warn("Scroll Error - Column not visible");
 				reject("Scroll Error - Column not visible");
 			}
+			
 		});
 	}
-
+	
 	//////////////// Cell Management /////////////////
-	generateCells(row) {
+	generateCells(row){
 		var cells = [];
-
+		
 		this.columnsByIndex.forEach((column) => {
 			cells.push(column.generateCell(row));
 		});
-
+		
 		return cells;
 	}
-
+	
 	//////////////// Column Management /////////////////
-	getFlexBaseWidth() {
+	getFlexBaseWidth(){
 		var totalWidth = this.table.element.clientWidth, //table element width
-			fixedWidth = 0;
-
+		fixedWidth = 0;
+		
 		//adjust for vertical scrollbar if present
-		if (
-			this.table.rowManager.element.scrollHeight >
-			this.table.rowManager.element.clientHeight
-		) {
-			totalWidth -=
-				this.table.rowManager.element.offsetWidth -
-				this.table.rowManager.element.clientWidth;
+		if(this.table.rowManager.element.scrollHeight > this.table.rowManager.element.clientHeight){
+			totalWidth -= this.table.rowManager.element.offsetWidth - this.table.rowManager.element.clientWidth;
 		}
-
-		this.columnsByIndex.forEach(function (column) {
+		
+		this.columnsByIndex.forEach(function(column){
 			var width, minWidth, colWidth;
-
-			if (column.visible) {
+			
+			if(column.visible){
+				
 				width = column.definition.width || 0;
-
+				
 				minWidth = parseInt(column.minWidth);
-
-				if (typeof width == "string") {
-					if (width.indexOf("%") > -1) {
-						colWidth = (totalWidth / 100) * parseInt(width);
-					} else {
+				
+				if(typeof(width) == "string"){
+					if(width.indexOf("%") > -1){
+						colWidth = (totalWidth / 100) * parseInt(width) ;
+					}else {
 						colWidth = parseInt(width);
 					}
-				} else {
+				}else {
 					colWidth = width;
 				}
-
+				
 				fixedWidth += colWidth > minWidth ? colWidth : minWidth;
+				
 			}
 		});
-
+		
 		return fixedWidth;
 	}
-
-	addColumn(definition, before, nextToColumn) {
+	
+	addColumn(definition, before, nextToColumn){
 		return new Promise((resolve, reject) => {
 			var column = this._addColumn(definition, before, nextToColumn);
-
+			
 			this._reIndexColumns();
-
+			
 			this.dispatch("column-add", definition, before, nextToColumn);
-
-			if (this.layoutMode() != "fitColumns") {
+			
+			if(this.layoutMode() != "fitColumns"){
 				column.reinitializeWidth();
 			}
-
+			
 			this.redraw(true);
-
+			
 			this.table.rowManager.reinitialize();
-
+			
 			this.rerenderColumns();
-
+			
 			resolve(column);
 		});
 	}
-
+	
 	//remove column from system
-	deregisterColumn(column) {
+	deregisterColumn(column){
 		var field = column.getField(),
-			index;
-
+		index;
+		
 		//remove from field list
-		if (field) {
+		if(field){
 			delete this.columnsByField[field];
 		}
-
+		
 		//remove from index list
 		index = this.columnsByIndex.indexOf(column);
-
-		if (index > -1) {
+		
+		if(index > -1){
 			this.columnsByIndex.splice(index, 1);
 		}
-
+		
 		//remove from column list
 		index = this.columns.indexOf(column);
-
-		if (index > -1) {
+		
+		if(index > -1){
 			this.columns.splice(index, 1);
 		}
-
+		
 		this.verticalAlignHeaders();
-
+		
 		this.redraw();
 	}
-
-	rerenderColumns(update, silent) {
-		if (!this.redrawBlock) {
+	
+	rerenderColumns(update, silent){
+		if(!this.redrawBlock){
 			this.renderer.rerenderColumns(update, silent);
-		} else {
-			if (
-				update === false ||
-				(update === true && this.redrawBlockUpdate === null)
-			) {
+		}else {
+			if(update === false || (update === true && this.redrawBlockUpdate === null)){
 				this.redrawBlockUpdate = update;
 			}
 		}
 	}
-
-	blockRedraw() {
+	
+	blockRedraw(){
 		this.redrawBlock = true;
 		this.redrawBlockUpdate = null;
 	}
-
-	restoreRedraw() {
+	
+	restoreRedraw(){
 		this.redrawBlock = false;
 		this.verticalAlignHeaders();
 		this.renderer.rerenderColumns(this.redrawBlockUpdate);
+		
 	}
-
+	
 	//redraw columns
-	redraw(force) {
-		if (Helpers.elVisible(this.element)) {
+	redraw(force){
+		if(Helpers.elVisible(this.element)){
 			this.verticalAlignHeaders();
 		}
-
-		if (force) {
+		
+		if(force){
 			this.table.rowManager.resetScroll();
 			this.table.rowManager.reinitialize();
 		}
-
-		if (!this.confirm("table-redrawing", force)) {
+		
+		if(!this.confirm("table-redrawing", force)){
 			this.layoutRefresh(force);
 		}
-
+		
 		this.dispatch("table-redraw", force);
-
+		
 		this.table.footerManager.redraw();
 	}
 }
 
-class BasicVertical extends Renderer {
-	constructor(table) {
+class BasicVertical extends Renderer{
+	constructor(table){
 		super(table);
 
 		this.verticalFillMode = "fill";
@@ -23623,11 +21371,11 @@ class BasicVertical extends Renderer {
 		this.scrollLeft = 0;
 	}
 
-	clearRows() {
+	clearRows(){
 		var element = this.tableElement;
 
 		// element.children.detach();
-		while (element.firstChild) element.removeChild(element.firstChild);
+		while(element.firstChild) element.removeChild(element.firstChild);
 
 		element.scrollTop = 0;
 		element.scrollLeft = 0;
@@ -23638,65 +21386,57 @@ class BasicVertical extends Renderer {
 		element.style.visibility = "";
 	}
 
-	renderRows() {
+	renderRows(){
 		var element = this.tableElement,
-			onlyGroupHeaders = true;
+		onlyGroupHeaders = true;
 
 		this.rows().forEach((row, index) => {
 			this.styleRow(row, index);
 			element.appendChild(row.getElement());
 			row.initialize(true);
 
-			if (row.type !== "group") {
+			if(row.type !== "group"){
 				onlyGroupHeaders = false;
 			}
 		});
 
-		if (onlyGroupHeaders) {
+		if(onlyGroupHeaders){
 			element.style.minWidth = this.table.columnManager.getWidth() + "px";
-		} else {
+		}else {
 			element.style.minWidth = "";
 		}
 	}
 
-	rerenderRows(callback) {
+
+	rerenderRows(callback){
 		this.clearRows();
 		this.renderRows();
 
-		if (callback) {
+		if(callback){
 			callback();
 		}
 	}
 
-	scrollToRowNearestTop(row) {
+	scrollToRowNearestTop(row){
 		var rowTop = Helpers.elOffset(row.getElement()).top;
 
-		return !(
-			Math.abs(this.elementVertical.scrollTop - rowTop) >
-			Math.abs(
-				this.elementVertical.scrollTop +
-					this.elementVertical.clientHeight -
-					rowTop
-			)
-		);
+		return !(Math.abs(this.elementVertical.scrollTop - rowTop) > Math.abs(this.elementVertical.scrollTop + this.elementVertical.clientHeight - rowTop));
 	}
 
-	scrollToRow(row) {
+	scrollToRow(row){
 		var rowEl = row.getElement();
 
-		this.elementVertical.scrollTop =
-			Helpers.elOffset(rowEl).top -
-			Helpers.elOffset(this.elementVertical).top +
-			this.elementVertical.scrollTop;
+		this.elementVertical.scrollTop = Helpers.elOffset(rowEl).top - Helpers.elOffset(this.elementVertical).top + this.elementVertical.scrollTop;
 	}
 
-	visibleRows(includingBuffer) {
+	visibleRows(includingBuffer){
 		return this.rows();
 	}
+
 }
 
-class VirtualDomVertical extends Renderer {
-	constructor(table) {
+class VirtualDomVertical extends Renderer{
+	constructor(table){
 		super(table);
 
 		this.verticalFillMode = "fill";
@@ -23730,11 +21470,11 @@ class VirtualDomVertical extends Renderer {
 	///////// Public Functions ///////////
 	//////////////////////////////////////
 
-	clearRows() {
+	clearRows(){
 		var element = this.tableElement;
 
 		// element.children.detach();
-		while (element.firstChild) element.removeChild(element.firstChild);
+		while(element.firstChild) element.removeChild(element.firstChild);
 
 		element.style.paddingTop = "";
 		element.style.paddingBottom = "";
@@ -23757,11 +21497,11 @@ class VirtualDomVertical extends Renderer {
 		this.vDomScrollPosBottom = 0;
 	}
 
-	renderRows() {
+	renderRows(){
 		this._virtualRenderFill();
 	}
 
-	rerenderRows(callback) {
+	rerenderRows(callback){
 		var scrollTop = this.elementVertical.scrollTop;
 		var topRow = false;
 		var topOffset = false;
@@ -23770,14 +21510,15 @@ class VirtualDomVertical extends Renderer {
 
 		var rows = this.rows();
 
-		for (var i = this.vDomTop; i <= this.vDomBottom; i++) {
-			if (rows[i]) {
+		for(var i = this.vDomTop; i <= this.vDomBottom; i++){
+
+			if(rows[i]){
 				var diff = scrollTop - rows[i].getElement().offsetTop;
 
-				if (topOffset === false || Math.abs(diff) < topOffset) {
+				if(topOffset === false || Math.abs(diff) < topOffset){
 					topOffset = diff;
 					topRow = i;
-				} else {
+				}else {
 					break;
 				}
 			}
@@ -23787,17 +21528,13 @@ class VirtualDomVertical extends Renderer {
 			row.deinitializeHeight();
 		});
 
-		if (callback) {
+		if(callback){
 			callback();
 		}
 
-		if (this.rows().length) {
-			this._virtualRenderFill(
-				topRow === false ? this.rows.length - 1 : topRow,
-				true,
-				topOffset || 0
-			);
-		} else {
+		if(this.rows().length){
+			this._virtualRenderFill((topRow === false ? this.rows.length - 1 : topRow), true, topOffset || 0);
+		}else {
 			this.clear();
 			this.table.rowManager._showPlaceholder();
 		}
@@ -23805,11 +21542,11 @@ class VirtualDomVertical extends Renderer {
 		this.scrollColumns(left);
 	}
 
-	scrollColumns(left) {
+	scrollColumns(left){
 		this.table.rowManager.scrollHorizontal(left);
 	}
 
-	scrollRows(top, dir) {
+	scrollRows(top, dir){
 		var topDiff = top - this.vDomScrollPosTop;
 		var bottomDiff = top - this.vDomScrollPosBottom;
 		var margin = this.vDomWindowBuffer * 2;
@@ -23817,42 +21554,39 @@ class VirtualDomVertical extends Renderer {
 
 		this.scrollTop = top;
 
-		if (-topDiff > margin || bottomDiff > margin) {
+		if(-topDiff > margin || bottomDiff > margin){
 			//if big scroll redraw table;
 			var left = this.table.rowManager.scrollLeft;
-			this._virtualRenderFill(
-				Math.floor(
-					(this.elementVertical.scrollTop / this.elementVertical.scrollHeight) *
-						rows.length
-				)
-			);
+			this._virtualRenderFill(Math.floor((this.elementVertical.scrollTop / this.elementVertical.scrollHeight) * rows.length));
 			this.scrollColumns(left);
-		} else {
-			if (dir) {
+		}else {
+
+			if(dir){
 				//scrolling up
-				if (topDiff < 0) {
+				if(topDiff < 0){
 					this._addTopRow(rows, -topDiff);
 				}
 
-				if (bottomDiff < 0) {
+				if(bottomDiff < 0){
 					//hide bottom row if needed
-					if (this.vDomScrollHeight - this.scrollTop > this.vDomWindowBuffer) {
+					if(this.vDomScrollHeight - this.scrollTop > this.vDomWindowBuffer){
 						this._removeBottomRow(rows, -bottomDiff);
-					} else {
+					}else {
 						this.vDomScrollPosBottom = this.scrollTop;
 					}
 				}
-			} else {
-				if (bottomDiff >= 0) {
+			}else {
+
+				if(bottomDiff >= 0){
 					this._addBottomRow(rows, bottomDiff);
 				}
 
 				//scrolling down
-				if (topDiff >= 0) {
+				if(topDiff >= 0){
 					//hide top row if needed
-					if (this.scrollTop > this.vDomWindowBuffer) {
+					if(this.scrollTop > this.vDomWindowBuffer){
 						this._removeTopRow(rows, topDiff);
-					} else {
+					}else {
 						this.vDomScrollPosTop = this.scrollTop;
 					}
 				}
@@ -23860,58 +21594,54 @@ class VirtualDomVertical extends Renderer {
 		}
 	}
 
-	resize() {
-		this.vDomWindowBuffer =
-			this.table.options.renderVerticalBuffer ||
-			this.elementVertical.clientHeight;
+	resize(){
+		this.vDomWindowBuffer = this.table.options.renderVerticalBuffer || this.elementVertical.clientHeight;
 	}
 
-	scrollToRowNearestTop(row) {
+	scrollToRowNearestTop(row){
 		var rowIndex = this.rows().indexOf(row);
 
-		return !(
-			Math.abs(this.vDomTop - rowIndex) > Math.abs(this.vDomBottom - rowIndex)
-		);
+		return !(Math.abs(this.vDomTop - rowIndex) > Math.abs(this.vDomBottom - rowIndex));
 	}
 
-	scrollToRow(row) {
+	scrollToRow(row){
 		var index = this.rows().indexOf(row);
 
-		if (index > -1) {
+		if(index > -1){
 			this._virtualRenderFill(index, true);
 		}
 	}
 
-	visibleRows(includingBuffer) {
+	visibleRows(includingBuffer){
 		var topEdge = this.elementVertical.scrollTop,
-			bottomEdge = this.elementVertical.clientHeight + topEdge,
-			topFound = false,
-			topRow = 0,
-			bottomRow = 0,
-			rows = this.rows();
+		bottomEdge = this.elementVertical.clientHeight + topEdge,
+		topFound = false,
+		topRow = 0,
+		bottomRow = 0,
+		rows = this.rows();
 
-		if (includingBuffer) {
+		if(includingBuffer){
 			topRow = this.vDomTop;
 			bottomRow = this.vDomBottom;
-		} else {
-			for (var i = this.vDomTop; i <= this.vDomBottom; i++) {
-				if (rows[i]) {
-					if (!topFound) {
-						if (topEdge - rows[i].getElement().offsetTop >= 0) {
+		}else {
+			for(var i = this.vDomTop; i <= this.vDomBottom; i++){
+				if(rows[i]){
+					if(!topFound){
+						if((topEdge - rows[i].getElement().offsetTop) >= 0){
 							topRow = i;
-						} else {
+						}else {
 							topFound = true;
 
-							if (bottomEdge - rows[i].getElement().offsetTop >= 0) {
+							if(bottomEdge - rows[i].getElement().offsetTop >= 0){
 								bottomRow = i;
-							} else {
+							}else {
 								break;
 							}
 						}
-					} else {
-						if (bottomEdge - rows[i].getElement().offsetTop >= 0) {
+					}else {
+						if(bottomEdge - rows[i].getElement().offsetTop >= 0){
 							bottomRow = i;
-						} else {
+						}else {
 							break;
 						}
 					}
@@ -23927,63 +21657,51 @@ class VirtualDomVertical extends Renderer {
 	//////////////////////////////////////
 
 	//full virtual render
-	_virtualRenderFill(position, forceMove, offset) {
-		var element = this.tableElement,
-			holder = this.elementVertical,
-			topPad = 0,
-			rowsHeight = 0,
-			heightOccupied = 0,
-			topPadHeight = 0,
-			i = 0,
-			rows = this.rows(),
-			rowsCount = rows.length,
-			containerHeight = this.elementVertical.clientHeight;
+	_virtualRenderFill(position, forceMove, offset){
+		var	element = this.tableElement,
+		holder = this.elementVertical,
+		topPad = 0,
+		rowsHeight = 0,
+		heightOccupied = 0,
+		topPadHeight = 0,
+		i = 0,
+		rows = this.rows(),
+		rowsCount = rows.length,
+		containerHeight = this.elementVertical.clientHeight;
 
 		position = position || 0;
 
 		offset = offset || 0;
 
-		if (!position) {
+		if(!position){
 			this.clear();
-		} else {
-			while (element.firstChild) element.removeChild(element.firstChild);
+		}else {
+			while(element.firstChild) element.removeChild(element.firstChild);
 
 			//check if position is too close to bottom of table
 			heightOccupied = (rowsCount - position + 1) * this.vDomRowHeight;
 
-			if (heightOccupied < containerHeight) {
-				position -= Math.ceil(
-					(containerHeight - heightOccupied) / this.vDomRowHeight
-				);
-				if (position < 0) {
+			if(heightOccupied < containerHeight){
+				position -= Math.ceil((containerHeight - heightOccupied) / this.vDomRowHeight);
+				if(position < 0){
 					position = 0;
 				}
 			}
 
 			//calculate initial pad
-			topPad = Math.min(
-				Math.max(
-					Math.floor(this.vDomWindowBuffer / this.vDomRowHeight),
-					this.vDomWindowMinMarginRows
-				),
-				position
-			);
+			topPad = Math.min(Math.max(Math.floor(this.vDomWindowBuffer / this.vDomRowHeight),  this.vDomWindowMinMarginRows), position);
 			position -= topPad;
 		}
 
-		if (rowsCount && Helpers.elVisible(this.elementVertical)) {
+		if(rowsCount && Helpers.elVisible(this.elementVertical)){
 			this.vDomTop = position;
 
-			this.vDomBottom = position - 1;
+			this.vDomBottom = position -1;
 
-			while (
-				(rowsHeight <= containerHeight + this.vDomWindowBuffer ||
-					i < this.vDomWindowMinTotalRows) &&
-				this.vDomBottom < rowsCount - 1
-			) {
+			while ((rowsHeight <= containerHeight + this.vDomWindowBuffer || i < this.vDomWindowMinTotalRows) && this.vDomBottom < rowsCount -1){
 				var index = this.vDomBottom + 1,
-					row = rows[index],
-					rowHeight = 0;
+				row = rows[index],
+				rowHeight = 0;
 
 				this.styleRow(row, index);
 
@@ -23991,74 +21709,49 @@ class VirtualDomVertical extends Renderer {
 
 				row.initialize();
 
-				if (!row.heightInitialized) {
+				if(!row.heightInitialized){
 					row.normalizeHeight(true);
 				}
 
 				rowHeight = row.getHeight();
 
-				if (i < topPad) {
+				if(i < topPad){
 					topPadHeight += rowHeight;
-				} else {
+				}else {
 					rowsHeight += rowHeight;
 				}
 
-				if (rowHeight > this.vDomWindowBuffer) {
+				if(rowHeight > this.vDomWindowBuffer){
 					this.vDomWindowBuffer = rowHeight * 2;
 				}
 
-				this.vDomBottom++;
+				this.vDomBottom ++;
 				i++;
 			}
 
-			if (!position) {
+			if(!position){
 				this.vDomTopPad = 0;
 				//adjust row height to match average of rendered elements
 				this.vDomRowHeight = Math.floor((rowsHeight + topPadHeight) / i);
-				this.vDomBottomPad =
-					this.vDomRowHeight * (rowsCount - this.vDomBottom - 1);
+				this.vDomBottomPad = this.vDomRowHeight * (rowsCount - this.vDomBottom -1);
 
-				this.vDomScrollHeight =
-					topPadHeight + rowsHeight + this.vDomBottomPad - containerHeight;
-			} else {
-				this.vDomTopPad = !forceMove
-					? this.scrollTop - topPadHeight
-					: this.vDomRowHeight * this.vDomTop + offset;
-				this.vDomBottomPad =
-					this.vDomBottom == rowsCount - 1
-						? 0
-						: Math.max(
-								this.vDomScrollHeight -
-									this.vDomTopPad -
-									rowsHeight -
-									topPadHeight,
-								0
-						  );
+				this.vDomScrollHeight = topPadHeight + rowsHeight + this.vDomBottomPad - containerHeight;
+			}else {
+				this.vDomTopPad = !forceMove ? this.scrollTop - topPadHeight : (this.vDomRowHeight * this.vDomTop) + offset;
+				this.vDomBottomPad = this.vDomBottom == rowsCount-1 ? 0 : Math.max(this.vDomScrollHeight - this.vDomTopPad - rowsHeight - topPadHeight, 0);
 			}
 
 			element.style.paddingTop = this.vDomTopPad + "px";
 			element.style.paddingBottom = this.vDomBottomPad + "px";
 
-			if (forceMove) {
-				this.scrollTop =
-					this.vDomTopPad +
-					topPadHeight +
-					offset -
-					(this.elementVertical.scrollWidth > this.elementVertical.clientWidth
-						? this.elementVertical.offsetHeight - containerHeight
-						: 0);
+			if(forceMove){
+				this.scrollTop = this.vDomTopPad + (topPadHeight) + offset - (this.elementVertical.scrollWidth > this.elementVertical.clientWidth ? this.elementVertical.offsetHeight - containerHeight : 0);
 			}
 
-			this.scrollTop = Math.min(
-				this.scrollTop,
-				this.elementVertical.scrollHeight - containerHeight
-			);
+			this.scrollTop = Math.min(this.scrollTop, this.elementVertical.scrollHeight - containerHeight);
 
 			//adjust for horizontal scrollbar if present (and not at top of table)
-			if (
-				this.elementVertical.scrollWidth > this.elementVertical.offsetWidth &&
-				forceMove
-			) {
+			if(this.elementVertical.scrollWidth > this.elementVertical.offsetWidth && forceMove){
 				this.scrollTop += this.elementVertical.offsetHeight - containerHeight;
 			}
 
@@ -24071,38 +21764,38 @@ class VirtualDomVertical extends Renderer {
 		}
 	}
 
-	_addTopRow(rows, fillableSpace) {
+	_addTopRow(rows, fillableSpace){
 		var table = this.tableElement,
-			addedRows = [],
-			paddingAdjust = 0,
-			index = this.vDomTop - 1,
-			i = 0,
-			working = true;
+		addedRows = [],
+		paddingAdjust = 0,
+		index = this.vDomTop -1,
+		i = 0,
+		working = true;
 
-		while (working) {
-			if (this.vDomTop) {
+		while(working){
+			if(this.vDomTop){
 				let row = rows[index],
-					rowHeight,
-					initialized;
+				rowHeight, initialized;
 
-				if (row && i < this.vDomMaxRenderChain) {
+				if(row && i < this.vDomMaxRenderChain){
 					rowHeight = row.getHeight() || this.vDomRowHeight;
 					initialized = row.initialized;
 
-					if (fillableSpace >= rowHeight) {
+					if(fillableSpace >= rowHeight){
+
 						this.styleRow(row, index);
 						table.insertBefore(row.getElement(), table.firstChild);
 
-						if (!row.initialized || !row.heightInitialized) {
+						if(!row.initialized || !row.heightInitialized){
 							addedRows.push(row);
 						}
 
 						row.initialize();
 
-						if (!initialized) {
+						if(!initialized){
 							rowHeight = row.getElement().offsetHeight;
 
-							if (rowHeight > this.vDomWindowBuffer) {
+							if(rowHeight > this.vDomWindowBuffer){
 								this.vDomWindowBuffer = rowHeight * 2;
 							}
 						}
@@ -24113,31 +21806,34 @@ class VirtualDomVertical extends Renderer {
 						this.vDomTop--;
 						index--;
 						i++;
-					} else {
+
+					}else {
 						working = false;
 					}
-				} else {
+
+				}else {
 					working = false;
 				}
-			} else {
+
+			}else {
 				working = false;
 			}
 		}
 
-		for (let row of addedRows) {
+		for (let row of addedRows){
 			row.clearCellHeight();
 		}
 
 		this._quickNormalizeRowHeight(addedRows);
 
-		if (paddingAdjust) {
+		if(paddingAdjust){
 			this.vDomTopPad -= paddingAdjust;
 
-			if (this.vDomTopPad < 0) {
+			if(this.vDomTopPad < 0){
 				this.vDomTopPad = index * this.vDomRowHeight;
 			}
 
-			if (index < 1) {
+			if(index < 1){
 				this.vDomTopPad = 0;
 			}
 
@@ -24146,20 +21842,20 @@ class VirtualDomVertical extends Renderer {
 		}
 	}
 
-	_removeTopRow(rows, fillableSpace) {
+	_removeTopRow(rows, fillableSpace){
 		var removableRows = [],
-			paddingAdjust = 0,
-			i = 0,
-			working = true;
+		paddingAdjust = 0,
+		i = 0,
+		working = true;
 
-		while (working) {
+		while(working){
 			let row = rows[this.vDomTop],
-				rowHeight;
+			rowHeight;
 
-			if (row && i < this.vDomMaxRenderChain) {
+			if(row && i < this.vDomMaxRenderChain){
 				rowHeight = row.getHeight() || this.vDomRowHeight;
 
-				if (fillableSpace >= rowHeight) {
+				if(fillableSpace >= rowHeight){
 					this.vDomTop++;
 
 					fillableSpace -= rowHeight;
@@ -24167,62 +21863,60 @@ class VirtualDomVertical extends Renderer {
 
 					removableRows.push(row);
 					i++;
-				} else {
+				}else {
 					working = false;
 				}
-			} else {
+			}else {
 				working = false;
 			}
 		}
 
-		for (let row of removableRows) {
+		for (let row of removableRows){
 			let rowEl = row.getElement();
 
-			if (rowEl.parentNode) {
+			if(rowEl.parentNode){
 				rowEl.parentNode.removeChild(rowEl);
 			}
 		}
 
-		if (paddingAdjust) {
+		if(paddingAdjust){
 			this.vDomTopPad += paddingAdjust;
 			this.tableElement.style.paddingTop = this.vDomTopPad + "px";
-			this.vDomScrollPosTop += this.vDomTop
-				? paddingAdjust
-				: paddingAdjust + this.vDomWindowBuffer;
+			this.vDomScrollPosTop += this.vDomTop ? paddingAdjust : paddingAdjust + this.vDomWindowBuffer;
 		}
 	}
 
-	_addBottomRow(rows, fillableSpace) {
+	_addBottomRow(rows, fillableSpace){
 		var table = this.tableElement,
-			addedRows = [],
-			paddingAdjust = 0,
-			index = this.vDomBottom + 1,
-			i = 0,
-			working = true;
+		addedRows = [],
+		paddingAdjust = 0,
+		index = this.vDomBottom + 1,
+		i = 0,
+		working = true;
 
-		while (working) {
+		while(working){
 			let row = rows[index],
-				rowHeight,
-				initialized;
+			rowHeight, initialized;
 
-			if (row && i < this.vDomMaxRenderChain) {
+			if(row && i < this.vDomMaxRenderChain){
 				rowHeight = row.getHeight() || this.vDomRowHeight;
 				initialized = row.initialized;
 
-				if (fillableSpace >= rowHeight) {
+				if(fillableSpace >= rowHeight){
+
 					this.styleRow(row, index);
 					table.appendChild(row.getElement());
 
-					if (!row.initialized || !row.heightInitialized) {
+					if(!row.initialized || !row.heightInitialized){
 						addedRows.push(row);
 					}
 
 					row.initialize();
 
-					if (!initialized) {
+					if(!initialized){
 						rowHeight = row.getElement().offsetHeight;
 
-						if (rowHeight > this.vDomWindowBuffer) {
+						if(rowHeight > this.vDomWindowBuffer){
 							this.vDomWindowBuffer = rowHeight * 2;
 						}
 					}
@@ -24233,24 +21927,24 @@ class VirtualDomVertical extends Renderer {
 					this.vDomBottom++;
 					index++;
 					i++;
-				} else {
+				}else {
 					working = false;
 				}
-			} else {
+			}else {
 				working = false;
 			}
 		}
 
-		for (let row of addedRows) {
+		for (let row of addedRows){
 			row.clearCellHeight();
 		}
 
 		this._quickNormalizeRowHeight(addedRows);
 
-		if (paddingAdjust) {
+		if(paddingAdjust){
 			this.vDomBottomPad -= paddingAdjust;
 
-			if (this.vDomBottomPad < 0 || index == rows.length - 1) {
+			if(this.vDomBottomPad < 0 || index == rows.length -1){
 				this.vDomBottomPad = 0;
 			}
 
@@ -24259,47 +21953,47 @@ class VirtualDomVertical extends Renderer {
 		}
 	}
 
-	_removeBottomRow(rows, fillableSpace) {
+	_removeBottomRow(rows, fillableSpace){
 		var removableRows = [],
-			paddingAdjust = 0,
-			i = 0,
-			working = true;
+		paddingAdjust = 0,
+		i = 0,
+		working = true;
 
-		while (working) {
+		while(working){
 			let row = rows[this.vDomBottom],
-				rowHeight;
+			rowHeight;
 
-			if (row && i < this.vDomMaxRenderChain) {
+			if(row && i < this.vDomMaxRenderChain){
 				rowHeight = row.getHeight() || this.vDomRowHeight;
 
-				if (fillableSpace >= rowHeight) {
-					this.vDomBottom--;
+				if(fillableSpace >= rowHeight){
+					this.vDomBottom --;
 
 					fillableSpace -= rowHeight;
 					paddingAdjust += rowHeight;
 
 					removableRows.push(row);
 					i++;
-				} else {
+				}else {
 					working = false;
 				}
-			} else {
+			}else {
 				working = false;
 			}
 		}
 
-		for (let row of removableRows) {
+		for (let row of removableRows){
 			let rowEl = row.getElement();
 
-			if (rowEl.parentNode) {
+			if(rowEl.parentNode){
 				rowEl.parentNode.removeChild(rowEl);
 			}
 		}
 
-		if (paddingAdjust) {
+		if(paddingAdjust){
 			this.vDomBottomPad += paddingAdjust;
 
-			if (this.vDomBottomPad < 0) {
+			if(this.vDomBottomPad < 0){
 				this.vDomBottomPad = 0;
 			}
 
@@ -24308,1158 +22002,1069 @@ class VirtualDomVertical extends Renderer {
 		}
 	}
 
-	_quickNormalizeRowHeight(rows) {
-		for (let row of rows) {
+	_quickNormalizeRowHeight(rows){
+		for(let row of rows){
 			row.calcHeight();
 		}
 
-		for (let row of rows) {
+		for(let row of rows){
 			row.setCellHeight();
 		}
 	}
 }
 
-class RowManager extends CoreFeature {
-	constructor(table) {
+class RowManager extends CoreFeature{
+	
+	constructor(table){
 		super(table);
-
+		
 		this.element = this.createHolderElement(); //containing element
 		this.tableElement = this.createTableElement(); //table element
 		this.heightFixer = this.createTableElement(); //table element
 		this.placeholder = null; //placeholder element
 		this.placeholderContents = null; //placeholder element
-
+		
 		this.firstRender = false; //handle first render
 		this.renderMode = "virtual"; //current rendering mode
 		this.fixedHeight = false; //current rendering mode
-
+		
 		this.rows = []; //hold row data objects
 		this.activeRowsPipeline = []; //hold calculation of active rows
 		this.activeRows = []; //rows currently available to on display in the table
 		this.activeRowsCount = 0; //count of active rows
-
+		
 		this.displayRows = []; //rows currently on display in the table
 		this.displayRowsCount = 0; //count of display rows
-
+		
 		this.scrollTop = 0;
 		this.scrollLeft = 0;
-
+		
 		this.redrawBlock = false; //prevent redraws to allow multiple data manipulations before continuing
 		this.redrawBlockRestoreConfig = false; //store latest redraw function calls for when redraw is needed
 		this.redrawBlockRenderInPosition = false; //store latest redraw function calls for when redraw is needed
-
+		
 		this.dataPipeline = []; //hold data pipeline tasks
 		this.displayPipeline = []; //hold data display pipeline tasks
-
+		
 		this.renderer = null;
 	}
-
+	
 	//////////////// Setup Functions /////////////////
-
-	createHolderElement() {
+	
+	createHolderElement (){
 		var el = document.createElement("div");
-
+		
 		el.classList.add("tabulator-tableholder");
 		el.setAttribute("tabindex", 0);
 		// el.setAttribute("role", "rowgroup");
-
+		
 		return el;
 	}
-
-	createTableElement() {
+	
+	createTableElement (){
 		var el = document.createElement("div");
-
+		
 		el.classList.add("tabulator-table");
 		el.setAttribute("role", "rowgroup");
-
+		
 		return el;
 	}
-
-	initializePlaceholder() {
+	
+	initializePlaceholder(){
 		//configure placeholder element
-		if (typeof this.table.options.placeholder == "string") {
+		if(typeof this.table.options.placeholder == "string"){
 			let el = document.createElement("div");
 			el.classList.add("tabulator-placeholder");
-
+			
 			let contents = document.createElement("div");
 			contents.classList.add("tabulator-placeholder-contents");
 			contents.innerHTML = this.table.options.placeholder;
-
+			
 			el.appendChild(contents);
-
+			
 			this.placeholderContents = contents;
 			this.placeholder = el;
 		}
 	}
-
+	
 	//return containing element
-	getElement() {
+	getElement(){
 		return this.element;
 	}
-
+	
 	//return table element
-	getTableElement() {
+	getTableElement(){
 		return this.tableElement;
 	}
-
-	initialize() {
+	
+	initialize(){
 		this.initializePlaceholder();
 		this.initializeRenderer();
-
+		
 		//initialize manager
 		this.element.appendChild(this.tableElement);
-
+		
 		this.firstRender = true;
-
+		
 		//scroll header along with table body
 		this.element.addEventListener("scroll", () => {
 			var left = this.element.scrollLeft,
-				leftDir = this.scrollLeft > left,
-				top = this.element.scrollTop,
-				topDir = this.scrollTop > top;
-
+			leftDir = this.scrollLeft > left,
+			top = this.element.scrollTop,
+			topDir = this.scrollTop > top;
+			
 			//handle horizontal scrolling
-			if (this.scrollLeft != left) {
+			if(this.scrollLeft != left){
 				this.scrollLeft = left;
-
+				
 				this.dispatch("scroll-horizontal", left, leftDir);
 				this.dispatchExternal("scrollHorizontal", left, leftDir);
-
+				
 				this._positionPlaceholder();
 			}
-
+			
 			//handle vertical scrolling
-			if (this.scrollTop != top) {
+			if(this.scrollTop != top){
 				this.scrollTop = top;
-
+				
 				this.renderer.scrollRows(top, topDir);
-
+				
 				this.dispatch("scroll-vertical", top, topDir);
 				this.dispatchExternal("scrollVertical", top, topDir);
 			}
 		});
 	}
-
+	
 	////////////////// Row Manipulation //////////////////
-	findRow(subject) {
-		if (typeof subject == "object") {
-			if (subject instanceof Row) {
+	findRow(subject){
+		if(typeof subject == "object"){
+			if(subject instanceof Row){
 				//subject is row element
 				return subject;
-			} else if (subject instanceof RowComponent) {
+			}else if(subject instanceof RowComponent){
 				//subject is public row component
 				return subject._getSelf() || false;
-			} else if (
-				typeof HTMLElement !== "undefined" &&
-				subject instanceof HTMLElement
-			) {
+			}else if(typeof HTMLElement !== "undefined" && subject instanceof HTMLElement){
 				//subject is a HTML element of the row
 				let match = this.rows.find((row) => {
 					return row.getElement() === subject;
 				});
-
+				
 				return match || false;
-			} else if (subject === null) {
+			}else if(subject === null){
 				return false;
 			}
-		} else if (typeof subject == "undefined") {
+		}else if(typeof subject == "undefined"){
 			return false;
-		} else {
+		}else {
 			//subject should be treated as the index of the row
 			let match = this.rows.find((row) => {
 				return row.data[this.table.options.index] == subject;
 			});
-
+			
 			return match || false;
 		}
-
+		
 		//catch all for any other type of input
 		return false;
 	}
-
-	getRowFromDataObject(data) {
+	
+	getRowFromDataObject(data){
 		var match = this.rows.find((row) => {
 			return row.data === data;
 		});
-
+		
 		return match || false;
 	}
-
-	getRowFromPosition(position) {
+	
+	getRowFromPosition(position){
 		return this.getDisplayRows().find((row) => {
 			return row.getPosition() === position && row.isDisplayed();
 		});
 	}
-
-	scrollToRow(row, position, ifVisible) {
+	
+	scrollToRow(row, position, ifVisible){
 		return this.renderer.scrollToRowPosition(row, position, ifVisible);
 	}
-
+	
 	////////////////// Data Handling //////////////////
-	setData(data, renderInPosition, columnsChanged) {
-		return new Promise((resolve, reject) => {
-			if (renderInPosition && this.getDisplayRows().length) {
-				if (this.table.options.pagination) {
+	setData(data, renderInPosition, columnsChanged){
+		return new Promise((resolve, reject)=>{
+			if(renderInPosition && this.getDisplayRows().length){
+				if(this.table.options.pagination){
 					this._setDataActual(data, true);
-				} else {
+				}else {
 					this.reRenderInPosition(() => {
 						this._setDataActual(data);
 					});
 				}
-			} else {
-				if (
-					this.table.options.autoColumns &&
-					columnsChanged &&
-					this.table.initialized
-				) {
+			}else {
+				if(this.table.options.autoColumns && columnsChanged && this.table.initialized){
 					this.table.columnManager.generateColumnsFromRowData(data);
 				}
 				this.resetScroll();
-
+				
 				this._setDataActual(data);
 			}
-
+			
 			resolve();
 		});
 	}
-
-	_setDataActual(data, renderInPosition) {
+	
+	_setDataActual(data, renderInPosition){
 		this.dispatchExternal("dataProcessing", data);
-
+		
 		this._wipeElements();
-
-		if (Array.isArray(data)) {
+		
+		if(Array.isArray(data)){
 			this.dispatch("data-processing", data);
-
+			
 			data.forEach((def, i) => {
-				if (def && typeof def === "object") {
+				if(def && typeof def === "object"){
 					var row = new Row(def, this);
 					this.rows.push(row);
-				} else {
-					console.warn(
-						"Data Loading Warning - Invalid row data detected and ignored, expecting object but received:",
-						def
-					);
+				}else {
+					console.warn("Data Loading Warning - Invalid row data detected and ignored, expecting object but received:", def);
 				}
 			});
-
+			
 			this.refreshActiveData(false, false, renderInPosition);
-
+			
 			this.dispatch("data-processed", data);
 			this.dispatchExternal("dataProcessed", data);
-		} else {
-			console.error(
-				"Data Loading Error - Unable to process data due to invalid data type \nExpecting: array \nReceived: ",
-				typeof data,
-				"\nData:     ",
-				data
-			);
+		}else {
+			console.error("Data Loading Error - Unable to process data due to invalid data type \nExpecting: array \nReceived: ", typeof data, "\nData:     ", data);
 		}
 	}
-
-	_wipeElements() {
+	
+	_wipeElements(){
 		this.dispatch("rows-wipe");
-
+		
 		this.rows.forEach((row) => {
 			row.wipe();
 		});
-
+		
 		this.rows = [];
 		this.activeRows = [];
 		this.activeRowsPipeline = [];
 		this.activeRowsCount = 0;
 		this.displayRows = [];
 		this.displayRowsCount = 0;
-
+		
 		this.adjustTableSize();
 	}
-
-	deleteRow(row, blockRedraw) {
+	
+	deleteRow(row, blockRedraw){
 		var allIndex = this.rows.indexOf(row),
-			activeIndex = this.activeRows.indexOf(row);
-
-		if (activeIndex > -1) {
+		activeIndex = this.activeRows.indexOf(row);
+		
+		if(activeIndex > -1){
 			this.activeRows.splice(activeIndex, 1);
 		}
-
-		if (allIndex > -1) {
+		
+		if(allIndex > -1){
 			this.rows.splice(allIndex, 1);
 		}
-
+		
 		this.setActiveRows(this.activeRows);
-
+		
 		this.displayRowIterator((rows) => {
 			var displayIndex = rows.indexOf(row);
-
-			if (displayIndex > -1) {
+			
+			if(displayIndex > -1){
 				rows.splice(displayIndex, 1);
 			}
 		});
-
-		if (!blockRedraw) {
+		
+		if(!blockRedraw){
 			this.reRenderInPosition();
 		}
-
+		
 		this.regenerateRowPositions();
-
+		
 		this.dispatchExternal("rowDeleted", row.getComponent());
-
-		if (!this.displayRowsCount) {
+		
+		if(!this.displayRowsCount){
 			this._showPlaceholder();
 		}
-
-		if (this.subscribedExternal("dataChanged")) {
+		
+		if(this.subscribedExternal("dataChanged")){
 			this.dispatchExternal("dataChanged", this.getData());
 		}
 	}
-
-	addRow(data, pos, index, blockRedraw) {
+	
+	addRow(data, pos, index, blockRedraw){
 		var row = this.addRowActual(data, pos, index, blockRedraw);
 		return row;
 	}
-
+	
 	//add multiple rows
-	addRows(data, pos, index) {
+	addRows(data, pos, index){
 		var rows = [];
-
+		
 		return new Promise((resolve, reject) => {
 			pos = this.findAddRowPos(pos);
-
-			if (!Array.isArray(data)) {
+			
+			if(!Array.isArray(data)){
 				data = [data];
 			}
-
-			if (
-				(typeof index == "undefined" && pos) ||
-				(typeof index !== "undefined" && !pos)
-			) {
+			
+			if((typeof index == "undefined" && pos) || (typeof index !== "undefined" && !pos)){
 				data.reverse();
 			}
-
+			
 			data.forEach((item, i) => {
 				var row = this.addRow(item, pos, index, true);
 				rows.push(row);
 				this.dispatch("row-added", row, data, pos, index);
 			});
-
+			
 			this.refreshActiveData(false, false, true);
-
+			
 			this.regenerateRowPositions();
-
-			if (rows.length) {
+			
+			if(rows.length){
 				this._clearPlaceholder();
 			}
-
+			
 			resolve(rows);
 		});
 	}
-
-	findAddRowPos(pos) {
-		if (typeof pos === "undefined") {
+	
+	findAddRowPos(pos){
+		if(typeof pos === "undefined"){
 			pos = this.table.options.addRowPos;
 		}
-
-		if (pos === "pos") {
+		
+		if(pos === "pos"){
 			pos = true;
 		}
-
-		if (pos === "bottom") {
+		
+		if(pos === "bottom"){
 			pos = false;
 		}
-
+		
 		return pos;
 	}
-
-	addRowActual(data, pos, index, blockRedraw) {
+	
+	addRowActual(data, pos, index, blockRedraw){
 		var row = data instanceof Row ? data : new Row(data || {}, this),
-			top = this.findAddRowPos(pos),
-			allIndex = -1,
-			activeIndex,
-			chainResult;
-
-		if (!index) {
-			chainResult = this.chain("row-adding-position", [row, top], null, {
-				index,
-				top,
-			});
-
+		top = this.findAddRowPos(pos),
+		allIndex = -1,
+		activeIndex, chainResult;
+		
+		if(!index){
+			chainResult = this.chain("row-adding-position", [row, top], null, {index, top});
+			
 			index = chainResult.index;
 			top = chainResult.top;
 		}
-
-		if (typeof index !== "undefined") {
+		
+		if(typeof index !== "undefined"){
 			index = this.findRow(index);
 		}
-
+		
 		index = this.chain("row-adding-index", [row, index, top], null, index);
-
-		if (index) {
+		
+		if(index){
 			allIndex = this.rows.indexOf(index);
 		}
-
-		if (index && allIndex > -1) {
+		
+		if(index && allIndex > -1){
 			activeIndex = this.activeRows.indexOf(index);
-
-			this.displayRowIterator(function (rows) {
+			
+			this.displayRowIterator(function(rows){
 				var displayIndex = rows.indexOf(index);
-
-				if (displayIndex > -1) {
-					rows.splice(top ? displayIndex : displayIndex + 1, 0, row);
+				
+				if(displayIndex > -1){
+					rows.splice((top ? displayIndex : displayIndex + 1), 0, row);
 				}
 			});
-
-			if (activeIndex > -1) {
-				this.activeRows.splice(top ? activeIndex : activeIndex + 1, 0, row);
+			
+			if(activeIndex > -1){
+				this.activeRows.splice((top ? activeIndex : activeIndex + 1), 0, row);
 			}
-
-			this.rows.splice(top ? allIndex : allIndex + 1, 0, row);
-		} else {
-			if (top) {
-				this.displayRowIterator(function (rows) {
+			
+			this.rows.splice((top ? allIndex : allIndex + 1), 0, row);
+			
+		}else {
+			
+			if(top){
+				
+				this.displayRowIterator(function(rows){
 					rows.unshift(row);
 				});
-
+				
 				this.activeRows.unshift(row);
 				this.rows.unshift(row);
-			} else {
-				this.displayRowIterator(function (rows) {
+			}else {
+				this.displayRowIterator(function(rows){
 					rows.push(row);
 				});
-
+				
 				this.activeRows.push(row);
 				this.rows.push(row);
 			}
 		}
-
+		
 		this.setActiveRows(this.activeRows);
-
+		
 		this.dispatchExternal("rowAdded", row.getComponent());
-
-		if (this.subscribedExternal("dataChanged")) {
+		
+		if(this.subscribedExternal("dataChanged")){
 			this.dispatchExternal("dataChanged", this.table.rowManager.getData());
 		}
-
-		if (!blockRedraw) {
+		
+		if(!blockRedraw){
 			this.reRenderInPosition();
 		}
-
+		
 		return row;
 	}
-
-	moveRow(from, to, after) {
+	
+	moveRow(from, to, after){
 		this.dispatch("row-move", from, to, after);
-
+		
 		this.moveRowActual(from, to, after);
-
+		
 		this.regenerateRowPositions();
-
+		
 		this.dispatch("row-moved", from, to, after);
 		this.dispatchExternal("rowMoved", from.getComponent());
 	}
-
-	moveRowActual(from, to, after) {
+	
+	moveRowActual(from, to, after){
 		this.moveRowInArray(this.rows, from, to, after);
 		this.moveRowInArray(this.activeRows, from, to, after);
-
+		
 		this.displayRowIterator((rows) => {
 			this.moveRowInArray(rows, from, to, after);
 		});
-
+		
 		this.dispatch("row-moving", from, to, after);
 	}
-
-	moveRowInArray(rows, from, to, after) {
-		var fromIndex, toIndex, start, end;
-
-		if (from !== to) {
+	
+	moveRowInArray(rows, from, to, after){
+		var	fromIndex, toIndex, start, end;
+		
+		if(from !== to){
+			
 			fromIndex = rows.indexOf(from);
-
+			
 			if (fromIndex > -1) {
+				
 				rows.splice(fromIndex, 1);
-
+				
 				toIndex = rows.indexOf(to);
-
+				
 				if (toIndex > -1) {
-					if (after) {
-						rows.splice(toIndex + 1, 0, from);
-					} else {
+					
+					if(after){
+						rows.splice(toIndex+1, 0, from);
+					}else {
 						rows.splice(toIndex, 0, from);
 					}
-				} else {
+					
+				}else {
 					rows.splice(fromIndex, 0, from);
 				}
 			}
-
+			
 			//restyle rows
-			if (rows === this.getDisplayRows()) {
+			if(rows === this.getDisplayRows()){
+				
 				start = fromIndex < toIndex ? fromIndex : toIndex;
-				end = toIndex > fromIndex ? toIndex : fromIndex + 1;
-
-				for (let i = start; i <= end; i++) {
-					if (rows[i]) {
+				end = toIndex > fromIndex ? toIndex : fromIndex +1;
+				
+				for(let i = start; i <= end; i++){
+					if(rows[i]){
 						this.styleRow(rows[i], i);
 					}
 				}
 			}
 		}
 	}
-
-	clearData() {
+	
+	clearData(){
 		this.setData([]);
 	}
-
-	getRowIndex(row) {
+	
+	getRowIndex(row){
 		return this.findRowIndex(row, this.rows);
 	}
-
-	getDisplayRowIndex(row) {
+	
+	getDisplayRowIndex(row){
 		var index = this.getDisplayRows().indexOf(row);
 		return index > -1 ? index : false;
 	}
-
-	nextDisplayRow(row, rowOnly) {
+	
+	nextDisplayRow(row, rowOnly){
 		var index = this.getDisplayRowIndex(row),
-			nextRow = false;
-
-		if (index !== false && index < this.displayRowsCount - 1) {
-			nextRow = this.getDisplayRows()[index + 1];
+		nextRow = false;
+		
+		
+		if(index !== false && index < this.displayRowsCount -1){
+			nextRow = this.getDisplayRows()[index+1];
 		}
-
-		if (nextRow && (!(nextRow instanceof Row) || nextRow.type != "row")) {
+		
+		if(nextRow && (!(nextRow instanceof Row) || nextRow.type != "row")){
 			return this.nextDisplayRow(nextRow, rowOnly);
 		}
-
+		
 		return nextRow;
 	}
-
-	prevDisplayRow(row, rowOnly) {
+	
+	prevDisplayRow(row, rowOnly){
 		var index = this.getDisplayRowIndex(row),
-			prevRow = false;
-
-		if (index) {
-			prevRow = this.getDisplayRows()[index - 1];
+		prevRow = false;
+		
+		if(index){
+			prevRow = this.getDisplayRows()[index-1];
 		}
-
-		if (
-			rowOnly &&
-			prevRow &&
-			(!(prevRow instanceof Row) || prevRow.type != "row")
-		) {
+		
+		if(rowOnly && prevRow && (!(prevRow instanceof Row) || prevRow.type != "row")){
 			return this.prevDisplayRow(prevRow, rowOnly);
 		}
-
+		
 		return prevRow;
 	}
-
-	findRowIndex(row, list) {
+	
+	findRowIndex(row, list){
 		var rowIndex;
-
+		
 		row = this.findRow(row);
-
-		if (row) {
+		
+		if(row){
 			rowIndex = list.indexOf(row);
-
-			if (rowIndex > -1) {
+			
+			if(rowIndex > -1){
 				return rowIndex;
 			}
 		}
-
+		
 		return false;
 	}
-
-	getData(active, transform) {
+	
+	getData(active, transform){
 		var output = [],
-			rows = this.getRows(active);
-
-		rows.forEach(function (row) {
-			if (row.type == "row") {
+		rows = this.getRows(active);
+		
+		rows.forEach(function(row){
+			if(row.type == "row"){
 				output.push(row.getData(transform || "data"));
 			}
 		});
-
+		
 		return output;
 	}
-
-	getComponents(active) {
-		var output = [],
-			rows = this.getRows(active);
-
-		rows.forEach(function (row) {
+	
+	getComponents(active){
+		var	output = [],
+		rows = this.getRows(active);
+		
+		rows.forEach(function(row){
 			output.push(row.getComponent());
 		});
-
+		
 		return output;
 	}
-
-	getDataCount(active) {
+	
+	getDataCount(active){
 		var rows = this.getRows(active);
-
+		
 		return rows.length;
 	}
-
-	scrollHorizontal(left) {
+	
+	scrollHorizontal(left){
 		this.scrollLeft = left;
 		this.element.scrollLeft = left;
-
+		
 		this.dispatch("scroll-horizontal", left);
 	}
-
-	registerDataPipelineHandler(handler, priority) {
-		if (typeof priority !== "undefined") {
-			this.dataPipeline.push({ handler, priority });
+	
+	registerDataPipelineHandler(handler, priority){
+		if(typeof priority !== "undefined"){
+			this.dataPipeline.push({handler, priority});
 			this.dataPipeline.sort((a, b) => {
 				return a.priority - b.priority;
 			});
-		} else {
-			console.error(
-				"Data pipeline handlers must have a priority in order to be registered"
-			);
+		}else {
+			console.error("Data pipeline handlers must have a priority in order to be registered");
 		}
 	}
-
-	registerDisplayPipelineHandler(handler, priority) {
-		if (typeof priority !== "undefined") {
-			this.displayPipeline.push({ handler, priority });
+	
+	registerDisplayPipelineHandler(handler, priority){
+		if(typeof priority !== "undefined"){
+			this.displayPipeline.push({handler, priority});
 			this.displayPipeline.sort((a, b) => {
 				return a.priority - b.priority;
 			});
-		} else {
-			console.error(
-				"Display pipeline handlers must have a priority in order to be registered"
-			);
+		}else {
+			console.error("Display pipeline handlers must have a priority in order to be registered");
 		}
 	}
-
+	
 	//set active data set
-	refreshActiveData(handler, skipStage, renderInPosition) {
+	refreshActiveData(handler, skipStage, renderInPosition){
 		var table = this.table,
-			stage = "",
-			index = 0,
-			cascadeOrder = [
-				"all",
-				"dataPipeline",
-				"display",
-				"displayPipeline",
-				"end",
-			];
-
-		if (typeof handler === "function") {
-			index = this.dataPipeline.findIndex((item) => {
-				return item.handler === handler;
-			});
-
-			if (index > -1) {
-				stage = "dataPipeline";
-
-				if (skipStage) {
-					if (index == this.dataPipeline.length - 1) {
-						stage = "display";
-					} else {
-						index++;
-					}
-				}
-			} else {
-				index = this.displayPipeline.findIndex((item) => {
+		stage = "",
+		index = 0,
+		cascadeOrder = ["all", "dataPipeline", "display", "displayPipeline", "end"];
+		
+		if(!this.table.destroyed){
+			if(typeof handler === "function"){
+				index = this.dataPipeline.findIndex((item) => {
 					return item.handler === handler;
 				});
-
-				if (index > -1) {
-					stage = "displayPipeline";
-
-					if (skipStage) {
-						if (index == this.displayPipeline.length - 1) {
-							stage = "end";
-						} else {
+				
+				if(index > -1){
+					stage = "dataPipeline";
+					
+					if(skipStage){
+						if(index == this.dataPipeline.length - 1){
+							stage = "display";
+						}else {
 							index++;
 						}
 					}
-				} else {
-					console.error(
-						"Unable to refresh data, invalid handler provided",
-						handler
-					);
-					return;
+				}else {
+					index = this.displayPipeline.findIndex((item) => {
+						return item.handler === handler;
+					});
+					
+					if(index > -1){
+						stage = "displayPipeline";
+						
+						if(skipStage){
+							if(index == this.displayPipeline.length - 1){
+								stage = "end";
+							}else {
+								index++;
+							}
+						}
+					}else {
+						console.error("Unable to refresh data, invalid handler provided", handler);
+						return;
+					}
 				}
+			}else {
+				stage = handler || "all";
+				index = 0;
 			}
-		} else {
-			stage = handler || "all";
-			index = 0;
-		}
-
-		if (this.redrawBlock) {
-			if (
-				!this.redrawBlockRestoreConfig ||
-				(this.redrawBlockRestoreConfig &&
-					((this.redrawBlockRestoreConfig.stage === stage &&
-						index < this.redrawBlockRestoreConfig.index) ||
-						cascadeOrder.indexOf(stage) <
-							cascadeOrder.indexOf(this.redrawBlockRestoreConfig.stage)))
-			) {
-				this.redrawBlockRestoreConfig = {
-					handler: handler,
-					skipStage: skipStage,
-					renderInPosition: renderInPosition,
-					stage: stage,
-					index: index,
-				};
-			}
-
-			return;
-		} else {
-			if (Helpers.elVisible(this.element)) {
-				if (renderInPosition) {
-					this.reRenderInPosition(
-						this.refreshPipelines.bind(
-							this,
-							handler,
-							stage,
-							index,
-							renderInPosition
-						)
-					);
-				} else {
+			
+			if(this.redrawBlock){
+				if(!this.redrawBlockRestoreConfig || (this.redrawBlockRestoreConfig && ((this.redrawBlockRestoreConfig.stage === stage && index < this.redrawBlockRestoreConfig.index) || (cascadeOrder.indexOf(stage) < cascadeOrder.indexOf(this.redrawBlockRestoreConfig.stage))))){
+					this.redrawBlockRestoreConfig = {
+						handler: handler,
+						skipStage: skipStage,
+						renderInPosition: renderInPosition,
+						stage:stage,
+						index:index,
+					};
+				}
+				
+				return;
+			}else {
+				if(Helpers.elVisible(this.element)){
+					if(renderInPosition){
+						this.reRenderInPosition(this.refreshPipelines.bind(this, handler, stage, index, renderInPosition));
+					}else {
+						this.refreshPipelines(handler, stage, index, renderInPosition);
+						
+						if(!handler){
+							this.table.columnManager.renderer.renderColumns();
+						}
+						
+						this.renderTable();
+						
+						if(table.options.layoutColumnsOnNewData){
+							this.table.columnManager.redraw(true);
+						}
+					}
+				}else {
 					this.refreshPipelines(handler, stage, index, renderInPosition);
-
-					if (!handler) {
-						this.table.columnManager.renderer.renderColumns();
-					}
-
-					this.renderTable();
-
-					if (table.options.layoutColumnsOnNewData) {
-						this.table.columnManager.redraw(true);
-					}
 				}
-			} else {
-				this.refreshPipelines(handler, stage, index, renderInPosition);
+				
+				this.dispatch("data-refreshed");
 			}
-
-			this.dispatch("data-refreshed");
 		}
 	}
-
-	refreshPipelines(handler, stage, index, renderInPosition) {
+	
+	refreshPipelines(handler, stage, index, renderInPosition){
 		this.dispatch("data-refreshing");
-
-		if (!handler) {
+		
+		if(!handler){
 			this.activeRowsPipeline[0] = this.rows.slice(0);
 		}
-
+		
 		//cascade through data refresh stages
-		switch (stage) {
+		switch(stage){
 			case "all":
 			//handle case where all data needs refreshing
-
+			
 			case "dataPipeline":
-				for (let i = index; i < this.dataPipeline.length; i++) {
-					let result = this.dataPipeline[i].handler(
-						this.activeRowsPipeline[i].slice(0)
-					);
-
-					this.activeRowsPipeline[i + 1] =
-						result || this.activeRowsPipeline[i].slice(0);
+			
+				for(let i = index; i < this.dataPipeline.length; i++){
+					let result = this.dataPipeline[i].handler(this.activeRowsPipeline[i].slice(0));
+					
+					this.activeRowsPipeline[i + 1] = result || this.activeRowsPipeline[i].slice(0);
 				}
-
+				
 				this.setActiveRows(this.activeRowsPipeline[this.dataPipeline.length]);
-
+				
 			case "display":
 				index = 0;
 				this.resetDisplayRows();
-
+				
 			case "displayPipeline":
-				for (let i = index; i < this.displayPipeline.length; i++) {
-					let result = this.displayPipeline[i].handler(
-						(i ? this.getDisplayRows(i - 1) : this.activeRows).slice(0),
-						renderInPosition
-					);
+				for(let i = index; i < this.displayPipeline.length; i++){
+					let result = this.displayPipeline[i].handler((i ? this.getDisplayRows(i - 1) : this.activeRows).slice(0), renderInPosition);
 
 					this.setDisplayRows(result || this.getDisplayRows(i - 1).slice(0), i);
 				}
-
+			
 			case "end":
 				//case to handle scenario when trying to skip past end stage
 				this.regenerateRowPositions();
 		}
 	}
-
+	
 	//regenerate row positions
-	regenerateRowPositions() {
+	regenerateRowPositions(){
 		var rows = this.getDisplayRows();
 		var index = 1;
-
+		
 		rows.forEach((row) => {
-			if (row.type === "row") {
+			if (row.type === "row"){
 				row.setPosition(index);
 				index++;
 			}
 		});
 	}
-
-	setActiveRows(activeRows) {
+	
+	setActiveRows(activeRows){
 		this.activeRows = activeRows;
 		this.activeRowsCount = this.activeRows.length;
 	}
-
+	
 	//reset display rows array
-	resetDisplayRows() {
+	resetDisplayRows(){
 		this.displayRows = [];
-
+		
 		this.displayRows.push(this.activeRows.slice(0));
-
+		
 		this.displayRowsCount = this.displayRows[0].length;
 	}
-
-	getNextDisplayIndex() {
-		return this.displayRows.length;
-	}
-
+	
 	//set display row pipeline data
-	setDisplayRows(displayRows, index) {
-		var output = true;
+	setDisplayRows(displayRows, index){
+		this.displayRows[index] = displayRows;
 
-		if (index && typeof this.displayRows[index] != "undefined") {
-			this.displayRows[index] = displayRows;
-			output = true;
-		} else {
-			this.displayRows.push(displayRows);
-			output = index = this.displayRows.length - 1;
+		if(index == this.displayRows.length -1){
+			this.displayRowsCount = this.displayRows[this.displayRows.length -1].length;
 		}
-
-		if (index == this.displayRows.length - 1) {
-			this.displayRowsCount =
-				this.displayRows[this.displayRows.length - 1].length;
-		}
-
-		return output;
 	}
-
-	getDisplayRows(index) {
-		if (typeof index == "undefined") {
-			return this.displayRows.length
-				? this.displayRows[this.displayRows.length - 1]
-				: [];
-		} else {
+	
+	getDisplayRows(index){
+		if(typeof index == "undefined"){
+			return this.displayRows.length ? this.displayRows[this.displayRows.length -1] : [];
+		}else {
 			return this.displayRows[index] || [];
 		}
 	}
-
-	getVisibleRows(chain, viewable) {
-		var rows = Object.assign([], this.renderer.visibleRows(!viewable));
-
-		if (chain) {
+	
+	getVisibleRows(chain, viewable){
+		var rows =  Object.assign([], this.renderer.visibleRows(!viewable));
+		
+		if(chain){
 			rows = this.chain("rows-visible", [viewable], rows, rows);
 		}
-
+		
 		return rows;
 	}
-
+	
 	//repeat action across display rows
-	displayRowIterator(callback) {
+	displayRowIterator(callback){
 		this.activeRowsPipeline.forEach(callback);
 		this.displayRows.forEach(callback);
-
-		this.displayRowsCount =
-			this.displayRows[this.displayRows.length - 1].length;
+		
+		this.displayRowsCount = this.displayRows[this.displayRows.length -1].length;
 	}
-
+	
 	//return only actual rows (not group headers etc)
-	getRows(type) {
-		var rows;
+	getRows(type){
+		var rows = [];
 
-		switch (type) {
-			case "active":
-				rows = this.activeRows;
-				break;
-
-			case "display":
-				rows = this.table.rowManager.getDisplayRows();
-				break;
-
-			case "visible":
-				rows = this.getVisibleRows(false, true);
-				break;
-
-			default:
-				rows = this.chain("rows-retrieve", type, null, this.rows) || this.rows;
+		if(!type || type === true){
+			rows = this.chain("rows-retrieve", type, null, this.rows) || this.rows;
+		}else {
+			switch(type){
+				case "active":
+					rows = this.activeRows;
+					break;
+				
+				case "display":
+					rows = this.table.rowManager.getDisplayRows();
+					break;
+					
+				case "visible":
+					rows = this.getVisibleRows(false, true);
+					break;
+			}
 		}
-
+		
 		return rows;
 	}
-
+	
 	///////////////// Table Rendering /////////////////
 	//trigger rerender of table in current position
-	reRenderInPosition(callback) {
-		if (this.redrawBlock) {
-			if (callback) {
+	reRenderInPosition(callback){
+		if(this.redrawBlock){
+			if(callback){
 				callback();
-			} else {
+			}else {
 				this.redrawBlockRenderInPosition = true;
 			}
-		} else {
+		}else {
 			this.dispatchExternal("renderStarted");
-
+			
 			this.renderer.rerenderRows(callback);
 
-			if (!this.fixedHeight) {
+			if(!this.fixedHeight){
 				this.adjustTableSize();
 			}
-
+			
 			this.dispatchExternal("renderComplete");
 		}
 	}
-
-	initializeRenderer() {
+	
+	initializeRenderer(){
 		var renderClass;
-
+		
 		var renderers = {
-			virtual: VirtualDomVertical,
-			basic: BasicVertical,
+			"virtual": VirtualDomVertical,
+			"basic": BasicVertical,
 		};
-
-		if (typeof this.table.options.renderVertical === "string") {
+		
+		if(typeof this.table.options.renderVertical === "string"){
 			renderClass = renderers[this.table.options.renderVertical];
-		} else {
+		}else {
 			renderClass = this.table.options.renderVertical;
 		}
-
-		if (renderClass) {
+		
+		if(renderClass){
 			this.renderMode = this.table.options.renderVertical;
-
-			this.renderer = new renderClass(
-				this.table,
-				this.element,
-				this.tableElement
-			);
+			
+			this.renderer = new renderClass(this.table, this.element, this.tableElement);
 			this.renderer.initialize();
-
-			if (this.table.element.clientHeight || this.table.options.height) {
+			
+			if((this.table.element.clientHeight || this.table.options.height)){
 				this.fixedHeight = true;
-			} else {
+			}else {
 				this.fixedHeight = false;
 			}
-		} else {
-			console.error(
-				"Unable to find matching renderer:",
-				this.table.options.renderVertical
-			);
+		}else {
+			console.error("Unable to find matching renderer:", this.table.options.renderVertical);
 		}
 	}
-
-	getRenderMode() {
+	
+	getRenderMode(){
 		return this.renderMode;
 	}
-
-	renderTable() {
+	
+	renderTable(){
 		this.dispatchExternal("renderStarted");
-
+		
 		this.element.scrollTop = 0;
-
+		
 		this._clearTable();
-
-		if (this.displayRowsCount) {
+		
+		if(this.displayRowsCount){
 			this.renderer.renderRows();
-
-			if (this.firstRender) {
+			
+			if(this.firstRender){
 				this.firstRender = false;
 				this.layoutRefresh(true);
 			}
-		} else {
+		}else {
 			this.renderEmptyScroll();
 		}
-
-		if (!this.fixedHeight) {
+		
+		if(!this.fixedHeight){
 			this.adjustTableSize();
 		}
-
+		
 		this.dispatch("table-layout");
-
-		if (!this.displayRowsCount) {
+		
+		if(!this.displayRowsCount){
 			this._showPlaceholder();
 		}
-
+		
 		this.dispatchExternal("renderComplete");
 	}
-
+	
 	//show scrollbars on empty table div
-	renderEmptyScroll() {
-		if (this.placeholder) {
+	renderEmptyScroll(){
+		if(this.placeholder){
 			this.tableElement.style.display = "none";
-		} else {
-			this.tableElement.style.minWidth =
-				this.table.columnManager.getWidth() + "px";
+		}else {
+			this.tableElement.style.minWidth = this.table.columnManager.getWidth() + "px";
 			// this.tableElement.style.minHeight = "1px";
 			// this.tableElement.style.visibility = "hidden";
 		}
 	}
-
-	_clearTable() {
+	
+	_clearTable(){	
 		this._clearPlaceholder();
-
+		
 		this.scrollTop = 0;
 		this.scrollLeft = 0;
-
-		// clear empty table placeholder min
-		this.tableElement.style.minWidth = "";
-
+		
 		this.renderer.clearRows();
 	}
-
-	_showPlaceholder() {
-		if (this.placeholder) {
+	
+	_showPlaceholder(){
+		if(this.placeholder){
 			this.placeholder.setAttribute("tabulator-render-mode", this.renderMode);
-
+			
 			this.getElement().appendChild(this.placeholder);
 			this._positionPlaceholder();
 		}
 	}
-
-	_clearPlaceholder() {
-		if (this.placeholder && this.placeholder.parentNode) {
+	
+	_clearPlaceholder(){
+		if(this.placeholder && this.placeholder.parentNode){
 			this.placeholder.parentNode.removeChild(this.placeholder);
 		}
-	}
 
-	_positionPlaceholder() {
-		if (this.placeholder && this.placeholder.parentNode) {
+		// clear empty table placeholder min
+		this.tableElement.style.minWidth = "";
+	}
+	
+	_positionPlaceholder(){
+		if(this.placeholder && this.placeholder.parentNode){
 			this.placeholder.style.width = this.table.columnManager.getWidth() + "px";
-			this.placeholderContents.style.width =
-				this.table.rowManager.element.clientWidth + "px";
+			this.placeholderContents.style.width = this.table.rowManager.element.clientWidth + "px";
 			this.placeholderContents.style.marginLeft = this.scrollLeft + "px";
 		}
 	}
-
-	styleRow(row, index) {
+	
+	styleRow(row, index){
 		var rowEl = row.getElement();
-
-		if (index % 2) {
+		
+		if(index % 2){
 			rowEl.classList.add("tabulator-row-even");
 			rowEl.classList.remove("tabulator-row-odd");
-		} else {
+		}else {
 			rowEl.classList.add("tabulator-row-odd");
 			rowEl.classList.remove("tabulator-row-even");
 		}
 	}
-
+	
 	//normalize height of active rows
-	normalizeHeight() {
-		this.activeRows.forEach(function (row) {
+	normalizeHeight(){
+		this.activeRows.forEach(function(row){
 			row.normalizeHeight();
 		});
 	}
-
+	
 	//adjust the height of the table holder to fit in the Tabulator element
-	adjustTableSize() {
-		var initialHeight = this.element.clientHeight,
-			minHeight;
-
-		if (this.renderer.verticalFillMode === "fill") {
-			let otherHeight = Math.floor(
-				this.table.columnManager.getElement().getBoundingClientRect().height +
-					(this.table.footerManager &&
-					this.table.footerManager.active &&
-					!this.table.footerManager.external
-						? this.table.footerManager.getElement().getBoundingClientRect()
-								.height
-						: 0)
-			);
-
-			if (this.fixedHeight) {
-				minHeight = isNaN(this.table.options.minHeight)
-					? this.table.options.minHeight
-					: this.table.options.minHeight + "px";
-
-				this.element.style.minHeight =
-					minHeight || "calc(100% - " + otherHeight + "px)";
+	adjustTableSize(){
+		var initialHeight = this.element.clientHeight, minHeight;
+		
+		if(this.renderer.verticalFillMode === "fill"){
+			let otherHeight =  Math.floor(this.table.columnManager.getElement().getBoundingClientRect().height + (this.table.footerManager && this.table.footerManager.active && !this.table.footerManager.external ? this.table.footerManager.getElement().getBoundingClientRect().height : 0));
+			
+			if(this.fixedHeight){
+				minHeight = isNaN(this.table.options.minHeight) ? this.table.options.minHeight : this.table.options.minHeight + "px";
+				
+				this.element.style.minHeight = minHeight || "calc(100% - " + otherHeight + "px)";
 				this.element.style.height = "calc(100% - " + otherHeight + "px)";
 				this.element.style.maxHeight = "calc(100% - " + otherHeight + "px)";
-			} else {
+			}else {
 				this.element.style.height = "";
-				this.element.style.height =
-					this.table.element.clientHeight - otherHeight + "px";
+				this.element.style.height = (this.table.element.clientHeight - otherHeight) + "px";
 				this.element.scrollTop = this.scrollTop;
 			}
-
+			
 			this.renderer.resize();
-
+			
 			//check if the table has changed size when dealing with variable height tables
-			if (!this.fixedHeight && initialHeight != this.element.clientHeight) {
-				if (this.subscribed("table-resize")) {
+			if(!this.fixedHeight && initialHeight != this.element.clientHeight){
+				if(this.subscribed("table-resize")){
 					this.dispatch("table-resize");
-				} else {
+				}else {
 					this.redraw();
 				}
 			}
 		}
-
+		
 		this._positionPlaceholder();
 	}
-
+	
 	//reinitialize all rows
-	reinitialize() {
-		this.rows.forEach(function (row) {
+	reinitialize(){
+		this.rows.forEach(function(row){
 			row.reinitialize(true);
 		});
 	}
-
+	
 	//prevent table from being redrawn
-	blockRedraw() {
+	blockRedraw (){
 		this.redrawBlock = true;
 		this.redrawBlockRestoreConfig = false;
 	}
-
+	
 	//restore table redrawing
-	restoreRedraw() {
+	restoreRedraw (){
 		this.redrawBlock = false;
-
-		if (this.redrawBlockRestoreConfig) {
-			this.refreshActiveData(
-				this.redrawBlockRestoreConfig.handler,
-				this.redrawBlockRestoreConfig.skipStage,
-				this.redrawBlockRestoreConfig.renderInPosition
-			);
-
+		
+		if(this.redrawBlockRestoreConfig){
+			this.refreshActiveData(this.redrawBlockRestoreConfig.handler, this.redrawBlockRestoreConfig.skipStage, this.redrawBlockRestoreConfig.renderInPosition);
+			
 			this.redrawBlockRestoreConfig = false;
-		} else {
-			if (this.redrawBlockRenderInPosition) {
+		}else {
+			if(this.redrawBlockRenderInPosition){
 				this.reRenderInPosition();
 			}
 		}
-
+		
 		this.redrawBlockRenderInPosition = false;
 	}
-
+	
 	//redraw table
-	redraw(force) {
+	redraw (force){
 		var left = this.scrollLeft;
-
+		
 		this.adjustTableSize();
-
+		
 		this.table.tableWidth = this.table.element.clientWidth;
-
-		if (!force) {
+		
+		if(!force){
 			this.reRenderInPosition();
 			this.scrollHorizontal(left);
-		} else {
+		}else {
 			this.renderTable();
 		}
 	}
-
-	resetScroll() {
+	
+	resetScroll(){
 		this.element.scrollLeft = 0;
 		this.element.scrollTop = 0;
-
-		if (this.table.browser === "ie") {
+		
+		if(this.table.browser === "ie"){
 			var event = document.createEvent("Event");
 			event.initEvent("scroll", false, true);
 			this.element.dispatchEvent(event);
-		} else {
-			this.element.dispatchEvent(new Event("scroll"));
+		}else {
+			this.element.dispatchEvent(new Event('scroll'));
 		}
 	}
 }
 
-class FooterManager extends CoreFeature {
-	constructor(table) {
+class FooterManager extends CoreFeature{
+
+	constructor(table){
 		super(table);
 
 		this.active = false;
@@ -25468,11 +23073,11 @@ class FooterManager extends CoreFeature {
 		this.external = false;
 	}
 
-	initialize() {
+	initialize(){
 		this.initializeElement();
 	}
 
-	createElement() {
+	createElement(){
 		var el = document.createElement("div");
 
 		el.classList.add("tabulator-footer");
@@ -25480,7 +23085,8 @@ class FooterManager extends CoreFeature {
 		return el;
 	}
 
-	createContainerElement() {
+	
+	createContainerElement(){
 		var el = document.createElement("div");
 
 		el.classList.add("tabulator-footer-contents");
@@ -25490,17 +23096,16 @@ class FooterManager extends CoreFeature {
 		return el;
 	}
 
-	initializeElement() {
-		if (this.table.options.footerElement) {
-			switch (typeof this.table.options.footerElement) {
+	initializeElement(){
+		if(this.table.options.footerElement){
+
+			switch(typeof this.table.options.footerElement){
 				case "string":
-					if (this.table.options.footerElement[0] === "<") {
+					if(this.table.options.footerElement[0] === "<"){
 						this.containerElement.innerHTML = this.table.options.footerElement;
-					} else {
+					}else {
 						this.external = true;
-						this.containerElement = document.querySelector(
-							this.table.options.footerElement
-						);
+						this.containerElement = document.querySelector(this.table.options.footerElement);
 					}
 					break;
 
@@ -25511,63 +23116,64 @@ class FooterManager extends CoreFeature {
 		}
 	}
 
-	getElement() {
+	getElement(){
 		return this.element;
 	}
 
-	append(element) {
+	append(element){
 		this.activate();
 
 		this.containerElement.appendChild(element);
 		this.table.rowManager.adjustTableSize();
 	}
 
-	prepend(element) {
+	prepend(element){
 		this.activate();
 
 		this.element.insertBefore(element, this.element.firstChild);
 		this.table.rowManager.adjustTableSize();
 	}
 
-	remove(element) {
+	remove(element){
 		element.parentNode.removeChild(element);
 		this.deactivate();
 	}
 
-	deactivate(force) {
-		if (!this.element.firstChild || force) {
-			if (!this.external) {
+	deactivate(force){
+		if(!this.element.firstChild || force){
+			if(!this.external){
 				this.element.parentNode.removeChild(this.element);
 			}
 			this.active = false;
 		}
 	}
 
-	activate() {
-		if (!this.active) {
+	activate(){
+		if(!this.active){
 			this.active = true;
-			if (!this.external) {
+			if(!this.external){
 				this.table.element.appendChild(this.getElement());
-				this.table.element.style.display = "";
+				this.table.element.style.display = '';
 			}
 		}
 	}
 
-	redraw() {
+	redraw(){
 		this.dispatch("footer-redraw");
 	}
 }
 
 class InteractionManager extends CoreFeature {
-	constructor(table) {
+	
+	constructor (table){
 		super(table);
-
+		
 		this.el = null;
-
+		
 		this.abortClasses = ["tabulator-headers", "tabulator-table"];
-
+		
 		this.previousTargets = {};
-
+		
 		this.listeners = [
 			"click",
 			"dblclick",
@@ -25580,313 +23186,294 @@ class InteractionManager extends CoreFeature {
 			"touchstart",
 			"touchend",
 		];
-
+		
 		this.componentMap = {
-			"tabulator-cell": "cell",
-			"tabulator-row": "row",
-			"tabulator-group": "group",
-			"tabulator-col": "column",
+			"tabulator-cell":"cell",
+			"tabulator-row":"row",
+			"tabulator-group":"group",
+			"tabulator-col":"column",
 		};
-
+		
 		this.pseudoTrackers = {
-			row: {
-				subscriber: null,
-				target: null,
+			"row":{
+				subscriber:null,
+				target:null,
 			},
-			cell: {
-				subscriber: null,
-				target: null,
+			"cell":{
+				subscriber:null,
+				target:null,
 			},
-			group: {
-				subscriber: null,
-				target: null,
+			"group":{
+				subscriber:null,
+				target:null,
 			},
-			column: {
-				subscriber: null,
-				target: null,
+			"column":{
+				subscriber:null,
+				target:null,
 			},
 		};
-
+		
 		this.pseudoTracking = false;
 	}
-
-	initialize() {
+	
+	initialize(){
 		this.el = this.table.element;
-
+		
 		this.buildListenerMap();
 		this.bindSubscriptionWatchers();
 	}
-
-	buildListenerMap() {
+	
+	buildListenerMap(){
 		var listenerMap = {};
-
+		
 		this.listeners.forEach((listener) => {
 			listenerMap[listener] = {
-				handler: null,
-				components: [],
+				handler:null,
+				components:[],
 			};
 		});
-
+		
 		this.listeners = listenerMap;
 	}
-
-	bindPseudoEvents() {
+	
+	bindPseudoEvents(){
 		Object.keys(this.pseudoTrackers).forEach((key) => {
-			this.pseudoTrackers[key].subscriber = this.pseudoMouseEnter.bind(
-				this,
-				key
-			);
+			this.pseudoTrackers[key].subscriber = this.pseudoMouseEnter.bind(this, key);
 			this.subscribe(key + "-mouseover", this.pseudoTrackers[key].subscriber);
 		});
-
+		
 		this.pseudoTracking = true;
 	}
-
-	pseudoMouseEnter(key, e, target) {
-		if (this.pseudoTrackers[key].target !== target) {
-			if (this.pseudoTrackers[key].target) {
+	
+	pseudoMouseEnter(key, e, target){
+		if(this.pseudoTrackers[key].target !== target){
+			
+			if(this.pseudoTrackers[key].target){
 				this.dispatch(key + "-mouseleave", e, this.pseudoTrackers[key].target);
 			}
-
+			
 			this.pseudoMouseLeave(key, e);
-
+			
 			this.pseudoTrackers[key].target = target;
-
+			
 			this.dispatch(key + "-mouseenter", e, target);
 		}
 	}
-
-	pseudoMouseLeave(key, e) {
+	
+	pseudoMouseLeave(key, e){
 		var leaveList = Object.keys(this.pseudoTrackers),
-			linkedKeys = {
-				row: ["cell"],
-				cell: ["row"],
-			};
-
+		linkedKeys = {
+			"row":["cell"],
+			"cell":["row"],
+		};
+		
 		leaveList = leaveList.filter((item) => {
 			var links = linkedKeys[key];
 			return item !== key && (!links || (links && !links.includes(item)));
 		});
-
+		
+		
 		leaveList.forEach((key) => {
 			var target = this.pseudoTrackers[key].target;
-
-			if (this.pseudoTrackers[key].target) {
+			
+			if(this.pseudoTrackers[key].target){
 				this.dispatch(key + "-mouseleave", e, target);
-
+				
 				this.pseudoTrackers[key].target = null;
 			}
 		});
 	}
-
-	bindSubscriptionWatchers() {
+	
+	
+	bindSubscriptionWatchers(){
 		var listeners = Object.keys(this.listeners),
-			components = Object.values(this.componentMap);
-
-		for (let comp of components) {
-			for (let listener of listeners) {
+		components = Object.values(this.componentMap);
+		
+		for(let comp of components){
+			for(let listener of listeners){
 				let key = comp + "-" + listener;
-
-				this.subscriptionChange(
-					key,
-					this.subscriptionChanged.bind(this, comp, listener)
-				);
+				
+				this.subscriptionChange(key, this.subscriptionChanged.bind(this, comp, listener));
 			}
 		}
-
+		
 		this.subscribe("table-destroy", this.clearWatchers.bind(this));
 	}
-
-	subscriptionChanged(component, key, added) {
+	
+	subscriptionChanged(component, key, added){
 		var listener = this.listeners[key].components,
-			index = listener.indexOf(component),
-			changed = false;
-
-		if (added) {
-			if (index === -1) {
+		index = listener.indexOf(component),
+		changed = false;
+		
+		if(added){
+			if(index === -1){
 				listener.push(component);
 				changed = true;
 			}
-		} else {
-			if (!this.subscribed(component + "-" + key)) {
-				if (index > -1) {
+		}else {
+			if(!this.subscribed(component + "-" + key)){
+				if(index > -1){
 					listener.splice(index, 1);
 					changed = true;
 				}
 			}
 		}
-
-		if (
-			(key === "mouseenter" || key === "mouseleave") &&
-			!this.pseudoTracking
-		) {
+		
+		if((key === "mouseenter" || key === "mouseleave") && !this.pseudoTracking){
 			this.bindPseudoEvents();
 		}
-
-		if (changed) {
+		
+		if(changed){
 			this.updateEventListeners();
 		}
 	}
-
-	updateEventListeners() {
-		for (let key in this.listeners) {
+	
+	updateEventListeners(){
+		for(let key in this.listeners){
 			let listener = this.listeners[key];
-
-			if (listener.components.length) {
-				if (!listener.handler) {
+			
+			if(listener.components.length){
+				if(!listener.handler){
 					listener.handler = this.track.bind(this, key);
 					this.el.addEventListener(key, listener.handler);
 					// this.el.addEventListener(key, listener.handler, {passive: true})
 				}
-			} else {
-				if (listener.handler) {
+			}else {
+				if(listener.handler){
 					this.el.removeEventListener(key, listener.handler);
 					listener.handler = null;
 				}
 			}
 		}
 	}
-
-	track(type, e) {
+	
+	track(type, e){
 		var path = (e.composedPath && e.composedPath()) || e.path;
-
+		
 		var targets = this.findTargets(path);
 		targets = this.bindComponents(type, targets);
-
+		
 		this.triggerEvents(type, e, targets);
-
-		if (
-			this.pseudoTracking &&
-			(type == "mouseover" || type == "mouseleave") &&
-			!Object.keys(targets).length
-		) {
+		
+		if(this.pseudoTracking && (type == "mouseover" || type == "mouseleave") && !Object.keys(targets).length){
 			this.pseudoMouseLeave("none", e);
 		}
 	}
-
-	findTargets(path) {
+	
+	findTargets(path){
 		var targets = {};
-
+		
 		let componentMap = Object.keys(this.componentMap);
-
+		
 		for (let el of path) {
 			let classList = el.classList ? [...el.classList] : [];
-
+			
 			let abort = classList.filter((item) => {
 				return this.abortClasses.includes(item);
 			});
-
-			if (abort.length) {
+			
+			if(abort.length){
 				break;
 			}
-
+			
 			let elTargets = classList.filter((item) => {
 				return componentMap.includes(item);
 			});
-
+			
 			for (let target of elTargets) {
-				if (!targets[this.componentMap[target]]) {
+				if(!targets[this.componentMap[target]]){
 					targets[this.componentMap[target]] = el;
 				}
 			}
 		}
-
-		if (targets.group && targets.group === targets.row) {
+		
+		if(targets.group && targets.group === targets.row){
 			delete targets.row;
 		}
-
+		
 		return targets;
 	}
-
-	bindComponents(type, targets) {
+	
+	bindComponents(type, targets){
 		//ensure row component is looked up before cell
 		var keys = Object.keys(targets).reverse(),
-			listener = this.listeners[type],
-			targetMatches = {};
-
-		for (let key of keys) {
-			let component;
-			let target = targets[key];
-			let previousTarget = this.previousTargets[key];
-
-			if (previousTarget && previousTarget.target === target) {
+		listener = this.listeners[type],
+		matches = {},
+		targetMatches = {};
+		
+		for(let key of keys){
+			let component,
+			target = targets[key],
+			previousTarget = this.previousTargets[key];
+			
+			if(previousTarget && previousTarget.target === target){
 				component = previousTarget.component;
-			} else {
-				switch (key) {
+			}else {
+				switch(key){
 					case "row":
 					case "group":
-						if (
-							listener.components.includes("row") ||
-							listener.components.includes("cell") ||
-							listener.components.includes("group")
-						) {
+						if(listener.components.includes("row") || listener.components.includes("cell") || listener.components.includes("group")){
 							let rows = this.table.rowManager.getVisibleRows(true);
-
+						
 							component = rows.find((row) => {
 								return row.getElement() === target;
 							});
-
-							if (
-								targets["row"] &&
-								targets["row"].parentNode &&
-								targets["row"].parentNode.closest(".tabulator-row")
-							) {
+						
+							if(targets["row"] && targets["row"].parentNode && targets["row"].parentNode.closest(".tabulator-row")){
 								targets[key] = false;
 							}
 						}
 						break;
-
+					
 					case "column":
-						if (listener.components.includes("column")) {
+						if(listener.components.includes("column")){
 							component = this.table.columnManager.findColumn(target);
 						}
 						break;
-
+					
 					case "cell":
-						if (listener.components.includes("cell")) {
-							if (targets["row"] instanceof Row) {
-								component = targets["row"].findCell(target);
-							} else {
-								if (targets["row"]) {
-									console.warn(
-										"Event Target Lookup Error - The row this cell is attached to cannot be found, has the table been reinitialized without being destroyed first?"
-									);
+						if(listener.components.includes("cell")){
+							if(matches["row"] instanceof Row){
+								component = matches["row"].findCell(target);
+							}else {	
+								if(targets["row"]){
+									console.warn("Event Target Lookup Error - The row this cell is attached to cannot be found, has the table been reinitialized without being destroyed first?");
 								}
 							}
 						}
 						break;
 				}
 			}
-
-			if (component) {
-				targets[key] = component;
+			
+			if(component){
+				matches[key] = component;
 				targetMatches[key] = {
-					target: target,
-					component: component,
+					target:target,
+					component:component,
 				};
 			}
 		}
-
+		
 		this.previousTargets = targetMatches;
-
-		return targets;
+		
+		return matches;
 	}
-
-	triggerEvents(type, e, targets) {
+	
+	triggerEvents(type, e, targets){
 		var listener = this.listeners[type];
 
-		for (let key in targets) {
-			if (targets[key] && listener.components.includes(key)) {
+		for(let key in targets){
+			if(targets[key] && listener.components.includes(key)){
 				this.dispatch(key + "-" + type, e, targets[key]);
 			}
 		}
 	}
-
-	clearWatchers() {
-		for (let key in this.listeners) {
+	
+	clearWatchers(){
+		for(let key in this.listeners){
 			let listener = this.listeners[key];
-
-			if (listener.handler) {
+			
+			if(listener.handler){
 				this.el.removeEventListener(key, listener.handler);
 				listener.handler = null;
 			}
@@ -25894,238 +23481,184 @@ class InteractionManager extends CoreFeature {
 	}
 }
 
-class ComponentFunctionBinder {
-	constructor(table) {
+class ComponentFunctionBinder{
+
+	constructor(table){
 		this.table = table;
 
 		this.bindings = {};
 	}
 
-	bind(type, funcName, handler) {
-		if (!this.bindings[type]) {
+	bind(type, funcName, handler){
+		if(!this.bindings[type]){
 			this.bindings[type] = {};
 		}
 
-		if (this.bindings[type][funcName]) {
-			console.warn(
-				"Unable to bind component handler, a matching function name is already bound",
-				type,
-				funcName,
-				handler
-			);
-		} else {
+		if(this.bindings[type][funcName]){
+			console.warn("Unable to bind component handler, a matching function name is already bound", type, funcName, handler);
+		}else {
 			this.bindings[type][funcName] = handler;
 		}
 	}
 
-	handle(type, component, name) {
-		if (
-			this.bindings[type] &&
-			this.bindings[type][name] &&
-			typeof this.bindings[type][name].bind === "function"
-		) {
+	handle(type, component, name){
+		if(this.bindings[type] && this.bindings[type][name] && typeof this.bindings[type][name].bind === 'function'){
 			return this.bindings[type][name].bind(null, component);
-		} else {
-			if (
-				name !== "then" &&
-				typeof name === "string" &&
-				!name.startsWith("_")
-			) {
-				if (this.table.options.debugInvalidComponentFuncs) {
-					console.error(
-						"The " +
-							type +
-							" component does not have a " +
-							name +
-							" function, have you checked that you have the correct Tabulator module installed?"
-					);
+		}else {
+			if(name !== "then" && typeof name === "string" && !name.startsWith("_")){
+				if(this.table.options.debugInvalidComponentFuncs){
+					console.error("The " + type + " component does not have a " + name + " function, have you checked that you have the correct Tabulator module installed?");
 				}
 			}
 		}
 	}
 }
 
-class DataLoader extends CoreFeature {
-	constructor(table) {
+class DataLoader extends CoreFeature{
+	constructor(table){
 		super(table);
 
 		this.requestOrder = 0; //prevent requests coming out of sequence if overridden by another load request
 		this.loading = false;
 	}
 
-	initialize() {}
+	initialize(){}
 
-	load(data, params, config, replace, silent, columnsChanged) {
+	load(data, params, config, replace, silent, columnsChanged){
 		var requestNo = ++this.requestOrder;
 
 		this.dispatchExternal("dataLoading", data);
 
 		//parse json data to array
-		if (data && (data.indexOf("{") == 0 || data.indexOf("[") == 0)) {
+		if (data && (data.indexOf("{") == 0 || data.indexOf("[") == 0)){
 			data = JSON.parse(data);
 		}
 
-		if (this.confirm("data-loading", [data, params, config, silent])) {
+		if(this.confirm("data-loading", [data, params, config, silent])){
 			this.loading = true;
 
-			if (!silent) {
+			if(!silent){
 				this.alertLoader();
 			}
 
 			//get params for request
-			params = this.chain(
-				"data-params",
-				[data, config, silent],
-				params || {},
-				params || {}
-			);
+			params = this.chain("data-params", [data, config, silent], params || {}, params || {});
 
 			params = this.mapParams(params, this.table.options.dataSendParams);
 
-			var result = this.chain(
-				"data-load",
-				[data, params, config, silent],
-				false,
-				Promise.resolve([])
-			);
+			var result = this.chain("data-load", [data, params, config, silent], false, Promise.resolve([]));
+			
+			return result.then((response) => {
+				if(!Array.isArray(response) && typeof response == "object"){
+					response = this.mapParams(response, this.objectInvert(this.table.options.dataReceiveParams));
+				}
 
-			return result
-				.then((response) => {
-					if (!Array.isArray(response) && typeof response == "object") {
-						response = this.mapParams(
-							response,
-							this.objectInvert(this.table.options.dataReceiveParams)
-						);
+				var rowData = this.chain("data-loaded", response, null, response);
+
+				if(requestNo == this.requestOrder){
+					this.clearAlert();
+
+					if(rowData !== false){
+						this.dispatchExternal("dataLoaded", rowData);
+						this.table.rowManager.setData(rowData,  replace, typeof columnsChanged === "undefined" ? !replace : columnsChanged);
 					}
+				}else {
+					console.warn("Data Load Response Blocked - An active data load request was blocked by an attempt to change table data while the request was being made");
+				}
+			}).catch((error) => {
+				console.error("Data Load Error: ", error);
+				this.dispatchExternal("dataLoadError", error);
 
-					var rowData = this.chain("data-loaded", response, null, response);
-
-					if (requestNo == this.requestOrder) {
-						this.clearAlert();
-
-						if (rowData !== false) {
-							this.dispatchExternal("dataLoaded", rowData);
-							this.table.rowManager.setData(
-								rowData,
-								replace,
-								typeof columnsChanged === "undefined"
-									? !replace
-									: columnsChanged
-							);
-						}
-					} else {
-						console.warn(
-							"Data Load Response Blocked - An active data load request was blocked by an attempt to change table data while the request was being made"
-						);
-					}
-				})
-				.catch((error) => {
-					console.error("Data Load Error: ", error);
-					this.dispatchExternal("dataLoadError", error);
-
-					if (!silent) {
-						this.alertError();
-					}
-
-					setTimeout(() => {
-						this.clearAlert();
-					}, this.table.options.dataLoaderErrorTimeout);
-				})
+				if(!silent){
+					this.alertError();
+				}
+				
+				setTimeout(() => {
+					this.clearAlert();
+				}, this.table.options.dataLoaderErrorTimeout);
+			})
 				.finally(() => {
 					this.loading = false;
 				});
-		} else {
+		}else {
 			this.dispatchExternal("dataLoaded", data);
 
-			if (!data) {
+			if(!data){
 				data = [];
 			}
 
-			this.table.rowManager.setData(
-				data,
-				replace,
-				typeof columnsChanged === "undefined" ? !replace : columnsChanged
-			);
+			this.table.rowManager.setData(data, replace, typeof columnsChanged === "undefined" ? !replace : columnsChanged);
 			return Promise.resolve();
 		}
 	}
 
-	mapParams(params, map) {
+	mapParams(params, map){
 		var output = {};
 
-		for (let key in params) {
+		for(let key in params){
 			output[map.hasOwnProperty(key) ? map[key] : key] = params[key];
 		}
 
 		return output;
 	}
 
-	objectInvert(obj) {
+	objectInvert(obj){
 		var output = {};
 
-		for (let key in obj) {
+		for(let key in obj){
 			output[obj[key]] = key;
 		}
 
 		return output;
 	}
 
-	blockActiveLoad() {
+	blockActiveLoad(){
 		this.requestOrder++;
 	}
 
-	alertLoader() {
-		var shouldLoad =
-			typeof this.table.options.dataLoader === "function"
-				? this.table.options.dataLoader()
-				: this.table.options.dataLoader;
+	alertLoader(){
+		var shouldLoad = typeof this.table.options.dataLoader === "function" ? this.table.options.dataLoader() : this.table.options.dataLoader;
 
-		if (shouldLoad) {
-			this.table.alertManager.alert(
-				this.table.options.dataLoaderLoading || this.langText("data|loading")
-			);
+		if(shouldLoad){
+			this.table.alertManager.alert(this.table.options.dataLoaderLoading || this.langText("data|loading"));
 		}
 	}
 
-	alertError() {
-		this.table.alertManager.alert(
-			this.table.options.dataLoaderError || this.langText("data|error"),
-			"error"
-		);
+	alertError(){
+		this.table.alertManager.alert(this.table.options.dataLoaderError || this.langText("data|error"), "error");
 	}
 
-	clearAlert() {
+	clearAlert(){
 		this.table.alertManager.clear();
 	}
 }
 
 class ExternalEventBus {
-	constructor(table, optionsList, debug) {
+
+	constructor(table, optionsList, debug){
 		this.table = table;
 		this.events = {};
 		this.optionsList = optionsList || {};
 		this.subscriptionNotifiers = {};
 
-		this.dispatch = debug
-			? this._debugDispatch.bind(this)
-			: this._dispatch.bind(this);
+		this.dispatch = debug ? this._debugDispatch.bind(this) : this._dispatch.bind(this);
 		this.debug = debug;
 	}
 
-	subscriptionChange(key, callback) {
-		if (!this.subscriptionNotifiers[key]) {
+	subscriptionChange(key, callback){
+		if(!this.subscriptionNotifiers[key]){
 			this.subscriptionNotifiers[key] = [];
 		}
 
 		this.subscriptionNotifiers[key].push(callback);
 
-		if (this.subscribed(key)) {
+		if(this.subscribed(key)){
 			this._notifySubscriptionChange(key, true);
 		}
 	}
 
-	subscribe(key, callback) {
-		if (!this.events[key]) {
+	subscribe(key, callback){
+		if(!this.events[key]){
 			this.events[key] = [];
 		}
 
@@ -26134,29 +23667,25 @@ class ExternalEventBus {
 		this._notifySubscriptionChange(key, true);
 	}
 
-	unsubscribe(key, callback) {
+	unsubscribe(key, callback){
 		var index;
 
-		if (this.events[key]) {
-			if (callback) {
+		if(this.events[key]){
+			if(callback){
 				index = this.events[key].findIndex((item) => {
 					return item === callback;
 				});
 
-				if (index > -1) {
+				if(index > -1){
 					this.events[key].splice(index, 1);
-				} else {
-					console.warn(
-						"Cannot remove event, no matching event found:",
-						key,
-						callback
-					);
+				}else {
+					console.warn("Cannot remove event, no matching event found:", key, callback);
 					return;
 				}
-			} else {
+			}else {
 				delete this.events[key];
 			}
-		} else {
+		}else {
 			console.warn("Cannot remove event, no events set on:", key);
 			return;
 		}
@@ -26164,30 +23693,30 @@ class ExternalEventBus {
 		this._notifySubscriptionChange(key, false);
 	}
 
-	subscribed(key) {
+	subscribed(key){
 		return this.events[key] && this.events[key].length;
 	}
 
-	_notifySubscriptionChange(key, subscribed) {
+	_notifySubscriptionChange(key, subscribed){
 		var notifiers = this.subscriptionNotifiers[key];
 
-		if (notifiers) {
-			notifiers.forEach((callback) => {
+		if(notifiers){
+			notifiers.forEach((callback)=>{
 				callback(subscribed);
 			});
 		}
 	}
 
-	_dispatch() {
+	_dispatch(){
 		var args = Array.from(arguments),
-			key = args.shift(),
-			result;
+		key = args.shift(),
+		result;
 
-		if (this.events[key]) {
+		if(this.events[key]){
 			this.events[key].forEach((callback, i) => {
 				let callResult = callback.apply(this.table, args);
 
-				if (!i) {
+				if(!i){
 					result = callResult;
 				}
 			});
@@ -26196,13 +23725,13 @@ class ExternalEventBus {
 		return result;
 	}
 
-	_debugDispatch() {
+	_debugDispatch(){
 		var args = Array.from(arguments),
-			key = args[0];
+		key = args[0];
 
 		args[0] = "ExternalEvent:" + args[0];
 
-		if (this.debug === true || this.debug.includes(key)) {
+		if(this.debug === true || this.debug.includes(key)){
 			console.log(...args);
 		}
 
@@ -26211,38 +23740,35 @@ class ExternalEventBus {
 }
 
 class InternalEventBus {
-	constructor(debug) {
+
+	constructor(debug){
 		this.events = {};
 		this.subscriptionNotifiers = {};
 
-		this.dispatch = debug
-			? this._debugDispatch.bind(this)
-			: this._dispatch.bind(this);
+		this.dispatch = debug ? this._debugDispatch.bind(this) : this._dispatch.bind(this);
 		this.chain = debug ? this._debugChain.bind(this) : this._chain.bind(this);
-		this.confirm = debug
-			? this._debugConfirm.bind(this)
-			: this._confirm.bind(this);
+		this.confirm = debug ? this._debugConfirm.bind(this) : this._confirm.bind(this);
 		this.debug = debug;
 	}
 
-	subscriptionChange(key, callback) {
-		if (!this.subscriptionNotifiers[key]) {
+	subscriptionChange(key, callback){
+		if(!this.subscriptionNotifiers[key]){
 			this.subscriptionNotifiers[key] = [];
 		}
 
 		this.subscriptionNotifiers[key].push(callback);
 
-		if (this.subscribed(key)) {
+		if(this.subscribed(key)){
 			this._notifySubscriptionChange(key, true);
 		}
 	}
 
-	subscribe(key, callback, priority = 10000) {
-		if (!this.events[key]) {
+	subscribe(key, callback, priority = 10000){
+		if(!this.events[key]){
 			this.events[key] = [];
 		}
 
-		this.events[key].push({ callback, priority });
+		this.events[key].push({callback, priority});
 
 		this.events[key].sort((a, b) => {
 			return a.priority - b.priority;
@@ -26251,27 +23777,23 @@ class InternalEventBus {
 		this._notifySubscriptionChange(key, true);
 	}
 
-	unsubscribe(key, callback) {
+	unsubscribe(key, callback){
 		var index;
 
-		if (this.events[key]) {
-			if (callback) {
+		if(this.events[key]){
+			if(callback){
 				index = this.events[key].findIndex((item) => {
 					return item.callback === callback;
 				});
 
-				if (index > -1) {
+				if(index > -1){
 					this.events[key].splice(index, 1);
-				} else {
-					console.warn(
-						"Cannot remove event, no matching event found:",
-						key,
-						callback
-					);
+				}else {
+					console.warn("Cannot remove event, no matching event found:", key, callback);
 					return;
 				}
 			}
-		} else {
+		}else {
 			console.warn("Cannot remove event, no events set on:", key);
 			return;
 		}
@@ -26279,38 +23801,38 @@ class InternalEventBus {
 		this._notifySubscriptionChange(key, false);
 	}
 
-	subscribed(key) {
+	subscribed(key){
 		return this.events[key] && this.events[key].length;
 	}
 
-	_chain(key, args, initialValue, fallback) {
+	_chain(key, args, initialValue, fallback){
 		var value = initialValue;
 
-		if (!Array.isArray(args)) {
+		if(!Array.isArray(args)){
 			args = [args];
 		}
 
-		if (this.subscribed(key)) {
+		if(this.subscribed(key)){
 			this.events[key].forEach((subscriber, i) => {
 				value = subscriber.callback.apply(this, args.concat([value]));
 			});
 
 			return value;
-		} else {
+		}else {
 			return typeof fallback === "function" ? fallback() : fallback;
 		}
 	}
 
-	_confirm(key, args) {
+	_confirm(key, args){
 		var confirmed = false;
 
-		if (!Array.isArray(args)) {
+		if(!Array.isArray(args)){
 			args = [args];
 		}
 
-		if (this.subscribed(key)) {
+		if(this.subscribed(key)){
 			this.events[key].forEach((subscriber, i) => {
-				if (subscriber.callback.apply(this, args)) {
+				if(subscriber.callback.apply(this, args)){
 					confirmed = true;
 				}
 			});
@@ -26319,60 +23841,60 @@ class InternalEventBus {
 		return confirmed;
 	}
 
-	_notifySubscriptionChange(key, subscribed) {
+	_notifySubscriptionChange(key, subscribed){
 		var notifiers = this.subscriptionNotifiers[key];
 
-		if (notifiers) {
-			notifiers.forEach((callback) => {
+		if(notifiers){
+			notifiers.forEach((callback)=>{
 				callback(subscribed);
 			});
 		}
 	}
 
-	_dispatch() {
+	_dispatch(){
 		var args = Array.from(arguments),
-			key = args.shift();
+		key = args.shift();
 
-		if (this.events[key]) {
+		if(this.events[key]){
 			this.events[key].forEach((subscriber) => {
 				subscriber.callback.apply(this, args);
 			});
 		}
 	}
 
-	_debugDispatch() {
+	_debugDispatch(){
 		var args = Array.from(arguments),
-			key = args[0];
+		key = args[0];
 
 		args[0] = "InternalEvent:" + key;
 
-		if (this.debug === true || this.debug.includes(key)) {
+		if(this.debug === true || this.debug.includes(key)){
 			console.log(...args);
 		}
 
 		return this._dispatch(...arguments);
 	}
 
-	_debugChain() {
+	_debugChain(){
 		var args = Array.from(arguments),
-			key = args[0];
+		key = args[0];
 
 		args[0] = "InternalEvent:" + key;
 
-		if (this.debug === true || this.debug.includes(key)) {
+		if(this.debug === true || this.debug.includes(key)){
 			console.log(...args);
 		}
 
 		return this._chain(...arguments);
 	}
 
-	_debugConfirm() {
+	_debugConfirm(){
 		var args = Array.from(arguments),
-			key = args[0];
+		key = args[0];
 
 		args[0] = "InternalEvent:" + key;
 
-		if (this.debug === true || this.debug.includes(key)) {
+		if(this.debug === true || this.debug.includes(key)){
 			console.log(...args);
 		}
 
@@ -26380,113 +23902,95 @@ class InternalEventBus {
 	}
 }
 
-class DeprecationAdvisor extends CoreFeature {
-	constructor(table) {
+class DeprecationAdvisor extends CoreFeature{
+	
+	constructor(table){
 		super(table);
 	}
-
-	_warnUser() {
-		if (this.options("debugDeprecation")) {
+	
+	_warnUser(){
+		if(this.options("debugDeprecation")){
 			console.warn(...arguments);
 		}
 	}
-
-	check(oldOption, newOption) {
+	
+	check(oldOption, newOption){
 		var msg = "";
-
-		if (typeof this.options(oldOption) !== "undefined") {
-			msg =
-				"Deprecated Setup Option - Use of the %c" +
-				oldOption +
-				"%c option is now deprecated";
-
-			if (newOption) {
+		
+		if(typeof this.options(oldOption) !== "undefined"){
+			msg = "Deprecated Setup Option - Use of the %c" + oldOption + "%c option is now deprecated";
+			
+			if(newOption){
 				msg = msg + ", Please use the %c" + newOption + "%c option instead";
-				this._warnUser(
-					msg,
-					"font-weight: bold;",
-					"font-weight: normal;",
-					"font-weight: bold;",
-					"font-weight: normal;"
-				);
-			} else {
-				this._warnUser(msg, "font-weight: bold;", "font-weight: normal;");
+				this._warnUser(msg, 'font-weight: bold;', 'font-weight: normal;', 'font-weight: bold;', 'font-weight: normal;');
+			}else {
+				this._warnUser(msg, 'font-weight: bold;', 'font-weight: normal;');
 			}
-
+			
 			return false;
-		} else {
+		}else {
 			return true;
 		}
 	}
-
-	checkMsg(oldOption, msg) {
-		if (typeof this.options(oldOption) !== "undefined") {
-			this._warnUser(
-				"%cDeprecated Setup Option - Use of the %c" +
-					oldOption +
-					" %c option is now deprecated, " +
-					msg,
-				"font-weight: normal;",
-				"font-weight: bold;",
-				"font-weight: normal;"
-			);
-
+	
+	checkMsg(oldOption, msg){
+		if(typeof this.options(oldOption) !== "undefined"){
+			this._warnUser("%cDeprecated Setup Option - Use of the %c" + oldOption + " %c option is now deprecated, " + msg, 'font-weight: normal;', 'font-weight: bold;', 'font-weight: normal;');
+			
 			return false;
-		} else {
+		}else {
 			return true;
 		}
 	}
-
-	msg(msg) {
+	
+	msg(msg){
 		this._warnUser(msg);
 	}
 }
 
 class TableRegistry {
-	static register(table) {
+
+	static register(table){
 		TableRegistry.tables.push(table);
 	}
 
-	static deregister(table) {
+	static deregister(table){
 		var index = TableRegistry.tables.indexOf(table);
 
-		if (index > -1) {
+		if(index > -1){
 			TableRegistry.tables.splice(index, 1);
 		}
 	}
 
-	static lookupTable(query, silent) {
+	static lookupTable(query, silent){
 		var results = [],
-			matches,
-			match;
+		matches, match;
 
-		if (typeof query === "string") {
+		if(typeof query === "string"){
 			matches = document.querySelectorAll(query);
 
-			if (matches.length) {
-				for (var i = 0; i < matches.length; i++) {
+			if(matches.length){
+				for(var i = 0; i < matches.length; i++){
 					match = TableRegistry.matchElement(matches[i]);
 
-					if (match) {
+					if(match){
 						results.push(match);
 					}
 				}
 			}
-		} else if (
-			(typeof HTMLElement !== "undefined" && query instanceof HTMLElement) ||
-			query instanceof Tabulator
-		) {
+
+		}else if((typeof HTMLElement !== "undefined" && query instanceof HTMLElement) || query instanceof Tabulator){
 			match = TableRegistry.matchElement(query);
 
-			if (match) {
+			if(match){
 				results.push(match);
 			}
-		} else if (Array.isArray(query)) {
-			query.forEach(function (item) {
+		}else if(Array.isArray(query)){
+			query.forEach(function(item){
 				results = results.concat(TableRegistry.lookupTable(item));
 			});
-		} else {
-			if (!silent) {
+		}else {
+			if(!silent){
 				console.warn("Table Connection Error - Invalid Selector", query);
 			}
 		}
@@ -26494,11 +23998,9 @@ class TableRegistry {
 		return results;
 	}
 
-	static matchElement(element) {
-		return TableRegistry.tables.find(function (table) {
-			return element instanceof Tabulator
-				? table === element
-				: table.element === element;
+	static matchElement(element){
+		return TableRegistry.tables.find(function(table){
+			return element instanceof Tabulator ? table === element : table.element === element;
 		});
 	}
 }
@@ -26506,86 +24008,70 @@ class TableRegistry {
 TableRegistry.tables = [];
 
 //resize columns to fit data they contain
-function fitData(columns, forced) {
-	if (forced) {
+function fitData(columns, forced){
+	if(forced){
 		this.table.columnManager.renderer.reinitializeColumnWidths(columns);
 	}
-
-	if (
-		this.table.options.responsiveLayout &&
-		this.table.modExists("responsiveLayout", true)
-	) {
+	
+	if(this.table.options.responsiveLayout && this.table.modExists("responsiveLayout", true)){
 		this.table.modules.responsiveLayout.update();
 	}
 }
 
 //resize columns to fit data they contain and stretch row to fill table, also used for fitDataTable
-function fitDataGeneral(columns, forced) {
-	columns.forEach(function (column) {
+function fitDataGeneral(columns, forced){
+	columns.forEach(function(column){
 		column.reinitializeWidth();
 	});
 
-	if (
-		this.table.options.responsiveLayout &&
-		this.table.modExists("responsiveLayout", true)
-	) {
+	if(this.table.options.responsiveLayout && this.table.modExists("responsiveLayout", true)){
 		this.table.modules.responsiveLayout.update();
 	}
 }
 
 //resize columns to fit data the contain and stretch last column to fill table
-function fitDataStretch(columns, forced) {
+function fitDataStretch(columns, forced){
 	var colsWidth = 0,
-		tableWidth = this.table.rowManager.element.clientWidth,
-		gap = 0,
-		lastCol = false;
+	tableWidth = this.table.rowManager.element.clientWidth,
+	gap = 0,
+	lastCol = false;
 
 	columns.forEach((column, i) => {
-		if (!column.widthFixed) {
+		if(!column.widthFixed){
 			column.reinitializeWidth();
 		}
 
-		if (
-			this.table.options.responsiveLayout
-				? column.modules.responsive.visible
-				: column.visible
-		) {
+		if(this.table.options.responsiveLayout ? column.modules.responsive.visible : column.visible){
 			lastCol = column;
 		}
 
-		if (column.visible) {
+		if(column.visible){
 			colsWidth += column.getWidth();
 		}
 	});
 
-	if (lastCol) {
+	if(lastCol){
 		gap = tableWidth - colsWidth + lastCol.getWidth();
 
-		if (
-			this.table.options.responsiveLayout &&
-			this.table.modExists("responsiveLayout", true)
-		) {
+		if(this.table.options.responsiveLayout && this.table.modExists("responsiveLayout", true)){
 			lastCol.setWidth(0);
 			this.table.modules.responsiveLayout.update();
 		}
 
-		if (gap > 0) {
+		if(gap > 0){
 			lastCol.setWidth(gap);
-		} else {
+		}else {
 			lastCol.reinitializeWidth();
 		}
-	} else {
-		if (
-			this.table.options.responsiveLayout &&
-			this.table.modExists("responsiveLayout", true)
-		) {
+	}else {
+		if(this.table.options.responsiveLayout && this.table.modExists("responsiveLayout", true)){
 			this.table.modules.responsiveLayout.update();
 		}
 	}
 }
 
 //resize columns to fit
-function fitColumns(columns, forced) {
+function fitColumns(columns, forced){
 	var totalWidth = this.table.rowManager.element.getBoundingClientRect().width; //table element width
 	var fixedWidth = 0; //total width of columns with a defined width
 	var flexWidth = 0; //total width available to flexible columns
@@ -26597,16 +24083,16 @@ function fitColumns(columns, forced) {
 	var overflowWidth = 0; //horizontal overflow width
 	var gapFill = 0; //number of pixels to be added to final column to close and half pixel gaps
 
-	function calcWidth(width) {
+	function calcWidth(width){
 		var colWidth;
 
-		if (typeof width == "string") {
-			if (width.indexOf("%") > -1) {
+		if(typeof(width) == "string"){
+			if(width.indexOf("%") > -1){
 				colWidth = (totalWidth / 100) * parseInt(width);
-			} else {
+			}else {
 				colWidth = parseInt(width);
 			}
-		} else {
+		}else {
 			colWidth = width;
 		}
 
@@ -26614,78 +24100,60 @@ function fitColumns(columns, forced) {
 	}
 
 	//ensure columns resize to take up the correct amount of space
-	function scaleColumns(columns, freeSpace, colWidth, shrinkCols) {
+	function scaleColumns(columns, freeSpace, colWidth, shrinkCols){
 		var oversizeCols = [],
-			oversizeSpace = 0,
-			remainingSpace = 0,
-			nextColWidth = 0,
-			remainingFlexGrowUnits = flexGrowUnits,
-			gap = 0,
-			changeUnits = 0,
-			undersizeCols = [];
+		oversizeSpace = 0,
+		remainingSpace = 0,
+		nextColWidth = 0,
+		remainingFlexGrowUnits = flexGrowUnits,
+		gap = 0,
+		changeUnits = 0,
+		undersizeCols = [];
 
-		function calcGrow(col) {
-			return colWidth * (col.column.definition.widthGrow || 1);
+		function calcGrow(col){
+			return (colWidth * (col.column.definition.widthGrow || 1));
 		}
 
-		function calcShrink(col) {
-			return (
-				calcWidth(col.width) -
-				colWidth * (col.column.definition.widthShrink || 0)
-			);
+		function calcShrink(col){
+			return  (calcWidth(col.width) - (colWidth * (col.column.definition.widthShrink || 0)));
 		}
 
-		columns.forEach(function (col, i) {
+		columns.forEach(function(col, i){
 			var width = shrinkCols ? calcShrink(col) : calcGrow(col);
-			if (col.column.minWidth >= width) {
+			if(col.column.minWidth >= width){
 				oversizeCols.push(col);
-			} else {
-				if (col.column.maxWidth && col.column.maxWidth < width) {
+			}else {
+				if(col.column.maxWidth && col.column.maxWidth < width){
 					col.width = col.column.maxWidth;
 					freeSpace -= col.column.maxWidth;
 
-					remainingFlexGrowUnits -= shrinkCols
-						? col.column.definition.widthShrink || 1
-						: col.column.definition.widthGrow || 1;
+					remainingFlexGrowUnits -= shrinkCols ? (col.column.definition.widthShrink || 1) : (col.column.definition.widthGrow || 1);
 
-					if (remainingFlexGrowUnits) {
-						colWidth = Math.floor(freeSpace / remainingFlexGrowUnits);
+					if(remainingFlexGrowUnits){
+						colWidth = Math.floor(freeSpace/remainingFlexGrowUnits);
 					}
-				} else {
+				}else {
 					undersizeCols.push(col);
-					changeUnits += shrinkCols
-						? col.column.definition.widthShrink || 1
-						: col.column.definition.widthGrow || 1;
+					changeUnits += shrinkCols ? (col.column.definition.widthShrink || 1) : (col.column.definition.widthGrow || 1);
 				}
 			}
 		});
 
-		if (oversizeCols.length) {
-			oversizeCols.forEach(function (col) {
-				oversizeSpace += shrinkCols
-					? col.width - col.column.minWidth
-					: col.column.minWidth;
+		if(oversizeCols.length){
+			oversizeCols.forEach(function(col){
+				oversizeSpace += shrinkCols ?  col.width - col.column.minWidth : col.column.minWidth;
 				col.width = col.column.minWidth;
 			});
 
 			remainingSpace = freeSpace - oversizeSpace;
 
-			nextColWidth = changeUnits
-				? Math.floor(remainingSpace / changeUnits)
-				: remainingSpace;
+			nextColWidth = changeUnits ? Math.floor(remainingSpace/changeUnits) : remainingSpace;
 
-			gap = scaleColumns(
-				undersizeCols,
-				remainingSpace,
-				nextColWidth,
-				shrinkCols
-			);
-		} else {
-			gap = changeUnits
-				? freeSpace - Math.floor(freeSpace / changeUnits) * changeUnits
-				: freeSpace;
+			gap = scaleColumns(undersizeCols, remainingSpace, nextColWidth, shrinkCols);
+		}else {
+			gap = changeUnits ? freeSpace - (Math.floor(freeSpace/changeUnits) * changeUnits) : freeSpace;
 
-			undersizeCols.forEach(function (column) {
+			undersizeCols.forEach(function(column){
 				column.width = shrinkCols ? calcShrink(column) : calcGrow(column);
 			});
 		}
@@ -26693,46 +24161,41 @@ function fitColumns(columns, forced) {
 		return gap;
 	}
 
-	if (
-		this.table.options.responsiveLayout &&
-		this.table.modExists("responsiveLayout", true)
-	) {
+	if(this.table.options.responsiveLayout && this.table.modExists("responsiveLayout", true)){
 		this.table.modules.responsiveLayout.update();
 	}
 
 	//adjust for vertical scrollbar if present
-	if (
-		this.table.rowManager.element.scrollHeight >
-		this.table.rowManager.element.clientHeight
-	) {
-		totalWidth -=
-			this.table.rowManager.element.offsetWidth -
-			this.table.rowManager.element.clientWidth;
+	if(this.table.rowManager.element.scrollHeight > this.table.rowManager.element.clientHeight){
+		totalWidth -= this.table.rowManager.element.offsetWidth - this.table.rowManager.element.clientWidth;
 	}
 
-	columns.forEach(function (column) {
+	columns.forEach(function(column){
 		var width, minWidth, colWidth;
 
-		if (column.visible) {
-			width = column.definition.width;
-			minWidth = parseInt(column.minWidth);
+		if(column.visible){
 
-			if (width) {
+			width = column.definition.width;
+			minWidth =  parseInt(column.minWidth);
+
+			if(width){
+
 				colWidth = calcWidth(width);
 
 				fixedWidth += colWidth > minWidth ? colWidth : minWidth;
 
-				if (column.definition.widthShrink) {
+				if(column.definition.widthShrink){
 					fixedShrinkColumns.push({
-						column: column,
-						width: colWidth > minWidth ? colWidth : minWidth,
+						column:column,
+						width:colWidth > minWidth ? colWidth : minWidth
 					});
 					flexShrinkUnits += column.definition.widthShrink;
 				}
-			} else {
+
+			}else {
 				flexColumns.push({
-					column: column,
-					width: 0,
+					column:column,
+					width:0,
 				});
 				flexGrowUnits += column.definition.widthGrow || 1;
 			}
@@ -26749,51 +24212,47 @@ function fitColumns(columns, forced) {
 	gapFill = scaleColumns(flexColumns, flexWidth, flexColWidth, false);
 
 	//increase width of last column to account for rounding errors
-	if (flexColumns.length && gapFill > 0) {
-		flexColumns[flexColumns.length - 1].width += gapFill;
+	if(flexColumns.length && gapFill > 0){
+		flexColumns[flexColumns.length-1].width += gapFill;
 	}
 
 	//calculate space for columns to be shrunk into
-	flexColumns.forEach(function (col) {
+	flexColumns.forEach(function(col){
 		flexWidth -= col.width;
 	});
 
 	overflowWidth = Math.abs(gapFill) + flexWidth;
 
 	//shrink oversize columns if there is no available space
-	if (overflowWidth > 0 && flexShrinkUnits) {
-		gapFill = scaleColumns(
-			fixedShrinkColumns,
-			overflowWidth,
-			Math.floor(overflowWidth / flexShrinkUnits),
-			true
-		);
+	if(overflowWidth > 0 && flexShrinkUnits){
+		gapFill = scaleColumns(fixedShrinkColumns, overflowWidth, Math.floor(overflowWidth / flexShrinkUnits), true);
 	}
 
 	//decrease width of last column to account for rounding errors
-	if (gapFill && fixedShrinkColumns.length) {
-		fixedShrinkColumns[fixedShrinkColumns.length - 1].width -= gapFill;
+	if(gapFill && fixedShrinkColumns.length){
+		fixedShrinkColumns[fixedShrinkColumns.length-1].width -= gapFill;
 	}
 
-	flexColumns.forEach(function (col) {
+	flexColumns.forEach(function(col){
 		col.column.setWidth(col.width);
 	});
 
-	fixedShrinkColumns.forEach(function (col) {
+	fixedShrinkColumns.forEach(function(col){
 		col.column.setWidth(col.width);
 	});
 }
 
 var defaultModes = {
-	fitData: fitData,
-	fitDataFill: fitDataGeneral,
-	fitDataTable: fitDataGeneral,
-	fitDataStretch: fitDataStretch,
-	fitColumns: fitColumns,
+	fitData:fitData,
+	fitDataFill:fitDataGeneral,
+	fitDataTable:fitDataGeneral,
+	fitDataStretch:fitDataStretch,
+	fitColumns:fitColumns ,
 };
 
-class Layout extends Module {
-	constructor(table) {
+class Layout extends Module{
+
+	constructor(table){
 		super(table, "layout");
 
 		this.mode = null;
@@ -26806,33 +24265,27 @@ class Layout extends Module {
 	}
 
 	//initialize layout system
-	initialize() {
+	initialize(){
 		var layout = this.table.options.layout;
 
-		if (Layout.modes[layout]) {
+		if(Layout.modes[layout]){
 			this.mode = layout;
-		} else {
-			console.warn(
-				"Layout Error - invalid mode set, defaulting to 'fitData' : " + layout
-			);
-			this.mode = "fitData";
+		}else {
+			console.warn("Layout Error - invalid mode set, defaulting to 'fitData' : " + layout);
+			this.mode = 'fitData';
 		}
 
 		this.table.element.setAttribute("tabulator-layout", this.mode);
 	}
 
-	getMode() {
+	getMode(){
 		return this.mode;
 	}
 
 	//trigger table layout
-	layout(dataChanged) {
+	layout(dataChanged){
 		this.dispatch("layout-refreshing");
-		Layout.modes[this.mode].call(
-			this,
-			this.table.columnManager.columnsByIndex,
-			dataChanged
-		);
+		Layout.modes[this.mode].call(this, this.table.columnManager.columnsByIndex, dataChanged);
 		this.dispatch("layout-refreshed");
 	}
 }
@@ -26843,45 +24296,46 @@ Layout.moduleName = "layout";
 Layout.modes = defaultModes;
 
 var defaultLangs = {
-	default: {
-		//hold default locale text
-		groups: {
-			item: "item",
-			items: "items",
+	"default":{ //hold default locale text
+		"groups":{
+			"item":"item",
+			"items":"items",
 		},
-		columns: {},
-		data: {
-			loading: "Loading",
-			error: "Error",
+		"columns":{
 		},
-		pagination: {
-			page_size: "Page Size",
-			page_title: "Show Page",
-			first: "First",
-			first_title: "First Page",
-			last: "Last",
-			last_title: "Last Page",
-			prev: "Prev",
-			prev_title: "Prev Page",
-			next: "Next",
-			next_title: "Next Page",
-			all: "All",
-			counter: {
-				showing: "Showing",
-				of: "of",
-				rows: "rows",
-				pages: "pages",
-			},
+		"data":{
+			"loading":"Loading",
+			"error":"Error",
 		},
-		headerFilters: {
-			default: "filter column...",
-			columns: {},
+		"pagination":{
+			"page_size":"Page Size",
+			"page_title":"Show Page",
+			"first":"First",
+			"first_title":"First Page",
+			"last":"Last",
+			"last_title":"Last Page",
+			"prev":"Prev",
+			"prev_title":"Prev Page",
+			"next":"Next",
+			"next_title":"Next Page",
+			"all":"All",
+			"counter":{
+				"showing": "Showing",
+				"of": "of",
+				"rows": "rows",
+				"pages": "pages",
+			}
 		},
+		"headerFilters":{
+			"default":"filter column...",
+			"columns":{}
+		}
 	},
 };
 
-class Localize extends Module {
-	constructor(table) {
+class Localize extends Module{
+
+	constructor(table){
 		super(table);
 
 		this.locale = "default"; //current locale
@@ -26893,16 +24347,14 @@ class Localize extends Module {
 		this.registerTableOption("langs", {});
 	}
 
-	initialize() {
+	initialize(){
 		this.langList = Helpers.deepClone(Localize.langs);
 
-		if (this.table.options.columnDefaults.headerFilterPlaceholder !== false) {
-			this.setHeaderFilterPlaceholder(
-				this.table.options.columnDefaults.headerFilterPlaceholder
-			);
+		if(this.table.options.columnDefaults.headerFilterPlaceholder !== false){
+			this.setHeaderFilterPlaceholder(this.table.options.columnDefaults.headerFilterPlaceholder);
 		}
 
-		for (let locale in this.table.options.langs) {
+		for(let locale in this.table.options.langs){
 			this.installLang(locale, this.table.options.langs[locale]);
 		}
 
@@ -26914,79 +24366,72 @@ class Localize extends Module {
 	}
 
 	//set header placeholder
-	setHeaderFilterPlaceholder(placeholder) {
+	setHeaderFilterPlaceholder(placeholder){
 		this.langList.default.headerFilters.default = placeholder;
 	}
 
 	//set header filter placeholder by column
-	setHeaderFilterColumnPlaceholder(column, placeholder) {
+	setHeaderFilterColumnPlaceholder(column, placeholder){
 		this.langList.default.headerFilters.columns[column] = placeholder;
 
-		if (this.lang && !this.lang.headerFilters.columns[column]) {
+		if(this.lang && !this.lang.headerFilters.columns[column]){
 			this.lang.headerFilters.columns[column] = placeholder;
 		}
 	}
 
 	//setup a lang description object
-	installLang(locale, lang) {
-		if (this.langList[locale]) {
+	installLang(locale, lang){
+		if(this.langList[locale]){
 			this._setLangProp(this.langList[locale], lang);
-		} else {
+		}else {
 			this.langList[locale] = lang;
 		}
 	}
 
-	_setLangProp(lang, values) {
-		for (let key in values) {
-			if (lang[key] && typeof lang[key] == "object") {
+	_setLangProp(lang, values){
+		for(let key in values){
+			if(lang[key] && typeof lang[key] == "object"){
 				this._setLangProp(lang[key], values[key]);
-			} else {
+			}else {
 				lang[key] = values[key];
 			}
 		}
 	}
 
 	//set current locale
-	setLocale(desiredLocale) {
+	setLocale(desiredLocale){
 		desiredLocale = desiredLocale || "default";
 
 		//fill in any matching language values
-		function traverseLang(trans, path) {
-			for (var prop in trans) {
-				if (typeof trans[prop] == "object") {
-					if (!path[prop]) {
+		function traverseLang(trans, path){
+			for(var prop in trans){
+				if(typeof trans[prop] == "object"){
+					if(!path[prop]){
 						path[prop] = {};
 					}
 					traverseLang(trans[prop], path[prop]);
-				} else {
+				}else {
 					path[prop] = trans[prop];
 				}
 			}
 		}
 
 		//determining correct locale to load
-		if (desiredLocale === true && navigator.language) {
+		if(desiredLocale === true && navigator.language){
 			//get local from system
 			desiredLocale = navigator.language.toLowerCase();
 		}
 
-		if (desiredLocale) {
+		if(desiredLocale){
 			//if locale is not set, check for matching top level locale else use default
-			if (!this.langList[desiredLocale]) {
+			if(!this.langList[desiredLocale]){
 				let prefix = desiredLocale.split("-")[0];
 
-				if (this.langList[prefix]) {
-					console.warn(
-						"Localization Error - Exact matching locale not found, using closest match: ",
-						desiredLocale,
-						prefix
-					);
+				if(this.langList[prefix]){
+					console.warn("Localization Error - Exact matching locale not found, using closest match: ", desiredLocale, prefix);
 					desiredLocale = prefix;
-				} else {
-					console.warn(
-						"Localization Error - Matching locale not found, using default: ",
-						desiredLocale
-					);
+				}else {
+					console.warn("Localization Error - Matching locale not found, using default: ", desiredLocale);
 					desiredLocale = "default";
 				}
 			}
@@ -26997,7 +24442,7 @@ class Localize extends Module {
 		//load default lang template
 		this.lang = Helpers.deepClone(this.langList.default || {});
 
-		if (desiredLocale != "default") {
+		if(desiredLocale != "default"){
 			traverseLang(this.langList[desiredLocale], this.lang);
 		}
 
@@ -27007,20 +24452,20 @@ class Localize extends Module {
 	}
 
 	//get current locale
-	getLocale(locale) {
+	getLocale(locale){
 		return this.locale;
 	}
 
 	//get lang object for given local or current if none provided
-	getLang(locale) {
+	getLang(locale){
 		return locale ? this.langList[locale] : this.lang;
 	}
 
 	//get text for current locale
-	getText(path, value) {
+	getText(path, value){
 		var fillPath = value ? path + "|" + value : path,
-			pathArray = fillPath.split("|"),
-			text = this._getLangElement(pathArray, this.locale);
+		pathArray = fillPath.split("|"),
+		text = this._getLangElement(pathArray, this.locale);
 
 		// if(text === false){
 		// 	console.warn("Localization Error - Matching localized text not found for given path: ", path);
@@ -27030,18 +24475,18 @@ class Localize extends Module {
 	}
 
 	//traverse langs object and find localized copy
-	_getLangElement(path, locale) {
+	_getLangElement(path, locale){
 		var root = this.lang;
 
-		path.forEach(function (level) {
+		path.forEach(function(level){
 			var rootPath;
 
-			if (root) {
+			if(root){
 				rootPath = root[level];
 
-				if (typeof rootPath != "undefined") {
+				if(typeof rootPath != "undefined"){
 					root = rootPath;
-				} else {
+				}else {
 					root = false;
 				}
 			}
@@ -27051,8 +24496,8 @@ class Localize extends Module {
 	}
 
 	//set update binding
-	bind(path, callback) {
-		if (!this.bindings[path]) {
+	bind(path, callback){
+		if(!this.bindings[path]){
 			this.bindings[path] = [];
 		}
 
@@ -27062,8 +24507,8 @@ class Localize extends Module {
 	}
 
 	//iterate through bindings and trigger updates
-	_executeBindings() {
-		for (let path in this.bindings) {
+	_executeBindings(){
+		for(let path in this.bindings){
 			this.bindings[path].forEach((binding) => {
 				binding(this.getText(path), this.lang);
 			});
@@ -27076,23 +24521,24 @@ Localize.moduleName = "localize";
 //load defaults
 Localize.langs = defaultLangs;
 
-class Comms extends Module {
-	constructor(table) {
+class Comms extends Module{
+
+	constructor(table){
 		super(table);
 	}
 
-	initialize() {
+	initialize(){
 		this.registerTableFunction("tableComms", this.receive.bind(this));
 	}
 
-	getConnections(selectors) {
+	getConnections(selectors){
 		var connections = [],
-			connection;
+		connection;
 
 		connection = TableRegistry.lookupTable(selectors);
 
-		connection.forEach((con) => {
-			if (this.table !== con) {
+		connection.forEach((con) =>{
+			if(this.table !== con){
 				connections.push(con);
 			}
 		});
@@ -27100,25 +24546,22 @@ class Comms extends Module {
 		return connections;
 	}
 
-	send(selectors, module, action, data) {
+	send(selectors, module, action, data){
 		var connections = this.getConnections(selectors);
 
 		connections.forEach((connection) => {
 			connection.tableComms(this.table.element, module, action, data);
 		});
 
-		if (!connections.length && selectors) {
-			console.warn(
-				"Table Connection Error - No tables matching selector found",
-				selectors
-			);
+		if(!connections.length && selectors){
+			console.warn("Table Connection Error - No tables matching selector found", selectors);
 		}
 	}
 
-	receive(table, module, action, data) {
-		if (this.table.modExists(module)) {
+	receive(table, module, action, data){
+		if(this.table.modExists(module)){
 			return this.table.modules[module].commsReceived(table, action, data);
-		} else {
+		}else {
 			console.warn("Inter-table Comms Error - no such module:", module);
 		}
 	}
@@ -27126,193 +24569,188 @@ class Comms extends Module {
 
 Comms.moduleName = "comms";
 
-var coreModules = /*#__PURE__*/ Object.freeze({
+var coreModules = /*#__PURE__*/Object.freeze({
 	__proto__: null,
 	LayoutModule: Layout,
 	LocalizeModule: Localize,
-	CommsModule: Comms,
+	CommsModule: Comms
 });
 
 class ModuleBinder {
-	constructor(tabulator, modules) {
+	
+	constructor(tabulator, modules){
 		this.bindStaticFunctionality(tabulator);
 		this.bindModules(tabulator, coreModules, true);
-
-		if (modules) {
+		
+		if(modules){
 			this.bindModules(tabulator, modules);
 		}
 	}
-
-	bindStaticFunctionality(tabulator) {
+	
+	bindStaticFunctionality(tabulator){
 		tabulator.moduleBindings = {};
-
-		tabulator.extendModule = function (name, property, values) {
-			if (tabulator.moduleBindings[name]) {
+		
+		tabulator.extendModule = function(name, property, values){
+			if(tabulator.moduleBindings[name]){
 				var source = tabulator.moduleBindings[name][property];
-
-				if (source) {
-					if (typeof values == "object") {
-						for (let key in values) {
+				
+				if(source){
+					if(typeof values == "object"){
+						for(let key in values){
 							source[key] = values[key];
 						}
-					} else {
-						console.warn(
-							"Module Error - Invalid value type, it must be an object"
-						);
+					}else {
+						console.warn("Module Error - Invalid value type, it must be an object");
 					}
-				} else {
+				}else {
 					console.warn("Module Error - property does not exist:", property);
 				}
-			} else {
+			}else {
 				console.warn("Module Error - module does not exist:", name);
 			}
 		};
-
-		tabulator.registerModule = function (modules) {
-			if (!Array.isArray(modules)) {
+		
+		tabulator.registerModule = function(modules){
+			if(!Array.isArray(modules)){
 				modules = [modules];
 			}
-
+			
 			modules.forEach((mod) => {
 				tabulator.registerModuleBinding(mod);
 			});
 		};
-
-		tabulator.registerModuleBinding = function (mod) {
+		
+		tabulator.registerModuleBinding = function(mod){
 			tabulator.moduleBindings[mod.moduleName] = mod;
 		};
-
-		tabulator.findTable = function (query) {
+		
+		tabulator.findTable = function(query){
 			var results = TableRegistry.lookupTable(query, true);
 			return Array.isArray(results) && !results.length ? false : results;
 		};
-
+		
 		//ensure that module are bound to instantiated function
-		tabulator.prototype.bindModules = function () {
+		tabulator.prototype.bindModules = function(){
 			var orderedStartMods = [],
-				orderedEndMods = [],
-				unOrderedMods = [];
-
+			orderedEndMods = [],
+			unOrderedMods = [];
+			
 			this.modules = {};
-
-			for (var name in tabulator.moduleBindings) {
+			
+			for(var name in tabulator.moduleBindings){
 				let mod = tabulator.moduleBindings[name];
 				let module = new mod(this);
-
+				
 				this.modules[name] = module;
-
-				if (mod.prototype.moduleCore) {
+				
+				if(mod.prototype.moduleCore){
 					this.modulesCore.push(module);
-				} else {
-					if (mod.moduleInitOrder) {
-						if (mod.moduleInitOrder < 0) {
+				}else {
+					if(mod.moduleInitOrder){
+						if(mod.moduleInitOrder < 0){
 							orderedStartMods.push(module);
-						} else {
+						}else {
 							orderedEndMods.push(module);
 						}
-					} else {
+						
+					}else {
 						unOrderedMods.push(module);
 					}
 				}
 			}
-
-			orderedStartMods.sort((a, b) =>
-				a.moduleInitOrder > b.moduleInitOrder ? 1 : -1
-			);
-			orderedEndMods.sort((a, b) =>
-				a.moduleInitOrder > b.moduleInitOrder ? 1 : -1
-			);
-
-			this.modulesRegular = orderedStartMods.concat(
-				unOrderedMods.concat(orderedEndMods)
-			);
+			
+			orderedStartMods.sort((a, b) => a.moduleInitOrder > b.moduleInitOrder ? 1 : -1);
+			orderedEndMods.sort((a, b) => a.moduleInitOrder > b.moduleInitOrder ? 1 : -1);
+			
+			this.modulesRegular = orderedStartMods.concat(unOrderedMods.concat(orderedEndMods));
 		};
 	}
-
-	bindModules(tabulator, modules, core) {
+	
+	bindModules(tabulator, modules, core){
 		var mods = Object.values(modules);
-
-		if (core) {
+		
+		if(core){
 			mods.forEach((mod) => {
 				mod.prototype.moduleCore = true;
 			});
 		}
-
+		
 		tabulator.registerModule(mods);
 	}
 }
 
-class Alert extends CoreFeature {
-	constructor(table) {
+class Alert extends CoreFeature{
+	constructor(table){
 		super(table);
-
+        
 		this.element = this._createAlertElement();
 		this.msgElement = this._createMsgElement();
 		this.type = null;
-
+        
 		this.element.appendChild(this.msgElement);
 	}
-
-	_createAlertElement() {
+    
+	_createAlertElement(){
 		var el = document.createElement("div");
 		el.classList.add("tabulator-alert");
 		return el;
 	}
-
-	_createMsgElement() {
+    
+	_createMsgElement(){
 		var el = document.createElement("div");
 		el.classList.add("tabulator-alert-msg");
 		el.setAttribute("role", "alert");
 		return el;
 	}
-
-	_typeClass() {
+    
+	_typeClass(){
 		return "tabulator-alert-state-" + this.type;
 	}
-
-	alert(content, type = "msg") {
-		if (content) {
+    
+	alert(content, type = "msg"){
+		if(content){
 			this.clear();
-
+            
 			this.type = type;
-
-			while (this.msgElement.firstChild)
-				this.msgElement.removeChild(this.msgElement.firstChild);
-
+            
+			while(this.msgElement.firstChild) this.msgElement.removeChild(this.msgElement.firstChild);
+            
 			this.msgElement.classList.add(this._typeClass());
-
-			if (typeof content === "function") {
+            
+			if(typeof content === "function"){
 				content = content();
 			}
-
-			if (content instanceof HTMLElement) {
+            
+			if(content instanceof HTMLElement){
 				this.msgElement.appendChild(content);
-			} else {
+			}else {
 				this.msgElement.innerHTML = content;
 			}
-
+            
 			this.table.element.appendChild(this.element);
 		}
 	}
-
-	clear() {
-		if (this.element.parentNode) {
+    
+	clear(){
+		if(this.element.parentNode){
 			this.element.parentNode.removeChild(this.element);
 		}
-
+        
 		this.msgElement.classList.remove(this._typeClass());
 	}
 }
 
 class Tabulator {
-	constructor(element, options) {
+	
+	constructor(element, options){
+		
 		this.options = {};
-
+		
 		this.columnManager = null; // hold Column Manager
 		this.rowManager = null; //hold Row Manager
 		this.footerManager = null; //holder Footer Manager
 		this.alertManager = null; //hold Alert Manager
-		this.vdomHoz = null; //holder horizontal virtual dom
+		this.vdomHoz  = null; //holder horizontal virtual dom
 		this.externalEvents = null; //handle external event messaging
 		this.eventBus = null; //handle internal event messaging
 		this.interactionMonitor = false; //track user interaction
@@ -27321,354 +24759,327 @@ class Tabulator {
 		this.browserMobile = false; //check if running on mobile, prevent resize cancelling edit on keyboard appearance
 		this.rtl = false; //check if the table is in RTL mode
 		this.originalElement = null; //hold original table element if it has been replaced
-
+		
 		this.componentFunctionBinder = new ComponentFunctionBinder(this); //bind component functions
 		this.dataLoader = false; //bind component functions
-
+		
 		this.modules = {}; //hold all modules bound to this table
 		this.modulesCore = []; //hold core modules bound to this table (for initialization purposes)
 		this.modulesRegular = []; //hold regular modules bound to this table (for initialization purposes)
-
+		
 		this.deprecationAdvisor = new DeprecationAdvisor(this);
 		this.optionsList = new OptionsList(this, "table constructor");
-
+		
 		this.initialized = false;
 		this.destroyed = false;
-
-		if (this.initializeElement(element)) {
+		
+		if(this.initializeElement(element)){
+			
 			this.initializeCoreSystems(options);
-
+			
 			//delay table creation to allow event bindings immediately after the constructor
 			setTimeout(() => {
 				this._create();
 			});
 		}
-
+		
 		TableRegistry.register(this); //register table for inter-device communication
 	}
-
-	initializeElement(element) {
-		if (typeof HTMLElement !== "undefined" && element instanceof HTMLElement) {
+	
+	initializeElement(element){
+		if(typeof HTMLElement !== "undefined" && element instanceof HTMLElement){
 			this.element = element;
 			return true;
-		} else if (typeof element === "string") {
+		}else if(typeof element === "string"){
 			this.element = document.querySelector(element);
-
-			if (this.element) {
+			
+			if(this.element){
 				return true;
-			} else {
-				console.error(
-					"Tabulator Creation Error - no element found matching selector: ",
-					element
-				);
+			}else {
+				console.error("Tabulator Creation Error - no element found matching selector: ", element);
 				return false;
 			}
-		} else {
-			console.error(
-				"Tabulator Creation Error - Invalid element provided:",
-				element
-			);
+		}else {
+			console.error("Tabulator Creation Error - Invalid element provided:", element);
 			return false;
 		}
 	}
-
-	initializeCoreSystems(options) {
+	
+	initializeCoreSystems(options){
 		this.columnManager = new ColumnManager(this);
 		this.rowManager = new RowManager(this);
 		this.footerManager = new FooterManager(this);
 		this.dataLoader = new DataLoader(this);
 		this.alertManager = new Alert(this);
-
+		
 		this.bindModules();
-
+		
 		this.options = this.optionsList.generate(Tabulator.defaultOptions, options);
-
+		
 		this._clearObjectPointers();
-
+		
 		this._mapDeprecatedFunctionality();
-
-		this.externalEvents = new ExternalEventBus(
-			this,
-			this.options,
-			this.options.debugEventsExternal
-		);
+		
+		this.externalEvents = new ExternalEventBus(this, this.options, this.options.debugEventsExternal);
 		this.eventBus = new InternalEventBus(this.options.debugEventsInternal);
-
+		
 		this.interactionMonitor = new InteractionManager(this);
-
+		
 		this.dataLoader.initialize();
 		// this.columnManager.initialize();
 		// this.rowManager.initialize();
 		this.footerManager.initialize();
 	}
-
+	
 	//convert deprecated functionality to new functions
-	_mapDeprecatedFunctionality() {
+	_mapDeprecatedFunctionality(){
 		//all previously deprecated functionality removed in the 5.0 release
 	}
-
-	_clearSelection() {
+	
+	_clearSelection(){
+		
 		this.element.classList.add("tabulator-block-select");
-
+		
 		if (window.getSelection) {
-			if (window.getSelection().empty) {
-				// Chrome
+			if (window.getSelection().empty) {  // Chrome
 				window.getSelection().empty();
-			} else if (window.getSelection().removeAllRanges) {
-				// Firefox
+			} else if (window.getSelection().removeAllRanges) {  // Firefox
 				window.getSelection().removeAllRanges();
 			}
-		} else if (document.selection) {
-			// IE?
+		} else if (document.selection) {  // IE?
 			document.selection.empty();
 		}
-
+		
 		this.element.classList.remove("tabulator-block-select");
 	}
-
+	
 	//create table
-	_create() {
+	_create(){
 		this.externalEvents.dispatch("tableBuilding");
 		this.eventBus.dispatch("table-building");
-
+		
 		this._rtlCheck();
-
+		
 		this._buildElement();
-
+		
 		this._initializeTable();
-
+		
 		this._loadInitialData();
-
+		
 		this.initialized = true;
-
+		
 		this.externalEvents.dispatch("tableBuilt");
 	}
-
-	_rtlCheck() {
+	
+	_rtlCheck(){
 		var style = window.getComputedStyle(this.element);
-
-		switch (this.options.textDirection) {
-			case "auto":
-				if (style.direction !== "rtl") {
+		
+		switch(this.options.textDirection){
+			case"auto":
+				if(style.direction !== "rtl"){
 					break;
 				}
-
+			
 			case "rtl":
 				this.element.classList.add("tabulator-rtl");
 				this.rtl = true;
 				break;
-
+			
 			case "ltr":
 				this.element.classList.add("tabulator-ltr");
-
+			
 			default:
 				this.rtl = false;
 		}
 	}
-
+	
 	//clear pointers to objects in default config object
-	_clearObjectPointers() {
+	_clearObjectPointers(){
 		this.options.columns = this.options.columns.slice(0);
-
-		if (Array.isArray(this.options.data) && !this.options.reactiveData) {
+		
+		if(Array.isArray(this.options.data) && !this.options.reactiveData){
 			this.options.data = this.options.data.slice(0);
 		}
 	}
-
+	
 	//build tabulator element
-	_buildElement() {
+	_buildElement(){
 		var element = this.element,
-			options = this.options,
-			newElement;
-
-		if (element.tagName === "TABLE") {
+		options = this.options,
+		newElement;
+		
+		if(element.tagName === "TABLE"){
 			this.originalElement = this.element;
 			newElement = document.createElement("div");
-
+			
 			//transfer attributes to new element
 			var attributes = element.attributes;
-
+			
 			// loop through attributes and apply them on div
-			for (var i in attributes) {
-				if (typeof attributes[i] == "object") {
+			for(var i in attributes){
+				if(typeof attributes[i] == "object"){
 					newElement.setAttribute(attributes[i].name, attributes[i].value);
 				}
 			}
-
+			
 			// replace table with div element
 			element.parentNode.replaceChild(newElement, element);
-
+			
 			this.element = element = newElement;
 		}
-
+		
 		element.classList.add("tabulator");
 		element.setAttribute("role", "grid");
-
+		
 		//empty element
-		while (element.firstChild) element.removeChild(element.firstChild);
-
+		while(element.firstChild) element.removeChild(element.firstChild);
+		
 		//set table height
-		if (options.height) {
-			options.height = isNaN(options.height)
-				? options.height
-				: options.height + "px";
+		if(options.height){
+			options.height = isNaN(options.height) ? options.height : options.height + "px";
 			element.style.height = options.height;
 		}
-
+		
 		//set table min height
-		if (options.minHeight !== false) {
-			options.minHeight = isNaN(options.minHeight)
-				? options.minHeight
-				: options.minHeight + "px";
+		if(options.minHeight !== false){
+			options.minHeight = isNaN(options.minHeight) ? options.minHeight : options.minHeight + "px";
 			element.style.minHeight = options.minHeight;
 		}
-
+		
 		//set table maxHeight
-		if (options.maxHeight !== false) {
-			options.maxHeight = isNaN(options.maxHeight)
-				? options.maxHeight
-				: options.maxHeight + "px";
+		if(options.maxHeight !== false){
+			options.maxHeight = isNaN(options.maxHeight) ? options.maxHeight : options.maxHeight + "px";
 			element.style.maxHeight = options.maxHeight;
 		}
 	}
-
+	
 	//initialize core systems and modules
-	_initializeTable() {
+	_initializeTable(){
 		var element = this.element,
-			options = this.options;
-
+		options = this.options;
+		
 		this.interactionMonitor.initialize();
-
+		
 		this.columnManager.initialize();
 		this.rowManager.initialize();
-
+		
 		this._detectBrowser();
-
+		
 		//initialize core modules
 		this.modulesCore.forEach((mod) => {
 			mod.initialize();
 		});
-
+		
 		//build table elements
 		element.appendChild(this.columnManager.getElement());
 		element.appendChild(this.rowManager.getElement());
-
-		if (options.footerElement) {
+		
+		if(options.footerElement){
 			this.footerManager.activate();
 		}
-
-		if (options.autoColumns && options.data) {
+		
+		if(options.autoColumns && options.data){
+			
 			this.columnManager.generateColumnsFromRowData(this.options.data);
 		}
-
+		
 		//initialize regular modules
 		this.modulesRegular.forEach((mod) => {
 			mod.initialize();
 		});
-
+		
 		this.columnManager.setColumns(options.columns);
-
+		
 		this.eventBus.dispatch("table-built");
 	}
-
-	_loadInitialData() {
+	
+	_loadInitialData(){
 		this.dataLoader.load(this.options.data);
 	}
-
+	
 	//deconstructor
-	destroy() {
+	destroy(){
 		var element = this.element;
-
+		
 		this.destroyed = true;
-
+		
 		TableRegistry.deregister(this); //deregister table from inter-device communication
-
+		
 		this.eventBus.dispatch("table-destroy");
-
+		
 		//clear row data
-		this.rowManager.rows.forEach(function (row) {
+		this.rowManager.rows.forEach(function(row){
 			row.wipe();
 		});
-
+		
 		this.rowManager.rows = [];
 		this.rowManager.activeRows = [];
 		this.rowManager.displayRows = [];
-
+		
 		//clear DOM
-		while (element.firstChild) element.removeChild(element.firstChild);
+		while(element.firstChild) element.removeChild(element.firstChild);
 		element.classList.remove("tabulator");
 
 		this.externalEvents.dispatch("tableDestroyed");
 	}
-
-	_detectBrowser() {
-		var ua = navigator.userAgent || navigator.vendor || window.opera;
-
-		if (ua.indexOf("Trident") > -1) {
+	
+	_detectBrowser(){
+		var ua = navigator.userAgent||navigator.vendor||window.opera;
+		
+		if(ua.indexOf("Trident") > -1){
 			this.browser = "ie";
 			this.browserSlow = true;
-		} else if (ua.indexOf("Edge") > -1) {
+		}else if(ua.indexOf("Edge") > -1){
 			this.browser = "edge";
 			this.browserSlow = true;
-		} else if (ua.indexOf("Firefox") > -1) {
+		}else if(ua.indexOf("Firefox") > -1){
 			this.browser = "firefox";
 			this.browserSlow = false;
-		} else {
+		}else {
 			this.browser = "other";
 			this.browserSlow = false;
 		}
-
-		this.browserMobile =
-			/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(
-				ua
-			) ||
-			/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw-(n|u)|c55\/|capi|ccwa|cdm-|cell|chtm|cldc|cmd-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc-s|devi|dica|dmob|do(c|p)o|ds(12|-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(-|_)|g1 u|g560|gene|gf-5|g-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd-(m|p|t)|hei-|hi(pt|ta)|hp( i|ip)|hs-c|ht(c(-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i-(20|go|ma)|i230|iac( |-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|-[a-w])|libw|lynx|m1-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|-([1-8]|c))|phil|pire|pl(ay|uc)|pn-2|po(ck|rt|se)|prox|psio|pt-g|qa-a|qc(07|12|21|32|60|-[2-7]|i-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h-|oo|p-)|sdk\/|se(c(-|0|1)|47|mc|nd|ri)|sgh-|shar|sie(-|m)|sk-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h-|v-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl-|tdg-|tel(i|m)|tim-|t-mo|to(pl|sh)|ts(70|m-|m3|m5)|tx-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-/i.test(
-				ua.slice(0, 4)
-			);
+		
+		this.browserMobile = /(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(ua)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw-(n|u)|c55\/|capi|ccwa|cdm-|cell|chtm|cldc|cmd-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc-s|devi|dica|dmob|do(c|p)o|ds(12|-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(-|_)|g1 u|g560|gene|gf-5|g-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd-(m|p|t)|hei-|hi(pt|ta)|hp( i|ip)|hs-c|ht(c(-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i-(20|go|ma)|i230|iac( |-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|-[a-w])|libw|lynx|m1-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|-([1-8]|c))|phil|pire|pl(ay|uc)|pn-2|po(ck|rt|se)|prox|psio|pt-g|qa-a|qc(07|12|21|32|60|-[2-7]|i-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h-|oo|p-)|sdk\/|se(c(-|0|1)|47|mc|nd|ri)|sgh-|shar|sie(-|m)|sk-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h-|v-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl-|tdg-|tel(i|m)|tim-|t-mo|to(pl|sh)|ts(70|m-|m3|m5)|tx-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-/i.test(ua.slice(0,4));
 	}
-
-	initGuard(func, msg) {
+	
+	initGuard(func, msg){
 		var stack, line;
-
-		if (this.options.debugInitialization && !this.initialized) {
-			if (!func) {
+		
+		if(this.options.debugInitialization && !this.initialized){
+			if(!func){
 				stack = new Error().stack.split("\n");
-
+				
 				line = stack[0] == "Error" ? stack[2] : stack[1];
-
-				if (line[0] == " ") {
+				
+				if(line[0] == " "){
 					func = line.trim().split(" ")[1].split(".")[1];
-				} else {
+				}else {
 					func = line.trim().split("@")[0];
 				}
 			}
-
-			console.warn(
-				"Table Not Initialized - Calling the " +
-					func +
-					" function before the table is initialized may result in inconsistent behavior, Please wait for the `tableBuilt` event before calling this function." +
-					(msg ? " " + msg : "")
-			);
+			
+			console.warn("Table Not Initialized - Calling the " + func + " function before the table is initialized may result in inconsistent behavior, Please wait for the `tableBuilt` event before calling this function." + (msg ? " " + msg : ""));
 		}
-
+		
 		return this.initialized;
 	}
-
+	
 	////////////////// Data Handling //////////////////
 	//block table redrawing
-	blockRedraw() {
+	blockRedraw(){
 		this.initGuard();
 
 		this.eventBus.dispatch("redraw-blocking");
-
+		
 		this.rowManager.blockRedraw();
 		this.columnManager.blockRedraw();
 
 		this.eventBus.dispatch("redraw-blocked");
 	}
-
+	
 	//restore table redrawing
-	restoreRedraw() {
+	restoreRedraw(){
 		this.initGuard();
 
 		this.eventBus.dispatch("redraw-restoring");
@@ -27678,519 +25089,515 @@ class Tabulator {
 
 		this.eventBus.dispatch("redraw-restored");
 	}
-
+	
 	//load data
-	setData(data, params, config) {
-		this.initGuard(
-			false,
-			"To set initial data please use the 'data' property in the table constructor."
-		);
-
+	setData(data, params, config){
+		this.initGuard(false, "To set initial data please use the 'data' property in the table constructor.");
+		
 		return this.dataLoader.load(data, params, config, false);
 	}
-
+	
 	//clear data
-	clearData() {
+	clearData(){
 		this.initGuard();
-
+		
 		this.dataLoader.blockActiveLoad();
 		this.rowManager.clearData();
 	}
-
+	
 	//get table data array
-	getData(active) {
+	getData(active){
 		return this.rowManager.getData(active);
 	}
-
+	
 	//get table data array count
-	getDataCount(active) {
+	getDataCount(active){
 		return this.rowManager.getDataCount(active);
 	}
-
+	
 	//replace data, keeping table in position with same sort
-	replaceData(data, params, config) {
+	replaceData(data, params, config){
 		this.initGuard();
-
+		
 		return this.dataLoader.load(data, params, config, true, true);
 	}
-
+	
 	//update table data
-	updateData(data) {
+	updateData(data){
 		var responses = 0;
-
+		
 		this.initGuard();
-
+		
 		return new Promise((resolve, reject) => {
 			this.dataLoader.blockActiveLoad();
-
-			if (typeof data === "string") {
+			
+			if(typeof data === "string"){
 				data = JSON.parse(data);
 			}
-
-			if (data) {
+			
+			if(data && data.length > 0){
 				data.forEach((item) => {
 					var row = this.rowManager.findRow(item[this.options.index]);
-
-					if (row) {
+					
+					if(row){
 						responses++;
-
-						row.updateData(item).then(() => {
-							responses--;
-
-							if (!responses) {
-								resolve();
-							}
-						});
+						
+						row.updateData(item)
+							.then(()=>{
+								responses--;
+							
+								if(!responses){
+									resolve();
+								}
+							});
 					}
 				});
-			} else {
+			}else {
 				console.warn("Update Error - No data provided");
 				reject("Update Error - No data provided");
 			}
 		});
 	}
-
-	addData(data, pos, index) {
+	
+	addData(data, pos, index){
 		this.initGuard();
-
+		
 		return new Promise((resolve, reject) => {
 			this.dataLoader.blockActiveLoad();
-
-			if (typeof data === "string") {
+			
+			if(typeof data === "string"){
 				data = JSON.parse(data);
 			}
-
-			if (data) {
-				this.rowManager.addRows(data, pos, index).then((rows) => {
-					var output = [];
-
-					rows.forEach(function (row) {
-						output.push(row.getComponent());
+			
+			if(data){
+				this.rowManager.addRows(data, pos, index)
+					.then((rows) => {
+						var output = [];
+					
+						rows.forEach(function(row){
+							output.push(row.getComponent());
+						});
+					
+						resolve(output);
 					});
-
-					resolve(output);
-				});
-			} else {
+			}else {
 				console.warn("Update Error - No data provided");
 				reject("Update Error - No data provided");
 			}
 		});
 	}
-
+	
 	//update table data
-	updateOrAddData(data) {
+	updateOrAddData(data){
 		var rows = [],
-			responses = 0;
-
+		responses = 0;
+		
 		this.initGuard();
-
+		
 		return new Promise((resolve, reject) => {
 			this.dataLoader.blockActiveLoad();
-
-			if (typeof data === "string") {
+			
+			if(typeof data === "string"){
 				data = JSON.parse(data);
 			}
-
-			if (data) {
+			
+			if(data && data.length > 0){
 				data.forEach((item) => {
 					var row = this.rowManager.findRow(item[this.options.index]);
-
+					
 					responses++;
-
-					if (row) {
-						row.updateData(item).then(() => {
-							responses--;
-							rows.push(row.getComponent());
-
-							if (!responses) {
-								resolve(rows);
-							}
-						});
-					} else {
-						this.rowManager.addRows(item).then((newRows) => {
-							responses--;
-							rows.push(newRows[0].getComponent());
-
-							if (!responses) {
-								resolve(rows);
-							}
-						});
+					
+					if(row){
+						row.updateData(item)
+							.then(()=>{
+								responses--;
+								rows.push(row.getComponent());
+							
+								if(!responses){
+									resolve(rows);
+								}
+							});
+					}else {
+						this.rowManager.addRows(item)
+							.then((newRows)=>{
+								responses--;
+								rows.push(newRows[0].getComponent());
+							
+								if(!responses){
+									resolve(rows);
+								}
+							});
 					}
 				});
-			} else {
+			}else {
 				console.warn("Update Error - No data provided");
 				reject("Update Error - No data provided");
 			}
 		});
 	}
-
+	
 	//get row object
-	getRow(index) {
+	getRow(index){
 		var row = this.rowManager.findRow(index);
-
-		if (row) {
+		
+		if(row){
 			return row.getComponent();
-		} else {
+		}else {
 			console.warn("Find Error - No matching row found:", index);
 			return false;
 		}
 	}
-
+	
 	//get row object
-	getRowFromPosition(position) {
+	getRowFromPosition(position){
 		var row = this.rowManager.getRowFromPosition(position);
-
-		if (row) {
+		
+		if(row){
 			return row.getComponent();
-		} else {
+		}else {
 			console.warn("Find Error - No matching row found:", position);
 			return false;
 		}
 	}
-
+	
 	//delete row from table
-	deleteRow(index) {
+	deleteRow(index){
 		var foundRows = [];
-
+		
 		this.initGuard();
-
-		if (!Array.isArray(index)) {
+		
+		if(!Array.isArray(index)){
 			index = [index];
 		}
-
+		
 		//find matching rows
-		for (let item of index) {
+		for(let item of index){
 			let row = this.rowManager.findRow(item, true);
-
-			if (row) {
+			
+			if(row){
 				foundRows.push(row);
-			} else {
+			}else {
 				console.error("Delete Error - No matching row found:", item);
 				return Promise.reject("Delete Error - No matching row found");
 			}
 		}
-
+		
 		//sort rows into correct order to ensure smooth delete from table
 		foundRows.sort((a, b) => {
-			return this.rowManager.rows.indexOf(a) > this.rowManager.rows.indexOf(b)
-				? 1
-				: -1;
+			return this.rowManager.rows.indexOf(a) > this.rowManager.rows.indexOf(b) ? 1 : -1;
 		});
-
+		
 		//delete rows
-		foundRows.forEach((row) => {
+		foundRows.forEach((row) =>{
 			row.delete();
 		});
-
+		
 		this.rowManager.reRenderInPosition();
-
+		
 		return Promise.resolve();
 	}
-
+	
 	//add row to table
-	addRow(data, pos, index) {
+	addRow(data, pos, index){
 		this.initGuard();
-
-		if (typeof data === "string") {
+		
+		if(typeof data === "string"){
 			data = JSON.parse(data);
 		}
-
-		return this.rowManager.addRows(data, pos, index).then((rows) => {
-			return rows[0].getComponent();
-		});
-	}
-
-	//update a row if it exists otherwise create it
-	updateOrAddRow(index, data) {
-		var row = this.rowManager.findRow(index);
-
-		this.initGuard();
-
-		if (typeof data === "string") {
-			data = JSON.parse(data);
-		}
-
-		if (row) {
-			return row.updateData(data).then(() => {
-				return row.getComponent();
-			});
-		} else {
-			return this.rowManager.addRows(data).then((rows) => {
+		
+		return this.rowManager.addRows(data, pos, index)
+			.then((rows)=>{
 				return rows[0].getComponent();
 			});
-		}
 	}
-
-	//update row data
-	updateRow(index, data) {
+	
+	//update a row if it exists otherwise create it
+	updateOrAddRow(index, data){
 		var row = this.rowManager.findRow(index);
-
+		
 		this.initGuard();
-
-		if (typeof data === "string") {
+		
+		if(typeof data === "string"){
 			data = JSON.parse(data);
 		}
-
-		if (row) {
-			return row.updateData(data).then(() => {
-				return Promise.resolve(row.getComponent());
-			});
-		} else {
+		
+		if(row){
+			return row.updateData(data)
+				.then(()=>{
+					return row.getComponent();
+				});
+		}else {
+			return this.rowManager.addRows(data)
+				.then((rows)=>{
+					return rows[0].getComponent();
+				});
+		}
+	}
+	
+	//update row data
+	updateRow(index, data){
+		var row = this.rowManager.findRow(index);
+		
+		this.initGuard();
+		
+		if(typeof data === "string"){
+			data = JSON.parse(data);
+		}
+		
+		if(row){
+			return row.updateData(data)
+				.then(()=>{
+					return Promise.resolve(row.getComponent());
+				});
+		}else {
 			console.warn("Update Error - No matching row found:", index);
 			return Promise.reject("Update Error - No matching row found");
 		}
 	}
-
+	
 	//scroll to row in DOM
-	scrollToRow(index, position, ifVisible) {
+	scrollToRow(index, position, ifVisible){
 		var row = this.rowManager.findRow(index);
-
-		if (row) {
+		
+		if(row){
 			return this.rowManager.scrollToRow(row, position, ifVisible);
-		} else {
+		}else {
 			console.warn("Scroll Error - No matching row found:", index);
 			return Promise.reject("Scroll Error - No matching row found");
 		}
 	}
-
-	moveRow(from, to, after) {
+	
+	moveRow(from, to, after){
 		var fromRow = this.rowManager.findRow(from);
-
+		
 		this.initGuard();
-
-		if (fromRow) {
+		
+		if(fromRow){
 			fromRow.moveToRow(to, after);
-		} else {
+		}else {
 			console.warn("Move Error - No matching row found:", from);
 		}
 	}
-
-	getRows(active) {
-		return this.rowManager.getComponents(active);
+	
+	getRows(active){
+		return this.rowManager.getComponents(active);	
 	}
-
+	
 	//get position of row in table
-	getRowPosition(index) {
+	getRowPosition(index){
 		var row = this.rowManager.findRow(index);
-
-		if (row) {
+		
+		if(row){
 			return row.getPosition();
-		} else {
+		}else {
 			console.warn("Position Error - No matching row found:", index);
 			return false;
 		}
 	}
-
+	
 	/////////////// Column Functions  ///////////////
-	setColumns(definition) {
-		this.initGuard(
-			false,
-			"To set initial columns please use the 'columns' property in the table constructor"
-		);
-
+	setColumns(definition){
+		this.initGuard(false, "To set initial columns please use the 'columns' property in the table constructor");
+		
 		this.columnManager.setColumns(definition);
 	}
-
-	getColumns(structured) {
+	
+	getColumns(structured){
 		return this.columnManager.getComponents(structured);
 	}
-
-	getColumn(field) {
+	
+	getColumn(field){
 		var column = this.columnManager.findColumn(field);
-
-		if (column) {
+		
+		if(column){
 			return column.getComponent();
-		} else {
+		}else {
 			console.warn("Find Error - No matching column found:", field);
 			return false;
 		}
 	}
-
-	getColumnDefinitions() {
+	
+	getColumnDefinitions(){
 		return this.columnManager.getDefinitionTree();
 	}
-
-	showColumn(field) {
+	
+	showColumn(field){
 		var column = this.columnManager.findColumn(field);
-
+		
 		this.initGuard();
-
-		if (column) {
+		
+		if(column){
 			column.show();
-		} else {
+		}else {
 			console.warn("Column Show Error - No matching column found:", field);
 			return false;
 		}
 	}
-
-	hideColumn(field) {
-		var column = this.columnManager.findColumn(field);
-
+	
+	hideColumn(field){
+		var column = this.columnManager.findColumn(field); 
+		
 		this.initGuard();
-
-		if (column) {
+		
+		if(column){
 			column.hide();
-		} else {
+		}else {
 			console.warn("Column Hide Error - No matching column found:", field);
 			return false;
 		}
 	}
-
-	toggleColumn(field) {
+	
+	toggleColumn(field){
 		var column = this.columnManager.findColumn(field);
-
+		
 		this.initGuard();
-
-		if (column) {
-			if (column.visible) {
+		
+		if(column){
+			if(column.visible){
 				column.hide();
-			} else {
+			}else {
 				column.show();
 			}
-		} else {
-			console.warn(
-				"Column Visibility Toggle Error - No matching column found:",
-				field
-			);
+		}else {
+			console.warn("Column Visibility Toggle Error - No matching column found:", field);
 			return false;
 		}
 	}
-
-	addColumn(definition, before, field) {
+	
+	addColumn(definition, before, field){
 		var column = this.columnManager.findColumn(field);
-
+		
 		this.initGuard();
-
-		return this.columnManager
-			.addColumn(definition, before, column)
+		
+		return this.columnManager.addColumn(definition, before, column)
 			.then((column) => {
 				return column.getComponent();
 			});
 	}
-
-	deleteColumn(field) {
+	
+	deleteColumn(field){
 		var column = this.columnManager.findColumn(field);
-
+		
 		this.initGuard();
-
-		if (column) {
+		
+		if(column){
 			return column.delete();
-		} else {
+		}else {
 			console.warn("Column Delete Error - No matching column found:", field);
 			return Promise.reject();
 		}
 	}
-
-	updateColumnDefinition(field, definition) {
+	
+	updateColumnDefinition(field, definition){
 		var column = this.columnManager.findColumn(field);
-
+		
 		this.initGuard();
-
-		if (column) {
+		
+		if(column){
 			return column.updateDefinition(definition);
-		} else {
+		}else {
 			console.warn("Column Update Error - No matching column found:", field);
 			return Promise.reject();
 		}
 	}
-
-	moveColumn(from, to, after) {
+	
+	moveColumn(from, to, after){
 		var fromColumn = this.columnManager.findColumn(from),
-			toColumn = this.columnManager.findColumn(to);
-
+		toColumn = this.columnManager.findColumn(to);
+		
 		this.initGuard();
-
-		if (fromColumn) {
-			if (toColumn) {
+		
+		if(fromColumn){
+			if(toColumn){
 				this.columnManager.moveColumn(fromColumn, toColumn, after);
-			} else {
+			}else {
 				console.warn("Move Error - No matching column found:", toColumn);
 			}
-		} else {
+		}else {
 			console.warn("Move Error - No matching column found:", from);
 		}
 	}
-
+	
 	//scroll to column in DOM
-	scrollToColumn(field, position, ifVisible) {
+	scrollToColumn(field, position, ifVisible){
 		return new Promise((resolve, reject) => {
 			var column = this.columnManager.findColumn(field);
-
-			if (column) {
+			
+			if(column){
 				return this.columnManager.scrollToColumn(column, position, ifVisible);
-			} else {
+			}else {
 				console.warn("Scroll Error - No matching column found:", field);
 				return Promise.reject("Scroll Error - No matching column found");
 			}
 		});
 	}
-
+	
 	//////////// General Public Functions ////////////
 	//redraw list without updating data
-	redraw(force) {
+	redraw(force){
 		this.initGuard();
 
 		this.columnManager.redraw(force);
 		this.rowManager.redraw(force);
 	}
-
-	setHeight(height) {
+	
+	setHeight(height){
 		this.options.height = isNaN(height) ? height : height + "px";
 		this.element.style.height = this.options.height;
 		this.rowManager.initializeRenderer();
 		this.rowManager.redraw();
 	}
-
+	
 	//////////////////// Event Bus ///////////////////
-
-	on(key, callback) {
+	
+	on(key, callback){
 		this.externalEvents.subscribe(key, callback);
 	}
-
-	off(key, callback) {
+	
+	off(key, callback){
 		this.externalEvents.unsubscribe(key, callback);
 	}
-
-	dispatchEvent() {
+	
+	dispatchEvent(){
 		var args = Array.from(arguments);
 		args.shift();
-
+		
 		this.externalEvents.dispatch(...arguments);
 	}
 
 	//////////////////// Alerts ///////////////////
 
-	alert(contents, type) {
+	alert(contents, type){
 		this.initGuard();
 
 		this.alertManager.alert(contents, type);
 	}
 
-	clearAlert() {
+	clearAlert(){
 		this.initGuard();
 
 		this.alertManager.clear();
 	}
-
+	
 	////////////// Extension Management //////////////
-	modExists(plugin, required) {
-		if (this.modules[plugin]) {
+	modExists(plugin, required){
+		if(this.modules[plugin]){
 			return true;
-		} else {
-			if (required) {
+		}else {
+			if(required){
 				console.error("Tabulator Module Not Installed: " + plugin);
 			}
 			return false;
 		}
 	}
-
-	module(key) {
+	
+	module(key){
 		var mod = this.modules[key];
-
-		if (!mod) {
+		
+		if(!mod){
 			console.error("Tabulator module not installed: " + key);
 		}
-
+		
 		return mod;
 	}
 }
@@ -28209,95 +25616,50 @@ class TabulatorFull extends Tabulator {}
 new ModuleBinder(TabulatorFull, modules);
 
 class PseudoRow {
-	constructor(type) {
+
+	constructor (type){
 		this.type = type;
 		this.element = this._createElement();
 	}
 
-	_createElement() {
+	_createElement(){
 		var el = document.createElement("div");
 		el.classList.add("tabulator-row");
 		return el;
 	}
 
-	getElement() {
+	getElement(){
 		return this.element;
 	}
 
-	getComponent() {
+	getComponent(){
 		return false;
 	}
 
-	getData() {
+	getData(){
 		return {};
 	}
 
-	getHeight() {
+	getHeight(){
 		return this.element.outerHeight;
 	}
 
-	initialize() {}
+	initialize(){}
 
-	reinitialize() {}
+	reinitialize(){}
 
-	normalizeHeight() {}
+	normalizeHeight(){}
 
-	generateCells() {}
+	generateCells(){}
 
-	reinitializeHeight() {}
+	reinitializeHeight(){}
 
-	calcHeight() {}
+	calcHeight(){}
 
-	setCellHeight() {}
+	setCellHeight(){}
 
-	clearCellHeight() {}
+	clearCellHeight(){}
 }
 
-export {
-	Accessor as AccessorModule,
-	Ajax as AjaxModule,
-	CalcComponent,
-	CellComponent,
-	Clipboard as ClipboardModule,
-	ColumnCalcs as ColumnCalcsModule,
-	ColumnComponent,
-	DataTree as DataTreeModule,
-	Download as DownloadModule,
-	Edit$1 as EditModule,
-	Export as ExportModule,
-	Filter as FilterModule,
-	Format as FormatModule,
-	FrozenColumns as FrozenColumnsModule,
-	FrozenRows as FrozenRowsModule,
-	GroupComponent,
-	GroupRows as GroupRowsModule,
-	History as HistoryModule,
-	HtmlTableImport as HtmlTableImportModule,
-	Import as ImportModule,
-	Interaction as InteractionModule,
-	Keybindings as KeybindingsModule,
-	Menu as MenuModule,
-	Module,
-	MoveColumns as MoveColumnsModule,
-	MoveRows as MoveRowsModule,
-	Mutator as MutatorModule,
-	Page as PageModule,
-	Persistence as PersistenceModule,
-	Popup$1 as PopupModule,
-	Print as PrintModule,
-	PseudoRow,
-	ReactiveData as ReactiveDataModule,
-	Renderer,
-	ResizeColumns as ResizeColumnsModule,
-	ResizeRows as ResizeRowsModule,
-	ResizeTable as ResizeTableModule,
-	ResponsiveLayout as ResponsiveLayoutModule,
-	RowComponent,
-	SelectRow as SelectRowModule,
-	Sort as SortModule,
-	Tabulator,
-	TabulatorFull,
-	Tooltip as TooltipModule,
-	Validate as ValidateModule,
-};
+export { Accessor as AccessorModule, Ajax as AjaxModule, CalcComponent, CellComponent, Clipboard as ClipboardModule, ColumnCalcs as ColumnCalcsModule, ColumnComponent, DataTree as DataTreeModule, Download as DownloadModule, Edit$1 as EditModule, Export as ExportModule, Filter as FilterModule, Format as FormatModule, FrozenColumns as FrozenColumnsModule, FrozenRows as FrozenRowsModule, GroupComponent, GroupRows as GroupRowsModule, History as HistoryModule, HtmlTableImport as HtmlTableImportModule, Import as ImportModule, Interaction as InteractionModule, Keybindings as KeybindingsModule, Menu as MenuModule, Module, MoveColumns as MoveColumnsModule, MoveRows as MoveRowsModule, Mutator as MutatorModule, Page as PageModule, Persistence as PersistenceModule, Popup$1 as PopupModule, Print as PrintModule, PseudoRow, ReactiveData as ReactiveDataModule, Renderer, ResizeColumns as ResizeColumnsModule, ResizeRows as ResizeRowsModule, ResizeTable as ResizeTableModule, ResponsiveLayout as ResponsiveLayoutModule, RowComponent, SelectRow as SelectRowModule, Sort as SortModule, Tabulator, TabulatorFull, Tooltip as TooltipModule, Validate as ValidateModule };
 //# sourceMappingURL=tabulator_esm.js.map

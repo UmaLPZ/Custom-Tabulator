@@ -128,7 +128,7 @@ class Interaction extends Module{
 		var range;
 
 		if(this.table.modExists("edit")){
-			if (this.table.modules.edit.currentCell === this){
+			if (this.table.modules.edit.currentCell === cell){
 				return; //prevent instant selection of editor content
 			}
 		}
@@ -138,11 +138,11 @@ class Interaction extends Module{
 		try{
 			if (document.selection) { // IE
 				range = document.body.createTextRange();
-				range.moveToElementText(this.element);
+				range.moveToElementText(cell.getElement());
 				range.select();
 			} else if (window.getSelection) {
 				range = document.createRange();
-				range.selectNode(this.element);
+				range.selectNode(cell.getElement());
 				window.getSelection().removeAllRanges();
 				window.getSelection().addRange(range);
 			}

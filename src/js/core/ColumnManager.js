@@ -286,6 +286,8 @@ export default class ColumnManager extends CoreFeature {
 		var minHeight = 0;
 		
 		if(!this.redrawBlock){
+
+			this.headersElement.style.height="";
 			
 			this.columns.forEach((column) => {
 				column.clearVerticalAlign();
@@ -298,7 +300,9 @@ export default class ColumnManager extends CoreFeature {
 					minHeight = height;
 				}
 			});
-			
+
+			this.headersElement.style.height = minHeight + "px";
+
 			this.columns.forEach((column) => {
 				column.verticalAlign(this.table.options.columnHeaderVertAlign, minHeight);
 			});
@@ -309,6 +313,8 @@ export default class ColumnManager extends CoreFeature {
 	
 	//////////////// Column Details /////////////////
 	findColumn(subject){
+		var columns;
+
 		if(typeof subject == "object"){
 			
 			if(subject instanceof Column){
@@ -318,8 +324,16 @@ export default class ColumnManager extends CoreFeature {
 				//subject is public column component
 				return subject._getSelf() || false;
 			}else if(typeof HTMLElement !== "undefined" && subject instanceof HTMLElement){
+
+				columns = [];
+
+				this.columns.forEach((column) => {
+					columns.push(column);
+					columns = columns.concat(column.getColumns(true));
+				});
+
 				//subject is a HTML element of the column header
-				let match = this.columns.find((column) => {
+				let match = columns.find((column) => {
 					return column.element === subject;
 				});
 				
@@ -434,14 +448,14 @@ export default class ColumnManager extends CoreFeature {
 	}
 	
 	moveColumn(from, to, after){
-		this.moveColumnActual(from, to, after);
-		
 		to.element.parentNode.insertBefore(from.element, to.element);
 		
 		if(after){
 			to.element.parentNode.insertBefore(to.element, from.element);
 		}
 		
+		this.moveColumnActual(from, to, after);
+
 		this.verticalAlignHeaders();
 		
 		this.table.rowManager.reinitialize();

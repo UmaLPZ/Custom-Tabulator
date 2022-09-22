@@ -18,8 +18,6 @@ class DataTree extends Module{
 
 		this.startOpen = function(){};
 
-		this.displayIndex = 0;
-
 		this.registerTableOption("dataTree", false); //enable data tree
 		this.registerTableOption("dataTreeFilter", true); //filter child rows
 		this.registerTableOption("dataTreeSort", true); //sort child rows
@@ -50,6 +48,10 @@ class DataTree extends Module{
 
 			this.field = options.dataTreeChildField;
 			this.indent = options.dataTreeChildIndent;
+
+			if(this.options("movableRows")){
+				console.warn("The movableRows option is not available with dataTree enabled, moving of child rows could result in unpredictable behavior");
+			}
 
 			if(options.dataTreeBranchElement){
 
@@ -291,14 +293,6 @@ class DataTree extends Module{
 		}
 	}
 
-	setDisplayIndex (index) {
-		this.displayIndex = index;
-	}
-
-	getDisplayIndex () {
-		return this.displayIndex;
-	}
-
 	getRows(rows){
 		var output = [];
 
@@ -436,7 +430,7 @@ class DataTree extends Module{
 	}
 
 	getTreeParentRoot(row){
-		return row.modules.dataTree.parent ? this.getTreeParentRoot(row.modules.dataTree.parent) : row;
+		return row.modules.dataTree && row.modules.dataTree.parent ? this.getTreeParentRoot(row.modules.dataTree.parent) : row;
 	}
 
 	getFilteredTreeChildren(row){

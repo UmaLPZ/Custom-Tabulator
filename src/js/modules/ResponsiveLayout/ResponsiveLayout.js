@@ -33,8 +33,9 @@ class ResponsiveLayout extends Module{
 			this.subscribe("column-delete", this.initializeResponsivity.bind(this));
 
 			this.subscribe("table-redrawing", this.tableRedraw.bind(this));
-
+			
 			if(this.table.options.responsiveLayout === "collapse"){
+				this.subscribe("row-data-changed", this.generateCollapsedRowContent.bind(this));
 				this.subscribe("row-init", this.initializeRow.bind(this));
 				this.subscribe("row-layout", this.layoutRow.bind(this));
 			}
@@ -309,8 +310,6 @@ class ResponsiveLayout extends Module{
 
 	formatCollapsedData(data){
 		var list = document.createElement("table");
-		var thead = document.createElement("thead");
-		var tbody = document.createElement("tbody");
 
 		data.forEach(function(item){
 			var row = document.createElement("tr");
@@ -332,10 +331,9 @@ class ResponsiveLayout extends Module{
 				valueData.innerHTML = item.value;
 			}
 
-			thead.appendChild(titleData);
-			tbody.appendChild(valueData);
-			list.appendChild(thead);
-			list.appendChild(tbody);
+			row.appendChild(titleData);
+			row.appendChild(valueData);
+			list.appendChild(row);
 		}, this);
 
 		return Object.keys(data).length ? list : "";
