@@ -161,6 +161,56 @@ export default class Popup extends CoreFeature{
         
 		return this;
 	}
+
+	cellshow(origin, position){
+		var x, y, parentEl, parentOffset, coords;
+
+		if(this.destroyed || this.table.destroyed){
+			return this;
+		}
+        
+		if(origin instanceof HTMLElement){
+			parentEl = origin;
+			coords = this.elementPositionCoords(origin, position);
+            
+			parentOffset = coords.offset;
+			x = coords.x;
+			y = coords.y;
+            
+		}else if(typeof origin === "number"){
+			parentOffset = {top:0, left:0};
+			x = origin;
+			y = position;
+		}else{
+			coords = this.containerEventCoords(origin);
+            
+			x = coords.x;
+			y = coords.y;
+            
+			this.reversedX = false;
+		}
+        
+		this.element.style.top = y + "px";
+		this.element.style.left = x + "px";
+        
+		this.container.appendChild(this.element);
+        
+		if(typeof this.renderedCallback === "function"){
+			this.renderedCallback();
+		}
+        
+		this._fitToScreen(x, y, parentEl, parentOffset, position);
+        
+		this.visible = true;
+
+		this.subscribe("table-destroy", this.destroyBinding);
+
+		this.element.addEventListener("mousedown", (e) => {
+			e.stopPropagation();
+		});
+        
+		return this;
+	}
     
 	_fitToScreen(x, y, parentEl, parentOffset, position){
 		var scrollTop = this.container === document.body ? document.documentElement.scrollTop : this.container.scrollTop;

@@ -1,12 +1,10 @@
+import babel from "@rollup/plugin-babel";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { terser } from "rollup-plugin-terser";
-import babel from "@rollup/plugin-babel";
 
 const license = require("rollup-plugin-license");
 const globby = require("globby");
 const fs  = require("fs-extra");
-
-import postcss from "rollup-plugin-postcss";
 
 export default class Bundler{
 
@@ -14,7 +12,7 @@ export default class Bundler{
 		this.bundles = [];
 
 		this.env = env;
-		this.version = "/* Tabulator v" + version + " (c) Oliver Folkerd <%= moment().format('YYYY') %> */";
+		this.version = "/* Custom Tabulator v" + version + " Updated by UmaLPZ */";
 	}
 
 	bundle(){
@@ -30,10 +28,6 @@ export default class Bundler{
 	watch(env){
 		console.log("Building Dev Package Bundles: ", env);
 		switch(env){
-			case "css":
-				this.bundleCSS(false);
-				break;
-
 			case "esm":
 				this.bundleESM(false);
 				break;
@@ -43,7 +37,6 @@ export default class Bundler{
 				break;
 
 			default:
-				this.bundleCSS(false);
 				this.bundleESM(false);
 				break;
 		}
@@ -60,8 +53,6 @@ export default class Bundler{
 
 		console.log("Building Production Package Bundles");
 
-		this.bundleCSS(false);
-		this.bundleCSS(true);
 
 		this.bundleESM(false);
 		this.bundleESM(true);
@@ -80,31 +71,6 @@ export default class Bundler{
 		builds.forEach((build) => {
 			fs.copySync("./src/js/builds/" + build, "./dist/js/" + build);
 		});
-	}
-
-	bundleCSS(minify){
-		this.bundles = this.bundles.concat(globby.sync("./src/scss/**/tabulator*.scss").map(inputFile => {
-
-			var file = inputFile.split("/");
-			file = file.pop().replace(".scss", (minify ? ".min" : "") + ".css");
-
-			return {
-				input: inputFile,
-				output: {
-					file: "./dist/css/" + file,
-					format: "es",
-				},
-				plugins: [
-					postcss({
-						modules: false,
-						extract: true,
-						minimize: minify,
-						sourceMap: true,
-						plugins: [require('postcss-prettify')]
-					}),
-				]
-			};
-		}));
 	}
 
 	bundleESM(minify){

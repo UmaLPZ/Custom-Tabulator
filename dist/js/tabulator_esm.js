@@ -7261,7 +7261,7 @@ function tickCross(cell, onRendered, success, cancel, editorParams){
 	falseValueSet = Object.keys(editorParams).includes("falseValue");
 
 	input.setAttribute("type", "checkbox");
-	input.style.marginTop = "5px";
+	input.style.marginTop = "20px";
 	input.style.boxSizing = "border-box";
 
 	if(editorParams.elementAttributes && typeof editorParams.elementAttributes == "object"){

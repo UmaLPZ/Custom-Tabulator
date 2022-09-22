@@ -626,6 +626,18 @@
 				},
 			},
 			{
+				key: "cellshow",
+				value: function cellshow() {
+					if (this._column.isGroup) {
+						this._column.columns.forEach(function (column) {
+							column.cellshow();
+						});
+					} else {
+						this._column.cellshow();
+					}
+				},
+			},
+			{
 				key: "hide",
 				value: function hide() {
 					if (this._column.isGroup) {
@@ -1152,6 +1164,14 @@
 			{
 				key: "show",
 				value: function show() {
+					this.element.style.display = this.column.vertAlign
+						? "inline-flex"
+						: "";
+				},
+			},
+			{
+				key: "cellshow",
+				value: function cellshow() {
 					this.element.style.display = this.column.vertAlign
 						? "inline-flex"
 						: "";
@@ -1750,6 +1770,39 @@
 						}
 						this.cells.forEach(function (cell) {
 							cell.show();
+						});
+						if (!this.isGroup && this.width === null) {
+							this.reinitializeWidth();
+						}
+						this.table.columnManager.verticalAlignHeaders();
+						this.dispatch("column-show", this, responsiveToggle);
+						if (!silent) {
+							this.dispatchExternal(
+								"columnVisibilityChanged",
+								this.getComponent(),
+								true
+							);
+						}
+						if (this.parent.isGroup) {
+							this.parent.matchChildWidths();
+						}
+						if (!this.silent) {
+							this.table.columnManager.rerenderColumns();
+						}
+					}
+				}, //hide column
+			},
+			{
+				key: "cellshow",
+				value: function cellshow(silent, responsiveToggle) {
+					if (!this.visible) {
+						this.visible = true;
+						this.element.style.display = "";
+						if (this.parent.isGroup) {
+							this.parent.checkColumnVisibility();
+						}
+						this.cells.forEach(function (cell) {
+							cell.cellshow();
 						});
 						if (!this.isGroup && this.width === null) {
 							this.reinitializeWidth();
@@ -7558,6 +7611,47 @@
 					}
 					this.element.style.top = y + "px";
 					this.element.style.left = x + "px";
+					this.container.appendChild(this.element);
+					if (typeof this.renderedCallback === "function") {
+						this.renderedCallback();
+					}
+					this._fitToScreen(x, y, parentEl, parentOffset, position);
+					this.visible = true;
+					this.subscribe("table-destroy", this.destroyBinding);
+					this.element.addEventListener("mousedown", function (e) {
+						e.stopPropagation();
+					});
+					return this;
+				},
+			},
+			{
+				key: "cellshow",
+				value: function cellshow(origin, position) {
+					var x, y, parentEl, parentOffset, coords;
+					if (this.destroyed || this.table.destroyed) {
+						return this;
+					}
+					if (origin instanceof HTMLElement) {
+						parentEl = origin;
+						coords = this.elementPositionCoords(origin, position);
+						parentOffset = coords.offset;
+						x = coords.x;
+						y = coords.y;
+					} else if (typeof origin === "number") {
+						parentOffset = {
+							top: 0,
+							left: 0,
+						};
+						x = origin;
+						y = position;
+					} else {
+						coords = this.containerEventCoords(origin);
+						x = coords.x;
+						y = coords.y;
+						this.reversedX = false;
+					}
+					this.element.style.top = y + "px";
+					this.element.style.left = x + 20 + "px";
 					this.container.appendChild(this.element);
 					if (typeof this.renderedCallback === "function") {
 						this.renderedCallback();
@@ -18733,6 +18827,12 @@
 				},
 			},
 			{
+				key: "cellshow",
+				value: function cellshow() {
+					this._group.cellshow();
+				},
+			},
+			{
 				key: "hide",
 				value: function hide() {
 					this._group.hide();
@@ -19203,6 +19303,45 @@
 			{
 				key: "show",
 				value: function show() {
+					this.visible = true;
+					if (
+						this.groupManager.table.rowManager.getRenderMode() == "basic" &&
+						!this.groupManager.table.options.pagination
+					) {
+						this.element.classList.add("tabulator-group-visible");
+						var prev = this.generateElement();
+						if (this.groupList.length) {
+							this.groupList.forEach(function (group) {
+								var rows = group.getHeadersAndRows();
+								rows.forEach(function (row) {
+									var rowEl = row.getElement();
+									prev.parentNode.insertBefore(rowEl, prev.nextSibling);
+									row.initialize();
+									prev = rowEl;
+								});
+							});
+						} else {
+							this.rows.forEach(function (row) {
+								var rowEl = row.getElement();
+								prev.parentNode.insertBefore(rowEl, prev.nextSibling);
+								row.initialize();
+								prev = rowEl;
+							});
+						}
+						this.groupManager.updateGroupRows(true);
+					} else {
+						this.groupManager.updateGroupRows(true);
+					}
+					this.groupManager.table.externalEvents.dispatch(
+						"groupVisibilityChanged",
+						this.getComponent(),
+						true
+					);
+				},
+			},
+			{
+				key: "cellshow",
+				value: function cellshow() {
 					this.visible = true;
 					if (
 						this.groupManager.table.rowManager.getRenderMode() == "basic" &&
@@ -24773,7 +24912,7 @@
 						cell = cell._cell;
 					}
 					if (cell.column.definition[option]) {
-						this.loadPopupEvent(cell.column.definition[option], e, cell);
+						this.cellloadPopupEvent(cell.column.definition[option], e, cell);
 					}
 				},
 			},
@@ -24813,6 +24952,30 @@
 				},
 			},
 			{
+				key: "cellloadPopupEvent",
+				value: function cellloadPopupEvent(contents, e, component) {
+					var renderedCallback;
+					function onRendered(callback) {
+						renderedCallback = callback;
+					}
+					if (component._group) {
+						component = component._group;
+					} else if (component._row) {
+						component = component._row;
+					}
+					contents =
+						typeof contents == "function"
+							? contents.call(
+									this.table,
+									e,
+									component.getComponent(),
+									onRendered
+							  )
+							: contents;
+					this.cellloadPopup(e, component, contents, renderedCallback);
+				},
+			},
+			{
 				key: "loadPopup",
 				value: function loadPopup(e, component, contents, renderedCallback) {
 					var _this3 = this;
@@ -24837,6 +25000,36 @@
 						popup.renderCallback(renderedCallback);
 					}
 					popup.show(e).hideOnBlur(function () {
+						_this3.dispatchExternal("popupClosed", component.getComponent());
+					});
+					this.dispatchExternal("popupOpened", component.getComponent());
+				},
+			},
+			{
+				key: "cellloadPopup",
+				value: function cellloadPopup(e, component, contents, renderedCallback) {
+					var _this3 = this;
+					var touch = !(e instanceof MouseEvent),
+						contentsEl,
+						popup;
+					if (contents instanceof HTMLElement) {
+						contentsEl = contents;
+					} else {
+						contentsEl = document.createElement("div");
+						contentsEl.innerHTML = contents;
+					}
+					contentsEl.classList.add("tabulator-popup");
+					contentsEl.addEventListener("click", function (e) {
+						e.stopPropagation();
+					});
+					if (!touch) {
+						e.preventDefault();
+					}
+					popup = this.popup(contentsEl);
+					if (typeof renderedCallback === "function") {
+						popup.renderCallback(renderedCallback);
+					}
+					popup.cellshow(e).hideOnBlur(function () {
 						_this3.dispatchExternal("popupClosed", component.getComponent());
 					});
 					this.dispatchExternal("popupOpened", component.getComponent());
