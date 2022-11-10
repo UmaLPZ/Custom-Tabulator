@@ -50,7 +50,7 @@ class MoveColumns extends Module{
 			
 			config.mousemove = function(e){
 				if(column.parent === self.moving.parent){
-					if((((self.touchMove ? e.touches[0].pageX : e.pageX) - Helpers.elOffset(colEl).left) + self.table.columnManager.element.scrollLeft) > (column.getWidth() / 2)){
+					if((((self.touchMove ? e.touches[0].pageX : e.pageX) - Helpers.elOffset(colEl).left) + self.table.columnManager.contentsElement.scrollLeft) > (column.getWidth() / 2)){
 						if(self.toCol !== column || !self.toColAfter){
 							colEl.parentNode.insertBefore(self.placeholderElement, colEl.nextSibling);
 							self.moveColumn(column, true);
@@ -164,7 +164,7 @@ class MoveColumns extends Module{
 	
 	startMove(e, column){
 		var element = column.getElement(),
-		headerElement = this.table.columnManager.getElement(),
+		headerElement = this.table.columnManager.getContentsElement(),
 		headersElement = this.table.columnManager.getHeadersElement();
 		
 		this.moving = column;
@@ -183,7 +183,7 @@ class MoveColumns extends Module{
 		this.hoverElement = element.cloneNode(true);
 		this.hoverElement.classList.add("tabulator-moving");
 		
-		this.table.columnManager.getElement().appendChild(this.hoverElement);
+		headerElement.appendChild(this.hoverElement);
 		
 		this.hoverElement.style.left = "0";
 		this.hoverElement.style.bottom = (headerElement.clientHeight - headersElement.offsetHeight) + "px";
@@ -265,7 +265,7 @@ class MoveColumns extends Module{
 	}
 	
 	moveHover(e){
-		var columnHolder = this.table.columnManager.getElement(),
+		var columnHolder = this.table.columnManager.getContentsElement(),
 		scrollLeft = columnHolder.scrollLeft,
 		xPos = ((this.touchMove ? e.touches[0].pageX : e.pageX) - Helpers.elOffset(columnHolder).left) + scrollLeft,
 		scrollPos;

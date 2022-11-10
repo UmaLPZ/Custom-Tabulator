@@ -92,7 +92,7 @@ class GroupRows extends Module{
 			
 			this.groupIDLookups = [];
 			
-			if(Array.isArray(groupBy)){
+			if(groupBy){
 				if(this.table.modExists("columnCalcs") && this.table.options.columnCalcs != "table" && this.table.options.columnCalcs != "both"){
 					this.table.modules.columnCalcs.removeCalcs();
 				}
@@ -233,6 +233,10 @@ class GroupRows extends Module{
 		}
 		
 		this.configureGroupSetup();
+
+		if(!groups && this.table.modExists("columnCalcs") && this.table.options.columnCalcs === true){
+			this.table.modules.columnCalcs.reinitializeCalcs();
+		}
 		
 		this.refreshData();
 		
@@ -388,6 +392,9 @@ class GroupRows extends Module{
 			this.groupList.forEach(function(group){
 				group.wipe();
 			});
+			
+			this.groupList = [];
+			this.groups = {};
 		}
 	}
 	
@@ -474,7 +481,12 @@ class GroupRows extends Module{
 				this.assignRowToGroup(row, oldGroups);
 			});
 		}
+		
+		Object.values(oldGroups).forEach((group) => {
+			group.wipe(true);
+		});	
 	}
+	
 	
 	createGroup(groupID, level, oldGroups){
 		var groupKey = level + "_" + groupID,

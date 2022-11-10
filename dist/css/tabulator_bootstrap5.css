@@ -138,8 +138,10 @@
 	.tabulator-col-sorter {
 	display: flex;
 	align-items: center;
-	justify-content: center;
-	position: relative;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 4px;
 }
 
 .tabulator
@@ -195,10 +197,7 @@
 	.tabulator-header
 	.tabulator-col.tabulator-sortable
 	.tabulator-col-title {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding-right: 0;
+	padding-right: 25px;
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-sortable:hover {
@@ -1308,7 +1307,7 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
 }
 
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content {
-	padding: 5px;
+	padding: 12px;
 }
 
 .tabulator
